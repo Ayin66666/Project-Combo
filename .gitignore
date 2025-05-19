@@ -73,3 +73,16 @@ crashlytics-build.properties
 # Temporary auto-generated Android Assets
 /[Aa]ssets/[Ss]treamingAssets/aa.meta
 /[Aa]ssets/[Ss]treamingAssets/aa/*
+
+# Large asset files - 모델링, 텍스처, 애니메이션 등 제외
+*.fbx
+*.obj
+*.blend
+*.psd
+*.tga
+*.png
+*.exr
+*.hdr
+*.mp4
+*.wav
+*.avi
