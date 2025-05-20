@@ -1,7 +1,6 @@
-using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
 using Easing.Tweening;
+using System.Collections;
+using UnityEngine;
 
 
 public class EAttack_MissileCall : Attack_Base
@@ -95,7 +94,7 @@ public class EAttack_MissileCall : Attack_Base
 
         // 데미지 셋팅 - 미사일
         (bool isCritical, int damage) = enemy.DamageCalculation(value_Normal[0]);
-        Skill_Base.Value_Data skillData = value_Normal[0].levelValue.GetData(skillLevel);
+        Skill_Value_SO.Value_Data skillData = value_Normal[0].levelValue.GetData(skillLevel);
         mech_Misslie.Damage_Setting(skillData.type, skillData.attackEffect, isCritical, skillData.hitCount, damage, enemy.target);
 
         // 데미지 셋팅 - 미사일 폭발
@@ -123,7 +122,7 @@ public class EAttack_MissileCall : Attack_Base
 
         // 데미지 셋팅 - 탄 직격
         (bool isCritical, int damage) = enemy.DamageCalculation(value_Normal[2]);
-        Skill_Base.Value_Data skillData = value_Normal[2].levelValue.GetData(skillLevel);
+        Skill_Value_SO.Value_Data skillData = value_Normal[2].levelValue.GetData(skillLevel);
         shoot.Damage_Setting(skillData.type, skillData.attackEffect, isCritical, skillData.hitCount, damage);
 
         // 데미지 셋팅 - 탄 폭발

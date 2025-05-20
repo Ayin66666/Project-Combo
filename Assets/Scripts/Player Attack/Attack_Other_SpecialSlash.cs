@@ -1,8 +1,6 @@
-using System;
-using System.Collections;
-using System.Collections.Generic;
 using Cinemachine;
 using DG.Tweening;
+using System.Collections;
 using UnityEngine;
 
 public class Attack_Other_SpecialSlash : Attack_Base
@@ -164,7 +162,7 @@ public class Attack_Other_SpecialSlash : Attack_Base
 
         // 데미지 셋팅
         (bool isCritical, int damage) = Player_Manager.instance.DamageCalculation(value_Normal[index], skillLevel);
-        Skill_Base.Value_Data skillData = value_Normal[index].levelValue.GetData(skillLevel);
+        Skill_Value_SO.Value_Data skillData = value_Normal[index].levelValue.GetData(skillLevel);
         shoot.Damage_Setting(skillData.type, skillData.attackEffect, isCritical, skillData.hitCount, damage);
 
         // 이동 셋팅
@@ -175,7 +173,7 @@ public class Attack_Other_SpecialSlash : Attack_Base
     public override void DamageCal(int index)
     {
         (bool isCritical, int damage) = Player_Manager.instance.DamageCalculation(value_Normal[index], skillLevel);
-        Skill_Base.Value_Data skillData = value_Normal[index].levelValue.GetData(skillLevel);
+        Skill_Value_SO.Value_Data skillData = value_Normal[index].levelValue.GetData(skillLevel);
         value_Normal[index].attackCollider.Damage_Setting(skillData.type, skillData.attackEffect, isCritical, skillData.hitCount, damage);
     }
 

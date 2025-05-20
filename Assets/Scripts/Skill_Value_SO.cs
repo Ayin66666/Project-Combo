@@ -4,7 +4,7 @@ using UnityEngine.UI;
 
 
 [CreateAssetMenu(fileName = "Skill Data", menuName = "Scriptable Object/Skill Data", order = int.MaxValue)]
-public class Skill_Base : ScriptableObject
+public class Skill_Value_SO : ScriptableObject
 {
     #region Property
     public string SkillName

@@ -1,5 +1,4 @@
 using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class Attack_Normal_Third : Attack_Base
@@ -70,7 +69,7 @@ public class Attack_Normal_Third : Attack_Base
 
     public override void DamageCal(int index)
     {
-        Skill_Base.Value_Data skillData;
+        Skill_Value_SO.Value_Data skillData;
         if (Player_Manager.instance.isAwakning)
         {
             (bool isCritical, int damage) = Player_Manager.instance.DamageCalculation(value_Awakening[index], skillLevel);

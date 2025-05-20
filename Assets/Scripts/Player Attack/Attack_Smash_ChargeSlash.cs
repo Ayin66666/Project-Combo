@@ -1,6 +1,5 @@
 using System.Collections;
 using System.Collections.Generic;
-using System.ComponentModel;
 using UnityEngine;
 
 public class Attack_Smash_ChargeSlash : Attack_Base
@@ -122,22 +121,23 @@ public class Attack_Smash_ChargeSlash : Attack_Base
 
     public override void DamageCal(int index)
     {
-        (bool isCritical, int damage) = Player_Manager.instance.DamageCalculation(value_Normal[index], skillLevel);
-        Skill_Base.Value_Data skillData = value_Normal[index].levelValue.GetData(skillLevel);
-        value_Normal[index].attackCollider.Damage_Setting(skillData.type, skillData.attackEffect, isCritical, skillData.hitCount, damage);
-
-        /*
+        Skill_Value_SO.Value_Data skillData;
         if (Player_Manager.instance.isAwakning)
         {
-            (bool isCritical, int damage) = Player_Manager.instance.DamageCalculation(awakeningValues[index]);
-            awakeningValues[index].attackCollider.Damage_Setting(awakeningValues[index].type, awakeningValues[index].attackEffect, isCritical, awakeningValues[index].hitCount, damage);
+            (bool isCritical, int damage) = Player_Manager.instance.DamageCalculation(value_Awakening[index], skillLevel);
+            skillData = value_Awakening[index].levelValue.GetData(skillLevel);
+
+            if (value_Awakening[index].attackCollider != null)
+                value_Awakening[index].attackCollider.Damage_Setting(skillData.type, skillData.attackEffect, isCritical, skillData.hitCount, damage);
         }
         else
         {
-            (bool isCritical, int damage) = Player_Manager.instance.DamageCalculation(values[index]);
-            values[index].attackCollider.Damage_Setting(values[index].type, values[index].attackEffect, isCritical, values[index].hitCount, damage);
+            (bool isCritical, int damage) = Player_Manager.instance.DamageCalculation(value_Normal[index], skillLevel);
+            skillData = value_Normal[index].levelValue.GetData(skillLevel);
+
+            if (value_Awakening[index].attackCollider != null)
+                value_Normal[index].attackCollider.Damage_Setting(skillData.type, skillData.attackEffect, isCritical, skillData.hitCount, damage);
         }
-        */
     }
 
     public override void Attack_Reset()

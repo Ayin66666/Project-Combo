@@ -36,7 +36,7 @@ public class EAttack_Subdue : Attack_Base
         for (int i = 1; i < value_Normal.Count; i++)
         {
             (bool isCrit, int dam) = enemy.DamageCalculation(value_Normal[i]);
-            Skill_Base.Value_Data skillData1 = value_Normal[i].levelValue.GetData(skillLevel);
+            Skill_Value_SO.Value_Data skillData1 = value_Normal[i].levelValue.GetData(skillLevel);
             value_Normal[i].attackCollider.Damage_Setting(skillData1.type, skillData1.attackEffect, isCrit, skillData1.hitCount, dam);
         }
 
@@ -65,7 +65,7 @@ public class EAttack_Subdue : Attack_Base
         subdueCollider.gameObject.SetActive(true);
         subdueCollider.hitAction += Hit;
         (bool isCritical, int damage) = enemy.DamageCalculation(value_Normal[0]);
-        Skill_Base.Value_Data skillData = value_Normal[0].levelValue.GetData(skillLevel);
+        Skill_Value_SO.Value_Data skillData = value_Normal[0].levelValue.GetData(skillLevel);
         subdueCollider.Damage_Setting(skillData.type, skillData.attackEffect, isCritical, skillData.hitCount, damage, 0.65f);
 
         // 돌진 애니메이션

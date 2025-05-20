@@ -1,5 +1,4 @@
 using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class EAttack_Flame : Attack_Base
@@ -57,7 +56,7 @@ public class EAttack_Flame : Attack_Base
     public override void AttackVFX(int index)
     {
         (bool isCritical, int damage) = enemy.DamageCalculation(value_Normal[0]);
-        Skill_Base.Value_Data skillData = value_Normal[0].levelValue.GetData(skillLevel);
+        Skill_Value_SO.Value_Data skillData = value_Normal[0].levelValue.GetData(skillLevel);
         attackCollider.Damage_Setting(skillData.type, skillData.attackEffect, Attack_Collider_AOE.AttackType.multipleHit, isCritical, skillData.hitCount, damage, 0.25f);
         attackVFX.SetActive(index == 0 ? true : false);
     }

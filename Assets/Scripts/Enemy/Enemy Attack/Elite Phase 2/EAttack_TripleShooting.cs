@@ -1,8 +1,6 @@
-using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
 using Easing.Tweening;
-using System;
+using System.Collections;
+using UnityEngine;
 
 public class EAttack_TripleShooting : Attack_Base
 {
@@ -67,7 +65,7 @@ public class EAttack_TripleShooting : Attack_Base
 
         // 콜라이더
         (bool isCritical, int damage) = enemy.DamageCalculation(value_Normal[index]);
-        Skill_Base.Value_Data skillData = value_Normal[index].levelValue.GetData(skillLevel);
+        Skill_Value_SO.Value_Data skillData = value_Normal[index].levelValue.GetData(skillLevel);
         value_Normal[index].attackCollider.Damage_Setting(skillData.type, skillData.attackEffect, isCritical, skillData.hitCount, damage);
         value_Normal[index].attackCollider.AttackColliderOn(0);
     }

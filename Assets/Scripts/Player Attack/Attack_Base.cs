@@ -25,7 +25,7 @@ public abstract class Attack_Base : MonoBehaviour
     public struct Value
     {
         [SerializeField] private string name;
-        public Skill_Base levelValue; // 스킬레벨 별 데미지
+        public Skill_Value_SO levelValue; // 스킬레벨 별 데미지
         public AttackCollider_Controller attackCollider;
     }
     

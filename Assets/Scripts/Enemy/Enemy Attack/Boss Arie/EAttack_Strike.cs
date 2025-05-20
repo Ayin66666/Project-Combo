@@ -1,8 +1,7 @@
+using Easing.Tweening;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using Easing.Tweening;
-using MagicaCloth2;
 
 
 public class EAttack_Strike : Attack_Base
@@ -36,7 +35,7 @@ public class EAttack_Strike : Attack_Base
         for (int i = 0; i < 3; i++)
         {
             (bool isCritical, int damage) = enemy.DamageCalculation(value_Normal[i]);
-            Skill_Base.Value_Data skillData = value_Normal[i].levelValue.GetData(skillLevel);
+            Skill_Value_SO.Value_Data skillData = value_Normal[i].levelValue.GetData(skillLevel);
             value_Normal[i].attackCollider.Damage_Setting(skillData.type, skillData.attackEffect, isCritical, skillData.hitCount, damage); ;
         }
 
@@ -212,7 +211,7 @@ public class EAttack_Strike : Attack_Base
 
                 // 데미지 셋팅
                 (bool isCritical, int damage) = enemy.DamageCalculation(value_Normal[3]);
-                Skill_Base.Value_Data skillData = value_Normal[3].levelValue.GetData(skillLevel);
+                Skill_Value_SO.Value_Data skillData = value_Normal[3].levelValue.GetData(skillLevel);
                 ex.Damage_Setting(skillData.type, skillData.attackEffect, Attack_Collider_AOE.AttackType.SingleHit, isCritical, skillData.hitCount, damage, 0.05f);
             }
             a += 4;
@@ -244,7 +243,7 @@ public class EAttack_Strike : Attack_Base
 
                 // 데미지 셋팅
                 (bool isCritical, int damage) = enemy.DamageCalculation(value_Normal[4]);
-                Skill_Base.Value_Data skillData = value_Normal[4].levelValue.GetData(skillLevel);
+                Skill_Value_SO.Value_Data skillData = value_Normal[4].levelValue.GetData(skillLevel);
                 ex.Damage_Setting(skillData.type, skillData.attackEffect, Attack_Collider_AOE.AttackType.SingleHit, isCritical, skillData.hitCount, damage, 0.05f);
             }
             a += 8;

@@ -1,5 +1,4 @@
 using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using Easing.Tweening;
 
@@ -121,7 +120,7 @@ public class EAttack_ComboUpper : Attack_Base
             // 데미지 셋팅
             int valueIndex = index == 0 ? 2 : 3;
             (bool isCritical, int damage) = enemy.DamageCalculation(value_Normal[valueIndex]);
-            Skill_Base.Value_Data skillData = value_Normal[valueIndex].levelValue.GetData(skillLevel);
+            Skill_Value_SO.Value_Data skillData = value_Normal[valueIndex].levelValue.GetData(skillLevel);
             aoe.Damage_Setting(skillData.type, skillData.attackEffect, Attack_Collider_AOE.AttackType.SingleHit, isCritical, skillData.hitCount, damage, 0.05f);
 
             // 딜레이

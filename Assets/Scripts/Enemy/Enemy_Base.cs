@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AI;
 using Easing.Tweening;
-using static Skill_Base;
+
 
 public abstract class Enemy_Base : MonoBehaviour, IDamageSysteam
 {
@@ -168,7 +168,7 @@ public abstract class Enemy_Base : MonoBehaviour, IDamageSysteam
         bool isCirtical = criticalhit >= Random.Range(0, 100) ? true : false;
 
         // 데미지 계산
-        Value_Data sBase = attackData.levelValue.GetData(0);
+        Skill_Value_SO.Value_Data sBase = attackData.levelValue.GetData(0);
         int calDamage = (int)((sBase.type == IDamageSysteam.DamageType.Physical ? physcialDamage : magicalDamage) * Random.Range(sBase.motionValue.x, sBase.motionValue.y) * (isCirtical ? critical_multiplier : 1));
 
         return (isCirtical, calDamage);

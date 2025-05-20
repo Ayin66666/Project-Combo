@@ -1,6 +1,6 @@
 using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
+
 
 public class EAttack_Shooting : Attack_Base
 {
@@ -46,7 +46,7 @@ public class EAttack_Shooting : Attack_Base
 
         // 데미지 셋팅
         (bool isCritical, int damage) = enemy.DamageCalculation(value_Normal[0]);
-        Skill_Base.Value_Data skillData = value_Normal[0].levelValue.GetData(skillLevel);
+        Skill_Value_SO.Value_Data skillData = value_Normal[0].levelValue.GetData(skillLevel);
         shoot.Damage_Setting(skillData.type, skillData.attackEffect, isCritical, skillData.hitCount, damage);
 
         // 이동방향 셋팅
@@ -62,7 +62,7 @@ public class EAttack_Shooting : Attack_Base
     public override void DamageCal(int index)
     {
         (bool isCritical, int damage) = enemy.DamageCalculation(value_Normal[0]);
-        Skill_Base.Value_Data skillData = value_Normal[0].levelValue.GetData(skillLevel);
+        Skill_Value_SO.Value_Data skillData = value_Normal[0].levelValue.GetData(skillLevel);
         value_Normal[0].attackCollider.Damage_Setting(skillData.type, skillData.attackEffect, isCritical, skillData.hitCount, damage);
     }
 

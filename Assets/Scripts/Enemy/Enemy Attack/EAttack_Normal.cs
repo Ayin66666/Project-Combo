@@ -1,6 +1,4 @@
-using DG.Tweening;
 using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class EAttack_Normal : Attack_Base
@@ -41,11 +39,11 @@ public class EAttack_Normal : Attack_Base
     {
         attackVFX.SetActive(true);
     }
-
+    
     public override void DamageCal(int index)
     {
         (bool isCritical, int damage) = enemy.DamageCalculation(value_Normal[0]);
-        Skill_Base.Value_Data skillData = value_Normal[0].levelValue.GetData(skillLevel);
+        Skill_Value_SO.Value_Data skillData = value_Normal[0].levelValue.GetData(skillLevel);
 
         value_Normal[0].attackCollider.Damage_Setting(skillData.type, skillData.attackEffect, isCritical, skillData.hitCount, damage);
     }

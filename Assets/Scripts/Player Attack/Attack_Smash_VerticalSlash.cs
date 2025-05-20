@@ -1,8 +1,7 @@
-using DG.Tweening;
-using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+
 
 public class Attack_Smash_VerticalSlash : Attack_Base
 {
@@ -163,14 +162,14 @@ public class Attack_Smash_VerticalSlash : Attack_Base
         Value val = Player_Manager.instance.isAwakning ? value_Normal[index] : value_Normal[index];
         (bool isCritical, int damage) = Player_Manager.instance.DamageCalculation(val, skillLevel);
 
-        Skill_Base.Value_Data skillData = val.levelValue.GetData(skillLevel);
+        Skill_Value_SO.Value_Data skillData = val.levelValue.GetData(skillLevel);
         objShot.Damage_Setting(skillData.type, skillData.attackEffect, isCritical, skillData.hitCount, damage);
         objShot.Movement_Setting(ppp, 3f, 0.5f);
     }
 
     public override void DamageCal(int index)
     {
-        Skill_Base.Value_Data skillData;
+        Skill_Value_SO.Value_Data skillData;
         if (Player_Manager.instance.isAwakning)
         {
             (bool isCritical, int damage) = Player_Manager.instance.DamageCalculation(value_Awakening[index], skillLevel);

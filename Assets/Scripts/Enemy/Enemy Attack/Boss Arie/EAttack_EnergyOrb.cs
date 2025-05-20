@@ -62,7 +62,7 @@ public class EAttack_EnergyOrb : Attack_Base
 
                 // 데미지 셋팅
                 (bool isCritical, int damage) = enemy.DamageCalculation(value_Normal[0]);
-                Skill_Base.Value_Data skillData = value_Normal[0].levelValue.GetData(skillLevel);
+                Skill_Value_SO.Value_Data skillData = value_Normal[0].levelValue.GetData(skillLevel);
                 shoot.Damage_Setting(skillData.type, skillData.attackEffect, isCritical, skillData.hitCount, damage);
 
                 // 직격 데미지 셋팅
@@ -142,7 +142,7 @@ public class EAttack_EnergyOrb : Attack_Base
         Attack_Collider_Shooting bigShoot = big.GetComponent<Attack_Collider_Shooting>();
 
         (bool isCri, int dam) = enemy.DamageCalculation(value_Normal[2]);
-        Skill_Base.Value_Data skillData = value_Normal[2].levelValue.GetData(skillLevel);
+        Skill_Value_SO.Value_Data skillData = value_Normal[2].levelValue.GetData(skillLevel);
         bigShoot.Damage_Setting(skillData.type, skillData.attackEffect, isCri, skillData.hitCount, dam);
 
         // 데미지 셋팅 - 폭발

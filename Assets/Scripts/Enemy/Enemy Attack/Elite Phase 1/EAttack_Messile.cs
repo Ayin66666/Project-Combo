@@ -1,7 +1,5 @@
 using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
-using static IDamageSysteam;
 
 
 public class EAttack_Messile : Attack_Base
@@ -107,7 +105,7 @@ public class EAttack_Messile : Attack_Base
             // Åº µ¥¹ÌÁö ¼ÂÆÃ
             Attack_Collider_Shooting bulletObj = obj.GetComponent<Attack_Collider_Shooting>();
             (bool isCritical, int damage) = enemy.DamageCalculation(value_Normal[0]);
-            Skill_Base.Value_Data skillData = value_Normal[0].levelValue.GetData(skillLevel);
+            Skill_Value_SO.Value_Data skillData = value_Normal[0].levelValue.GetData(skillLevel);
             bulletObj.Damage_Setting(skillData.type, skillData.attackEffect, isCritical, skillData.hitCount, damage);
 
             // Åº Æø¹ß µ¥¹ÌÁö ¼ÂÆÃ

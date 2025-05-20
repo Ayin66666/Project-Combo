@@ -1,10 +1,8 @@
 ﻿using System.Collections;
 using UnityEngine;
-using TMPro;
 using DG.Tweening;
 using Easing.Tweening;
 using System.Collections.Generic;
-using static Skill_Base;
 
 
 public class Player_Manager : MonoBehaviour, IDamageSysteam
@@ -834,7 +832,7 @@ public class Player_Manager : MonoBehaviour, IDamageSysteam
         bool isCirtical = criticalhit >= Random.Range(0, 100) ? true : false;
 
         // 데미지 계산 - 여기 레벨 벨류 어케할거 - 그냥 인덱스 추가해서 값 받아옴!
-        Value_Data sBase = attackData.levelValue.GetData(skillLevel);
+        Skill_Value_SO.Value_Data sBase = attackData.levelValue.GetData(skillLevel);
         int calDamage = (int)((sBase.type == IDamageSysteam.DamageType.Physical ? physcialDamage : magicalDamage) * Random.Range(sBase.motionValue.x, sBase.motionValue.y) * (isCirtical ? critical_multiplier : 1));
 
         return (isCirtical, calDamage);

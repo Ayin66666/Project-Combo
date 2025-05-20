@@ -43,7 +43,7 @@ public class EAttack_Swing : Attack_Base
     public override void DamageCal(int index)
     {
         (bool isCritical, int damage) = enemy.DamageCalculation(value_Normal[index]);
-        Skill_Base.Value_Data skillData = value_Normal[index].levelValue.GetData(skillLevel);
+        Skill_Value_SO.Value_Data skillData = value_Normal[index].levelValue.GetData(skillLevel);
 
         flameCollider.Damage_Setting(skillData.type, skillData.attackEffect, Attack_Collider_AOE.AttackType.multipleHit, isCritical, skillData.hitCount, damage, 0.25f);
     }

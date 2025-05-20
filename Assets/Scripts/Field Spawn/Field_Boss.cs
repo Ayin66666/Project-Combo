@@ -1,12 +1,12 @@
 using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
+
 
 public class Field_Boss : Field_Base
 {
     [Header("---Setting---")]
     [SerializeField] private Enemy_Base boss;
-    private new WaitForSeconds delay = new WaitForSeconds(1f);
+    private  WaitForSeconds delay = new WaitForSeconds(1f);
 
 
     // 엘리트 몬스터 용 소환 트리 추가할 지?

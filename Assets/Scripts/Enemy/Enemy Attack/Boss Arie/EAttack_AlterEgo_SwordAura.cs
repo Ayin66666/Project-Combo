@@ -33,7 +33,7 @@ public class EAttack_AlterEgo_SwordAura : Attack_Base
         {
             (bool isCritical, int damage) = enemy.DamageCalculation(value_Normal[i]);
             Value value = value_Normal[i];
-            Skill_Base.Value_Data skillData = value.levelValue.GetData(skillLevel);
+            Skill_Value_SO.Value_Data skillData = value.levelValue.GetData(skillLevel);
             value.attackCollider.Damage_Setting(skillData.type, skillData.attackEffect, isCritical, skillData.hitCount, damage);
         }
 
@@ -95,7 +95,7 @@ public class EAttack_AlterEgo_SwordAura : Attack_Base
         // 데미지 셋팅
         int targetIndex = (index == 0) ? 4 : 6;
         Value valueData = value_Normal[targetIndex];
-        Skill_Base.Value_Data skillData = valueData.levelValue.GetData(skillLevel);
+        Skill_Value_SO.Value_Data skillData = valueData.levelValue.GetData(skillLevel);
 
         (bool isCritical, int damage) = enemy.DamageCalculation(valueData);
         shoot.Damage_Setting(skillData.type, skillData.attackEffect, isCritical, skillData.hitCount, damage);
@@ -120,7 +120,7 @@ public class EAttack_AlterEgo_SwordAura : Attack_Base
 
             // 데미지 셋팅
             (bool isCritical, int damage) = enemy.DamageCalculation(value_Normal[5]);
-            Skill_Base.Value_Data skillData = value_Normal[5].levelValue.GetData(skillLevel);
+            Skill_Value_SO.Value_Data skillData = value_Normal[5].levelValue.GetData(skillLevel);
             aoe.Damage_Setting(skillData.type, skillData.attackEffect, Attack_Collider_AOE.AttackType.SingleHit, isCritical, skillData.hitCount, damage, 0.05f);
 
             // 폭발 딜레이
@@ -137,7 +137,7 @@ public class EAttack_AlterEgo_SwordAura : Attack_Base
 
             // 데미지 계산
             Value valueData = value_Normal[7];
-            Skill_Base.Value_Data skillData = valueData.levelValue.GetData(skillLevel);
+            Skill_Value_SO.Value_Data skillData = valueData.levelValue.GetData(skillLevel);
             (bool isCritical, int damage) = enemy.DamageCalculation(valueData);
 
             // 분신 데미지 셋팅

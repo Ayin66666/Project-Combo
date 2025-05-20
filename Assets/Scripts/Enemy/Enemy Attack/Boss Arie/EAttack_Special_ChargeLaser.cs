@@ -1,9 +1,9 @@
+using DG.Tweening;
+using Easing.Tweening;
 using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Video;
-using Easing.Tweening;
-using DG.Tweening;
-using System.Collections.Generic;
 
 
 public class EAttack_Special_ChargeLaser : Attack_Base
@@ -192,7 +192,7 @@ public class EAttack_Special_ChargeLaser : Attack_Base
 
         // 중앙 대형 레이저 발사
         (bool isCritical, int damage) = enemy.DamageCalculation(value_Normal[3]);
-        Skill_Base.Value_Data skillData = value_Normal[3].levelValue.GetData(skillLevel);
+        Skill_Value_SO.Value_Data skillData = value_Normal[3].levelValue.GetData(skillLevel);
         laserVFX[1].GetComponent<Attack_Collider_AOE>().Damage_Setting(skillData.type, skillData.attackEffect, Attack_Collider_AOE.AttackType.multipleHit, isCritical, skillData.hitCount, damage, 0.15f);
 
         // 방향 지정
@@ -271,7 +271,7 @@ public class EAttack_Special_ChargeLaser : Attack_Base
 
             // 데미지 셋팅
             (bool isCritical, int damage) = enemy.DamageCalculation(value_Normal[1]);
-            Skill_Base.Value_Data skillData = value_Normal[1].levelValue.GetData(skillLevel);
+            Skill_Value_SO.Value_Data skillData = value_Normal[1].levelValue.GetData(skillLevel);
             aoe.Damage_Setting(skillData.type, skillData.attackEffect, Attack_Collider_AOE.AttackType.multipleHit, isCritical, skillData.hitCount, damage, 0.15f);
 
             // 폭발 딜레이
@@ -303,7 +303,7 @@ public class EAttack_Special_ChargeLaser : Attack_Base
 
             // 데미지 셋팅
             (bool isCritical, int damage) = enemy.DamageCalculation(value_Normal[2]);
-            Skill_Base.Value_Data skillData = value_Normal[2].levelValue.GetData(skillLevel);
+            Skill_Value_SO.Value_Data skillData = value_Normal[2].levelValue.GetData(skillLevel);
             shoot.Damage_Setting(skillData.type, skillData.attackEffect, isCritical, skillData.hitCount, damage);
 
             // 이동 셋팅
@@ -345,7 +345,7 @@ public class EAttack_Special_ChargeLaser : Attack_Base
 
                 // 데미지 셋팅
                 (bool isCritical, int damage) = enemy.DamageCalculation(value_Normal[5]);
-                Skill_Base.Value_Data skillData = value_Normal[5].levelValue.GetData(skillLevel);
+                Skill_Value_SO.Value_Data skillData = value_Normal[5].levelValue.GetData(skillLevel);
                 ex.Damage_Setting(skillData.type, skillData.attackEffect, Attack_Collider_AOE.AttackType.SingleHit, isCritical, skillData.hitCount, damage, 0.05f);
             }
             a += 8;

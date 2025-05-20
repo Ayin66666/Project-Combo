@@ -1,7 +1,5 @@
 using DG.Tweening;
-using System;
 using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class EAttack_MachineGun : Attack_Base
@@ -99,7 +97,7 @@ public class EAttack_MachineGun : Attack_Base
             // 데미지 셋팅
             Attack_Collider_Shooting obj_Setting = obj.GetComponent<Attack_Collider_Shooting>();
             (bool isCritical, int damage) = enemy.DamageCalculation(value_Normal[0]);
-            Skill_Base.Value_Data skillData = value_Normal[0].levelValue.GetData(skillLevel);
+            Skill_Value_SO.Value_Data skillData = value_Normal[0].levelValue.GetData(skillLevel);
             obj_Setting.Damage_Setting(skillData.type, skillData.attackEffect, isCritical, skillData.hitCount, damage);
 
             // 이동 셋팅

@@ -1,7 +1,6 @@
-using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
 using Easing.Tweening;
+using System.Collections;
+using UnityEngine;
 
 
 public class EAttack_AlterEgoShooting : Attack_Base
@@ -64,8 +63,8 @@ public class EAttack_AlterEgoShooting : Attack_Base
 
             // 공격 지시
             Enemy_AlterEgo alter = obj.GetComponent<Enemy_AlterEgo>();
-            (bool isCritical, int damage) = enemy.DamageCalculation(value_Normal[1]);
-            Skill_Base.Value_Data skillData = value_Normal[1].levelValue.GetData(skillLevel);
+            (bool isCritical, int damage) = enemy.DamageCalculation(value_Normal[0]);
+            Skill_Value_SO.Value_Data skillData = value_Normal[1].levelValue.GetData(skillLevel);
             alter.Damage_Setting(skillData.type, skillData.attackEffect, isCritical, skillData.hitCount, damage, enemy.target);
             alter.Attack();
 
@@ -143,7 +142,7 @@ public class EAttack_AlterEgoShooting : Attack_Base
     {
         // 1번 - 시작 데미지
         (bool isCritical, int damage) = enemy.DamageCalculation(value_Normal[1]);
-        Skill_Base.Value_Data skillData = value_Normal[1].levelValue.GetData(skillLevel);
+        Skill_Value_SO.Value_Data skillData = value_Normal[1].levelValue.GetData(skillLevel);
         value_Normal[1].attackCollider.Damage_Setting(skillData.type, skillData.attackEffect, isCritical, skillData.hitCount, damage);
 
         // 2번 - 중간 데미지

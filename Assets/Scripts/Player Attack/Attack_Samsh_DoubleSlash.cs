@@ -1,6 +1,4 @@
-using System;
 using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class Attack_Samsh_DoubleSlash : Attack_Base
@@ -168,13 +166,13 @@ public class Attack_Samsh_DoubleSlash : Attack_Base
 
         // 데미지 셋팅
         (bool isCritical, int damage) = Player_Manager.instance.DamageCalculation(value_Awakening[3], skillLevel);
-        Skill_Base.Value_Data skillData = value_Normal[3].levelValue.GetData(skillLevel);
+        Skill_Value_SO.Value_Data skillData = value_Normal[3].levelValue.GetData(skillLevel);
         aoe.Damage_Setting(skillData.type, skillData.attackEffect, Attack_Collider_AOE.AttackType.multipleHit, isCritical, skillData.hitCount, damage, 0.15f);
     }
 
     public override void DamageCal(int index)
     {
-        Skill_Base.Value_Data skillData;
+        Skill_Value_SO.Value_Data skillData;
         if (Player_Manager.instance.isAwakning)
         {
             (bool isCritical, int damage) = Player_Manager.instance.DamageCalculation(value_Awakening[index], skillLevel);

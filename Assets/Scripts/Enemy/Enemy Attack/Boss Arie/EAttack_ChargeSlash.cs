@@ -1,7 +1,6 @@
-using System;
 using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
+
 
 public class EAttack_ChargeSlash : Attack_Base
 {
@@ -43,7 +42,7 @@ public class EAttack_ChargeSlash : Attack_Base
             // 데미지 셋팅
             (bool isCritical, int damage) = enemy.DamageCalculation(value_Normal[i]);
             Value value = value_Normal[i];
-            Skill_Base.Value_Data skillData = value.levelValue.GetData(skillLevel);
+            Skill_Value_SO.Value_Data skillData = value.levelValue.GetData(skillLevel);
             value_Normal[i].attackCollider.Damage_Setting(skillData.type, skillData.attackEffect, isCritical, skillData.hitCount, damage);
         }
 
@@ -111,7 +110,7 @@ public class EAttack_ChargeSlash : Attack_Base
         // 데미지 셋팅
         (bool isCritical, int damage) = enemy.DamageCalculation(value_Normal[4]);
         Value value = value_Normal[4];
-        Skill_Base.Value_Data skillData = value.levelValue.GetData(skillLevel);
+        Skill_Value_SO.Value_Data skillData = value.levelValue.GetData(skillLevel);
         shoot.Damage_Setting(skillData.type, skillData.attackEffect, Attack_Collider_AOE.AttackType.SingleHit, isCritical, skillData.hitCount, damage, 0.05f);
     }
 
@@ -130,7 +129,7 @@ public class EAttack_ChargeSlash : Attack_Base
 
             // 데미지 셋팅
             (bool isCritical, int damage) = enemy.DamageCalculation(value_Normal[3]);
-            Skill_Base.Value_Data skillData = value_Normal[3].levelValue.GetData(skillLevel);
+            Skill_Value_SO.Value_Data skillData = value_Normal[3].levelValue.GetData(skillLevel);
             obj.GetComponent<Attack_Collider_AOE>().Damage_Setting(skillData.type, skillData.attackEffect, Attack_Collider_AOE.AttackType.SingleHit, isCritical, skillData.hitCount, damage, 0.05f);
 
             yield return new WaitForSeconds(0.125f);
@@ -146,7 +145,7 @@ public class EAttack_ChargeSlash : Attack_Base
 
             // 데미지 셋팅
             (bool isCritical, int damage) = enemy.DamageCalculation(value_Normal[4]);
-            Skill_Base.Value_Data skillData = value_Normal[4].levelValue.GetData(skillLevel);
+            Skill_Value_SO.Value_Data skillData = value_Normal[4].levelValue.GetData(skillLevel);
             obj.GetComponent<Attack_Collider_AOE>().Damage_Setting(skillData.type, skillData.attackEffect, Attack_Collider_AOE.AttackType.SingleHit, isCritical, skillData.hitCount, damage, 0.05f);
         }
 
