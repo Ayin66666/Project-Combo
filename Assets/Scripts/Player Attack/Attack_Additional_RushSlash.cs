@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using UnityEngine;
 
@@ -5,6 +6,7 @@ public class Attack_Additional_RushSlash : Attack_Base
 {
     [Header("---RushSlash Setting---")]
     [SerializeField] private GameObject[] attackVFX;
+    [SerializeField] private GameObject rushSlashCollider;
 
 
     public override void Use()
@@ -32,6 +34,7 @@ public class Attack_Additional_RushSlash : Attack_Base
 
         // 돌진 공격
         Player_Manager.instance.LookAt();
+        RushCollider(true);
         anim.SetTrigger("Action");
         anim.SetBool("isAttack", true);
         anim.SetBool("isAdditonalRush", true);
@@ -57,12 +60,24 @@ public class Attack_Additional_RushSlash : Attack_Base
 
         // 콜라이더 무시
         Player_Manager.instance.Collider_Ignore(false);
+        RushCollider(false);
 
         // 공격 콜라이더 리셋
         Attack_ColliderReset();
 
         Player_Manager.instance.MovementLock(cancelType, false);
         Player_Manager.instance.AttackOver();
+    }
+
+    private void RushCollider(bool isOn)
+    {
+        Attack_Collider_AOE aoe = rushSlashCollider.GetComponent<Attack_Collider_AOE>();
+
+        (bool isCritical, int damage) = enemy.DamageCalculation(value_Normal[0]);
+        Skill_Value_SO.Value_Data skillData = value_Normal[0].levelValue.GetData(skillLevel);
+        aoe.Damage_Setting(skillData.type, skillData.attackEffect, Attack_Collider_AOE.AttackType.multipleHit, isCritical, skillData.hitCount, damage, 3f);
+        
+        rushSlashCollider.SetActive(isOn);
     }
 
     public override void AttackVFX(int index)
@@ -75,19 +90,19 @@ public class Attack_Additional_RushSlash : Attack_Base
         Skill_Value_SO.Value_Data skillData;
         if (Player_Manager.instance.isAwakning)
         {
-            (bool isCritical, int damage) = Player_Manager.instance.DamageCalculation(value_Awakening[index], skillLevel);
-            skillData = value_Awakening[index].levelValue.GetData(skillLevel);
+            (bool isCritical, int damage) = Player_Manager.instance.DamageCalculation(value_Awakening[0], skillLevel);
+            skillData = value_Awakening[0].levelValue.GetData(skillLevel);
 
-            if (value_Awakening[index].attackCollider != null)
-                value_Awakening[index].attackCollider.Damage_Setting(skillData.type, skillData.attackEffect, isCritical, skillData.hitCount, damage);
+            if (value_Awakening[0].attackCollider != null)
+                value_Awakening[0].attackCollider.Damage_Setting(skillData.type, skillData.attackEffect, isCritical, skillData.hitCount, damage);
         }
         else
         {
-            (bool isCritical, int damage) = Player_Manager.instance.DamageCalculation(value_Normal[index], skillLevel);
-            skillData = value_Normal[index].levelValue.GetData(skillLevel);
+            (bool isCritical, int damage) = Player_Manager.instance.DamageCalculation(value_Normal[0], skillLevel);
+            skillData = value_Normal[0].levelValue.GetData(skillLevel);
 
-            if (value_Awakening[index].attackCollider != null)
-                value_Normal[index].attackCollider.Damage_Setting(skillData.type, skillData.attackEffect, isCritical, skillData.hitCount, damage);
+            if (value_Awakening[0].attackCollider != null)
+                value_Normal[0].attackCollider.Damage_Setting(skillData.type, skillData.attackEffect, isCritical, skillData.hitCount, damage);
         }
     }
 

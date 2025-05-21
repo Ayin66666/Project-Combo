@@ -92,7 +92,7 @@ public class AttackCollider_Controller : MonoBehaviour
         }
 
         currentIndex = index;
-        // Invoke(nameof(Re), 0.5f); -> 이거 화면 확인용인데 성능이슈 있을수도 있어서 일단 비활성화
+        Invoke(nameof(Re), 0.5f); // -> 이거 화면 확인용인데 성능이슈 있을수도 있어서 일단 비활성화
     }
 
     private void Re()

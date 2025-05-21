@@ -182,7 +182,6 @@ public class EAttack_Strike : Attack_Base
     }
 
 
-
     public void Explosion(int index)
     {   
         explosionCoroutine = StartCoroutine(index == 0 ? Explosion_First() : Explosion_Second());
@@ -201,7 +200,6 @@ public class EAttack_Strike : Attack_Base
         int a = 0;
         for (int i = 0; i < 5; i++)
         {
-            Debug.Log("Call Ex 1");
             // ÀÌÆåÆ® ¼ÒÈ¯
             for (int j = a; j < a + 4; j++)
             {

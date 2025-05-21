@@ -100,9 +100,12 @@ public class Stage_Manager : MonoBehaviour
         }
     }
 
+    /// <summary>
+    /// 다음 씬으로 넘어가기
+    /// </summary>
     public void Stage_End()
     {
-
+        SceneLoad_Manager.LoadScene(nextScene);
     }
 
     /// <summary>

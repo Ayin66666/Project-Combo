@@ -22,9 +22,11 @@ public class Attack_Collider_AOE : MonoBehaviour
     private enum ColliderOwner { Player, Enemy }
     public enum AttackType { SingleHit, multipleHit }
 
+
     private void OnEnable()
     {
         attackCollider.enabled = true;
+        isDelay = false;
 
         if (attackType == AttackType.SingleHit)
             StartCoroutine(Delay_Collider(delayTime));
@@ -77,7 +79,7 @@ public class Attack_Collider_AOE : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
-        if(other.CompareTag(owner == ColliderOwner.Player ? "Enemy" : "Player") && !isDelay)
+        if (other.CompareTag(owner == ColliderOwner.Player ? "Enemy" : "Player") && !isDelay)
         {
             // µ¥¹ÌÁö
             other.GetComponent<IDamageSysteam>().Take_Damage(gameObject, damageType, hitEffect, isCritical, hitCount, damage);

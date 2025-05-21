@@ -270,7 +270,7 @@ public class EAttack_Special_ChargeLaser : Attack_Base
             laser.transform.rotation = lookRotation;
 
             // 데미지 셋팅
-            (bool isCritical, int damage) = enemy.DamageCalculation(value_Normal[1]);
+            (bool isCritical, int damage) = enemy.DamageCalculation(value_Normal[0]);
             Skill_Value_SO.Value_Data skillData = value_Normal[1].levelValue.GetData(skillLevel);
             aoe.Damage_Setting(skillData.type, skillData.attackEffect, Attack_Collider_AOE.AttackType.multipleHit, isCritical, skillData.hitCount, damage, 0.15f);
 

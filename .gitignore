@@ -44,6 +44,7 @@ sysinfo.txt
 /[Aa]ssets/[Ss]treamingAssets/aa.meta
 /[Aa]ssets/[Ss]treamingAssets/aa/*
 
+<<<<<<< HEAD
 # 대용량 에셋 확장자 무시 (모델링, 텍스처, 사운드, 애니메이션 등)
 *.fbx
 *.obj
@@ -103,3 +104,17 @@ ReflectionProbe-*
 # !*.cs
 # !*.unity
 # !*.meta
+=======
+# Large asset files -
+*.fbx
+*.obj
+*.blend
+*.psd
+*.tga
+*.png
+*.exr
+*.hdr
+*.mp4
+*.wav
+*.avi
+>>>>>>> 9ef4dbc0e947bdedc63e63de21399603810b6d7b
