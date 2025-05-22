@@ -1,7 +1,9 @@
 using System.Collections;
+using TMPro;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
+using Easing.Tweening;
 
 
 public class SceneLoad_Manager : MonoBehaviour
@@ -15,13 +17,9 @@ public class SceneLoad_Manager : MonoBehaviour
 
     [Header("---Loading Image---")]
     [SerializeField] private Slider progressbar;
-    [SerializeField] private Text loadText;
-    [SerializeField] private Text tipText;
+    [SerializeField] private TextMeshProUGUI loadText;
+    [SerializeField] private TextMeshProUGUI tipText;
     [SerializeField][TextArea] private string[] texts;
-
-
-    [Header("=== 페이드 ===")]
-    [SerializeField] private Image fadeImage;
 
 
     void Awake()
@@ -99,19 +97,8 @@ public class SceneLoad_Manager : MonoBehaviour
         Cursor.lockState = CursorLockMode.None;
         isLoading = true;
 
-        // 화면 페이드
-        fadeImage.color = new Color(fadeImage.color.r, fadeImage.color.g, fadeImage.color.b, 1);
-        float timer = 1;
-        while(timer > 0)
-        {
-            timer -= Time.deltaTime * 1.25f;
-            fadeImage.color = new Color(fadeImage.color.r, fadeImage.color.g, fadeImage.color.b, timer);
-            yield return null;
-        }
-        fadeImage.color = new Color(fadeImage.color.r, fadeImage.color.g, fadeImage.color.b, 0);
-
         // 팁 실행
-        if(tipCoroutine != null)
+        if (tipCoroutine != null)
             StopCoroutine(tipCoroutine);
 
         tipCoroutine = StartCoroutine(Tip());
