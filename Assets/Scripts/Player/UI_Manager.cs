@@ -69,7 +69,7 @@ public class UI_Manager : MonoBehaviour
 
     [Header("---Fade UI---")]
     [SerializeField] private GameObject fadeSet;
-    [SerializeField] private CanvasGroup fade;
+    [SerializeField] private CanvasGroup fadeCanvasGroup;
 
 
     [Header("---Inventory---")]
@@ -103,6 +103,36 @@ public class UI_Manager : MonoBehaviour
         Awanking();
     }
 
+
+    public void Fade(bool isOn, float speed)
+    {
+        StartCoroutine(FadeCall(isOn, speed));
+    }
+
+    private IEnumerator FadeCall(bool isOn, float speed)
+    {
+        float start = isOn ? 0 : 1;
+        float end = isOn ? 1 : 0;
+        float timer = 0;
+
+        fadeSet.SetActive(true);
+        fadeCanvasGroup.alpha = start;
+        while (timer < 1)
+        {
+            timer += Time.deltaTime;
+            float t = Mathf.Clamp01(timer / speed);
+            fadeCanvasGroup.alpha = Mathf.Lerp(start, end, t);
+           yield return null;
+        }
+        fadeCanvasGroup.alpha = end;
+
+        if(isOn)
+        {
+            fadeSet.SetActive(false);
+        }
+
+        yield return null;
+    }
 
     #region Status
     /// <summary>

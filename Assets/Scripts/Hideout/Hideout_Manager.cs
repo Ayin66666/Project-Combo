@@ -41,6 +41,7 @@ public class Hideout_Manager : MonoBehaviour
     public void Stage_Move(string sceneName)
     {
         // 선행 연출 - 넣을건지?
+        UI_Manager.instance.Fade(true, 0.75f);
 
         // 씬 이동
         SceneLoad_Manager.LoadScene(sceneName);
