@@ -54,6 +54,6 @@ public class Hideout_Manager : MonoBehaviour
     /// </summary>
     public void Save()
     {
-        
+        SaveLoad_Manager.instance.SaveUI(true);
     }
 }

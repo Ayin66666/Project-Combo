@@ -148,11 +148,11 @@ public class UI_Manager : MonoBehaviour
         hpBSlider.maxValue = Player_Manager.instance.maxHp;
         hpBSlider.value = Player_Manager.instance.curhp;
 
-        staminaSlider.maxValue = Player_Manager.instance.maxSteamina;
-        staminaSlider.value = Player_Manager.instance.curSteamina;
+        staminaSlider.maxValue = Player_Manager.instance.maxStamina;
+        staminaSlider.value = Player_Manager.instance.curStamina;
 
-        awankingSlider.maxValue = Player_Manager.instance.maxAwankning;
-        awankingSlider.value = Player_Manager.instance.curAwankning;
+        awankingSlider.maxValue = Player_Manager.instance.maxAwakening;
+        awankingSlider.value = Player_Manager.instance.curAwakening;
     }
 
     public void Hp()
@@ -173,12 +173,12 @@ public class UI_Manager : MonoBehaviour
 
     public void Stamina()
     {
-        staminaSlider.value = Player_Manager.instance.curSteamina;
+        staminaSlider.value = Player_Manager.instance.curStamina;
     }
 
     public void Awanking()
     {
-        awankingSlider.value = Player_Manager.instance.curAwankning;
+        awankingSlider.value = Player_Manager.instance.curAwakening;
     }
     #endregion
 

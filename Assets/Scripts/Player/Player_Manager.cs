@@ -9,6 +9,8 @@ public class Player_Manager : MonoBehaviour, IDamageSysteam
 {
     public static Player_Manager instance;
 
+    public int level;
+
     [Header("---Status---")]
     // Defence Status
     public int curhp;
@@ -17,7 +19,7 @@ public class Player_Manager : MonoBehaviour, IDamageSysteam
     public int magicalDefence;
 
     // Attack Status
-    public int physcialDamage;
+    public int physicalDamage;
     public int magicalDamage;
     public int attackSpeed;
     public float criticalhit;
@@ -25,10 +27,10 @@ public class Player_Manager : MonoBehaviour, IDamageSysteam
 
     // Other Status
     public float moveSpeed;
-    public float curSteamina;
-    public float maxSteamina;
-    public float curAwankning;
-    public float maxAwankning;
+    public float curStamina;
+    public float maxStamina;
+    public float curAwakening;
+    public float maxAwakening;
 
 
     // 아머 타입 추가해야함! - 그리고 아머타입에 따른 피격효과 셋팅도!
@@ -276,8 +278,8 @@ public class Player_Manager : MonoBehaviour, IDamageSysteam
 
     private void Recovery()
     {
-        if (curSteamina < maxSteamina)
-            curSteamina += Time.deltaTime * 5f;
+        if (curStamina < maxStamina)
+            curStamina += Time.deltaTime * 5f;
     }
 
     public void Collider_Ignore(bool isOn)
@@ -381,7 +383,7 @@ public class Player_Manager : MonoBehaviour, IDamageSysteam
 
     private IEnumerator DashCall()
     {
-        if (!canAction || !canDash || curSteamina < 30)
+        if (!canAction || !canDash || curStamina < 30)
         {
             yield break;
         }
@@ -391,7 +393,7 @@ public class Player_Manager : MonoBehaviour, IDamageSysteam
             isDash = true;
 
             // 스테미너 소모
-            curSteamina -= 30f;
+            curStamina -= 30f;
 
             // 애니메이션 리셋
             Animation_Reset();
@@ -833,7 +835,7 @@ public class Player_Manager : MonoBehaviour, IDamageSysteam
 
         // 데미지 계산 - 여기 레벨 벨류 어케할거 - 그냥 인덱스 추가해서 값 받아옴!
         Skill_Value_SO.Value_Data sBase = attackData.levelValue.GetData(skillLevel);
-        int calDamage = (int)((sBase.type == IDamageSysteam.DamageType.Physical ? physcialDamage : magicalDamage) * Random.Range(sBase.motionValue.x, sBase.motionValue.y) * (isCirtical ? critical_multiplier : 1));
+        int calDamage = (int)((sBase.type == IDamageSysteam.DamageType.Physical ? physicalDamage : magicalDamage) * Random.Range(sBase.motionValue.x, sBase.motionValue.y) * (isCirtical ? critical_multiplier : 1));
 
         return (isCirtical, calDamage);
     }
@@ -991,11 +993,11 @@ public class Player_Manager : MonoBehaviour, IDamageSysteam
 
     public void AwankingAdd(int index)
     {
-        curAwankning += index;
-        if (curAwankning >= maxAwankning)
+        curAwakening += index;
+        if (curAwakening >= maxAwakening)
         {
             // 최대치를 넘을 경우
-            curAwankning = maxAwankning;
+            curAwakening = maxAwakening;
 
             // 각성 활성화
             if (!canAwakning)

@@ -97,7 +97,7 @@ public class Attack_Other_SpecialSlash : Attack_Base
         Player_Manager.instance.Collider_Ignore(false);
 
         // 각성 종료
-        Player_Manager.instance.curAwankning = 0;
+        Player_Manager.instance.curAwakening = 0;
 
         // 공격 종료
         Player_Manager.instance.MovementLock(cancelType, false);

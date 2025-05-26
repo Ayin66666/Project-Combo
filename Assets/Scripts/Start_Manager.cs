@@ -13,7 +13,6 @@ public class Start_Manager : MonoBehaviour
 
 
     [Header("---UI---")]
-    [SerializeField] private GameObject selectSet;
     [SerializeField] private GameObject optionSet;
     [SerializeField] private GameObject extraSet;
     [SerializeField] private GameObject exitSet;
@@ -31,7 +30,6 @@ public class Start_Manager : MonoBehaviour
             Destroy(gameObject);
         }
 
-        uiList.Add(selectSet);
         uiList.Add(optionSet);
         uiList.Add(extraSet);
         uiList.Add(exitSet);
@@ -58,7 +56,7 @@ public class Start_Manager : MonoBehaviour
     public void Click_Start()
     {
         curUI = UI.Start;
-        selectSet.SetActive(true);
+        SaveLoad_Manager.instance.SaveUI(true);
     }
 
     /// <summary>

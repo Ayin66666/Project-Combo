@@ -169,16 +169,16 @@ public class Stage_Manager : MonoBehaviour
         maxHp = Player_Manager.instance.maxHp;
         physicalDefence = Player_Manager.instance.physicalDefence;
         magicalDamage = Player_Manager.instance.magicalDefence;
-        physcialDamage = Player_Manager.instance.physcialDamage;
+        physcialDamage = Player_Manager.instance.physicalDamage;
         magicalDamage = Player_Manager.instance.magicalDamage;
         attackSpeed = Player_Manager.instance.attackSpeed;
         criticalhit = Player_Manager.instance.criticalhit;
         critical_multiplier = Player_Manager.instance.critical_multiplier;
         moveSpeed = Player_Manager.instance.moveSpeed;
-        curSteamina = Player_Manager.instance.curSteamina;
-        maxSteamina = Player_Manager.instance.maxSteamina;
-        curAwankning = Player_Manager.instance.curAwankning;
-        maxAwankning = Player_Manager.instance.maxAwankning;
+        curSteamina = Player_Manager.instance.curStamina;
+        maxSteamina = Player_Manager.instance.maxStamina;
+        curAwankning = Player_Manager.instance.curAwakening;
+        maxAwankning = Player_Manager.instance.maxAwakening;
 
         // 아이템 저장
 
@@ -195,16 +195,16 @@ public class Stage_Manager : MonoBehaviour
         Player_Manager.instance.maxHp = maxHp;
         Player_Manager.instance.physicalDefence = physicalDefence;
         Player_Manager.instance.magicalDefence = magicalDamage;
-        Player_Manager.instance.physcialDamage = physcialDamage;
+        Player_Manager.instance.physicalDamage = physcialDamage;
         Player_Manager.instance.magicalDamage = magicalDamage;
         Player_Manager.instance.attackSpeed = attackSpeed;
         Player_Manager.instance.criticalhit = criticalhit;
         Player_Manager.instance.critical_multiplier = critical_multiplier;
         Player_Manager.instance.moveSpeed = moveSpeed;
-        Player_Manager.instance.curSteamina = curSteamina;
-        Player_Manager.instance.maxSteamina = maxSteamina;
-        Player_Manager.instance.curAwankning = curAwankning;
-        Player_Manager.instance.maxAwankning = maxAwankning;
+        Player_Manager.instance.curStamina = curSteamina;
+        Player_Manager.instance.maxStamina = maxSteamina;
+        Player_Manager.instance.curAwakening = curAwankning;
+        Player_Manager.instance.maxAwakening = maxAwankning;
 
 
         // UI 리셋
