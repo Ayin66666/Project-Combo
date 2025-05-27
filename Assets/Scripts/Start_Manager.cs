@@ -13,9 +13,11 @@ public class Start_Manager : MonoBehaviour
 
 
     [Header("---UI---")]
+    [SerializeField] private GameObject selectSet;
     [SerializeField] private GameObject optionSet;
     [SerializeField] private GameObject extraSet;
     [SerializeField] private GameObject exitSet;
+    [SerializeField] private List<Save_Slot> slots;
     private List<GameObject> uiList = new List<GameObject>();
 
 
@@ -30,11 +32,22 @@ public class Start_Manager : MonoBehaviour
             Destroy(gameObject);
         }
 
+        uiList.Add(selectSet);
         uiList.Add(optionSet);
         uiList.Add(extraSet);
         uiList.Add(exitSet);
     }
 
+    /// <summary>
+    /// 슬롯 선택 UI 표기
+    /// </summary>
+    /// <param name="index"></param>
+    /// <param name="levelText"></param>
+    /// <param name="timeText"></param>
+    public void Slot_Setting(int index, string levelText, string timeText)
+    {
+        slots[index].Slot_Setting(levelText, timeText);
+    }
 
     #region 버튼 이벤트
 
@@ -56,7 +69,32 @@ public class Start_Manager : MonoBehaviour
     public void Click_Start()
     {
         curUI = UI.Start;
-        SaveLoad_Manager.instance.SaveUI(true);
+        selectSet.SetActive(true);  
+    }
+
+    /// <summary>
+    /// select 슬롯에서 클릭했을 때 호출 - 인자값의 데이터가 있는지 체크 후 동작
+    /// </summary>
+    /// <param name="index"></param>
+    public void Click_Slot(int index)
+    {
+        if(SaveLoad_Manager.instance.CheckData(index))
+        {
+            // 해당 슬롯에 저장된 데이터가 있을 경우
+
+            // 데이터 로드
+            SaveLoad_Manager.instance.LoadData(index);
+
+            // 마이룸으로
+            SceneLoad_Manager.LoadScene("0.Hideout");
+        }
+        else
+        {
+            // 저장된 데이터가 없다면
+
+            // 튜토리얼 이동
+            SceneLoad_Manager.LoadScene("1.Chapter1_Tutorial");
+        }
     }
 
     /// <summary>

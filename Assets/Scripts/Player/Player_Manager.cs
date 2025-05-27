@@ -154,6 +154,25 @@ public class Player_Manager : MonoBehaviour, IDamageSysteam
         Recovery();
     }
 
+    public void Status_Setting(PlayerData data)
+    {
+        curhp = data.curhp;
+        maxHp = data.maxHp;
+        physicalDefence = data.physicalDefence;
+        magicalDefence = data.magicalDefence;
+
+        physicalDamage = data.physicalDamage;
+        magicalDamage = data.magicalDamage;
+        criticalhit = data.criticalhit;
+        critical_multiplier = data.critical_multiplier;
+        attackSpeed = data.attackSpeed;
+
+        moveSpeed = data.moveSpeed;
+        curStamina = data.curStamina;
+        maxStamina = data.maxStamina;
+        curAwakening = data.curAwakening;
+        maxAwakening = data.maxAwakening;
+    }
 
     public void Cursor_Setting(bool isOn)
     {
