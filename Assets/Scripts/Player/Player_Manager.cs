@@ -154,7 +154,7 @@ public class Player_Manager : MonoBehaviour, IDamageSysteam
         Recovery();
     }
 
-    public void Status_Setting(PlayerData data)
+    public void Status_Setting(Data data)
     {
         curhp = data.curhp;
         maxHp = data.maxHp;

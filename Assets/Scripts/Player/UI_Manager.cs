@@ -4,6 +4,7 @@ using UnityEngine.UI;
 using TMPro;
 using DG.Tweening;
 using Easing.Tweening;
+using Unity.VisualScripting;
 
 
 public class UI_Manager : MonoBehaviour
@@ -13,6 +14,7 @@ public class UI_Manager : MonoBehaviour
 
     [Header("---State---")]
     public bool isUIOn;
+    public bool isFade;
     [SerializeField] private UIType uiType;
     public enum UIType { Item, Skill, Tutorial, Option }
 
@@ -114,6 +116,7 @@ public class UI_Manager : MonoBehaviour
         float start = isOn ? 0 : 1;
         float end = isOn ? 1 : 0;
         float timer = 0;
+        isFade = true;
 
         fadeSet.SetActive(true);
         fadeCanvasGroup.alpha = start;
@@ -131,7 +134,7 @@ public class UI_Manager : MonoBehaviour
             fadeSet.SetActive(false);
         }
 
-        yield return null;
+        isFade = false;
     }
 
     #region Status
