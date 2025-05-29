@@ -165,28 +165,6 @@ public class SaveLoad_Manager : MonoBehaviour
         }
     }
 
-    private IEnumerator CoverDataCall(int index)
-    {
-        // 조건 초기화
-        isCover = false;
-
-        // UI 활성화
-        CoverUI(true);
-
-        // UI 종료 대기
-        while (coverUISet.activeSelf)
-        {
-            yield return null;
-        }
-
-        // 조건 만족시 저장
-        if (isCover)
-        {
-            // 데이터 저장
-            SaveResultUI(Save(index));
-        }
-    }
-
     /// <summary>
     /// 저장 기능
     /// </summary>
@@ -235,6 +213,29 @@ public class SaveLoad_Manager : MonoBehaviour
             return false;
         }
     }
+
+    private IEnumerator CoverDataCall(int index)
+    {
+        // 조건 초기화
+        isCover = false;
+
+        // UI 활성화
+        CoverUI(true);
+
+        // UI 종료 대기
+        while (coverUISet.activeSelf)
+        {
+            yield return null;
+        }
+
+        // 조건 만족시 저장
+        if (isCover)
+        {
+            // 데이터 저장
+            SaveResultUI(Save(index));
+        }
+    }
+
 
     /// <summary>
     /// 데이터 로드 기능
