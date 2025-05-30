@@ -40,6 +40,10 @@ public class Hideout_Manager : MonoBehaviour
     [SerializeField] private ChapterData clearData; // 저장용 데이터 - 클리어 여부
 
 
+    [Header("---Component---")]
+    private StageData_Manager sd_Manager;
+
+
     private void Awake()
     {
         if (instance == null)
@@ -52,23 +56,59 @@ public class Hideout_Manager : MonoBehaviour
         }
 
         DontDestroyOnLoad(gameObject);
+
+        sd_Manager = StageData_Manager.instance;
     }
 
-    public void Data_Setting(Data data)
+    private void Start()
     {
-        // 데이터 받아와서 셋팅
-        clearData = data.clearData[chapterCount];
+        Data_Setting();
+        SelectUI_Setting();
+    }
+
+
+    #region 아지트 입장 시 데이터 최신화 로직
+    /// <summary>
+    /// 아지트 입장 시 데이터 최신화 기능
+    /// </summary>
+    public void Data_Setting()
+    {
+        // 아지트 진입 시 동작 - 데이터 셋팅 로직
+        Data chapterData = SaveLoad_Manager.instance.LoadData(SaveLoad_Manager.instance.curSlot);
+        clearData = chapterData.clearData[SaveLoad_Manager.instance.curSlot];
+
+
+        // 스테이지 클리어 후 아지트 진입 시 동작 - 데이터 최신화 로직
+        if (sd_Manager != null && sd_Manager.haveNewData)
+        {
+            // 데이터 로드
+            (int chapter, int stageIndex, StageData data) = sd_Manager.Get_StageData();
+
+            // 지금 스테이지에 맞는 데이터 & 데이터 인덱스에 문제가 없다면
+            if (chapterCount == chapter && stageIndex < clearData.stage.Count)
+            {
+                // 데이터 셋팅
+                clearData.stage[stageIndex] = data;
+
+                // 세이브 최신화
+                SaveLoad_Manager.instance.SaveData(SaveLoad_Manager.instance.curSlot);
+            }
+            else
+            {
+                Debug.Log($"데이터 최신화 에러 / 챕터 인덱스 : {chapter} / 스테이지 인덱스 : {stageIndex}");
+            }
+        }
     }
 
     /// <summary>
-    /// 스테이지 클리어 시 데이터 전달
+    /// 스테이지 선택 UI 최신화
     /// </summary>
-    /// <param name="index"></param>
-    /// <param name="data"></param>
-    public void Stage_Clear(int index, StageData data)
+    private void SelectUI_Setting()
     {
-        clearData.stage[index] = data;
+
     }
+    #endregion
+
 
     #region Button Event
     /// <summary>

@@ -240,27 +240,37 @@ public class SaveLoad_Manager : MonoBehaviour
     /// <summary>
     /// 데이터 로드 기능
     /// </summary>
-    /// <param name="index"></param>
-    public void LoadData(int index)
+    /// <param name="slotIndex"></param>
+    public Data LoadData(int slotIndex)
     {
-        if (!CheckData(index))
+        if (!CheckData(slotIndex))
         {
             // 로드 파일 없음!
             Debug.LogWarning("로드할 파일이 없습니다: ");
-            return;
+            return null;
         }
 
         try
         {
-            // 데이터 로드
+            //데이터 불러오기
+            string json = File.ReadAllText(savePath + fileName[slotIndex]);
+            Data data = JsonUtility.FromJson<Data>(json);
 
-            // 데이터 적용
-            
+            // 방어코딩 - 혹시라도 데이터 문제가 있을 경우
+            if(data == null)
+            {
+                Debug.Log($"로드 에러 발생 : {savePath + fileName[slotIndex]}");
+                return null;
+            }
+
+            // 데이터 전달
+            return data;
         }
         catch (IOException ex)
         {
             // 로드를 실패할 경우
             Debug.LogError("Load failed: " + ex.Message);
+            return null;
         }
     }
     #endregion

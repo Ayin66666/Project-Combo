@@ -46,7 +46,6 @@ public class StageData_Manager : MonoBehaviour
     /// <returns></returns>
     public (int chapter, int stageCount, StageData data) Get_StageData()
     {
-        haveNewData = false;
         return (chapterCount, stageCount, data);
     }
 }
