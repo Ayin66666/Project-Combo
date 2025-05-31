@@ -1,6 +1,8 @@
 using System.Collections;
 using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
+using UnityEngine.UI;
 
 
 #region Stage Data
@@ -44,6 +46,17 @@ public class Hideout_Manager : MonoBehaviour
     private StageData_Manager sd_Manager;
 
 
+    [Header("---Description UI---")]
+    [SerializeField] private GameObject descriptionSet;
+    [SerializeField] private TextMeshProUGUI stageTypeText;
+    [SerializeField] private TextMeshProUGUI levelText;
+    [SerializeField] private TextMeshProUGUI stageNameText;
+    [SerializeField] private TextMeshProUGUI clearTimeText;
+    [SerializeField] private TextMeshProUGUI descriptionText;
+    [SerializeField] private TextMeshProUGUI rankText;
+    [SerializeField] private Image stageImage;
+
+
     private void Awake()
     {
         if (instance == null)
@@ -64,6 +77,26 @@ public class Hideout_Manager : MonoBehaviour
     {
         Data_Setting();
         SelectUI_Setting();
+
+        DescriptionUI_Setting(0);
+    }
+
+
+    /// <summary>
+    /// 스테이지 버튼 클릭 시 상세 UI 표기
+    /// </summary>
+    public void DescriptionUI_Setting(int stageIndex)
+    {
+        // 스테이지 기본 데이터
+        stageImage.sprite = null;
+        stageTypeText.text = uiData.stageData[stageIndex].stageType.ToString();
+        levelText.text = uiData.stageData[stageIndex].stageLevel.ToString();
+        stageNameText.text = uiData.stageData[stageIndex].stageName;
+        descriptionText.text = uiData.stageData[stageIndex].stageSummation;
+
+        // 클리어 데이터
+        clearTimeText.text = clearData.stage[stageIndex].clearTime.ToString();
+        rankText.text = clearData.stage[stageIndex].clearRank.ToString();
     }
 
 

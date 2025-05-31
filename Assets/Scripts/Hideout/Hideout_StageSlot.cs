@@ -1,29 +1,21 @@
-using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.EventSystems;
+using TMPro;
+
 
 public class Hideout_StageSlot : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler, IPointerClickHandler
 {
     [Header("---Slot UI---")]
     [SerializeField] private Image borderImage;
     [SerializeField] private TextMeshProUGUI nameText;
-    [SerializeField] private TextMeshProUGUI typeText;
+    [SerializeField] private int stageIndex;
 
 
-    [Header("---Description UI---")]
-    [SerializeField] private GameObject descriptionSet;
-    [SerializeField] private TextMeshProUGUI stageNameText;
-    [SerializeField] private TextMeshProUGUI stageTypeText;
-    [SerializeField] private TextMeshProUGUI levelText;
-    [SerializeField] private TextMeshProUGUI rankText;
-    [SerializeField] private Image stageImage;
-
-
-    public void UI_Setting(Chapter_Data_SO data, int index)
+    public void SlotUI_Setting(Chapter_Data_SO data, int index)
     {
-        nameText.text = data.stageData[index].stageName;
-        typeText.text = data.stageType == Chapter_Data_SO.StageType.Normal ? "Normal" : "Boss";
+        stageIndex = data.stageData.Count;
+        nameText.text = data.stageData[index].stageType + " " + data.stageData[index].stageName;
     }
 
 
@@ -42,7 +34,8 @@ public class Hideout_StageSlot : MonoBehaviour, IPointerEnterHandler, IPointerEx
 
     public void OnPointerClick(PointerEventData eventData)
     {
-        descriptionSet.SetActive(true);
+        // Ό³Έν UI On
+        Hideout_Manager.instance.DescriptionUI_Setting(stageIndex);
     }
     #endregion
 }
