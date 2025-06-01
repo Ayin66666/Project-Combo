@@ -97,6 +97,9 @@ public class SceneLoad_Manager : MonoBehaviour
         Cursor.lockState = CursorLockMode.None;
         isLoading = true;
 
+        // 페이드 종료
+        // UI_Manager.instance.Fade(false, 0.75f);
+
         // 팁 실행
         if (tipCoroutine != null)
             StopCoroutine(tipCoroutine);

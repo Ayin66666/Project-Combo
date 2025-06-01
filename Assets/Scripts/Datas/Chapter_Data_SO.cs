@@ -17,6 +17,7 @@ public class Chapter_Data_SO : ScriptableObject
         public StageType stageType;
         public Sprite stageImage;
         public string stageName;
+        public string sceneName;
         public int stageLevel;
         [TextArea] public string stageSummation;
         [TextArea] public string stageDescription;

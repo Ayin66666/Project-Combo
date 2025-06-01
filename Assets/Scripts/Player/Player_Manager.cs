@@ -21,7 +21,7 @@ public class Player_Manager : MonoBehaviour, IDamageSysteam
     // Attack Status
     public int physicalDamage;
     public int magicalDamage;
-    public int attackSpeed;
+    public float attackSpeed;
     public float criticalhit;
     public float critical_multiplier;
 

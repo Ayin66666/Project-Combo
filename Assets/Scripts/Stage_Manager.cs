@@ -47,7 +47,7 @@ public class Stage_Manager : MonoBehaviour
     // Attack Status
     public int physcialDamage;
     public int magicalDamage;
-    public int attackSpeed;
+    public float attackSpeed;
     public float criticalhit;
     public float critical_multiplier;
 
@@ -179,10 +179,6 @@ public class Stage_Manager : MonoBehaviour
         maxSteamina = Player_Manager.instance.maxStamina;
         curAwankning = Player_Manager.instance.curAwakening;
         maxAwankning = Player_Manager.instance.maxAwakening;
-
-        // 아이템 저장
-
-        // 스킬 저장
     }
 
     /// <summary>
@@ -206,14 +202,11 @@ public class Stage_Manager : MonoBehaviour
         Player_Manager.instance.curAwakening = curAwankning;
         Player_Manager.instance.maxAwakening = maxAwankning;
 
-
         // UI 리셋
         UI_Manager.instance.Hp();
 
-
         // 플레이어 위치 이동
         Player_Manager.instance.Pos_Setting(spawnPos, spawnRotation);
-
 
         // 스테이지 리셋
     }

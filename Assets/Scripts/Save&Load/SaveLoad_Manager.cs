@@ -23,7 +23,7 @@ public class Data
     // Attack Status
     public int physicalDamage;
     public int magicalDamage;
-    public int attackSpeed;
+    public float attackSpeed;
     public float criticalhit;
     public float critical_multiplier;
 
@@ -37,11 +37,11 @@ public class Data
 
     [Header("---Item---")]
     public List<int> inevntory;
-    public List<GameObject> equipment;
+    public List<int> equipment;
 
 
     [Header("---Chapter---")]
-    public List<ChapterData> clearData;
+    public ClearData clearData;
 }
 
 
@@ -54,6 +54,7 @@ public class SaveLoad_Manager : MonoBehaviour
     public string savePath;
     public List<string> fileName;
     public int curSlot;
+    [SerializeField] private List<Chapter_Data_SO> chapterDatas;
 
 
     [Header("---UI---")]
@@ -153,6 +154,8 @@ public class SaveLoad_Manager : MonoBehaviour
     public void SaveData(int index)
     {
         // 이미 저장된 데이터가 있을 경우 대비
+        bool s = CheckData(index);
+        Debug.Log(s);
         if (CheckData(index))
         {
             // 덮어쓰기 안내 UI
@@ -160,8 +163,8 @@ public class SaveLoad_Manager : MonoBehaviour
         }
         else
         {
-            // 플레이어 데이터 저장 - Save() 함수는 저장 + 불값 반환을 실행하며, 이에 따라 성공 & 실패 UI 표기가 동작함!
-            SaveResultUI(Save(index));
+            // 플레이어 데이터 생성
+            SaveResultUI(Create_Data(index));
         }
     }
 
@@ -198,7 +201,7 @@ public class SaveLoad_Manager : MonoBehaviour
                 // 아이템
 
 
-                // 스테이지      
+                // 스테이지
             };
 
             // 데이터 저장
@@ -236,6 +239,105 @@ public class SaveLoad_Manager : MonoBehaviour
         }
     }
 
+    public void Save_StageData(int chapterIndex, ChapterData data)
+    {
+
+    }
+
+    /// <summary>
+    /// 처음 시작 시 신규 데이터 생성
+    /// </summary>
+    public bool Create_Data(int slotCount)
+    {
+        Data data = new Data()
+        {
+            // 스테이터스
+            level = 1,
+            curhp = 500,
+            maxHp = 500,
+            physicalDefence = 15,
+            magicalDefence = 15,
+
+            physicalDamage = 30,
+            magicalDamage = 30,
+            attackSpeed = 1f,
+            criticalhit = 0,
+            critical_multiplier = 1.5f,
+
+            moveSpeed = 10f,
+            curAwakening = 0,
+            maxAwakening = 200,
+            curStamina = 200,
+            maxStamina = 200,
+
+
+            // 아이템
+            inevntory = new List<int>(40),
+            equipment = new List<int>(8),
+
+
+            // 스테이지
+            clearData = new ClearData()
+            {
+                chapterList = new List<ChapterData>(chapterDatas.Count)
+            }
+        };
+
+
+        // 아이템 코드 초기화
+        for (int i = 0; i < 40; i++)
+        {
+            data.inevntory.Add(-1);
+        }
+
+        // 장비 코드 초기화
+        for (int i = 0; i < 8; i++)
+        {
+            data.equipment.Add(-1);
+        }
+
+
+        // 스테이지 세부 데이터 저장
+        for (int i = 0; i < chapterDatas.Count; i++)
+        {
+            // 챕터 데이터 생성
+            ChapterData chapter = new ChapterData
+            {
+                chapterName = chapterDatas[i].chapterName,
+                stageList = new List<StageData>()
+            };
+
+
+            // 스테이지 데이터 생성
+            for (int j = 0; j < chapterDatas[i].stageData.Count; j++)
+            {
+                StageData stage = new StageData()
+                {
+                    isClear = false,
+                    clearRank = StageData.Rank.None,
+                    clearTime = 0
+                };
+
+                chapter.stageList.Add(stage);
+            }
+
+            data.clearData.chapterList.Add(chapter);
+        }
+
+        // 데이터 저장
+        try
+        {
+            string json = JsonUtility.ToJson(data);
+            File.WriteAllText(savePath + fileName[slotCount], json);
+
+            return true;
+        }
+        catch (System.Exception e)
+        {
+            Debug.LogError($"저장 에러 발생! {e.Message}");
+            return false;
+        }
+    }
 
     /// <summary>
     /// 데이터 로드 기능
@@ -257,7 +359,7 @@ public class SaveLoad_Manager : MonoBehaviour
             Data data = JsonUtility.FromJson<Data>(json);
 
             // 방어코딩 - 혹시라도 데이터 문제가 있을 경우
-            if(data == null)
+            if (data == null)
             {
                 Debug.Log($"로드 에러 발생 : {savePath + fileName[slotIndex]}");
                 return null;

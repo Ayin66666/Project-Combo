@@ -1,6 +1,4 @@
-using System.Collections;
 using System.Collections.Generic;
-using Unity.VisualScripting.Antlr3.Runtime;
 using UnityEngine;
 
 public class Start_Manager : MonoBehaviour
@@ -49,8 +47,8 @@ public class Start_Manager : MonoBehaviour
         slots[index].Slot_Setting(levelText, timeText);
     }
 
-    #region 버튼 이벤트
 
+    #region 버튼 이벤트
     /// <summary>
     /// 나가기 버튼
     /// </summary>
@@ -69,7 +67,7 @@ public class Start_Manager : MonoBehaviour
     public void Click_Start()
     {
         curUI = UI.Start;
-        selectSet.SetActive(true);  
+        selectSet.SetActive(true);
     }
 
     /// <summary>
@@ -78,7 +76,9 @@ public class Start_Manager : MonoBehaviour
     /// <param name="index"></param>
     public void Click_Slot(int index)
     {
-        if(SaveLoad_Manager.instance.CheckData(index))
+        // 구버전 테스트용
+        /*
+        if (SaveLoad_Manager.instance.CheckData(index))
         {
             // 해당 슬롯에 저장된 데이터가 있을 경우
 
@@ -90,7 +90,28 @@ public class Start_Manager : MonoBehaviour
         }
         else
         {
-            // 저장된 데이터가 없다면
+            // 저장된 데이터가 없다면 - 신규 데이터 생성
+
+            // 튜토리얼 이동
+            SceneLoad_Manager.LoadScene("1.Chapter1_Tutorial");
+        }
+        */
+
+        // 신버전
+        if(SaveLoad_Manager.instance.CheckData(index))
+        {
+            // 데이터 로드
+            Data data = SaveLoad_Manager.instance.LoadData(index);
+
+            // 데이터 적용
+
+            // 씬 이동
+            SceneLoad_Manager.LoadScene("0.Hideout");
+        }
+        else
+        {
+            // 데이터 생성
+            SaveLoad_Manager.instance.Create_Data(index);
 
             // 튜토리얼 이동
             SceneLoad_Manager.LoadScene("1.Chapter1_Tutorial");

@@ -7,15 +7,24 @@ using UnityEngine.UI;
 
 #region Stage Data
 [System.Serializable]
+public class ClearData
+{
+    // 챕터 묶음 - 최종 저장 데이터
+    public List<ChapterData> chapterList;
+}
+
+[System.Serializable]
 public class ChapterData
 {
+    // 챕터 데이터 - 각 장의 데이터 묶음
     public string chapterName;
-    public List<StageData> stage;
+    public List<StageData> stageList;
 }
 
 [System.Serializable]
 public class StageData
 {
+    // 챕터 내에 존재하는 스테이지 데이터
     public bool isClear;
     public Rank clearRank;
     public float clearTime;
@@ -31,6 +40,7 @@ public class Hideout_Manager : MonoBehaviour
 
     [Header("---Chapter Setting---")]
     [SerializeField] private int chapterCount;
+    [SerializeField] private string curSelectStage;
 
 
     [Header("---Select UI---")]
@@ -39,7 +49,7 @@ public class Hideout_Manager : MonoBehaviour
 
     [Header("---Data---")]
     [SerializeField] private Chapter_Data_SO uiData; // 스테이지 UI 데이터
-    [SerializeField] private ChapterData clearData; // 저장용 데이터 - 클리어 여부
+    [SerializeField] private ChapterData stageClearData; // 저장용 데이터 - 클리어 여부
 
 
     [Header("---Component---")]
@@ -95,8 +105,11 @@ public class Hideout_Manager : MonoBehaviour
         descriptionText.text = uiData.stageData[stageIndex].stageSummation;
 
         // 클리어 데이터
-        clearTimeText.text = clearData.stage[stageIndex].clearTime.ToString();
-        rankText.text = clearData.stage[stageIndex].clearRank.ToString();
+        clearTimeText.text = stageClearData.stageList[stageIndex].clearTime.ToString();
+        rankText.text = stageClearData.stageList[stageIndex].clearRank.ToString();
+
+        // 진입 데이터 셋팅
+        curSelectStage = uiData.stageData[stageIndex].sceneName;
     }
 
 
@@ -107,8 +120,9 @@ public class Hideout_Manager : MonoBehaviour
     public void Data_Setting()
     {
         // 아지트 진입 시 동작 - 데이터 셋팅 로직
-        Data chapterData = SaveLoad_Manager.instance.LoadData(SaveLoad_Manager.instance.curSlot);
-        clearData = chapterData.clearData[SaveLoad_Manager.instance.curSlot];
+        Data saveData = SaveLoad_Manager.instance.LoadData(SaveLoad_Manager.instance.curSlot);
+        ChapterData ch = saveData.clearData.chapterList[chapterCount];
+        stageClearData = ch;
 
 
         // 스테이지 클리어 후 아지트 진입 시 동작 - 데이터 최신화 로직
@@ -117,11 +131,12 @@ public class Hideout_Manager : MonoBehaviour
             // 데이터 로드
             (int chapter, int stageIndex, StageData data) = sd_Manager.Get_StageData();
 
+
             // 지금 스테이지에 맞는 데이터 & 데이터 인덱스에 문제가 없다면
-            if (chapterCount == chapter && stageIndex < clearData.stage.Count)
+            if (chapterCount == chapter && stageIndex < ch.stageList.Count)
             {
                 // 데이터 셋팅
-                clearData.stage[stageIndex] = data;
+                saveData.clearData.chapterList[chapterCount].stageList[stageIndex] = data;
 
                 // 세이브 최신화
                 SaveLoad_Manager.instance.SaveData(SaveLoad_Manager.instance.curSlot);
@@ -150,21 +165,18 @@ public class Hideout_Manager : MonoBehaviour
     /// <param name="isOn"></param>
     public void Click_Select(bool isOn)
     {
-        // 1. 플레이어의 진행도 데이터를 저장하는 무언가에서 데이터 받아오기
-
-        // 2. 받아온 데이터 기반 UI 활성화
         selectSet.SetActive(isOn);
     }
 
     /// <summary>
     /// 스테이지 이동 기능
     /// </summary>
-    public void Click_Stage(string sceneName)
+    public void Click_Stage()
     {
-        StartCoroutine(StageCall(sceneName));
+        StartCoroutine(StageCall());
     }
 
-    private IEnumerator StageCall(string sceneName)
+    private IEnumerator StageCall()
     {
         // 선행 연출 - 넣을건지?
         UI_Manager.instance.Fade(true, 0.75f);
@@ -174,7 +186,7 @@ public class Hideout_Manager : MonoBehaviour
         }
 
         // 씬 이동
-        SceneLoad_Manager.LoadScene(sceneName);
+        SceneLoad_Manager.LoadScene(curSelectStage);
     }
 
     /// <summary>
