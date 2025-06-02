@@ -56,9 +56,9 @@ public class Attack_Other_Awankning : Attack_Base
         Player_Manager.instance.MovementLock(cancelType, false);
 
         // 타이머
-        while(Player_Manager.instance.curAwakening > 0)
+        while(Player_Manager.instance.status.curAwakening > 0)
         {
-            Player_Manager.instance.curAwakening -= Time.deltaTime * 5f;
+            Player_Manager.instance.status.curAwakening -= Time.deltaTime * 5f;
             yield return null;
         }
 
@@ -77,28 +77,28 @@ public class Attack_Other_Awankning : Attack_Base
     private void Buff_Setting()
     {
         // 데미지 저장
-        add_PhysicalDam = (int)(Player_Manager.instance.physicalDamage * damage);
-        add_magcalDam = (int)(Player_Manager.instance.magicalDamage * damage);
+        add_PhysicalDam = (int)(Player_Manager.instance.status.physicalDamage * damage);
+        add_magcalDam = (int)(Player_Manager.instance.status.magicalDamage * damage);
     }
 
     private void Status_Setting(bool isOn)
     {
         if (isOn)
         {
-            Player_Manager.instance.physicalDamage += add_PhysicalDam;
-            Player_Manager.instance.magicalDamage += add_magcalDam;
-            Player_Manager.instance.criticalhit += criticalChance;
-            Player_Manager.instance.critical_multiplier += criticalMultiplier;
-            Player_Manager.instance.moveSpeed += moveSpeed;
-            Player_Manager.instance.curStamina = Player_Manager.instance.maxStamina;
+            Player_Manager.instance.status.physicalDamage += add_PhysicalDam;
+            Player_Manager.instance.status.magicalDamage += add_magcalDam;
+            Player_Manager.instance.status.criticalhit += criticalChance;
+            Player_Manager.instance.status.critical_multiplier += criticalMultiplier;
+            Player_Manager.instance.status.moveSpeed += moveSpeed;
+            Player_Manager.instance.status.curStamina = Player_Manager.instance.status.maxStamina;
         }
         else
         {
-            Player_Manager.instance.physicalDamage -= add_PhysicalDam;
-            Player_Manager.instance.magicalDamage -= add_magcalDam;
-            Player_Manager.instance.criticalhit -= criticalChance;
-            Player_Manager.instance.critical_multiplier -= criticalMultiplier;
-            Player_Manager.instance.moveSpeed -= moveSpeed;
+            Player_Manager.instance.status.physicalDamage -= add_PhysicalDam;
+            Player_Manager.instance.status.magicalDamage -= add_magcalDam;
+            Player_Manager.instance.status.criticalhit -= criticalChance;
+            Player_Manager.instance.status.critical_multiplier -= criticalMultiplier;
+            Player_Manager.instance.status.moveSpeed -= moveSpeed;
         }
     }
 

@@ -165,20 +165,20 @@ public class Stage_Manager : MonoBehaviour
         spawnRotation = Player_Manager.instance.transform.rotation;
 
         // 스텟 저장
-        curhp = Player_Manager.instance.curhp;
-        maxHp = Player_Manager.instance.maxHp;
-        physicalDefence = Player_Manager.instance.physicalDefence;
-        magicalDamage = Player_Manager.instance.magicalDefence;
-        physcialDamage = Player_Manager.instance.physicalDamage;
-        magicalDamage = Player_Manager.instance.magicalDamage;
-        attackSpeed = Player_Manager.instance.attackSpeed;
-        criticalhit = Player_Manager.instance.criticalhit;
-        critical_multiplier = Player_Manager.instance.critical_multiplier;
-        moveSpeed = Player_Manager.instance.moveSpeed;
-        curSteamina = Player_Manager.instance.curStamina;
-        maxSteamina = Player_Manager.instance.maxStamina;
-        curAwankning = Player_Manager.instance.curAwakening;
-        maxAwankning = Player_Manager.instance.maxAwakening;
+        curhp = Player_Manager.instance.status.curhp;
+        maxHp = Player_Manager.instance.status.maxHp;
+        physicalDefence = Player_Manager.instance.status.physicalDefence;
+        magicalDamage = Player_Manager.instance.status.magicalDefence;
+        physcialDamage = Player_Manager.instance.status.physicalDamage;
+        magicalDamage = Player_Manager.instance.status.magicalDamage;
+        attackSpeed = Player_Manager.instance.status.attackSpeed;
+        criticalhit = Player_Manager.instance.status.criticalhit;
+        critical_multiplier = Player_Manager.instance.status.critical_multiplier;
+        moveSpeed = Player_Manager.instance.status.moveSpeed;
+        curSteamina = Player_Manager.instance.status.curStamina;
+        maxSteamina = Player_Manager.instance.status.maxStamina;
+        curAwankning = Player_Manager.instance.status.curAwakening;
+        maxAwankning = Player_Manager.instance.status.maxAwakening;
     }
 
     /// <summary>
@@ -187,20 +187,20 @@ public class Stage_Manager : MonoBehaviour
     public void CheckPoint_Call()
     {
         // 스테이터스 변경
-        Player_Manager.instance.curhp = curhp;
-        Player_Manager.instance.maxHp = maxHp;
-        Player_Manager.instance.physicalDefence = physicalDefence;
-        Player_Manager.instance.magicalDefence = magicalDamage;
-        Player_Manager.instance.physicalDamage = physcialDamage;
-        Player_Manager.instance.magicalDamage = magicalDamage;
-        Player_Manager.instance.attackSpeed = attackSpeed;
-        Player_Manager.instance.criticalhit = criticalhit;
-        Player_Manager.instance.critical_multiplier = critical_multiplier;
-        Player_Manager.instance.moveSpeed = moveSpeed;
-        Player_Manager.instance.curStamina = curSteamina;
-        Player_Manager.instance.maxStamina = maxSteamina;
-        Player_Manager.instance.curAwakening = curAwankning;
-        Player_Manager.instance.maxAwakening = maxAwankning;
+        Player_Manager.instance.status.curhp = curhp;
+        Player_Manager.instance.status.maxHp = maxHp;
+        Player_Manager.instance.status.physicalDefence = physicalDefence;
+        Player_Manager.instance.status.magicalDefence = magicalDamage;
+        Player_Manager.instance.status.physicalDamage = physcialDamage;
+        Player_Manager.instance.status.magicalDamage = magicalDamage;
+        Player_Manager.instance.status.attackSpeed = attackSpeed;
+        Player_Manager.instance.status.criticalhit = criticalhit;
+        Player_Manager.instance.status.critical_multiplier = critical_multiplier;
+        Player_Manager.instance.status.moveSpeed = moveSpeed;
+        Player_Manager.instance.status.curStamina = curSteamina;
+        Player_Manager.instance.status.maxStamina = maxSteamina;
+        Player_Manager.instance.status.curAwakening = curAwankning;
+        Player_Manager.instance.status.maxAwakening = maxAwankning;
 
         // UI 리셋
         UI_Manager.instance.Hp();

@@ -11,6 +11,10 @@ using System.IO;
 [System.Serializable]
 public class Data
 {
+    [Header("---Ohter---")]
+    public float playTime;
+
+
     [Header("---Status---")]
     public int level;
 
@@ -43,6 +47,33 @@ public class Data
     [Header("---Chapter---")]
     public ClearData clearData;
 }
+
+#region Stage Data
+[System.Serializable]
+public class ClearData
+{
+    // 챕터 묶음 - 최종 저장 데이터
+    public List<ChapterData> chapterList;
+}
+
+[System.Serializable]
+public class ChapterData
+{
+    // 챕터 데이터 - 각 장의 데이터 묶음
+    public string chapterName;
+    public List<StageData> stageList;
+}
+
+[System.Serializable]
+public class StageData
+{
+    // 챕터 내에 존재하는 스테이지 데이터
+    public bool isClear;
+    public Rank clearRank;
+    public float clearTime;
+    public enum Rank { None, D, C, B, A, S }
+}
+#endregion
 
 
 public class SaveLoad_Manager : MonoBehaviour
@@ -84,6 +115,30 @@ public class SaveLoad_Manager : MonoBehaviour
 
 
     #region UI
+    public Data SlotUI(int slotIndex)
+    {
+        // 경로 유효성 체크
+        string path = savePath + fileName[slotIndex];
+        if (!File.Exists(path))
+        {
+            Debug.LogWarning($"세이브 & 로드 슬롯 {slotIndex} 에 파일이 없습니다.");
+            return null;
+        }
+
+        //데이터 불러오기
+        try
+        {
+            string json = File.ReadAllText(path);
+            Data data = JsonUtility.FromJson<Data>(json);
+            return data;
+        }
+        catch (System.Exception ex)
+        {
+            Debug.LogError($"세이브 & 로드 슬롯 {slotIndex} 로드 중 예외 발생 : {ex.Message}");
+            return null;
+        }
+    }
+
     public void SaveUI(bool isOn)
     {
         saveUIset.SetActive(isOn);
@@ -168,9 +223,11 @@ public class SaveLoad_Manager : MonoBehaviour
         }
     }
 
+
     /// <summary>
     /// 저장 기능
     /// </summary>
+    /// <param name="index"></param>
     /// <returns></returns>
     private bool Save(int index)
     {
@@ -179,23 +236,23 @@ public class SaveLoad_Manager : MonoBehaviour
             Data playerData = new()
             {
                 // 스테이터스
-                level = Player_Manager.instance.level,
-                curhp = Player_Manager.instance.curhp,
-                maxHp = Player_Manager.instance.maxHp,
-                physicalDefence = Player_Manager.instance.physicalDefence,
-                magicalDefence = Player_Manager.instance.magicalDefence,
+                level = Player_Manager.instance.status.level,
+                curhp = Player_Manager.instance.status.curhp,
+                maxHp = Player_Manager.instance.status.maxHp,
+                physicalDefence = Player_Manager.instance.status.physicalDefence,
+                magicalDefence = Player_Manager.instance.status.magicalDefence,
 
-                physicalDamage = Player_Manager.instance.physicalDamage,
-                magicalDamage = Player_Manager.instance.magicalDamage,
-                attackSpeed = Player_Manager.instance.attackSpeed,
-                criticalhit = Player_Manager.instance.criticalhit,
-                critical_multiplier = Player_Manager.instance.critical_multiplier,
+                physicalDamage = Player_Manager.instance.status.physicalDamage,
+                magicalDamage = Player_Manager.instance.status.magicalDamage,
+                attackSpeed = Player_Manager.instance.status.attackSpeed,
+                criticalhit = Player_Manager.instance.status.criticalhit,
+                critical_multiplier = Player_Manager.instance.status.critical_multiplier,
 
-                moveSpeed = Player_Manager.instance.moveSpeed,
-                curAwakening = Player_Manager.instance.curAwakening,
-                maxAwakening = Player_Manager.instance.maxAwakening,
-                curStamina = Player_Manager.instance.curStamina,
-                maxStamina = Player_Manager.instance.maxStamina,
+                moveSpeed = Player_Manager.instance.status.moveSpeed,
+                curAwakening = Player_Manager.instance.status.curAwakening,
+                maxAwakening = Player_Manager.instance.status.maxAwakening,
+                curStamina = Player_Manager.instance.status.curStamina,
+                maxStamina = Player_Manager.instance.status.maxStamina,
 
 
                 // 아이템
@@ -329,6 +386,13 @@ public class SaveLoad_Manager : MonoBehaviour
         {
             string json = JsonUtility.ToJson(data);
             File.WriteAllText(savePath + fileName[slotCount], json);
+
+            // 데이터 적용 - 스테이터스
+            Player_Status.instacne.Status_Setting(data);
+
+            // 데이터 적용 - 인벤토리
+
+            // 데이터 적용 - 스킬트리
 
             return true;
         }

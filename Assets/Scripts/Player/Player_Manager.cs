@@ -9,37 +9,14 @@ public class Player_Manager : MonoBehaviour, IDamageSysteam
 {
     public static Player_Manager instance;
 
-    public int level;
-
-    [Header("---Status---")]
-    // Defence Status
-    public int curhp;
-    public int maxHp;
-    public int physicalDefence;
-    public int magicalDefence;
-
-    // Attack Status
-    public int physicalDamage;
-    public int magicalDamage;
-    public float attackSpeed;
-    public float criticalhit;
-    public float critical_multiplier;
-
-    // Other Status
-    public float moveSpeed;
-    public float curStamina;
-    public float maxStamina;
-    public float curAwakening;
-    public float maxAwakening;
-
 
     // 아머 타입 추가해야함! - 그리고 아머타입에 따른 피격효과 셋팅도!
     [Header("---State---")]
     [SerializeField] private IDamageSysteam.HitVFX curHitState;
     public bool canAction;
+    public bool canAttack;
     public bool useGravity;
     private bool isGoround;
-
     public bool canMovement;
     public bool canAwakning;
     [SerializeField] private bool canDash;
@@ -97,6 +74,7 @@ public class Player_Manager : MonoBehaviour, IDamageSysteam
 
 
     [Header("---Component---")]
+    public Player_Status status = Player_Status.instacne;
     [SerializeField] private CharacterController controller;
     [SerializeField] private Animator anim;
     [SerializeField] private GameObject[] cinemachineCam;
@@ -123,7 +101,14 @@ public class Player_Manager : MonoBehaviour, IDamageSysteam
 
     private void Start()
     {
+        // 키셋팅
         KeyActionSetting();
+
+
+        // UI 활성화
+        UI_Manager.instance.isUIOn = true;
+        UI_Manager.instance.UI_Setting(true);
+        UI_Manager.instance.Reset_StatusUI();
     }
 
     private void Update()
@@ -151,28 +136,8 @@ public class Player_Manager : MonoBehaviour, IDamageSysteam
 
 
         Gravity();
-        Recovery();
     }
 
-    public void Status_Setting(Data data)
-    {
-        curhp = data.curhp;
-        maxHp = data.maxHp;
-        physicalDefence = data.physicalDefence;
-        magicalDefence = data.magicalDefence;
-
-        physicalDamage = data.physicalDamage;
-        magicalDamage = data.magicalDamage;
-        criticalhit = data.criticalhit;
-        critical_multiplier = data.critical_multiplier;
-        attackSpeed = data.attackSpeed;
-
-        moveSpeed = data.moveSpeed;
-        curStamina = data.curStamina;
-        maxStamina = data.maxStamina;
-        curAwakening = data.curAwakening;
-        maxAwakening = data.maxAwakening;
-    }
 
     public void Cursor_Setting(bool isOn)
     {
@@ -295,12 +260,6 @@ public class Player_Manager : MonoBehaviour, IDamageSysteam
         }
     }
 
-    private void Recovery()
-    {
-        if (curStamina < maxStamina)
-            curStamina += Time.deltaTime * 5f;
-    }
-
     public void Collider_Ignore(bool isOn)
     {
         // 충돌 무시 시작
@@ -382,7 +341,7 @@ public class Player_Manager : MonoBehaviour, IDamageSysteam
 
                 transform.rotation = Quaternion.Euler(0f, angle, 0f);
                 Vector3 mDir = new Vector3(camDir.x, 0, camDir.z).normalized;
-                controller.Move(moveSpeed * Time.deltaTime * mDir);
+                controller.Move(status.moveSpeed * Time.deltaTime * mDir);
             }
             else
             {
@@ -402,7 +361,7 @@ public class Player_Manager : MonoBehaviour, IDamageSysteam
 
     private IEnumerator DashCall()
     {
-        if (!canAction || !canDash || curStamina < 30)
+        if (!canAction || !canDash || status.curStamina < 30)
         {
             yield break;
         }
@@ -412,7 +371,7 @@ public class Player_Manager : MonoBehaviour, IDamageSysteam
             isDash = true;
 
             // 스테미너 소모
-            curStamina -= 30f;
+            status.curStamina -= 30f;
 
             // 애니메이션 리셋
             Animation_Reset();
@@ -506,7 +465,7 @@ public class Player_Manager : MonoBehaviour, IDamageSysteam
         }
 
         // 데미지 계산
-        int calDamage = damage - (type == IDamageSysteam.DamageType.Physical ? physicalDefence : magicalDefence);
+        int calDamage = damage - (type == IDamageSysteam.DamageType.Physical ? status.physicalDefence : status.magicalDefence);
         if (calDamage > 0)
         {
             // 타격 횟수만큼 동작
@@ -514,10 +473,10 @@ public class Player_Manager : MonoBehaviour, IDamageSysteam
             {
                 // 체력 감소
                 int calendDamage = calDamage / hitCount;
-                curhp -= calendDamage;
+                status.curhp -= calendDamage;
 
                 // 사망 체크
-                if (curhp < 0)
+                if (status.curhp < 0)
                 {
                     Die();
                     break;
@@ -850,11 +809,11 @@ public class Player_Manager : MonoBehaviour, IDamageSysteam
     public (bool isCritical, int damage) DamageCalculation(Attack_Base.Value attackData, int skillLevel)
     {
         // 크리티컬 계산
-        bool isCirtical = criticalhit >= Random.Range(0, 100) ? true : false;
+        bool isCirtical = status.criticalhit >= Random.Range(0, 100) ? true : false;
 
         // 데미지 계산 - 여기 레벨 벨류 어케할거 - 그냥 인덱스 추가해서 값 받아옴!
         Skill_Value_SO.Value_Data sBase = attackData.levelValue.GetData(skillLevel);
-        int calDamage = (int)((sBase.type == IDamageSysteam.DamageType.Physical ? physicalDamage : magicalDamage) * Random.Range(sBase.motionValue.x, sBase.motionValue.y) * (isCirtical ? critical_multiplier : 1));
+        int calDamage = (int)((sBase.type == IDamageSysteam.DamageType.Physical ? status.physicalDamage : status.magicalDamage) * Random.Range(sBase.motionValue.x, sBase.motionValue.y) * (isCirtical ? status.critical_multiplier : 1));
 
         return (isCirtical, calDamage);
     }
@@ -900,7 +859,7 @@ public class Player_Manager : MonoBehaviour, IDamageSysteam
 
     private void Attack_Normal()
     {
-        if (!canAction || isAttack || isSmash)
+        if (!canAction || !canAttack || isAttack || isSmash)
         {
             return;
         }
@@ -926,7 +885,7 @@ public class Player_Manager : MonoBehaviour, IDamageSysteam
 
     private void Attack_Smash()
     {
-        if (!canAction || isAttack || isSmash)
+        if (!canAction || !canAttack || isAttack || isSmash)
         {
             return;
         }
@@ -974,7 +933,7 @@ public class Player_Manager : MonoBehaviour, IDamageSysteam
 
     private void Attack_Counter()
     {
-        if (!canAction || isAttack || isSmash || isCounter)
+        if (!canAction || !canAttack  || isAttack || isSmash || isCounter)
         {
             return;
         }
@@ -984,7 +943,7 @@ public class Player_Manager : MonoBehaviour, IDamageSysteam
 
     private void Buff_Awanking()
     {
-        if (!canAction || isAttack || isSmash)
+        if (!canAction || !canAttack || isAttack || isSmash)
         {
             return;
         }
@@ -1002,26 +961,12 @@ public class Player_Manager : MonoBehaviour, IDamageSysteam
 
     private void Attack_Speical()
     {
-        if (!canAction || !canSpecial || !isAwakning || isAttack || isSmash || isCounter)
+        if (!canAction || !canAttack || !canSpecial || !isAwakning || isAttack || isSmash || isCounter)
         {
             return;
         }
 
         specialAttack.Use();
-    }
-
-    public void AwankingAdd(int index)
-    {
-        curAwakening += index;
-        if (curAwakening >= maxAwakening)
-        {
-            // 최대치를 넘을 경우
-            curAwakening = maxAwakening;
-
-            // 각성 활성화
-            if (!canAwakning)
-                canAwakning = true;
-        }
     }
 
     public void Attack_Movement(Transform movePos, float speed)
@@ -1064,10 +1009,10 @@ public class Player_Manager : MonoBehaviour, IDamageSysteam
     #region Buff
     public void Healing(int heal)
     {
-        curhp += heal;
-        if (curhp + heal > maxHp)
+        status.curhp += heal;
+        if (status.curhp + heal > status.maxHp)
         {
-            curhp = maxHp;
+            status.curhp = status.maxHp;
         }
     }
     #endregion

@@ -1,10 +1,9 @@
-using System.Collections;
-using UnityEngine;
-using UnityEngine.UI;
-using TMPro;
 using DG.Tweening;
 using Easing.Tweening;
-using Unity.VisualScripting;
+using System.Collections;
+using TMPro;
+using UnityEngine;
+using UnityEngine.UI;
 
 
 public class UI_Manager : MonoBehaviour
@@ -17,6 +16,9 @@ public class UI_Manager : MonoBehaviour
     public bool isFade;
     [SerializeField] private UIType uiType;
     public enum UIType { Item, Skill, Tutorial, Option }
+
+
+    [SerializeField] private GameObject fightUI;
 
 
     [Header("---Player Status---")]
@@ -39,7 +41,6 @@ public class UI_Manager : MonoBehaviour
     [Header("---Mini Map---")]
     [SerializeField] private GameObject NiniMapSet;
     [SerializeField] private RectTransform miniMapRect;
-    private Coroutine miniMapCoroutine;
 
 
     [Header("---Quest---")]
@@ -94,15 +95,13 @@ public class UI_Manager : MonoBehaviour
         }
     }
 
-    private void Start()
-    {
-        Reset_StatusUI();
-    }
-
     private void Update()
     {
-        Stamina();
-        Awanking();
+        if (isUIOn)
+        {
+            Stamina();
+            Awanking();
+        }
     }
 
 
@@ -141,21 +140,21 @@ public class UI_Manager : MonoBehaviour
     /// <summary>
     /// 게임 시작 시 스테이터스 UI 최신화
     /// </summary>
-    private void Reset_StatusUI()
+    public void Reset_StatusUI()
     {
         uiType = UIType.Item;
 
-        hpFSlider.maxValue = Player_Manager.instance.maxHp;
-        hpFSlider.value = Player_Manager.instance.curhp;
+        hpFSlider.maxValue = Player_Manager.instance.status.maxHp;
+        hpFSlider.value = Player_Manager.instance.status.curhp;
 
-        hpBSlider.maxValue = Player_Manager.instance.maxHp;
-        hpBSlider.value = Player_Manager.instance.curhp;
+        hpBSlider.maxValue = Player_Manager.instance.status.maxHp;
+        hpBSlider.value = Player_Manager.instance.status.curhp;
 
-        staminaSlider.maxValue = Player_Manager.instance.maxStamina;
-        staminaSlider.value = Player_Manager.instance.curStamina;
+        staminaSlider.maxValue = Player_Manager.instance.status.maxStamina;
+        staminaSlider.value = Player_Manager.instance.status.curStamina;
 
-        awankingSlider.maxValue = Player_Manager.instance.maxAwakening;
-        awankingSlider.value = Player_Manager.instance.curAwakening;
+        awankingSlider.maxValue = Player_Manager.instance.status.maxAwakening;
+        awankingSlider.value = Player_Manager.instance.status.curAwakening;
     }
 
     public void Hp()
@@ -168,25 +167,34 @@ public class UI_Manager : MonoBehaviour
 
     private IEnumerator HpCall()
     {
-        hpFSlider.value = Player_Manager.instance.curhp;
+        hpFSlider.value = Player_Manager.instance.status.curhp;
         yield return new WaitForSeconds(0.25f);
 
-        hpBSlider.DOValue(Player_Manager.instance.curhp, 0.75f).SetEase(Ease.Linear);
+        hpBSlider.DOValue(Player_Manager.instance.status.curhp, 0.75f).SetEase(Ease.Linear);
     }
 
     public void Stamina()
     {
-        staminaSlider.value = Player_Manager.instance.curStamina;
+        staminaSlider.value = Player_Manager.instance.status.curStamina;
     }
 
     public void Awanking()
     {
-        awankingSlider.value = Player_Manager.instance.curAwakening;
+        awankingSlider.value = Player_Manager.instance.status.curAwakening;
     }
     #endregion
 
 
     #region InGame Systeam
+    /// <summary>
+    /// UI OnOff
+    /// </summary>
+    /// <param name="isOn"></param>
+    public void UI_Setting(bool isOn)
+    {
+        fightUI.SetActive(isOn);
+    }
+
     /// <summary>
     /// 공격 가이드 시스템
     /// </summary>

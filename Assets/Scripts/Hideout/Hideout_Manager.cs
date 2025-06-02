@@ -1,36 +1,7 @@
 using System.Collections;
-using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
-
-
-#region Stage Data
-[System.Serializable]
-public class ClearData
-{
-    // 챕터 묶음 - 최종 저장 데이터
-    public List<ChapterData> chapterList;
-}
-
-[System.Serializable]
-public class ChapterData
-{
-    // 챕터 데이터 - 각 장의 데이터 묶음
-    public string chapterName;
-    public List<StageData> stageList;
-}
-
-[System.Serializable]
-public class StageData
-{
-    // 챕터 내에 존재하는 스테이지 데이터
-    public bool isClear;
-    public Rank clearRank;
-    public float clearTime;
-    public enum Rank { None, D, C, B, A, S }
-}
-#endregion
 
 
 public class Hideout_Manager : MonoBehaviour
