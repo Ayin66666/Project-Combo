@@ -56,10 +56,13 @@ public class Hideout_Manager : MonoBehaviour
 
     private void Start()
     {
+        // 스테이지 셋팅
         Data_Setting();
         SelectUI_Setting();
-
         DescriptionUI_Setting(0);
+
+        // 플레이어 활성화
+        Player_Manager.instance.PlayerOn();
     }
 
 

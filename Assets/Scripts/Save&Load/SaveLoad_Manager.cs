@@ -12,6 +12,7 @@ using System.IO;
 public class Data
 {
     [Header("---Ohter---")]
+    public string chapter;
     public float playTime;
 
 
@@ -308,6 +309,9 @@ public class SaveLoad_Manager : MonoBehaviour
     {
         Data data = new Data()
         {
+            // 챕터 진행도
+            chapter = "Chapter 0",
+
             // 스테이터스
             level = 1,
             curhp = 500,

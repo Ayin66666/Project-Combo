@@ -128,7 +128,7 @@ public class UI_Manager : MonoBehaviour
         }
         fadeCanvasGroup.alpha = end;
 
-        if(isOn)
+        if(!isOn)
         {
             fadeSet.SetActive(false);
         }

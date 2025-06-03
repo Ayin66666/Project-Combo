@@ -138,6 +138,15 @@ public class Player_Manager : MonoBehaviour, IDamageSysteam
         Gravity();
     }
 
+    /// <summary>
+    /// 플레이어 OnOff 기능
+    /// </summary>
+    /// <param name="isOn"></param>
+    public void Player_Setting(bool isOn)
+    {
+        canAction = isOn;
+        bodyObject.SetActive(isOn);
+    }
 
     public void Cursor_Setting(bool isOn)
     {
