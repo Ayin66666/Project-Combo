@@ -23,7 +23,7 @@ public class EAttack_MachineGun : Attack_Base
     {
         enemy.curState = Enemy_Base.State.Attack;
 
-        enemy.LookAt(Player_Manager.instance.gameObject, 0.15f);
+        enemy.LookAt(PlayerAction_Manager.instance.gameObject, 0.15f);
         yield return new WaitForSeconds(0.15f);
 
         // 애니메이션
@@ -101,7 +101,7 @@ public class EAttack_MachineGun : Attack_Base
             obj_Setting.Damage_Setting(skillData.type, skillData.attackEffect, isCritical, skillData.hitCount, damage);
 
             // 이동 셋팅
-            Vector3 shootPos = Player_Manager.instance.transform.position - shotPos[i].position;
+            Vector3 shootPos = PlayerAction_Manager.instance.transform.position - shotPos[i].position;
             shootPos.y += 1;
             obj_Setting.Movement_Setting(shootPos, 5f, 10);
         }

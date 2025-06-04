@@ -98,7 +98,7 @@ public class SceneLoad_Manager : MonoBehaviour
         isLoading = true;
 
         // 페이드 종료
-        UI_Manager.instance.Fade(false, 0.75f);
+        UI_Manager.instance.Fade(false, 1.25f);
 
         // 팁 실행
         if (tipCoroutine != null)
@@ -127,6 +127,13 @@ public class SceneLoad_Manager : MonoBehaviour
 
             if (Input.GetKeyDown(KeyCode.Space) && progressbar.value >= 1f && operation.progress >= 0.9f)
             {
+                // 페이드 종료
+                UI_Manager.instance.Fade(true, 1.25f);
+                while(UI_Manager.instance.isFade)
+                {
+                    yield return null;
+                }
+
                 // Scene Move
                 isLoading = false;
                 operation.allowSceneActivation = true;

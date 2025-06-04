@@ -47,7 +47,7 @@ public class Obejct_Elevator : MonoBehaviour
     private IEnumerator UseCall()
     {
         isUsed = true;
-        Player_Manager.instance.transform.parent = transform;
+        PlayerAction_Manager.instance.transform.parent = transform;
 
         // 텍스트 변경
         text.text = "엘리베이터 기동";
@@ -74,14 +74,14 @@ public class Obejct_Elevator : MonoBehaviour
             // 플레이어가 위에 있다면 같이 이동
             if (isPlayerIn)
             {
-                Player_Manager.instance.RideMovement(delta);
+                PlayerAction_Manager.instance.RideMovement(delta);
             }
 
 
             yield return null;
         }
         transform.position = movePos[curMovement == Movement.AtoB ? 1 : 0].position;
-        Player_Manager.instance.transform.parent = null;
+        PlayerAction_Manager.instance.transform.parent = null;
 
         // 텍스트 변경
         text.text = "기동완료";
@@ -102,7 +102,7 @@ public class Obejct_Elevator : MonoBehaviour
             isPlayerIn = true;
 
             // 중력 비활성화 - 있으면 덜덜 떨림
-            Player_Manager.instance.useGravity = false;
+            PlayerAction_Manager.instance.useGravity = false;
         }
     }
 
@@ -126,7 +126,7 @@ public class Obejct_Elevator : MonoBehaviour
             isPlayerIn = false;
 
             // 중력 활성화 - 있으면 덜덜 떨림
-            Player_Manager.instance.useGravity = true;
+            PlayerAction_Manager.instance.useGravity = true;
         }
     }
 }

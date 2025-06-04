@@ -25,8 +25,8 @@ public class Attack_Smash_ChargeSlash : Attack_Base
     /// <returns></returns>
     private IEnumerator UseCall()
     {
-        Player_Manager.instance.MovementLock(cancelType, true);
-        Player_Manager.instance.isAttack = true;
+        PlayerAction_Manager.instance.MovementLock(cancelType, true);
+        PlayerAction_Manager.instance.isAttack = true;
 
         anim.SetTrigger("Smash");
         anim.SetBool("isAttack", true);
@@ -41,12 +41,12 @@ public class Attack_Smash_ChargeSlash : Attack_Base
         chargeCount = 0;
         while (Input_Manager.instance.inputDatas[1].isInput && timer < 3)
         {
-            Player_Manager.instance.ChargeLookAt();
+            PlayerAction_Manager.instance.ChargeLookAt();
             timer += Time.deltaTime;
             // Â÷Â¡
             if(chargeCount < 1)
             {
-                chargeCount += Time.deltaTime * (Player_Manager.instance.isAwakning ? 1f : 0.5f);
+                chargeCount += Time.deltaTime * (PlayerAction_Manager.instance.isAwakning ? 1f : 0.5f);
             }
 
             // 2´Ü°è
@@ -80,8 +80,8 @@ public class Attack_Smash_ChargeSlash : Attack_Base
             yield return null;
         }
 
-        Player_Manager.instance.isAttack = false;
-        Player_Manager.instance.RushSlash_Setting(true);
+        PlayerAction_Manager.instance.isAttack = false;
+        PlayerAction_Manager.instance.RushSlash_Setting(true);
 
         timer = 0;
         while(anim.GetBool("isSmash"))
@@ -95,9 +95,9 @@ public class Attack_Smash_ChargeSlash : Attack_Base
             yield return null;
         }
 
-        Player_Manager.instance.MovementLock(cancelType, false);
-        Player_Manager.instance.RushSlash_Setting(false);
-        Player_Manager.instance.AttackOver();
+        PlayerAction_Manager.instance.MovementLock(cancelType, false);
+        PlayerAction_Manager.instance.RushSlash_Setting(false);
+        PlayerAction_Manager.instance.AttackOver();
     }
 
 
@@ -122,9 +122,9 @@ public class Attack_Smash_ChargeSlash : Attack_Base
     public override void DamageCal(int index)
     {
         Skill_Value_SO.Value_Data skillData;
-        if (Player_Manager.instance.isAwakning)
+        if (PlayerAction_Manager.instance.isAwakning)
         {
-            (bool isCritical, int damage) = Player_Manager.instance.DamageCalculation(value_Awakening[index], skillLevel);
+            (bool isCritical, int damage) = PlayerAction_Manager.instance.DamageCalculation(value_Awakening[index], skillLevel);
             skillData = value_Awakening[index].levelValue.GetData(skillLevel);
 
             if (value_Awakening[index].attackCollider != null)
@@ -132,7 +132,7 @@ public class Attack_Smash_ChargeSlash : Attack_Base
         }
         else
         {
-            (bool isCritical, int damage) = Player_Manager.instance.DamageCalculation(value_Normal[index], skillLevel);
+            (bool isCritical, int damage) = PlayerAction_Manager.instance.DamageCalculation(value_Normal[index], skillLevel);
             skillData = value_Normal[index].levelValue.GetData(skillLevel);
 
             if (value_Awakening[index].attackCollider != null)

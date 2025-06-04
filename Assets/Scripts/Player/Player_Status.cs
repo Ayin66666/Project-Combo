@@ -93,8 +93,8 @@ public class Player_Status : MonoBehaviour
             curAwakening = maxAwakening;
 
             // 각성 활성화
-            if (!Player_Manager.instance.canAwakning)
-                Player_Manager.instance.canAwakning = true;
+            if (!PlayerAction_Manager.instance.canAwakning)
+                PlayerAction_Manager.instance.canAwakning = true;
         }
     }
 }

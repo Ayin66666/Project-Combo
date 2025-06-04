@@ -13,14 +13,24 @@ public class UI_Manager : MonoBehaviour
 
     [Header("---State---")]
     public bool isUIOn;
+    public bool isOptionOn;
     public bool isFade;
     [SerializeField] private UIType uiType;
     public enum UIType { Item, Skill, Tutorial, Option }
+    private Player_Manager pManager;
 
 
+    [Header("---UI Set---")]
     [SerializeField] private GameObject fightUI;
+    [SerializeField] private GameObject optionUI;
 
 
+    [Header("---Fade UI---")]
+    [SerializeField] private GameObject fadeSet;
+    [SerializeField] private CanvasGroup fadeCanvasGroup;
+
+
+    #region Player Fight UI
     [Header("---Player Status---")]
     [SerializeField] private GameObject StatusSet;
     [SerializeField] private Slider hpFSlider;
@@ -68,18 +78,16 @@ public class UI_Manager : MonoBehaviour
     [SerializeField] private GameObject dieUIset;
     [SerializeField] private CanvasGroup dieCanvasGroup;
     public bool isDieUI;
+    #endregion
 
 
-    [Header("---Fade UI---")]
-    [SerializeField] private GameObject fadeSet;
-    [SerializeField] private CanvasGroup fadeCanvasGroup;
-
-
+    #region Option UI
     [Header("---Inventory---")]
 
 
     [Header("---Short Cut---")]
     [SerializeField] private GameObject obj;
+    #endregion
 
 
 
@@ -93,6 +101,15 @@ public class UI_Manager : MonoBehaviour
         {
             Destroy(gameObject);
         }
+    }
+
+    private void Start()
+    {
+        pManager = Player_Manager.instance;
+
+
+        // 인풋 셋팅 - 옵션창
+        Input_Manager.instance.Action_Setting(8, Option);
     }
 
     private void Update()
@@ -144,17 +161,17 @@ public class UI_Manager : MonoBehaviour
     {
         uiType = UIType.Item;
 
-        hpFSlider.maxValue = Player_Manager.instance.status.maxHp;
-        hpFSlider.value = Player_Manager.instance.status.curhp;
+        hpFSlider.maxValue = pManager.status.maxHp;
+        hpFSlider.value = pManager.status.curhp;
 
-        hpBSlider.maxValue = Player_Manager.instance.status.maxHp;
-        hpBSlider.value = Player_Manager.instance.status.curhp;
+        hpBSlider.maxValue = pManager.status.maxHp;
+        hpBSlider.value = pManager.status.curhp;
 
-        staminaSlider.maxValue = Player_Manager.instance.status.maxStamina;
-        staminaSlider.value = Player_Manager.instance.status.curStamina;
+        staminaSlider.maxValue = pManager.status.maxStamina;
+        staminaSlider.value = pManager.status.curStamina;
 
-        awankingSlider.maxValue = Player_Manager.instance.status.maxAwakening;
-        awankingSlider.value = Player_Manager.instance.status.curAwakening;
+        awankingSlider.maxValue = pManager.status.maxAwakening;
+        awankingSlider.value = pManager.status.curAwakening;
     }
 
     public void Hp()
@@ -167,20 +184,20 @@ public class UI_Manager : MonoBehaviour
 
     private IEnumerator HpCall()
     {
-        hpFSlider.value = Player_Manager.instance.status.curhp;
+        hpFSlider.value = pManager.status.curhp;
         yield return new WaitForSeconds(0.25f);
 
-        hpBSlider.DOValue(Player_Manager.instance.status.curhp, 0.75f).SetEase(Ease.Linear);
+        hpBSlider.DOValue(pManager.status.curhp, 0.75f).SetEase(Ease.Linear);
     }
 
     public void Stamina()
     {
-        staminaSlider.value = Player_Manager.instance.status.curStamina;
+        staminaSlider.value = pManager.status.curStamina;
     }
 
     public void Awanking()
     {
-        awankingSlider.value = Player_Manager.instance.status.curAwakening;
+        awankingSlider.value = pManager.status.curAwakening;
     }
     #endregion
 
@@ -449,6 +466,12 @@ public class UI_Manager : MonoBehaviour
 
 
     #region 인벤토리 & 쇼트컷은 따로 스크립트에서 데이터 관리 / 표기?
+    public void Option()
+    {
+        isOptionOn = !isOptionOn;
+        optionUI.SetActive(isOptionOn);
+    }
+
     public void Inventory()
     {
 

@@ -84,7 +84,7 @@ public abstract class Enemy_Base : MonoBehaviour, IDamageSysteam
     public void Spawn()
     {
         Status_Setting();
-        target = Player_Manager.instance.gameObject;
+        target = PlayerAction_Manager.instance.gameObject;
 
         spawnList = new List<System.Func<IEnumerator>>()
         {
@@ -211,7 +211,7 @@ public abstract class Enemy_Base : MonoBehaviour, IDamageSysteam
 
     public void Check_Target()
     {
-        targetDir = Player_Manager.instance.transform.position - transform.position;
+        targetDir = PlayerAction_Manager.instance.transform.position - transform.position;
         targetRange = targetDir.magnitude;
     }
 

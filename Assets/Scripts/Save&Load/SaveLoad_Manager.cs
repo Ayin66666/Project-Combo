@@ -14,6 +14,8 @@ public class Data
     [Header("---Ohter---")]
     public string chapter;
     public float playTime;
+    public string SceneName;
+    public Vector3 playerPos;
 
 
     [Header("---Status---")]
@@ -86,7 +88,6 @@ public class SaveLoad_Manager : MonoBehaviour
     public string savePath;
     public List<string> fileName;
     public int curSlot;
-    [SerializeField] private List<Chapter_Data_SO> chapterDatas;
 
 
     [Header("---UI---")]
@@ -236,6 +237,12 @@ public class SaveLoad_Manager : MonoBehaviour
         {
             Data playerData = new()
             {
+                // 스테이지
+                // chapter = ,
+                // playTime = ,
+                // SceneName = ,
+                // playerPos =,
+
                 // 스테이터스
                 level = Player_Manager.instance.status.level,
                 curhp = Player_Manager.instance.status.curhp,
@@ -255,11 +262,15 @@ public class SaveLoad_Manager : MonoBehaviour
                 curStamina = Player_Manager.instance.status.curStamina,
                 maxStamina = Player_Manager.instance.status.maxStamina,
 
-
                 // 아이템
-
+                inevntory = new List<int>(40),
+                equipment = new List<int>(8),
 
                 // 스테이지
+                clearData = new ClearData()
+                {
+                    chapterList = ChapterData_Manager.instance.chapterData,
+                }
             };
 
             // 데이터 저장
@@ -295,11 +306,6 @@ public class SaveLoad_Manager : MonoBehaviour
             // 데이터 저장
             SaveResultUI(Save(index));
         }
-    }
-
-    public void Save_StageData(int chapterIndex, ChapterData data)
-    {
-
     }
 
     /// <summary>
@@ -340,7 +346,7 @@ public class SaveLoad_Manager : MonoBehaviour
             // 스테이지
             clearData = new ClearData()
             {
-                chapterList = new List<ChapterData>(chapterDatas.Count)
+                chapterList = new List<ChapterData>(ChapterData_Manager.instance.chapterUIData.Count)
             }
         };
 
@@ -359,18 +365,18 @@ public class SaveLoad_Manager : MonoBehaviour
 
 
         // 스테이지 세부 데이터 저장
-        for (int i = 0; i < chapterDatas.Count; i++)
+        for (int i = 0; i < ChapterData_Manager.instance.chapterUIData.Count; i++)
         {
             // 챕터 데이터 생성
             ChapterData chapter = new ChapterData
             {
-                chapterName = chapterDatas[i].chapterName,
+                chapterName = ChapterData_Manager.instance.chapterUIData[i].chapterName,
                 stageList = new List<StageData>()
             };
 
 
             // 스테이지 데이터 생성
-            for (int j = 0; j < chapterDatas[i].stageData.Count; j++)
+            for (int j = 0; j < ChapterData_Manager.instance.chapterUIData[i].stageData.Count; j++)
             {
                 StageData stage = new StageData()
                 {

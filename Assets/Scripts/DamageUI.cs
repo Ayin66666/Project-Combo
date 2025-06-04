@@ -39,7 +39,7 @@ public class DamageUI : MonoBehaviour
     {
         while (true)
         {
-            Vector3 lookDir = (Player_Manager.instance.cam.position - transform.position).normalized;
+            Vector3 lookDir = (PlayerAction_Manager.instance.cam.position - transform.position).normalized;
             lookDir.y = 0;
             transform.rotation = Quaternion.LookRotation(-lookDir);
             yield return null;

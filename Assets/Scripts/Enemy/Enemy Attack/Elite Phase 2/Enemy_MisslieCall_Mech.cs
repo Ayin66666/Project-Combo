@@ -60,7 +60,7 @@ public class Enemy_MisslieCall_Mech : MonoBehaviour
 
     private IEnumerator UseCall()
     {
-        LookAt(Player_Manager.instance.gameObject, 0.25f);
+        LookAt(PlayerAction_Manager.instance.gameObject, 0.25f);
         isOn = true;
 
         // 애니메이션 - 비행 시작

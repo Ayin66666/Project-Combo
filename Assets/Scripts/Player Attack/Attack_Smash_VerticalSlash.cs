@@ -27,10 +27,10 @@ public class Attack_Smash_VerticalSlash : Attack_Base
     /// <returns></returns>
     private IEnumerator UseCall()
     {
-        Player_Manager.instance.isAttack = true;
-        Player_Manager.instance.isSmash = true;
-        Player_Manager.instance.MovementLock(cancelType, true);
-        Player_Manager.instance.LookAt();
+        PlayerAction_Manager.instance.isAttack = true;
+        PlayerAction_Manager.instance.isSmash = true;
+        PlayerAction_Manager.instance.MovementLock(cancelType, true);
+        PlayerAction_Manager.instance.LookAt();
         TeleportPos_Setting();
 
         // 데미지 계산
@@ -48,8 +48,8 @@ public class Attack_Smash_VerticalSlash : Attack_Base
             yield return null;
         }
 
-        Player_Manager.instance.isAttack = false;
-        Player_Manager.instance.RushSlash_Setting(true);
+        PlayerAction_Manager.instance.isAttack = false;
+        PlayerAction_Manager.instance.RushSlash_Setting(true);
 
         // 추가타 대기
         float timer = 0;
@@ -58,9 +58,9 @@ public class Attack_Smash_VerticalSlash : Attack_Base
             timer += Time.deltaTime;
 
             // 추가타
-            if (Player_Manager.instance.isAwakning && Input_Manager.instance.inputDatas[1].isInput)
+            if (PlayerAction_Manager.instance.isAwakning && Input_Manager.instance.inputDatas[1].isInput)
             {
-                Player_Manager.instance.RushSlash_Setting(false);
+                PlayerAction_Manager.instance.RushSlash_Setting(false);
                 AdditionalAttack();
                 yield break;
             }
@@ -75,9 +75,9 @@ public class Attack_Smash_VerticalSlash : Attack_Base
             yield return null;
         }
 
-        Player_Manager.instance.MovementLock(cancelType, false);
-        Player_Manager.instance.RushSlash_Setting(false);
-        Player_Manager.instance.AttackOver();
+        PlayerAction_Manager.instance.MovementLock(cancelType, false);
+        PlayerAction_Manager.instance.RushSlash_Setting(false);
+        PlayerAction_Manager.instance.AttackOver();
     }
 
     private void AdditionalAttack()
@@ -90,9 +90,9 @@ public class Attack_Smash_VerticalSlash : Attack_Base
 
     private IEnumerator AdditionalAttackCall()
     {
-        Player_Manager.instance.isAttack = true;
-        Player_Manager.instance.MovementLock(cancelType, true);
-        Player_Manager.instance.LookAt();
+        PlayerAction_Manager.instance.isAttack = true;
+        PlayerAction_Manager.instance.MovementLock(cancelType, true);
+        PlayerAction_Manager.instance.LookAt();
 
         // 2타 공격
         anim.SetTrigger("Smash");
@@ -103,7 +103,7 @@ public class Attack_Smash_VerticalSlash : Attack_Base
             yield return null;
         }
 
-        Player_Manager.instance.isAttack = false;
+        PlayerAction_Manager.instance.isAttack = false;
 
         float timer = 0;
         while (anim.GetBool("isAdditionalSmash"))
@@ -117,8 +117,8 @@ public class Attack_Smash_VerticalSlash : Attack_Base
 
             yield return null;
         }
-        Player_Manager.instance.MovementLock(cancelType, false);
-        Player_Manager.instance.AttackOver();
+        PlayerAction_Manager.instance.MovementLock(cancelType, false);
+        PlayerAction_Manager.instance.AttackOver();
     }
 
     /// <summary>
@@ -137,7 +137,7 @@ public class Attack_Smash_VerticalSlash : Attack_Base
     // 텔레포트
     public void Movement(int index)
     {
-        Player_Manager.instance.bodyObject.transform.position = moveDatas[index].movePos.position;
+        PlayerAction_Manager.instance.bodyObject.transform.position = moveDatas[index].movePos.position;
     }
 
 
@@ -149,18 +149,18 @@ public class Attack_Smash_VerticalSlash : Attack_Base
     public void Veritcal_Aura(int index)
     {
         // 이펙트
-        Vector3 ppp = Player_Manager.instance.shootTarget.transform.position - Player_Manager.instance.bodyObject.transform.position;
-        GameObject obj = Instantiate(auraVFX, shotPos.position, Player_Manager.instance.transform.localRotation);
+        Vector3 ppp = PlayerAction_Manager.instance.shootTarget.transform.position - PlayerAction_Manager.instance.bodyObject.transform.position;
+        GameObject obj = Instantiate(auraVFX, shotPos.position, PlayerAction_Manager.instance.transform.localRotation);
         obj.transform.rotation = Quaternion.LookRotation(ppp);
 
         // 투명 투사체
-        GameObject auraObj = Instantiate(auraCollider, shotPos.position, Player_Manager.instance.transform.localRotation);
+        GameObject auraObj = Instantiate(auraCollider, shotPos.position, PlayerAction_Manager.instance.transform.localRotation);
         Attack_Collider_Shooting objShot = auraObj.GetComponent<Attack_Collider_Shooting>();
         auraObj.transform.rotation = Quaternion.LookRotation(ppp);
 
         // 투명 투사체 데미지
-        Value val = Player_Manager.instance.isAwakning ? value_Normal[index] : value_Normal[index];
-        (bool isCritical, int damage) = Player_Manager.instance.DamageCalculation(val, skillLevel);
+        Value val = PlayerAction_Manager.instance.isAwakning ? value_Normal[index] : value_Normal[index];
+        (bool isCritical, int damage) = PlayerAction_Manager.instance.DamageCalculation(val, skillLevel);
 
         Skill_Value_SO.Value_Data skillData = val.levelValue.GetData(skillLevel);
         objShot.Damage_Setting(skillData.type, skillData.attackEffect, isCritical, skillData.hitCount, damage);
@@ -170,9 +170,9 @@ public class Attack_Smash_VerticalSlash : Attack_Base
     public override void DamageCal(int index)
     {
         Skill_Value_SO.Value_Data skillData;
-        if (Player_Manager.instance.isAwakning)
+        if (PlayerAction_Manager.instance.isAwakning)
         {
-            (bool isCritical, int damage) = Player_Manager.instance.DamageCalculation(value_Awakening[index], skillLevel);
+            (bool isCritical, int damage) = PlayerAction_Manager.instance.DamageCalculation(value_Awakening[index], skillLevel);
             skillData = value_Awakening[index].levelValue.GetData(skillLevel);
 
             if (value_Awakening[index].attackCollider != null)
@@ -180,7 +180,7 @@ public class Attack_Smash_VerticalSlash : Attack_Base
         }
         else
         {
-            (bool isCritical, int damage) = Player_Manager.instance.DamageCalculation(value_Normal[index], skillLevel);
+            (bool isCritical, int damage) = PlayerAction_Manager.instance.DamageCalculation(value_Normal[index], skillLevel);
             skillData = value_Normal[index].levelValue.GetData(skillLevel);
 
             if (value_Awakening[index].attackCollider != null)
@@ -195,7 +195,7 @@ public class Attack_Smash_VerticalSlash : Attack_Base
             StopCoroutine(useCoroutine);
 
         // 위치 정상화 -> 아마 이게 2번으로 잡혀서 리셋할때 움직인듯?
-        Player_Manager.instance.bodyObject.transform.position = moveDatas[3].movePos.position;
+        PlayerAction_Manager.instance.bodyObject.transform.position = moveDatas[3].movePos.position;
 
 
         // 이펙트 종료

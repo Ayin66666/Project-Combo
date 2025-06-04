@@ -34,9 +34,9 @@ public class Attack_Other_Awankning : Attack_Base
 
     private IEnumerator UseCall()
     {
-        Player_Manager.instance.MovementLock(cancelType, true);
-        Player_Manager.instance.isAwakning = true;
-        Player_Manager.instance.Special_Setting(true);
+        PlayerAction_Manager.instance.MovementLock(cancelType, true);
+        PlayerAction_Manager.instance.isAwakning = true;
+        PlayerAction_Manager.instance.Special_Setting(true);
 
         // 이펙트 On
         awankningVFX.SetActive(true);
@@ -49,14 +49,14 @@ public class Attack_Other_Awankning : Attack_Base
         // 애니메이션
         anim.SetTrigger("Action");
         anim.SetBool("isAwakning", true);
-        while(anim.GetBool("isAwakning"))
+        while (anim.GetBool("isAwakning"))
         {
             yield return null;
         }
-        Player_Manager.instance.MovementLock(cancelType, false);
+        PlayerAction_Manager.instance.MovementLock(cancelType, false);
 
         // 타이머
-        while(Player_Manager.instance.status.curAwakening > 0)
+        while (Player_Manager.instance.status.curAwakening > 0)
         {
             Player_Manager.instance.status.curAwakening -= Time.deltaTime * 5f;
             yield return null;
@@ -64,14 +64,14 @@ public class Attack_Other_Awankning : Attack_Base
 
         // 능력치 초기화
         Status_Setting(false);
-        Player_Manager.instance.Special_Setting(false);
+        PlayerAction_Manager.instance.Special_Setting(false);
 
         // 이펙트 Off
         awankningVFX.SetActive(false);
         swordVFX.SetActive(false);
 
-        Player_Manager.instance.isAwakning = false;
-        Player_Manager.instance.canAwakning = false;
+        PlayerAction_Manager.instance.isAwakning = false;
+        PlayerAction_Manager.instance.canAwakning = false;
     }
 
     private void Buff_Setting()
@@ -105,15 +105,15 @@ public class Attack_Other_Awankning : Attack_Base
     public override void DamageCal(int index)
     {
         Skill_Value_SO.Value_Data skillData;
-        if (Player_Manager.instance.isAwakning)
+        if (PlayerAction_Manager.instance.isAwakning)
         {
-            (bool isCritical, int damage) = Player_Manager.instance.DamageCalculation(value_Awakening[index], skillLevel);
+            (bool isCritical, int damage) = PlayerAction_Manager.instance.DamageCalculation(value_Awakening[index], skillLevel);
             skillData = value_Awakening[index].levelValue.GetData(skillLevel);
             value_Awakening[index].attackCollider.Damage_Setting(skillData.type, skillData.attackEffect, isCritical, skillData.hitCount, damage);
         }
         else
         {
-            (bool isCritical, int damage) = Player_Manager.instance.DamageCalculation(value_Normal[index], skillLevel);
+            (bool isCritical, int damage) = PlayerAction_Manager.instance.DamageCalculation(value_Normal[index], skillLevel);
             skillData = value_Normal[index].levelValue.GetData(skillLevel);
             value_Normal[index].attackCollider.Damage_Setting(skillData.type, skillData.attackEffect, isCritical, skillData.hitCount, damage);
         }

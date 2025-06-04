@@ -29,7 +29,7 @@ public class EAttack_Messile : Attack_Base
     {
         enemy.curState = Enemy_Base.State.Attack;
 
-        enemy.LookAt(Player_Manager.instance.gameObject, 0.25f);
+        enemy.LookAt(PlayerAction_Manager.instance.gameObject, 0.25f);
 
         isOn = true;
 

@@ -90,7 +90,7 @@ public class Tutorial_Manager : MonoBehaviour
     /// <param name="index"></param>
     public void Tutorial_Big(int index)
     {
-        Player_Manager.instance.canAction = false;
+        PlayerAction_Manager.instance.canAction = false;
         istutorialOn = true;
 
         Time.timeScale = 0f;
@@ -117,7 +117,7 @@ public class Tutorial_Manager : MonoBehaviour
             obj.SetActive(false);
         }
 
-        Player_Manager.instance.canAction = true;
+        PlayerAction_Manager.instance.canAction = true;
         istutorialOn = false;
     }
 

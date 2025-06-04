@@ -58,7 +58,7 @@ public class Enemy_Range_Gunner : Enemy_Base
             }
 
             Check_Target();
-            nav.SetDestination(Player_Manager.instance.gameObject.transform.position);
+            nav.SetDestination(PlayerAction_Manager.instance.gameObject.transform.position);
             yield return null;
         }
         nav.enabled = false;

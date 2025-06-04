@@ -19,9 +19,9 @@ public class Attack_Additional_RushSlash : Attack_Base
 
     private IEnumerator UseCall()
     {
-        Player_Manager.instance.MovementLock(cancelType, true);
-        Player_Manager.instance.Animation_Reset();
-        Player_Manager.instance.isAttack = true;
+        PlayerAction_Manager.instance.MovementLock(cancelType, true);
+        PlayerAction_Manager.instance.Animation_Reset();
+        PlayerAction_Manager.instance.isAttack = true;
 
         // 데미지 계산
         for (int i = 0; i < value_Normal.Count; i++)
@@ -30,10 +30,10 @@ public class Attack_Additional_RushSlash : Attack_Base
         }
 
         // 콜라이더 무시
-        Player_Manager.instance.Collider_Ignore(true);
+        PlayerAction_Manager.instance.Collider_Ignore(true);
 
         // 돌진 공격
-        Player_Manager.instance.LookAt();
+        PlayerAction_Manager.instance.LookAt();
         RushCollider(true);
         anim.SetTrigger("Action");
         anim.SetBool("isAttack", true);
@@ -43,7 +43,7 @@ public class Attack_Additional_RushSlash : Attack_Base
             yield return null;
         }
 
-        Player_Manager.instance.isAttack = false;
+        PlayerAction_Manager.instance.isAttack = false;
 
         // 이동 대기
         float timer = 0;
@@ -59,14 +59,14 @@ public class Attack_Additional_RushSlash : Attack_Base
         }
 
         // 콜라이더 무시
-        Player_Manager.instance.Collider_Ignore(false);
+        PlayerAction_Manager.instance.Collider_Ignore(false);
         RushCollider(false);
 
         // 공격 콜라이더 리셋
         Attack_ColliderReset();
 
-        Player_Manager.instance.MovementLock(cancelType, false);
-        Player_Manager.instance.AttackOver();
+        PlayerAction_Manager.instance.MovementLock(cancelType, false);
+        PlayerAction_Manager.instance.AttackOver();
     }
 
     private void RushCollider(bool isOn)
@@ -88,9 +88,9 @@ public class Attack_Additional_RushSlash : Attack_Base
     public override void DamageCal(int index)
     {
         Skill_Value_SO.Value_Data skillData;
-        if (Player_Manager.instance.isAwakning)
+        if (PlayerAction_Manager.instance.isAwakning)
         {
-            (bool isCritical, int damage) = Player_Manager.instance.DamageCalculation(value_Awakening[0], skillLevel);
+            (bool isCritical, int damage) = PlayerAction_Manager.instance.DamageCalculation(value_Awakening[0], skillLevel);
             skillData = value_Awakening[0].levelValue.GetData(skillLevel);
 
             if (value_Awakening[0].attackCollider != null)
@@ -98,7 +98,7 @@ public class Attack_Additional_RushSlash : Attack_Base
         }
         else
         {
-            (bool isCritical, int damage) = Player_Manager.instance.DamageCalculation(value_Normal[0], skillLevel);
+            (bool isCritical, int damage) = PlayerAction_Manager.instance.DamageCalculation(value_Normal[0], skillLevel);
             skillData = value_Normal[0].levelValue.GetData(skillLevel);
 
             if (value_Awakening[0].attackCollider != null)

@@ -13,7 +13,7 @@ public class Attack_Smash_UpperSlash : Attack_Base
 
     public override void Use()
     {
-        if (Player_Manager.instance.isSmash)
+        if (PlayerAction_Manager.instance.isSmash)
         {
             return;
         }
@@ -31,9 +31,9 @@ public class Attack_Smash_UpperSlash : Attack_Base
     /// <returns></returns>
     private IEnumerator UseCall()
     {
-        Player_Manager.instance.MovementLock(cancelType, true);
-        Player_Manager.instance.isAttack = true;
-        Player_Manager.instance.isSmash = true;
+        PlayerAction_Manager.instance.MovementLock(cancelType, true);
+        PlayerAction_Manager.instance.isAttack = true;
+        PlayerAction_Manager.instance.isSmash = true;
 
         // 데미지 계산
         for (int i = 0; i < value_Normal.Count; i++)
@@ -42,7 +42,7 @@ public class Attack_Smash_UpperSlash : Attack_Base
         }
 
         // 1타 공격
-        Player_Manager.instance.LookAt();
+        PlayerAction_Manager.instance.LookAt();
         anim.SetTrigger("Smash");
         anim.SetBool("isAttack", true);
         anim.SetBool("isSmash", true);
@@ -51,8 +51,8 @@ public class Attack_Smash_UpperSlash : Attack_Base
             yield return null;
         }
 
-        Player_Manager.instance.isAttack = false;
-        Player_Manager.instance.RushSlash_Setting(true);
+        PlayerAction_Manager.instance.isAttack = false;
+        PlayerAction_Manager.instance.RushSlash_Setting(true);
 
         // 추가타 대기
         float timer = 0;
@@ -61,9 +61,9 @@ public class Attack_Smash_UpperSlash : Attack_Base
             timer += Time.deltaTime;
 
             // 추가타
-            if (Player_Manager.instance.isAwakning && Input_Manager.instance.inputDatas[1].isInput)
+            if (PlayerAction_Manager.instance.isAwakning && Input_Manager.instance.inputDatas[1].isInput)
             {
-                Player_Manager.instance.RushSlash_Setting(false);
+                PlayerAction_Manager.instance.RushSlash_Setting(false);
                 AdditionalAttack();
                 yield break;
             }
@@ -81,9 +81,9 @@ public class Attack_Smash_UpperSlash : Attack_Base
         // 데미지 리셋
         Attack_ColliderReset();
 
-        Player_Manager.instance.MovementLock(cancelType, false);
-        Player_Manager.instance.RushSlash_Setting(false);
-        Player_Manager.instance.AttackOver();
+        PlayerAction_Manager.instance.MovementLock(cancelType, false);
+        PlayerAction_Manager.instance.RushSlash_Setting(false);
+        PlayerAction_Manager.instance.AttackOver();
     }
 
 
@@ -97,9 +97,9 @@ public class Attack_Smash_UpperSlash : Attack_Base
 
     private IEnumerator AdditionalAttackCall()
     {
-        Player_Manager.instance.MovementLock(cancelType, true);
-        Player_Manager.instance.isAttack = true;
-        Player_Manager.instance.LookAt();
+        PlayerAction_Manager.instance.MovementLock(cancelType, true);
+        PlayerAction_Manager.instance.isAttack = true;
+        PlayerAction_Manager.instance.LookAt();
 
         // 데미지 계산
         for (int i = 0; i < value_Normal.Count; i++)
@@ -116,7 +116,7 @@ public class Attack_Smash_UpperSlash : Attack_Base
             yield return null;
         }
 
-        Player_Manager.instance.isAttack = false;
+        PlayerAction_Manager.instance.isAttack = false;
 
         float timer = 0;
         while (anim.GetBool("isAdditionalSmash"))
@@ -126,7 +126,7 @@ public class Attack_Smash_UpperSlash : Attack_Base
             if (timer > time && Input_Manager.instance.movementInput.magnitude > 0)
             {
                 anim.SetBool("isAdditionalSmash", false);
-                Player_Manager.instance.MovementLock(cancelType, false);
+                PlayerAction_Manager.instance.MovementLock(cancelType, false);
                 break;
             }
 
@@ -135,7 +135,7 @@ public class Attack_Smash_UpperSlash : Attack_Base
 
         // 데미지 리셋
         Attack_ColliderReset();
-        Player_Manager.instance.AttackOver();
+        PlayerAction_Manager.instance.AttackOver();
     }
 
 
@@ -175,9 +175,9 @@ public class Attack_Smash_UpperSlash : Attack_Base
     public override void DamageCal(int index)
     {
         Skill_Value_SO.Value_Data skillData;
-        if (Player_Manager.instance.isAwakning)
+        if (PlayerAction_Manager.instance.isAwakning)
         {
-            (bool isCritical, int damage) = Player_Manager.instance.DamageCalculation(value_Awakening[index], skillLevel);
+            (bool isCritical, int damage) = PlayerAction_Manager.instance.DamageCalculation(value_Awakening[index], skillLevel);
             skillData = value_Awakening[index].levelValue.GetData(skillLevel);
 
             if (value_Awakening[index].attackCollider != null)
@@ -185,7 +185,7 @@ public class Attack_Smash_UpperSlash : Attack_Base
         }
         else
         {
-            (bool isCritical, int damage) = Player_Manager.instance.DamageCalculation(value_Normal[index], skillLevel);
+            (bool isCritical, int damage) = PlayerAction_Manager.instance.DamageCalculation(value_Normal[index], skillLevel);
             skillData = value_Normal[index].levelValue.GetData(skillLevel);
 
             if (value_Awakening[index].attackCollider != null)

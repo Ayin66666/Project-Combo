@@ -20,7 +20,7 @@ public class EAttack_Normal : Attack_Base
         enemy.curState = Enemy_Base.State.Attack;
 
         DamageCal(0);
-        enemy.LookAt(Player_Manager.instance.gameObject, 0.1f);
+        enemy.LookAt(PlayerAction_Manager.instance.gameObject, 0.1f);
         yield return new WaitForSeconds(0.1f);
 
         // Âî¸£±â °ø°Ý

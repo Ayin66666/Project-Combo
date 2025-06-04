@@ -79,7 +79,7 @@ public class Enemy_UI : MonoBehaviour
         Vector3 lookDir = Vector3.zero;
         while (true)
         {
-            lookDir = Player_Manager.instance.cam.transform.position - transform.position;
+            lookDir = PlayerAction_Manager.instance.cam.transform.position - transform.position;
             lookDir.y = 0;
             transform.rotation = Quaternion.LookRotation(-lookDir);
             yield return null;

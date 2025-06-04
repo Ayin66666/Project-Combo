@@ -34,7 +34,7 @@ public class Attack_Collider : MonoBehaviour
     {
         if(other.CompareTag("Player"))
         {
-            Player_Manager.instance.Take_Damage(gameObject, damageType, hitType, isCritical, hitCont, damage);
+            PlayerAction_Manager.instance.Take_Damage(gameObject, damageType, hitType, isCritical, hitCont, damage);
         }
     }
 }

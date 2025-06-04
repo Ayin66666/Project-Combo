@@ -12,7 +12,7 @@ public class Attack_Other_Counter : Attack_Base
 
     private void Start()
     {
-        Player_Manager.instance.hitAction += Hit_Check;
+        PlayerAction_Manager.instance.hitAction += Hit_Check;
     }
 
 
@@ -26,9 +26,9 @@ public class Attack_Other_Counter : Attack_Base
 
     private IEnumerator UseCall()
     {
-        Player_Manager.instance.MovementLock(cancelType, true);
-        Player_Manager.instance.isCounter = true;
-        Player_Manager.instance.isAttack = true;
+        PlayerAction_Manager.instance.MovementLock(cancelType, true);
+        PlayerAction_Manager.instance.isCounter = true;
+        PlayerAction_Manager.instance.isAttack = true;
         isHit = false;
 
         // 데미지 계산
@@ -38,8 +38,8 @@ public class Attack_Other_Counter : Attack_Base
         }
 
         // 애니메이션 리셋
-        Player_Manager.instance.Animation_Reset();
-        Player_Manager.instance.LookAt();
+        PlayerAction_Manager.instance.Animation_Reset();
+        PlayerAction_Manager.instance.LookAt();
 
         // 애니메이션
         anim.SetTrigger("Action");
@@ -69,9 +69,9 @@ public class Attack_Other_Counter : Attack_Base
         // 공격 콜라이더 리셋
         Attack_ColliderReset();
 
-        Player_Manager.instance.isCounter = false;
-        Player_Manager.instance.MovementLock(cancelType, false);
-        Player_Manager.instance.AttackOver();
+        PlayerAction_Manager.instance.isCounter = false;
+        PlayerAction_Manager.instance.MovementLock(cancelType, false);
+        PlayerAction_Manager.instance.AttackOver();
     }
 
 
@@ -90,8 +90,8 @@ public class Attack_Other_Counter : Attack_Base
 
     private IEnumerator Attack_HorizontalSalsh()
     {
-        Player_Manager.instance.isAttack = true;
-        Player_Manager.instance.LookAt();
+        PlayerAction_Manager.instance.isAttack = true;
+        PlayerAction_Manager.instance.LookAt();
 
         // 게이지 상승
         Player_Manager.instance.status.AwankingAdd(20);
@@ -106,8 +106,8 @@ public class Attack_Other_Counter : Attack_Base
             yield return null;
         }
 
-        Player_Manager.instance.isInvincibility = false;
-        Player_Manager.instance.isAttack = false;
+        PlayerAction_Manager.instance.isInvincibility = false;
+        PlayerAction_Manager.instance.isAttack = false;
 
         // 추가타 입력 대기
         float timer = 0;
@@ -130,9 +130,9 @@ public class Attack_Other_Counter : Attack_Base
         // 공격 콜라이더 리셋
         Attack_ColliderReset();
 
-        Player_Manager.instance.MovementLock(cancelType, false);
-        Player_Manager.instance.isCounter = false;
-        Player_Manager.instance.AttackOver();
+        PlayerAction_Manager.instance.MovementLock(cancelType, false);
+        PlayerAction_Manager.instance.isCounter = false;
+        PlayerAction_Manager.instance.AttackOver();
     }
 
     /// <summary>
@@ -149,13 +149,13 @@ public class Attack_Other_Counter : Attack_Base
 
     private IEnumerator Attack_VerticalStrike()
     {
-        Player_Manager.instance.MovementLock(cancelType, true);
-        Player_Manager.instance.isAttack = true;
-        Player_Manager.instance.LookAt();
+        PlayerAction_Manager.instance.MovementLock(cancelType, true);
+        PlayerAction_Manager.instance.isAttack = true;
+        PlayerAction_Manager.instance.LookAt();
 
 
         // 콜라이더 무시
-        Player_Manager.instance.Collider_Ignore(true);
+        PlayerAction_Manager.instance.Collider_Ignore(true);
 
         // 애니메이션
         anim.SetTrigger("Action");
@@ -166,7 +166,7 @@ public class Attack_Other_Counter : Attack_Base
             yield return null;
         }
 
-        Player_Manager.instance.isAttack = false;
+        PlayerAction_Manager.instance.isAttack = false;
         float timer = 0;
         while(anim.GetBool("isCounter"))
         {
@@ -181,15 +181,15 @@ public class Attack_Other_Counter : Attack_Base
         }
 
         // 콜라이더 무시
-        Player_Manager.instance.Collider_Ignore(false);
+        PlayerAction_Manager.instance.Collider_Ignore(false);
 
         // 공격 콜라이더 리셋
         Attack_ColliderReset();
 
         // 공격 종료
-        Player_Manager.instance.MovementLock(cancelType, false);
-        Player_Manager.instance.isCounter = false;
-        Player_Manager.instance.AttackOver();
+        PlayerAction_Manager.instance.MovementLock(cancelType, false);
+        PlayerAction_Manager.instance.isCounter = false;
+        PlayerAction_Manager.instance.AttackOver();
     }
     #endregion
 
@@ -211,7 +211,7 @@ public class Attack_Other_Counter : Attack_Base
 
     public override void DamageCal(int index)
     {
-        (bool isCritical, int damage) = Player_Manager.instance.DamageCalculation(value_Normal[index], skillLevel);
+        (bool isCritical, int damage) = PlayerAction_Manager.instance.DamageCalculation(value_Normal[index], skillLevel);
         Skill_Value_SO.Value_Data skillData = value_Normal[index].levelValue.GetData(skillLevel);
         value_Normal[index].attackCollider.Damage_Setting(skillData.type, skillData.attackEffect, isCritical, skillData.hitCount, damage);
     }
@@ -222,7 +222,7 @@ public class Attack_Other_Counter : Attack_Base
         if (useCoroutine != null)
             StopCoroutine(useCoroutine);
 
-        Player_Manager.instance.isCounter = false;
+        PlayerAction_Manager.instance.isCounter = false;
         isHit = false;
 
         // 이펙트 종료

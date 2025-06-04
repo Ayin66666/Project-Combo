@@ -97,14 +97,14 @@ public class EAttack_Subdue : Attack_Base
             anim.SetBool("isSubdueAttack", true);
 
             // 플레이어 잡힘 애니메이션 호출
-            Player_Manager.instance.Subdue(true, subduePos, this.transform);
+            PlayerAction_Manager.instance.Subdue(true, subduePos, this.transform);
 
             //애니메이션 대기
             while (anim.GetBool("isSubdueAttack"))
             {
                 yield return null;
             }
-            Player_Manager.instance.Subdue(false, null, null);
+            PlayerAction_Manager.instance.Subdue(false, null, null);
         }
         else
         {
@@ -147,7 +147,7 @@ public class EAttack_Subdue : Attack_Base
             StopCoroutine(useCoroutine);
 
         // 카메라 종료
-        Player_Manager.instance.Subdue(false, null, null);
+        PlayerAction_Manager.instance.Subdue(false, null, null);
 
         // 이펙트 종료
         foreach (GameObject obj in attackVFX)

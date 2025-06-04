@@ -22,7 +22,7 @@ public class EAttack_Shooting : Attack_Base
     {
         enemy.curState = Enemy_Base.State.Attack;
 
-        enemy.LookAt(Player_Manager.instance.gameObject, 0.1f);
+        enemy.LookAt(PlayerAction_Manager.instance.gameObject, 0.1f);
         yield return new WaitForSeconds(0.1f);
 
         anim.SetTrigger("Action");

@@ -21,14 +21,14 @@ public class EAttack_Shooting_Barrage : Attack_Base
     {
         enemy.curState = Enemy_Base.State.Attack;
 
-        enemy.LookAt(Player_Manager.instance.gameObject, 0.1f);
+        enemy.LookAt(PlayerAction_Manager.instance.gameObject, 0.1f);
         yield return new WaitForSeconds(0.1f);
 
         anim.SetTrigger("Action");
         anim.SetBool("isBarrage", true);
         while (anim.GetBool("isBarrage"))
         {
-            enemy.LookAt(Player_Manager.instance.gameObject, 0);
+            enemy.LookAt(PlayerAction_Manager.instance.gameObject, 0);
             yield return null;
         }
 
@@ -53,7 +53,7 @@ public class EAttack_Shooting_Barrage : Attack_Base
         shoot.Damage_Setting(skillData.type, skillData.attackEffect, isCritical, skillData.hitCount, damage);
 
         // 이동방향 셋팅
-        Vector3 shootDir = Player_Manager.instance.transform.position - shotPos.position;
+        Vector3 shootDir = PlayerAction_Manager.instance.transform.position - shotPos.position;
         shootDir.y += 1;
         shoot.Movement_Setting(shootDir.normalized, 10f, 10f);
 

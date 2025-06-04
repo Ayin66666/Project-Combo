@@ -12,6 +12,7 @@ public class Hideout_Manager : MonoBehaviour
     [Header("---Chapter Setting---")]
     [SerializeField] private int chapterCount;
     [SerializeField] private string curSelectStage;
+    [SerializeField] private Transform startPos;
 
 
     [Header("---Select UI---")]
@@ -28,7 +29,6 @@ public class Hideout_Manager : MonoBehaviour
 
 
     [Header("---Description UI---")]
-    [SerializeField] private GameObject descriptionSet;
     [SerializeField] private TextMeshProUGUI stageTypeText;
     [SerializeField] private TextMeshProUGUI levelText;
     [SerializeField] private TextMeshProUGUI stageNameText;
@@ -36,6 +36,11 @@ public class Hideout_Manager : MonoBehaviour
     [SerializeField] private TextMeshProUGUI descriptionText;
     [SerializeField] private TextMeshProUGUI rankText;
     [SerializeField] private Image stageImage;
+
+
+    [Header("---Detailed description UI---")]
+    [SerializeField] private GameObject detailedDescriptionSet;
+    [SerializeField] private TextMeshProUGUI ddText;
 
 
     private void Awake()
@@ -58,13 +63,30 @@ public class Hideout_Manager : MonoBehaviour
     {
         // 스테이지 셋팅
         Data_Setting();
-        SelectUI_Setting();
         DescriptionUI_Setting(0);
 
+        // 페이드 종료
+        UI_Manager.instance.Fade(false, 1.25f);
+
         // 플레이어 활성화
-        Player_Manager.instance.PlayerOn();
+        Player_Manager.instance.Player_Setting(true, startPos.position);
     }
 
+
+    /// <summary>
+    /// UI On/Off
+    /// </summary>
+    public void Hideout_Setting(bool isOn)
+    {
+        // 플레이어 UI
+        UI_Manager.instance.UI_Setting(isOn);
+
+        // 커서 셋팅
+        Player_Manager.instance.Cursor_Setting(false);
+
+        // 스테이지 UI
+        selectSet.SetActive(isOn);
+    }
 
     /// <summary>
     /// 스테이지 버튼 클릭 시 상세 UI 표기
@@ -77,6 +99,7 @@ public class Hideout_Manager : MonoBehaviour
         levelText.text = uiData.stageData[stageIndex].stageLevel.ToString();
         stageNameText.text = uiData.stageData[stageIndex].stageName;
         descriptionText.text = uiData.stageData[stageIndex].stageSummation;
+        ddText.text = uiData.stageData[stageIndex].stageDescription;
 
         // 클리어 데이터
         clearTimeText.text = stageClearData.stageList[stageIndex].clearTime.ToString();
@@ -121,18 +144,19 @@ public class Hideout_Manager : MonoBehaviour
             }
         }
     }
-
-    /// <summary>
-    /// 스테이지 선택 UI 최신화
-    /// </summary>
-    private void SelectUI_Setting()
-    {
-
-    }
     #endregion
 
 
     #region Button Event
+    /// <summary>
+    /// 상세 설명 UI On/Off
+    /// </summary>
+    /// <param name="isOn"></param>
+    public void Click_DetailedDescription(bool isOn)
+    {
+        detailedDescriptionSet.SetActive(isOn);
+    }
+
     /// <summary>
     /// 스테이지 선택 UI
     /// </summary>
@@ -152,8 +176,11 @@ public class Hideout_Manager : MonoBehaviour
 
     private IEnumerator StageCall()
     {
+        // 플레이어 비활성화
+        Player_Manager.instance.Player_Setting(false, startPos.position);
+
         // 선행 연출 - 넣을건지?
-        UI_Manager.instance.Fade(true, 0.75f);
+        UI_Manager.instance.Fade(true, 1.25f);
         while (UI_Manager.instance.isFade)
         {
             yield return null;

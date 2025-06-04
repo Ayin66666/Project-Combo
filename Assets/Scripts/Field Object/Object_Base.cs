@@ -80,7 +80,7 @@ public abstract class Object_Base : MonoBehaviour
     protected void LookAt()
     {
         
-        Vector3 lookDir = iconSet.transform.position - Player_Manager.instance.cam.transform.position;
+        Vector3 lookDir = iconSet.transform.position - PlayerAction_Manager.instance.cam.transform.position;
         lookDir.y = 0;
         iconSet.transform.rotation = Quaternion.LookRotation(lookDir.normalized);
 

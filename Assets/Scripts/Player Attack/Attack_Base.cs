@@ -71,7 +71,7 @@ public abstract class Attack_Base : MonoBehaviour
         switch (attackOwner)
         {
             case Owner.Player:
-                Player_Manager.instance.Attack_Movement(moveDatas[index].movePos, moveDatas[index].moveSpeed);
+                PlayerAction_Manager.instance.Attack_Movement(moveDatas[index].movePos, moveDatas[index].moveSpeed);
                 break;
 
             case Owner.Enemy:

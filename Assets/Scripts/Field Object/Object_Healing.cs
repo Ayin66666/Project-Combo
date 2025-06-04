@@ -25,14 +25,14 @@ public class Object_Healing : Object_Base
         isUsed = true;
 
         // 이펙트
-        GameObject obj = Instantiate(healVFX, Player_Manager.instance.transform.position, Quaternion.identity);
-        obj.transform.parent = Player_Manager.instance.transform;
+        GameObject obj = Instantiate(healVFX, PlayerAction_Manager.instance.transform.position, Quaternion.identity);
+        obj.transform.parent = PlayerAction_Manager.instance.transform;
         Vector3 pos = obj.transform.position;
         pos.y += 0.5f;
         obj.transform.position = pos;
 
         // 회복
-        Player_Manager.instance.Healing(healHp);
+        PlayerAction_Manager.instance.Healing(healHp);
 
         // UI 동작
         text.text = "회복 시스템 가동";
