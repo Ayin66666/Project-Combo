@@ -90,7 +90,7 @@ public class SaveLoad_Manager : MonoBehaviour
     public int curSlot;
 
 
-    [Header("---UI---")]
+    [Header("---Save UI---")]
     public bool isCover;
     public GameObject saveUIset;
     public GameObject coverUISet;
@@ -98,6 +98,13 @@ public class SaveLoad_Manager : MonoBehaviour
     [SerializeField] private CanvasGroup saveResultCanvas;
     [SerializeField] private TextMeshProUGUI saveResultText;
     private Coroutine saveUICoroutine;
+
+
+    [Header("---Load UI---")]
+    public bool isLoad;
+    public GameObject loadUISet;
+    public GameObject loadClickSet;
+    private Coroutine loadCoroutine;
 
 
     private void Awake()
@@ -183,7 +190,7 @@ public class SaveLoad_Manager : MonoBehaviour
     #endregion
 
 
-    #region Save & Load
+    #region Save
     /// <summary>
     /// 해당 경로에 데이터가 있는지 반환
     /// </summary>
@@ -211,8 +218,6 @@ public class SaveLoad_Manager : MonoBehaviour
     public void SaveData(int index)
     {
         // 이미 저장된 데이터가 있을 경우 대비
-        bool s = CheckData(index);
-        Debug.Log(s);
         if (CheckData(index))
         {
             // 덮어쓰기 안내 UI
@@ -413,8 +418,13 @@ public class SaveLoad_Manager : MonoBehaviour
         }
     }
 
+
+    #endregion
+
+
+    #region Load
     /// <summary>
-    /// 데이터 로드 기능
+    /// 데이터 로드 후 전달 기능 - 스테이지나 플레이어에게 데이터 전달
     /// </summary>
     /// <param name="slotIndex"></param>
     public Data LoadData(int slotIndex)
@@ -447,6 +457,109 @@ public class SaveLoad_Manager : MonoBehaviour
             // 로드를 실패할 경우
             Debug.LogError("Load failed: " + ex.Message);
             return null;
+        }
+    }
+
+
+
+    /// <summary>
+    /// 로드 슬롯 클릭 시 호출 - 데이터 로드 후 씬 이동 기능
+    /// </summary>
+    /// <param name="index"></param>
+    public void Click_Load(int index)
+    {
+        if (CheckData(index))
+        {
+            // 데이터가 있다면 로드 체크 UI
+            loadCoroutine = StartCoroutine(LoadDataCall(index));
+        }
+        else
+        {
+            // 데이터가 없다면 무시
+            return;
+        }
+    }
+
+    /// <summary>
+    /// 로드 여부 체크 UI
+    /// </summary>
+    /// <param name="isOn"></param>
+    public void LoadUI(bool isOn)
+    {
+        loadClickSet.SetActive(isOn);
+    }
+
+    /// <summary>
+    /// 로드 버튼
+    /// </summary>
+    public void LoadBool()
+    {
+        isLoad = true;
+    }
+
+    /// <summary>
+    /// 로드 여부 체크
+    /// </summary>
+    /// <param name="index"></param>
+    /// <returns></returns>
+    private IEnumerator LoadDataCall(int index)
+    {
+        // 조건 초기화
+        isLoad = false;
+
+        
+        // UI 활성화
+        LoadUI(true);
+
+        // UI 종료 대기
+        while (loadClickSet.activeSelf)
+        {
+            yield return null;
+        }
+
+        // 조건 만족시 로드
+        if (isLoad)
+        {
+            // 슬롯 변경
+            curSlot = index;
+
+            // 데이터 로드 & 적용
+            Data data;
+            try
+            {
+                //데이터 불러오기
+                string json = File.ReadAllText(savePath + fileName[index]);
+                data = JsonUtility.FromJson<Data>(json);
+
+                // 방어코딩 - 혹시라도 데이터 문제가 있을 경우
+                if (data == null)
+                {
+                    Debug.Log($"로드 에러 발생 : {savePath + fileName[index]}");
+                    yield break;
+                }
+            }
+            catch (IOException ex)
+            {
+                // 로드를 실패할 경우
+                data = null;
+                Debug.LogError("Load failed: " + ex.Message);
+            }
+
+            // 페이드 인
+            UI_Manager.instance.Fade(true, 1.25f);
+            while (UI_Manager.instance.isFade)
+            {
+                yield return null;
+            }
+
+            // 데이터 셋팅
+            Player_Status.instacne.Status_Setting(data);
+            ChapterData_Manager.instance.Data_Setting(data);
+            // 인벤토리 & 장비창
+            // 스킬트리
+
+            // 씬 로딩
+            SceneLoad_Manager.LoadScene(data.SceneName);
         }
     }
     #endregion
