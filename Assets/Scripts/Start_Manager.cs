@@ -15,7 +15,6 @@ public class Start_Manager : MonoBehaviour
 
 
     [Header("---UI---")]
-    [SerializeField] private GameObject selectSet;
     [SerializeField] private GameObject optionSet;
     [SerializeField] private GameObject extraSet;
     [SerializeField] private GameObject exitSet;
@@ -40,20 +39,9 @@ public class Start_Manager : MonoBehaviour
     private void Start()
     {
         // OnOff 용 리스트 추가
-        uiList.Add(selectSet);
         uiList.Add(optionSet);
         uiList.Add(extraSet);
         uiList.Add(exitSet);
-
-        // 슬롯 데이터 셋팅 + UI 최신화
-        for (int i = 0; i < slots.Count; i++)
-        {
-            Data data = SaveLoad_Manager.instance.SlotUI(i);
-            if(data != null)
-            {
-                slots[i].Slot_Setting(data.chapter, data.level.ToString(), data.playTime);
-            }
-        }
     }
 
     private IEnumerator LoadData(int index)
@@ -86,7 +74,7 @@ public class Start_Manager : MonoBehaviour
             SaveLoad_Manager.instance.curSlot = index;
 
             // 페이드
-            UI_Manager.instance.Fade(true, 0.75f);
+            UI_Manager.instance.Fade(true, 1.25f);
             while (UI_Manager.instance.isFade)
             {
                 yield return null;
@@ -97,39 +85,6 @@ public class Start_Manager : MonoBehaviour
         }
     }
 
-    private IEnumerator CreateData(int index)
-    {
-        isNew = false;
-
-        // 데이터 생성 UI
-        newDataUI.SetActive(true);
-        while(newDataUI.activeSelf)
-        {
-            yield return null;
-        }
-
-        // 신규 데이터를 생성
-        if(isNew)
-        {
-            if (SaveLoad_Manager.instance.Create_Data(index))
-            {
-                // 페이드
-                UI_Manager.instance.Fade(true, 0.75f);
-                while(UI_Manager.instance.isFade)
-                {
-                    yield return null;
-                }
-
-                // 데이터 생성 성공 - 튜토리얼 이동
-                SceneLoad_Manager.LoadScene("1.Chapter1_Tutorial");
-            }
-            else
-            {
-                // 데이터 생성 실패 - 데이터 생성 실패 시
-                Debug.LogError($"데이터 생성 실패! {index}");
-            }
-        }
-    }
 
     #region 버튼 이벤트
     /// <summary>
@@ -150,28 +105,7 @@ public class Start_Manager : MonoBehaviour
     public void Click_Start()
     {
         curUI = UI.Start;
-        selectSet.SetActive(true);
-    }
-
-    /// <summary>
-    /// select 슬롯에서 클릭했을 때 호출 - 인자값의 데이터가 있는지 체크 후 동작
-    /// </summary>
-    /// <param name="index"></param>
-    public void Click_Slot(int index)
-    {
-        isLoad = false;
-
-        // 신버전
-        if (SaveLoad_Manager.instance.CheckData(index))
-        {
-            // 데이터 로드
-            StartCoroutine(LoadData(index));
-        }
-        else
-        {
-            // 데이터 생성
-            StartCoroutine(CreateData(index));
-        }
+        SaveLoad_Manager.instance.SaveLoadUI(true);
     }
 
     /// <summary>

@@ -25,7 +25,7 @@ public class Hideout_Manager : MonoBehaviour
 
 
     [Header("---Component---")]
-    private StageData_Manager sd_Manager;
+    private ClearData_Manager sd_Manager;
 
 
     [Header("---Description UI---")]
@@ -56,7 +56,7 @@ public class Hideout_Manager : MonoBehaviour
 
         DontDestroyOnLoad(gameObject);
 
-        sd_Manager = StageData_Manager.instance;
+        sd_Manager = ClearData_Manager.instance;
     }
 
     private void Start()
@@ -136,7 +136,7 @@ public class Hideout_Manager : MonoBehaviour
                 saveData.clearData.chapterList[chapterCount].stageList[stageIndex] = data;
 
                 // 세이브 최신화
-                SaveLoad_Manager.instance.SaveData(SaveLoad_Manager.instance.curSlot);
+                SaveLoad_Manager.instance.Save(SaveLoad_Manager.instance.curSlot);
             }
             else
             {
@@ -195,7 +195,7 @@ public class Hideout_Manager : MonoBehaviour
     /// </summary>
     public void Click_Save()
     {
-        SaveLoad_Manager.instance.SaveUI(true);
+        SaveLoad_Manager.instance.SaveLoadUI(true);
     }
     #endregion
 }

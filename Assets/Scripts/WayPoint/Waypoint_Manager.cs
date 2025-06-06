@@ -18,10 +18,9 @@ public class Waypoint_Manager : MonoBehaviour
     }
     
 
-    void Awake()
+    private void Start()
     {
-        camera_WayPoint_Base = GameObject.Find("Main Camera").GetComponentInChildren<Camera_WayPoint_Base>();
-        //Player_Manager.instance.cam.GetComponent<Camera_WayPoint_Base>();
+        camera_WayPoint_Base = PlayerAction_Manager.instance.cam.GetComponent<Camera_WayPoint_Base>();
     }
 
     /// <summary>

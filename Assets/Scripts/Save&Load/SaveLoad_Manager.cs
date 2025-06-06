@@ -2,9 +2,12 @@ using System.Collections.Generic;
 using System.Collections;
 using UnityEngine;
 using TMPro;
+using System;
 using System.IO;
+using UnityEngine.SceneManagement;
 
 
+#region Data
 /// <summary>
 /// 모든 데이터 총괄 묶음
 /// </summary>
@@ -51,7 +54,7 @@ public class Data
     public ClearData clearData;
 }
 
-#region Stage Data
+
 [System.Serializable]
 public class ClearData
 {
@@ -88,11 +91,16 @@ public class SaveLoad_Manager : MonoBehaviour
     public string savePath;
     public List<string> fileName;
     public int curSlot;
+    public bool isStartScene;
+
+
+    [Header("---Slot UI---")]
+    [SerializeField] private List<Save_Slot> slots;
 
 
     [Header("---Save UI---")]
     public bool isCover;
-    public GameObject saveUIset;
+    public GameObject saveLoadUIset;
     public GameObject coverUISet;
     [SerializeField] private GameObject saveResultSet;
     [SerializeField] private CanvasGroup saveResultCanvas;
@@ -100,11 +108,19 @@ public class SaveLoad_Manager : MonoBehaviour
     private Coroutine saveUICoroutine;
 
 
+    [Header("---New Data UI---")]
+    [SerializeField] private GameObject newDataUI;
+    public bool isNew;
+
+
     [Header("---Load UI---")]
+    [SerializeField] private GameObject loadUI; 
     public bool isLoad;
-    public GameObject loadUISet;
-    public GameObject loadClickSet;
-    private Coroutine loadCoroutine;
+
+
+    [Header("---Remove UI---")]
+    [SerializeField] private GameObject removeUI;
+    public bool isRemove;
 
 
     private void Awake()
@@ -119,12 +135,45 @@ public class SaveLoad_Manager : MonoBehaviour
         }
 
         DontDestroyOnLoad(gameObject);
+
+        isStartScene = true;
         savePath = Application.persistentDataPath + "/";
+    }
+
+    private void Start()
+    {
+        SlotUI_Setting();
     }
 
 
     #region UI
-    public Data SlotUI(int slotIndex)
+    /// <summary>
+    /// 세이브 & 로드 슬롯 UI 셋팅
+    /// </summary>
+    public void SlotUI_Setting()
+    {
+        // 슬롯 데이터 셋팅 + UI 최신화
+        for (int i = 0; i < slots.Count; i++)
+        {
+            Data data = Get_SlotUIData(i);
+            if (data != null)
+            {
+                slots[i].Slot_Setting(data.chapter, data.level.ToString(), data.playTime);
+            }
+            else
+            {
+                // 저장 데이터가 없다면
+                slots[i].Slot_Setting("None", "0", 0);
+            }
+        }
+    }
+
+    /// <summary>
+    /// 세이브 & 로드 슬롯에 들어갈 데이터 로드
+    /// </summary>
+    /// <param name="slotIndex"></param>
+    /// <returns></returns>
+    public Data Get_SlotUIData(int slotIndex)
     {
         // 경로 유효성 체크
         string path = savePath + fileName[slotIndex];
@@ -148,14 +197,30 @@ public class SaveLoad_Manager : MonoBehaviour
         }
     }
 
-    public void SaveUI(bool isOn)
+
+    public void NewDataUI(bool isOn)
     {
-        saveUIset.SetActive(isOn);
+        newDataUI.SetActive(isOn);
+    }
+
+    public void SaveLoadUI(bool isOn)
+    {
+        saveLoadUIset.SetActive(isOn);
+    }
+
+    public void LoadUI(bool isOn)
+    {
+        loadUI.SetActive(isOn);
     }
 
     public void CoverUI(bool isOn)
     {
         coverUISet.SetActive(isOn);
+    }
+
+    public void RemoveUI(bool isOn)
+    {
+        removeUI.SetActive(isOn);
     }
 
     public void SaveResultUI(bool isSuccess)
@@ -190,7 +255,30 @@ public class SaveLoad_Manager : MonoBehaviour
     #endregion
 
 
-    #region Save
+    #region Slot Click Evnet
+    public void Click_Create(int index)
+    {
+        StartCoroutine(CreateDataCall(index));
+    }
+
+    public void Click_Save(int index)
+    {
+        StartCoroutine(CoverDataCall(index));
+    }
+
+    public void Click_Load(int index)
+    {
+        StartCoroutine(LoadDataCall(index));
+    }
+
+    public void Click_Remvoe(int index)
+    {
+        StartCoroutine(RemoveCall(index));
+    }
+    #endregion
+
+
+    #region Save & Load
     /// <summary>
     /// 해당 경로에 데이터가 있는지 반환
     /// </summary>
@@ -210,118 +298,83 @@ public class SaveLoad_Manager : MonoBehaviour
         }
     }
 
-
     /// <summary>
-    /// 데이터 세이브 기능
-    /// </summary>
-    /// <param name="index"></param>
-    public void SaveData(int index)
-    {
-        // 이미 저장된 데이터가 있을 경우 대비
-        if (CheckData(index))
-        {
-            // 덮어쓰기 안내 UI
-            StartCoroutine(CoverDataCall(index));
-        }
-        else
-        {
-            // 플레이어 데이터 생성
-            SaveResultUI(Create_Data(index));
-        }
-    }
-
-
-    /// <summary>
-    /// 저장 기능
+    /// 현재 진행중인 챕터 체크 기능
     /// </summary>
     /// <param name="index"></param>
     /// <returns></returns>
-    private bool Save(int index)
+    private string ChapterCheck(int index)
     {
-        try
+        Data data = LoadData(index);
+
+        // 챕터 체크
+        foreach (var chapter in data.clearData.chapterList)
         {
-            Data playerData = new()
+            // 챕터 내의 스테이지 클리어
+            foreach (var stage in chapter.stageList)
             {
-                // 스테이지
-                // chapter = ,
-                // playTime = ,
-                // SceneName = ,
-                // playerPos =,
-
-                // 스테이터스
-                level = Player_Manager.instance.status.level,
-                curhp = Player_Manager.instance.status.curhp,
-                maxHp = Player_Manager.instance.status.maxHp,
-                physicalDefence = Player_Manager.instance.status.physicalDefence,
-                magicalDefence = Player_Manager.instance.status.magicalDefence,
-
-                physicalDamage = Player_Manager.instance.status.physicalDamage,
-                magicalDamage = Player_Manager.instance.status.magicalDamage,
-                attackSpeed = Player_Manager.instance.status.attackSpeed,
-                criticalhit = Player_Manager.instance.status.criticalhit,
-                critical_multiplier = Player_Manager.instance.status.critical_multiplier,
-
-                moveSpeed = Player_Manager.instance.status.moveSpeed,
-                curAwakening = Player_Manager.instance.status.curAwakening,
-                maxAwakening = Player_Manager.instance.status.maxAwakening,
-                curStamina = Player_Manager.instance.status.curStamina,
-                maxStamina = Player_Manager.instance.status.maxStamina,
-
-                // 아이템
-                inevntory = new List<int>(40),
-                equipment = new List<int>(8),
-
-                // 스테이지
-                clearData = new ClearData()
+                // 클리어하지 않은 스테이지가 존재한다면
+                if (!stage.isClear)
                 {
-                    chapterList = ChapterData_Manager.instance.chapterData,
+                    // 해당 챕터의 이름 반환
+                    return chapter.chapterName;
                 }
-            };
-
-            // 데이터 저장
-            string data = JsonUtility.ToJson(playerData);
-            File.WriteAllText(savePath + fileName[index], data);
-
-            return true;
+            }
         }
-        catch (System.Exception e)
-        {
-            Debug.LogError($"[Save Error] 데이터 저장 실패: {e.Message}\n{e.StackTrace}");
-            return false;
-        }
+
+        // 예기치 못한 사태로 데이터가 없을 경우
+        return "0.Hideout";
     }
 
-    private IEnumerator CoverDataCall(int index)
+
+
+
+    private IEnumerator CreateDataCall(int index)
     {
-        // 조건 초기화
-        isCover = false;
+        isNew = false;
 
-        // UI 활성화
-        CoverUI(true);
-
-        // UI 종료 대기
-        while (coverUISet.activeSelf)
+        // 데이터 생성 UI
+        newDataUI.SetActive(true);
+        while (newDataUI.activeSelf)
         {
             yield return null;
         }
 
-        // 조건 만족시 저장
-        if (isCover)
+        // 신규 데이터를 생성
+        if (isNew)
         {
-            // 데이터 저장
-            SaveResultUI(Save(index));
+            if (Create_Data(index))
+            {
+                // 페이드
+                UI_Manager.instance.Fade(true, 0.75f);
+                while (UI_Manager.instance.isFade)
+                {
+                    yield return null;
+                }
+
+                // 데이터 생성 성공 - 튜토리얼 이동
+                SceneLoad_Manager.LoadScene("1.Chapter1_Tutorial");
+            }
+            else
+            {
+                // 데이터 생성 실패 - 데이터 생성 실패 시
+                Debug.LogError($"데이터 생성 실패! {index}");
+            }
         }
     }
 
     /// <summary>
     /// 처음 시작 시 신규 데이터 생성
     /// </summary>
-    public bool Create_Data(int slotCount)
+    private bool Create_Data(int slotCount)
     {
         Data data = new Data()
         {
             // 챕터 진행도
             chapter = "Chapter 0",
+            SceneName = "0.Hideout",
+            playerPos = Vector3.zero,
+            playTime = 0,
 
             // 스테이터스
             level = 1,
@@ -405,24 +458,119 @@ public class SaveLoad_Manager : MonoBehaviour
             // 데이터 적용 - 스테이터스
             Player_Status.instacne.Status_Setting(data);
 
-            // 데이터 적용 - 인벤토리
+            // 데이터 적용 - 챕터
+            ChapterData_Manager.instance.Data_Setting(data);
+
+            // 데이터 적용 - 인벤토리 & 장비창
 
             // 데이터 적용 - 스킬트리
 
             return true;
         }
-        catch (System.Exception e)
+        catch (Exception e)
         {
             Debug.LogError($"저장 에러 발생! {e.Message}");
             return false;
         }
     }
 
+    public void NewDataBool()
+    {
+        isNew = true;
+    }
 
-    #endregion
 
 
-    #region Load
+
+    /// <summary>
+    /// 저장 기능
+    /// </summary>
+    /// <param name="index"></param>
+    /// <returns></returns>
+    public bool Save(int index)
+    {
+        try
+        {
+            Data playerData = new()
+            {
+                // 스테이지
+                chapter = ChapterCheck(index),
+                // playTime = ,
+                SceneName = SceneManager.GetActiveScene().name,
+                playerPos = Player_Manager.instance.action.transform.position,
+
+                // 스테이터스
+                level = Player_Manager.instance.status.level,
+                curhp = Player_Manager.instance.status.curhp,
+                maxHp = Player_Manager.instance.status.maxHp,
+                physicalDefence = Player_Manager.instance.status.physicalDefence,
+                magicalDefence = Player_Manager.instance.status.magicalDefence,
+
+                physicalDamage = Player_Manager.instance.status.physicalDamage,
+                magicalDamage = Player_Manager.instance.status.magicalDamage,
+                attackSpeed = Player_Manager.instance.status.attackSpeed,
+                criticalhit = Player_Manager.instance.status.criticalhit,
+                critical_multiplier = Player_Manager.instance.status.critical_multiplier,
+
+                moveSpeed = Player_Manager.instance.status.moveSpeed,
+                curAwakening = Player_Manager.instance.status.curAwakening,
+                maxAwakening = Player_Manager.instance.status.maxAwakening,
+                curStamina = Player_Manager.instance.status.curStamina,
+                maxStamina = Player_Manager.instance.status.maxStamina,
+
+                // 아이템
+                inevntory = new List<int>(40),
+                equipment = new List<int>(8),
+
+                // 스테이지
+                clearData = new ClearData()
+                {
+                    chapterList = ChapterData_Manager.instance.chapterData,
+                }
+            };
+
+            // 데이터 저장
+            string data = JsonUtility.ToJson(playerData);
+            File.WriteAllText(savePath + fileName[index], data);
+
+            return true;
+        }
+        catch (Exception e)
+        {
+            Debug.LogError($"[Save Error] 데이터 저장 실패: {e.Message}\n{e.StackTrace}");
+            return false;
+        }
+    }
+
+    private IEnumerator CoverDataCall(int index)
+    {
+        // 조건 초기화
+        isCover = false;
+
+        // UI 활성화
+        CoverUI(true);
+
+        // UI 종료 대기
+        while (coverUISet.activeSelf)
+        {
+            yield return null;
+        }
+
+        // 조건 만족시 저장
+        if (isCover)
+        {
+            // 데이터 저장
+            SaveResultUI(Save(index));
+        }
+    }
+
+    public void CoverBool()
+    {
+        isCover = true;
+    }
+
+
+
     /// <summary>
     /// 데이터 로드 후 전달 기능 - 스테이지나 플레이어에게 데이터 전달
     /// </summary>
@@ -460,43 +608,6 @@ public class SaveLoad_Manager : MonoBehaviour
         }
     }
 
-
-
-    /// <summary>
-    /// 로드 슬롯 클릭 시 호출 - 데이터 로드 후 씬 이동 기능
-    /// </summary>
-    /// <param name="index"></param>
-    public void Click_Load(int index)
-    {
-        if (CheckData(index))
-        {
-            // 데이터가 있다면 로드 체크 UI
-            loadCoroutine = StartCoroutine(LoadDataCall(index));
-        }
-        else
-        {
-            // 데이터가 없다면 무시
-            return;
-        }
-    }
-
-    /// <summary>
-    /// 로드 여부 체크 UI
-    /// </summary>
-    /// <param name="isOn"></param>
-    public void LoadUI(bool isOn)
-    {
-        loadClickSet.SetActive(isOn);
-    }
-
-    /// <summary>
-    /// 로드 버튼
-    /// </summary>
-    public void LoadBool()
-    {
-        isLoad = true;
-    }
-
     /// <summary>
     /// 로드 여부 체크
     /// </summary>
@@ -507,12 +618,9 @@ public class SaveLoad_Manager : MonoBehaviour
         // 조건 초기화
         isLoad = false;
 
-        
-        // UI 활성화
+        // UI 활성화 & 종료 대기
         LoadUI(true);
-
-        // UI 종료 대기
-        while (loadClickSet.activeSelf)
+        while (loadUI.activeSelf)
         {
             yield return null;
         }
@@ -561,6 +669,55 @@ public class SaveLoad_Manager : MonoBehaviour
             // 씬 로딩
             SceneLoad_Manager.LoadScene(data.SceneName);
         }
+    }
+
+    /// <summary>
+    /// 로드 버튼
+    /// </summary>
+    public void LoadBool()
+    {
+        isLoad = true;
+    }
+
+
+
+    /// <summary>
+    /// 슬롯에 저장된 데이터 삭제 기능
+    /// </summary>
+    /// <param name="index"></param>
+    /// <returns></returns>
+    public IEnumerator RemoveCall(int index)
+    {
+        isRemove = false;
+
+        // 경고 UI
+        removeUI.SetActive(true);
+        while (removeUI.activeSelf)
+        {
+            yield return null;
+        }
+
+        // 데이터를 삭제한다면
+        if (isRemove)
+        {
+            try
+            {
+                // 데이터 삭제
+                File.Delete(savePath + fileName[index]);
+
+                // UI 최신화
+                slots[index].Slot_Setting("None", "None", 0);
+            }
+            catch (Exception ex)
+            {
+                Debug.LogError($"삭제할 데이터 없음! : {ex} / {savePath + fileName[index]}");
+            }
+        }
+    }
+
+    public void RemoveBool()
+    {
+        isRemove = true;
     }
     #endregion
 }
