@@ -54,8 +54,6 @@ public class Hideout_Manager : MonoBehaviour
             Destroy(gameObject);
         }
 
-        DontDestroyOnLoad(gameObject);
-
         sd_Manager = ClearData_Manager.instance;
     }
 
@@ -66,10 +64,11 @@ public class Hideout_Manager : MonoBehaviour
         DescriptionUI_Setting(0);
 
         // 페이드 종료
-        UI_Manager.instance.Fade(false, 1.25f);
+        UI_Manager.instance.Fade(false, 1.5f);
 
         // 플레이어 활성화
         Player_Manager.instance.Player_Setting(true, startPos.position);
+        Player_Manager.instance.Player_Hideout_Setting();
     }
 
 
@@ -176,15 +175,18 @@ public class Hideout_Manager : MonoBehaviour
 
     private IEnumerator StageCall()
     {
-        // 플레이어 비활성화
-        Player_Manager.instance.Player_Setting(false, startPos.position);
+        // 플레이어 동작 정지
+        Player_Manager.instance.Player_Action_Setting(false);
 
-        // 선행 연출 - 넣을건지?
-        UI_Manager.instance.Fade(true, 1.25f);
+        // 페이드
+        UI_Manager.instance.Fade(true, 1.5f);
         while (UI_Manager.instance.isFade)
         {
             yield return null;
         }
+
+        // 플레이어 비활성화
+        Player_Manager.instance.Player_Setting(false, startPos.position);
 
         // 씬 이동
         SceneLoad_Manager.LoadScene(curSelectStage);

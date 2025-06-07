@@ -140,7 +140,7 @@ public class UI_Manager : MonoBehaviour
         {
             timer += Time.deltaTime;
             float t = Mathf.Clamp01(timer / speed);
-            fadeCanvasGroup.alpha = Mathf.Lerp(start, end, t);
+            fadeCanvasGroup.alpha = Mathf.Lerp(start, end, EasingFunctions.OutExpo(t));
            yield return null;
         }
         fadeCanvasGroup.alpha = end;

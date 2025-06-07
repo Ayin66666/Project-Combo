@@ -76,13 +76,15 @@ public class Stage_Manager : MonoBehaviour
         Stage_Start();
     }
 
+
     public void Stage_Start()
     {
         // 페이드 종료
-        UI_Manager.instance.Fade(false, 1.25f);
+        UI_Manager.instance.Fade(false, 1.5f);
 
         // 플레이어 활성화
         Player_Manager.instance.Player_Setting(true, startSpawnPos.position);
+        Player_Manager.instance.Player_Action_Setting(true);
 
         // 시작 체크포인트 셋팅
         CheckPoint_Seting(startSpawnPos);

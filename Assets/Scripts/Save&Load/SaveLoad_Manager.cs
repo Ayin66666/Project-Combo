@@ -77,7 +77,7 @@ public class StageData
     public bool isClear;
     public Rank clearRank;
     public float clearTime;
-    public enum Rank { None, D, C, B, A, S }
+    public enum Rank { N, D, C, B, A, S }
 }
 #endregion
 
@@ -96,6 +96,7 @@ public class SaveLoad_Manager : MonoBehaviour
 
     [Header("---Slot UI---")]
     [SerializeField] private List<Save_Slot> slots;
+    public bool isUIOn;
 
 
     [Header("---Save UI---")]
@@ -138,10 +139,7 @@ public class SaveLoad_Manager : MonoBehaviour
 
         isStartScene = true;
         savePath = Application.persistentDataPath + "/";
-    }
 
-    private void Start()
-    {
         SlotUI_Setting();
     }
 
@@ -165,6 +163,14 @@ public class SaveLoad_Manager : MonoBehaviour
                 // 저장 데이터가 없다면
                 slots[i].Slot_Setting("None", "0", 0);
             }
+        }
+    }
+
+    public void SlotUI_ButtonOff()
+    {
+        foreach(Save_Slot slot in slots)
+        {
+            slot.ButtonOnOff(false);
         }
     }
 
@@ -205,6 +211,7 @@ public class SaveLoad_Manager : MonoBehaviour
 
     public void SaveLoadUI(bool isOn)
     {
+        isUIOn = isOn;
         saveLoadUIset.SetActive(isOn);
     }
 
@@ -233,6 +240,9 @@ public class SaveLoad_Manager : MonoBehaviour
 
     private IEnumerator SaveSuccessCall(bool isSuccess)
     {
+        // 버튼 UI Off
+        SlotUI_ButtonOff();
+
         saveResultCanvas.alpha = 1f;
         saveResultText.text = isSuccess ? "세이브 완료" : "세이브 실패";
         saveResultSet.SetActive(true);
@@ -333,6 +343,9 @@ public class SaveLoad_Manager : MonoBehaviour
     {
         isNew = false;
 
+        // 버튼 UI Off
+        SlotUI_ButtonOff();
+
         // 데이터 생성 UI
         newDataUI.SetActive(true);
         while (newDataUI.activeSelf)
@@ -343,17 +356,30 @@ public class SaveLoad_Manager : MonoBehaviour
         // 신규 데이터를 생성
         if (isNew)
         {
-            if (Create_Data(index))
+            (Data data, bool isSuccess) = Create_Data(index);
+            if (isSuccess)
             {
+                isNew = false;
+
                 // 페이드
-                UI_Manager.instance.Fade(true, 0.75f);
+                UI_Manager.instance.Fade(true, 1.5f);
                 while (UI_Manager.instance.isFade)
                 {
                     yield return null;
                 }
 
+                // 데이터 셋팅
+                Player_Status.instacne.Status_Setting(data);
+                ChapterData_Manager.instance.Data_Setting(data);
+                // 인벤토리 & 장비창
+                // 스킬트리
+
+                // 선택 UI Off
+                SaveLoadUI(false);
+                isStartScene = false;
+
                 // 데이터 생성 성공 - 튜토리얼 이동
-                SceneLoad_Manager.LoadScene("1.Chapter1_Tutorial");
+                SceneLoad_Manager.LoadScene("Chapter 1-1 Tutorial");
             }
             else
             {
@@ -366,13 +392,13 @@ public class SaveLoad_Manager : MonoBehaviour
     /// <summary>
     /// 처음 시작 시 신규 데이터 생성
     /// </summary>
-    private bool Create_Data(int slotCount)
+    private (Data, bool) Create_Data(int slotCount)
     {
         Data data = new Data()
         {
             // 챕터 진행도
             chapter = "Chapter 0",
-            SceneName = "0.Hideout",
+            SceneName = "Chapter 1-1 Tutorial",
             playerPos = Vector3.zero,
             playTime = 0,
 
@@ -439,7 +465,7 @@ public class SaveLoad_Manager : MonoBehaviour
                 StageData stage = new StageData()
                 {
                     isClear = false,
-                    clearRank = StageData.Rank.None,
+                    clearRank = StageData.Rank.N,
                     clearTime = 0
                 };
 
@@ -465,12 +491,12 @@ public class SaveLoad_Manager : MonoBehaviour
 
             // 데이터 적용 - 스킬트리
 
-            return true;
+            return (data, true);
         }
         catch (Exception e)
         {
             Debug.LogError($"저장 에러 발생! {e.Message}");
-            return false;
+            return (null, false);
         }
     }
 
@@ -544,6 +570,9 @@ public class SaveLoad_Manager : MonoBehaviour
 
     private IEnumerator CoverDataCall(int index)
     {
+        // 버튼 UI Off
+        SlotUI_ButtonOff();
+
         // 조건 초기화
         isCover = false;
 
@@ -559,6 +588,8 @@ public class SaveLoad_Manager : MonoBehaviour
         // 조건 만족시 저장
         if (isCover)
         {
+            isCover = false;
+
             // 데이터 저장
             SaveResultUI(Save(index));
         }
@@ -615,6 +646,9 @@ public class SaveLoad_Manager : MonoBehaviour
     /// <returns></returns>
     private IEnumerator LoadDataCall(int index)
     {
+        // 버튼 UI Off
+        SlotUI_ButtonOff();
+
         // 조건 초기화
         isLoad = false;
 
@@ -628,6 +662,8 @@ public class SaveLoad_Manager : MonoBehaviour
         // 조건 만족시 로드
         if (isLoad)
         {
+            isLoad = false;
+
             // 슬롯 변경
             curSlot = index;
 
@@ -654,17 +690,21 @@ public class SaveLoad_Manager : MonoBehaviour
             }
 
             // 페이드 인
-            UI_Manager.instance.Fade(true, 1.25f);
+            UI_Manager.instance.Fade(true, 1.5f);
             while (UI_Manager.instance.isFade)
             {
                 yield return null;
             }
 
             // 데이터 셋팅
+            Player_Manager.instance.Player_Setting(false, Vector3.zero);
             Player_Status.instacne.Status_Setting(data);
             ChapterData_Manager.instance.Data_Setting(data);
             // 인벤토리 & 장비창
             // 스킬트리
+
+            // 선택 UI Off
+            SaveLoadUI(false);
 
             // 씬 로딩
             SceneLoad_Manager.LoadScene(data.SceneName);
@@ -688,6 +728,9 @@ public class SaveLoad_Manager : MonoBehaviour
     /// <returns></returns>
     public IEnumerator RemoveCall(int index)
     {
+        // 버튼 UI Off
+        SlotUI_ButtonOff();
+
         isRemove = false;
 
         // 경고 UI
@@ -704,6 +747,9 @@ public class SaveLoad_Manager : MonoBehaviour
             {
                 // 데이터 삭제
                 File.Delete(savePath + fileName[index]);
+
+                // 슬롯 선택지 UI Off
+                slots[index].ButtonOnOff(false);
 
                 // UI 최신화
                 slots[index].Slot_Setting("None", "None", 0);

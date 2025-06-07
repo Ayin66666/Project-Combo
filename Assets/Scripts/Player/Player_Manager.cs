@@ -41,6 +41,27 @@ public class Player_Manager : MonoBehaviour
         player.SetActive(isOn);
     }
 
+    /// <summary>
+    /// 전투 지역 진입 시 호출
+    /// </summary>
+    /// <param name="isOn"></param>
+    public void Player_Action_Setting(bool isOn)
+    {
+        action.canAction = isOn;
+        action.canAttack = isOn;
+        action.canMovement = isOn;
+    }
+
+    /// <summary>
+    /// 아지트 진입 시 호출
+    /// </summary>
+    public void Player_Hideout_Setting()
+    {
+        action.canAction = true;
+        action.canMovement = true;
+        action.canAttack = false;
+    }
+
     public void Cursor_Setting(bool isOn)
     {
         Cursor.lockState = isOn ? CursorLockMode.Locked : CursorLockMode.None;

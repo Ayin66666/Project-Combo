@@ -29,6 +29,7 @@ public class ChapterDataEditor : Editor
             SerializedProperty stageImageProp = stageProp.FindPropertyRelative("stageImage");
             SerializedProperty stageNameProp = stageProp.FindPropertyRelative("stageName");
             SerializedProperty stageLevelProp = stageProp.FindPropertyRelative("stageLevel");
+            SerializedProperty sceneNameProp = stageProp.FindPropertyRelative("sceneName");
             SerializedProperty stageSummationProp = stageProp.FindPropertyRelative("stageSummation");
             SerializedProperty stageDescriptionProp = stageProp.FindPropertyRelative("stageDescription");
 
@@ -38,6 +39,7 @@ public class ChapterDataEditor : Editor
             EditorGUILayout.PropertyField(stageTypeProp);
             EditorGUILayout.PropertyField(stageNameProp);
             EditorGUILayout.PropertyField(stageLevelProp);
+            EditorGUILayout.PropertyField(sceneNameProp);
 
             // 이미지 필드와 미리보기
             EditorGUILayout.PropertyField(stageImageProp);
