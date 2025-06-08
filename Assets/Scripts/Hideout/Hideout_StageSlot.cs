@@ -9,11 +9,13 @@ public class Hideout_StageSlot : MonoBehaviour, IPointerEnterHandler, IPointerEx
     [Header("---Slot UI---")]
     [SerializeField] private Image borderImage;
     [SerializeField] private TextMeshProUGUI nameText;
+    [SerializeField] private Color highlightColor;
     [SerializeField] private int stageIndex;
+    public bool canSelect;
 
-
-    public void SlotUI_Setting(Chapter_Data_SO data, int index)
+    public void SlotUI_Setting(Chapter_Data_SO data, int index, bool canSelect)
     {
+        this.canSelect = canSelect;
         stageIndex = data.stageData.Count;
         nameText.text = data.stageData[index].stageType + " " + data.stageData[index].stageName;
     }
@@ -34,8 +36,17 @@ public class Hideout_StageSlot : MonoBehaviour, IPointerEnterHandler, IPointerEx
 
     public void OnPointerClick(PointerEventData eventData)
     {
-        // 설명 UI On
-        Hideout_Manager.instance.DescriptionUI_Setting(stageIndex);
+        // 진입 가능 여부 체크
+        if(canSelect)
+        {
+            // 진입 가능 시 - 설명 UI
+            Hideout_Manager.instance.DescriptionUI_Setting(stageIndex);
+        }
+        else
+        {
+            // 진입 불가능 시 - 안내 UI
+            Hideout_Manager.instance.EnterUI();
+        }
     }
     #endregion
 }

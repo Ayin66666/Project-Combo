@@ -73,9 +73,9 @@ public class Attack_Additional_RushSlash : Attack_Base
     {
         Attack_Collider_AOE aoe = rushSlashCollider.GetComponent<Attack_Collider_AOE>();
 
-        (bool isCritical, int damage) = enemy.DamageCalculation(value_Normal[0]);
+        (bool isCritical, int damage) = PlayerAction_Manager.instance.DamageCalculation(value_Normal[0], skillLevel);
         Skill_Value_SO.Value_Data skillData = value_Normal[0].levelValue.GetData(skillLevel);
-        aoe.Damage_Setting(skillData.type, skillData.attackEffect, Attack_Collider_AOE.AttackType.multipleHit, isCritical, skillData.hitCount, damage, 3f);
+        aoe.Damage_Setting(skillData.type, skillData.attackEffect, Attack_Collider_AOE.AttackType.multipleHit, isCritical, skillData.hitCount, damage, 5f);
         
         rushSlashCollider.SetActive(isOn);
     }

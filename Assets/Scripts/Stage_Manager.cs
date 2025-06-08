@@ -83,8 +83,9 @@ public class Stage_Manager : MonoBehaviour
         UI_Manager.instance.Fade(false, 1.5f);
 
         // 플레이어 활성화
-        Player_Manager.instance.Player_Setting(true, startSpawnPos.position);
         Player_Manager.instance.Player_Action_Setting(true);
+        Player_Manager.instance.PlayerPos_Setting(spawnPos);
+        Player_Manager.instance.PlayerOnOff_Setting(true);
 
         // 시작 체크포인트 셋팅
         CheckPoint_Seting(startSpawnPos);
@@ -113,6 +114,32 @@ public class Stage_Manager : MonoBehaviour
     /// </summary>
     public void Stage_End()
     {
+        StartCoroutine(StageEndCall());
+    }
+
+    private IEnumerator StageEndCall()
+    {
+        // 플레이어 동작 비활성화
+        Player_Manager.instance.Player_Action_Setting(false);
+
+        // 클리어 UI
+        UI_Manager.instance.FieldClear_Normal();
+        while(UI_Manager.instance.isClear)
+        {
+            yield return null;
+        }
+
+        // 페이드 인
+        UI_Manager.instance.Fade(true, 1.5f);
+        while(UI_Manager.instance.isFade)
+        {
+            yield return null;
+        }
+
+        // 플레이어 비활성화
+        Player_Manager.instance.PlayerOnOff_Setting(false);
+
+        // 씬 이동
         SceneLoad_Manager.LoadScene(nextScene);
     }
 

@@ -7,6 +7,7 @@ public class Chapter_Data_SO : ScriptableObject
 {
     [Header("---Chapter Data---")]
     public string chapterName;
+    public string sceneName;
     public List<Stage> stageData;
     public enum StageType { Normal, Boss }
 

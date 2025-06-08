@@ -19,7 +19,7 @@ public class PlayerAction_Manager : MonoBehaviour, IDamageSysteam
     private bool isGoround;
     public bool canMovement;
     public bool canAwakning;
-    [SerializeField] private bool canDash;
+    public bool canDash;
     [SerializeField] private bool canRushSlash;
     [SerializeField] private bool canSpecial;
 

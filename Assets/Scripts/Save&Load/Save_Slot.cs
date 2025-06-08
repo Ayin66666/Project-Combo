@@ -64,13 +64,15 @@ public class Save_Slot : MonoBehaviour
             // 아지트
             if (SaveLoad_Manager.instance.CheckData(slotIndex))
             {
-                // 데이터가 없다면 - 해당 슬롯에 저장
-                SaveLoad_Manager.instance.SaveResultUI(SaveLoad_Manager.instance.Save(slotIndex));
+                // 데이터가 있다면 - 덮어쓰기 UI
+                buttonSet.SetActive(!buttonSet.activeSelf);
+                //SaveLoad_Manager.instance.Click_Save(slotIndex);
             }
             else
             {
-                // 데이터가 있다면 - 덮어쓰기 UI
-                SaveLoad_Manager.instance.Click_Save(slotIndex);
+                // 데이터가 없다면 - 해당 슬롯에 저장
+                SaveLoad_Manager.instance.SaveResultUI(SaveLoad_Manager.instance.Save(slotIndex));
+                SaveLoad_Manager.instance.SlotUI_Setting();
             }
         }
     }

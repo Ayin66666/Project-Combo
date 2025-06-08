@@ -12,7 +12,8 @@ public class Player_Manager : MonoBehaviour
 
 
     [Header("---Player---")]
-    [SerializeField] private GameObject player;
+    [SerializeField] private GameObject playerSet;
+    [SerializeField] private GameObject playerMovement;
     [SerializeField] private Animator anim;
 
 
@@ -35,10 +36,14 @@ public class Player_Manager : MonoBehaviour
     /// 플레이어 On/Off
     /// </summary>
     /// <param name="isOn"></param>
-    public void Player_Setting(bool isOn, Vector3 pos)
+    public void PlayerOnOff_Setting(bool isOn)
     {
-        player.transform.position = pos;
-        player.SetActive(isOn);
+        playerSet.SetActive(isOn);
+    }
+
+    public void PlayerPos_Setting(Vector3 pos)
+    {
+        playerMovement.transform.position = pos;
     }
 
     /// <summary>
@@ -49,6 +54,7 @@ public class Player_Manager : MonoBehaviour
     {
         action.canAction = isOn;
         action.canAttack = isOn;
+        action.canDash = isOn;
         action.canMovement = isOn;
     }
 

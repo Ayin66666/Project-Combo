@@ -316,6 +316,19 @@ public class SaveLoad_Manager : MonoBehaviour
     private string ChapterCheck(int index)
     {
         Data data = LoadData(index);
+        // 데이터 여부 체크
+        if (data == null)
+        {
+            Debug.LogError($"[ChapterCheck] 데이터가 null입니다. index: {index}");
+            return ChapterData_Manager.instance.chapterUIData[0].chapterName;
+        }
+
+        // 데이터의 손상 체크
+        if (data.clearData?.chapterList == null)
+        {
+            Debug.LogError($"[ChapterCheck] clearData 또는 chapterList가 null입니다. index: {index}");
+            return ChapterData_Manager.instance.chapterUIData[0].chapterName;
+        }
 
         // 챕터 체크
         foreach (var chapter in data.clearData.chapterList)
@@ -333,7 +346,7 @@ public class SaveLoad_Manager : MonoBehaviour
         }
 
         // 예기치 못한 사태로 데이터가 없을 경우
-        return "0.Hideout";
+        return ChapterData_Manager.instance.chapterUIData[0].chapterName;
     }
 
 
@@ -378,6 +391,10 @@ public class SaveLoad_Manager : MonoBehaviour
                 SaveLoadUI(false);
                 isStartScene = false;
 
+                // 슬롯 UI 최신화
+                SlotUI_Setting();
+
+
                 // 데이터 생성 성공 - 튜토리얼 이동
                 SceneLoad_Manager.LoadScene("Chapter 1-1 Tutorial");
             }
@@ -409,8 +426,8 @@ public class SaveLoad_Manager : MonoBehaviour
             physicalDefence = 15,
             magicalDefence = 15,
 
-            physicalDamage = 30,
-            magicalDamage = 30,
+            physicalDamage = 60,
+            magicalDamage = 60,
             attackSpeed = 1f,
             criticalhit = 0,
             critical_multiplier = 1.5f,
@@ -592,6 +609,9 @@ public class SaveLoad_Manager : MonoBehaviour
 
             // 데이터 저장
             SaveResultUI(Save(index));
+
+            // 슬롯 최신화
+            SlotUI_Setting();
         }
     }
 
@@ -697,7 +717,7 @@ public class SaveLoad_Manager : MonoBehaviour
             }
 
             // 데이터 셋팅
-            Player_Manager.instance.Player_Setting(false, Vector3.zero);
+            Player_Manager.instance.PlayerPos_Setting(data.playerPos);
             Player_Status.instacne.Status_Setting(data);
             ChapterData_Manager.instance.Data_Setting(data);
             // 인벤토리 & 장비창
@@ -706,7 +726,11 @@ public class SaveLoad_Manager : MonoBehaviour
             // 선택 UI Off
             SaveLoadUI(false);
 
+            // 슬롯 최신화
+            SlotUI_Setting();
+
             // 씬 로딩
+            isStartScene = false;
             SceneLoad_Manager.LoadScene(data.SceneName);
         }
     }
@@ -752,7 +776,8 @@ public class SaveLoad_Manager : MonoBehaviour
                 slots[index].ButtonOnOff(false);
 
                 // UI 최신화
-                slots[index].Slot_Setting("None", "None", 0);
+                SlotUI_Setting();
+                // slots[index].Slot_Setting("None", "0", 0);
             }
             catch (Exception ex)
             {

@@ -15,6 +15,7 @@ public class UI_Manager : MonoBehaviour
     public bool isUIOn;
     public bool isOptionOn;
     public bool isFade;
+    public bool isClear;
     [SerializeField] private UIType uiType;
     public enum UIType { Item, Skill, Tutorial, Option }
     private Player_Manager pManager;
@@ -392,36 +393,35 @@ public class UI_Manager : MonoBehaviour
     private IEnumerator FieldClaerNormalCall()
     {
         fieldClearSet.SetActive(true);
-        fieldClearCanvasGroup.alpha = 0;
+        isClear = true;
 
         // 페이드 인
+        fieldClearCanvasGroup.alpha = 0;
         float timer = 0;
-        float a = 0;
         while (timer < 1)
         {
-            timer += Time.deltaTime;
-            a = Mathf.Lerp(0, 1, EasingFunctions.OutExpo(timer));
-            fieldClearCanvasGroup.alpha = a;
+            timer += Time.deltaTime * 1.25f;
+            fieldClearCanvasGroup.alpha = Mathf.Lerp(0, 1, EasingFunctions.OutExpo(timer));
             yield return null;
         }
         fieldClearCanvasGroup.alpha = 1;
 
         // 딜레이
-        yield return new WaitForSeconds(1f);
+        yield return new WaitForSeconds(1.25f);
 
         // 페이드 아웃
         timer = 0;
         while (timer < 1)
         {
-            timer += Time.deltaTime;
-            a = Mathf.Lerp(1, 0, EasingFunctions.OutExpo(timer));
-            fieldClearCanvasGroup.alpha = a;
+            timer += Time.deltaTime * 1.25f;
+            fieldClearCanvasGroup.alpha = Mathf.Lerp(1, 0, EasingFunctions.OutExpo(timer));
             yield return null;
         }
         fieldClearCanvasGroup.alpha = 0;
 
         // 종료
         fieldClearSet.SetActive(false);
+        isClear = false;
     }
 
 
