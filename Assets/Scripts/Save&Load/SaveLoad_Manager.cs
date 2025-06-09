@@ -52,6 +52,11 @@ public class Data
 
     [Header("---Chapter---")]
     public ClearData clearData;
+
+
+    [Header("---Skill Tree---")]
+    public int skillPoint;
+    public List<SkillData> skillData;
 }
 
 

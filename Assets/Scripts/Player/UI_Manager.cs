@@ -83,6 +83,14 @@ public class UI_Manager : MonoBehaviour
 
 
     #region Option UI
+    [Header("---Skill---")]
+    [SerializeField] private GameObject skillSet;
+    [SerializeField] private GameObject skillResultSet;
+    [SerializeField] private TextMeshProUGUI skillResultSetText;
+    [SerializeField] private CanvasGroup skillResultSetCanvasGroup;
+    private Coroutine skillResultSetCoroutine;
+
+
     [Header("---Inventory---")]
 
 
@@ -471,6 +479,40 @@ public class UI_Manager : MonoBehaviour
         isOptionOn = !isOptionOn;
         optionUI.SetActive(isOptionOn);
     }
+
+    /// <summary>
+    /// 스킬 습득 결과 표기 UI
+    /// </summary>
+    /// <param name="isSuccess"></param>
+    public void Skill_Result(bool isSuccess)
+    {
+        if(skillResultSetCoroutine != null)
+            StopCoroutine(skillResultSetCoroutine);
+
+        skillResultSetCoroutine =  StartCoroutine(SkillResultCall(isSuccess));
+    }
+
+    private IEnumerator SkillResultCall(bool isSuccess)
+    {
+        skillResultSet.SetActive(true);
+
+        skillResultSetText.text = isSuccess ? "습득 성공" : "스킬 포인트가 부족합니다!";
+        skillResultSetCanvasGroup.alpha = 1;
+
+        yield return new WaitForSeconds(1.25f);
+
+        float timer = 0;
+        while (timer < 1)
+        {
+            timer += Time.deltaTime;
+            skillResultSetCanvasGroup.alpha = Mathf.Lerp(1, 0, EasingFunctions.OutExpo(timer));
+            yield return null;
+        }
+        skillResultSetCanvasGroup.alpha = 0;
+
+        skillResultSet.SetActive(false);
+    }
+
 
     public void Inventory()
     {
