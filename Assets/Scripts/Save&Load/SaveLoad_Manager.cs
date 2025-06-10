@@ -43,6 +43,7 @@ public class Data
     public float maxStamina;
     public float curAwakening;
     public float maxAwakening;
+    public float staminaRecovery;
 
 
     [Header("---Item---")]
@@ -442,7 +443,7 @@ public class SaveLoad_Manager : MonoBehaviour
             maxAwakening = 200,
             curStamina = 200,
             maxStamina = 200,
-
+            staminaRecovery = 5f,
 
             // 아이템
             inevntory = new List<int>(40),
@@ -453,7 +454,12 @@ public class SaveLoad_Manager : MonoBehaviour
             clearData = new ClearData()
             {
                 chapterList = new List<ChapterData>(ChapterData_Manager.instance.chapterUIData.Count)
-            }
+            },
+
+
+            // 스킬트리
+            skillData = new List<SkillData>(),
+            skillPoint = 0,
         };
 
 

@@ -1,4 +1,6 @@
+using System.Collections.Generic;
 using UnityEngine;
+
 
 public class Player_Status : MonoBehaviour
 {
@@ -7,6 +9,7 @@ public class Player_Status : MonoBehaviour
 
     [Header("---Status---")]
     public int level;
+    public int maxLevel;
 
     // Defence Status
     public int curhp;
@@ -27,6 +30,16 @@ public class Player_Status : MonoBehaviour
     public float maxStamina;
     public float curAwakening;
     public float maxAwakening;
+    public float staminaRecovery;
+
+    // Level Status
+    public int curExp;
+    public int maxExp;
+
+    [Header("---Level---")]
+    public List<int> expList;
+    private int baseExp = 500;
+    private float growth = 1.5f;
 
 
     private void Awake()
@@ -41,18 +54,22 @@ public class Player_Status : MonoBehaviour
         }
     }
 
-
     private void Update()
     {
         Recovery();
     }
 
+
+    #region Start Setting
     /// <summary>
     /// 게임 시작 시 데이터 로드 후 셋팅
     /// </summary>
     /// <param name="data"></param>
     public void Status_Setting(Data data)
     {
+        level = data.level;
+
+
         curhp = data.curhp;
         maxHp = data.maxHp;
         physicalDefence = data.physicalDefence;
@@ -69,7 +86,23 @@ public class Player_Status : MonoBehaviour
         maxStamina = data.maxStamina;
         curAwakening = data.curAwakening;
         maxAwakening = data.maxAwakening;
+        staminaRecovery = data.staminaRecovery;
     }
+
+    /// <summary>
+    /// 게임 시작 시 경험치 요구량 셋팅
+    /// </summary>
+    public void Level_Setting()
+    {
+        // 경험치 요구량은 해당 지수계수 1.5 데이터를 기반
+        for (int i = 1; i < maxLevel; i++)
+        {
+            int a = (int)(baseExp * Mathf.Pow(i, growth));
+            expList.Add(a);
+        }
+    }
+    #endregion
+
 
     /// <summary>
     /// 스테미너 회복
@@ -77,7 +110,7 @@ public class Player_Status : MonoBehaviour
     private void Recovery()
     {
         if (curStamina < maxStamina)
-            curStamina += Time.deltaTime * 5f;
+            curStamina += Time.deltaTime * staminaRecovery;
     }
 
     /// <summary>
@@ -97,4 +130,49 @@ public class Player_Status : MonoBehaviour
                 PlayerAction_Manager.instance.canAwakning = true;
         }
     }
+
+
+    #region Level Up
+    /// <summary>
+    /// 레벨 업 시 기초 스테이터스 증가
+    /// </summary>
+    public void LevelUp()
+    {
+        level += 1;
+
+        // 기본 증가
+        curhp += 25;
+        maxHp += 25;
+        physicalDefence += 2;
+        magicalDefence += 2;
+        physicalDamage += 5;
+        magicalDamage += 5;
+
+        // 5레벨 당 증가
+        if (level % 5 == 0)
+        {
+            critical_multiplier += 0.05f;
+            staminaRecovery += 0.01f;
+        }
+    }
+
+    /// <summary>
+    /// 경험치 증가 로직
+    /// </summary>
+    /// <param name="exp"></param>
+    public void ExpAdd(int exp)
+    {
+        curExp += exp;
+        if (curExp >= maxExp)
+        {
+            // 스테이터스 증가
+            LevelUp();
+
+            // 남은 경험치 계산
+            int remainExp = maxExp - curExp;
+            maxExp = expList[level];
+            curExp += remainExp;
+        }
+    }
+    #endregion
 }

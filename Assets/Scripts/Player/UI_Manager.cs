@@ -4,6 +4,7 @@ using System.Collections;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.Video;
 
 
 public class UI_Manager : MonoBehaviour
@@ -83,12 +84,17 @@ public class UI_Manager : MonoBehaviour
 
 
     #region Option UI
-    [Header("---Skill---")]
+    [Header("---Skill Result---")]
     [SerializeField] private GameObject skillSet;
     [SerializeField] private GameObject skillResultSet;
     [SerializeField] private TextMeshProUGUI skillResultSetText;
     [SerializeField] private CanvasGroup skillResultSetCanvasGroup;
     private Coroutine skillResultSetCoroutine;
+
+
+    [Header("---Skill Description---")]
+    [SerializeField] private TextMeshProUGUI skillDescriptionText;
+    [SerializeField] private VideoPlayer skillVideoPlayer;
 
 
     [Header("---Inventory---")]
@@ -473,23 +479,17 @@ public class UI_Manager : MonoBehaviour
     #endregion
 
 
-    #region 인벤토리 & 쇼트컷은 따로 스크립트에서 데이터 관리 / 표기?
-    public void Option()
-    {
-        isOptionOn = !isOptionOn;
-        optionUI.SetActive(isOptionOn);
-    }
-
+    #region Skill
     /// <summary>
     /// 스킬 습득 결과 표기 UI
     /// </summary>
     /// <param name="isSuccess"></param>
     public void Skill_Result(bool isSuccess)
     {
-        if(skillResultSetCoroutine != null)
+        if (skillResultSetCoroutine != null)
             StopCoroutine(skillResultSetCoroutine);
 
-        skillResultSetCoroutine =  StartCoroutine(SkillResultCall(isSuccess));
+        skillResultSetCoroutine = StartCoroutine(SkillResultCall(isSuccess));
     }
 
     private IEnumerator SkillResultCall(bool isSuccess)
@@ -512,6 +512,36 @@ public class UI_Manager : MonoBehaviour
 
         skillResultSet.SetActive(false);
     }
+
+    /// <summary>
+    /// 스킬 설명 UI
+    /// </summary>
+    /// <param name="data"></param>
+    public void Skill_Description(Skill_Value_SO data)
+    {
+        if(data != null)
+        {
+            skillDescriptionText.text = data.SkillDescription;
+            skillVideoPlayer.clip = data.SkillClip;
+            skillVideoPlayer.Play();
+        }
+        else
+        {
+            skillDescriptionText.text = "";
+            skillVideoPlayer.Pause();
+            skillVideoPlayer.clip = null;
+        }
+    }
+    #endregion
+
+
+    #region 인벤토리 & 쇼트컷은 따로 스크립트에서 데이터 관리 / 표기?
+    public void Option()
+    {
+        isOptionOn = !isOptionOn;
+        optionUI.SetActive(isOptionOn);
+    }
+
 
 
     public void Inventory()

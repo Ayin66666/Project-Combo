@@ -1,20 +1,20 @@
-using System.Collections;
-using System.Collections.Generic;
-using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.EventSystems;
+using TMPro;
 
 
-public class Skill_Slot : MonoBehaviour
+public class Skill_Slot : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler, IPointerClickHandler
 {
     [Header("---Slot Setting---")]
     [SerializeField] private int skill_Index;
-
+    private Skill_Value_SO so;
 
     [Header("---UI---")]
     [SerializeField] private Image iconImage;
     [SerializeField] private TextMeshProUGUI nameText;
     [SerializeField] private TextMeshProUGUI levelText;
+    [SerializeField] private Image borderImage;
 
 
     /// <summary>
@@ -26,6 +26,7 @@ public class Skill_Slot : MonoBehaviour
     {
         // Index Setting
         skill_Index = skillIndex;
+        so = uiData;
 
         // UI Setting
         iconImage.sprite = uiData.Icon;
@@ -40,4 +41,23 @@ public class Skill_Slot : MonoBehaviour
     {
         Player_Manager.instance.skill.LevelUp(skill_Index);
     }
+
+
+    #region 마우스 이벤트
+    public void OnPointerEnter(PointerEventData eventData)
+    {
+        borderImage.color = Color.gray;
+        UI_Manager.instance.Skill_Description(so);
+    }
+
+    public void OnPointerClick(PointerEventData eventData)
+    {
+        Use();
+    }
+
+    public void OnPointerExit(PointerEventData eventData)
+    {
+        borderImage.color = Color.white;
+    }
+    #endregion
 }

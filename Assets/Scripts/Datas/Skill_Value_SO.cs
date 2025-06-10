@@ -24,6 +24,12 @@ public class Skill_Value_SO : ScriptableObject
         get { return iconImage; }
         private set { iconImage = value; }
     }
+
+    public VideoClip SkillClip
+    {
+        get { return clip; }
+        private set { clip = value; }
+    }
     #endregion
 
     [Header("---Description---")]
