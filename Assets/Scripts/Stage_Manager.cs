@@ -38,6 +38,11 @@ public class Stage_Manager : MonoBehaviour
     public Quaternion spawnRotation;
 
 
+    [Header("---Clear Exp---")]
+    [SerializeField] private Chapter_Data_SO stageData;
+    [SerializeField] private int stageIndex;
+
+
     // Defence
     public int curhp;
     public int maxHp;
@@ -97,13 +102,13 @@ public class Stage_Manager : MonoBehaviour
         }
 
         // 시작 목표
-        if(haveStartQuest)
+        if (haveStartQuest)
         {
             Quest(0);
         }
 
         // 웨이포인트
-        if(haveStartwayPoint)
+        if (haveStartwayPoint)
         {
             WayPoint(true, 0);
         }
@@ -122,16 +127,19 @@ public class Stage_Manager : MonoBehaviour
         // 플레이어 동작 비활성화
         Player_Manager.instance.Player_Action_Setting(false);
 
+        // 클리어 경험치
+        Player_Manager.instance.status.ExpAdd(stageData.stageData[stageIndex].stageClearExp);
+
         // 클리어 UI
         UI_Manager.instance.FieldClear_Normal();
-        while(UI_Manager.instance.isClear)
+        while (UI_Manager.instance.isClear)
         {
             yield return null;
         }
 
         // 페이드 인
         UI_Manager.instance.Fade(true, 1.5f);
-        while(UI_Manager.instance.isFade)
+        while (UI_Manager.instance.isFade)
         {
             yield return null;
         }

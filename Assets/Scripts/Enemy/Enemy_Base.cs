@@ -44,6 +44,7 @@ public abstract class Enemy_Base : MonoBehaviour, IDamageSysteam
     // Other Status
     public float moveSpeed;
     public float groggyTime;
+    public int exp;
 
 
     [Header("---Chase---")]
@@ -114,6 +115,7 @@ public abstract class Enemy_Base : MonoBehaviour, IDamageSysteam
         curGroggy = statusData.Groggy;
         maxGroggy = statusData.Groggy;
         groggyTime = statusData.GroggyTime;
+        exp = statusData.Exp;
     }
 
     protected IEnumerator Spawn_None()
@@ -251,7 +253,6 @@ public abstract class Enemy_Base : MonoBehaviour, IDamageSysteam
                 // 데미지 & 그로기
                 curHp -= calDamage;
                 curGroggy -= (calDamage / 10);
-                HitEffect(type, isCirtical, damage);
 
                 // 카메라 흔들림
                 CameraEffect_Manager.instance.Camera_Shack(1, 0.1f);
@@ -265,7 +266,15 @@ public abstract class Enemy_Base : MonoBehaviour, IDamageSysteam
                     curHp = 0;
                     Hit_Reset();
                     Die();
+
+                    // 경험치 추가
+                    Player_Manager.instance.status.ExpAdd(exp);
                     return;
+                }
+                else
+                {
+                    // 피격 이펙트
+                    HitEffect(type, isCirtical, damage);
                 }
             }
         }

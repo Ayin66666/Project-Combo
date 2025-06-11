@@ -54,4 +54,7 @@ public class Character_Status_SO : ScriptableObject
 
     [SerializeField] private float groggyTime;
     public float GroggyTime { get {  return groggyTime; } private set {  groggyTime = value; } }
+
+    [SerializeField] private int exp;
+    public int Exp { get { return exp; } private set { exp = value; } }
 }

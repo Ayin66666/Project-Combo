@@ -8,7 +8,7 @@ public class Skill_Slot : MonoBehaviour, IPointerEnterHandler, IPointerExitHandl
 {
     [Header("---Slot Setting---")]
     [SerializeField] private int skill_Index;
-    private Skill_Value_SO so;
+    private Skill_UI_SO so;
 
     [Header("---UI---")]
     [SerializeField] private Image iconImage;
@@ -22,7 +22,7 @@ public class Skill_Slot : MonoBehaviour, IPointerEnterHandler, IPointerExitHandl
     /// </summary>
     /// <param name="uiData"></param>
     /// <param name="skillLevel"></param>
-    public void UI_Setting(Skill_Value_SO uiData, int skillLevel, int skillIndex)
+    public void UI_Setting(Skill_UI_SO uiData, int skillLevel, int skillIndex)
     {
         // Index Setting
         skill_Index = skillIndex;
@@ -39,7 +39,7 @@ public class Skill_Slot : MonoBehaviour, IPointerEnterHandler, IPointerExitHandl
     /// </summary>
     public void Use()
     {
-        Player_Manager.instance.skill.LevelUp(skill_Index);
+        Player_Manager.instance.skill.Skill_LevelUp(skill_Index);
     }
 
 

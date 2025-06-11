@@ -1,6 +1,7 @@
 using DG.Tweening;
 using Easing.Tweening;
 using System.Collections;
+using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
@@ -14,17 +15,21 @@ public class UI_Manager : MonoBehaviour
 
     [Header("---State---")]
     public bool isUIOn;
-    public bool isOptionOn;
     public bool isFade;
     public bool isClear;
     [SerializeField] private UIType uiType;
-    public enum UIType { Item, Skill, Tutorial, Option }
+    public enum UIType { Item, Skill, Tutorial, Option, Exit }
     private Player_Manager pManager;
 
 
     [Header("---UI Set---")]
     [SerializeField] private GameObject fightUI;
-    [SerializeField] private GameObject optionUI;
+    [SerializeField] private GameObject playerUI;
+
+
+    [Header("---Player UI---")]
+    [SerializeField] private List<GameObject> playerUISet;
+    [SerializeField] private List<GameObject> buttonSet;
 
 
     [Header("---Fade UI---")]
@@ -35,8 +40,10 @@ public class UI_Manager : MonoBehaviour
     #region Player Fight UI
     [Header("---Player Status---")]
     [SerializeField] private GameObject StatusSet;
+    [SerializeField] private TextMeshProUGUI levelText;
     [SerializeField] private Slider hpFSlider;
     [SerializeField] private Slider hpBSlider;
+    [SerializeField] private TextMeshProUGUI hpText;
     [SerializeField] private Slider staminaSlider;
     [SerializeField] private Slider awankingSlider;
     private Coroutine hpCoroutine;
@@ -84,8 +91,14 @@ public class UI_Manager : MonoBehaviour
 
 
     #region Option UI
+    [Header("---Level Up UI---")]
+    [SerializeField] private GameObject levelUpSet;
+    [SerializeField] private TextMeshProUGUI levelUpText;
+    [SerializeField] private CanvasGroup levelUpCanvasGroup;
+    private Coroutine levelUpCoroutine;
+
+
     [Header("---Skill Result---")]
-    [SerializeField] private GameObject skillSet;
     [SerializeField] private GameObject skillResultSet;
     [SerializeField] private TextMeshProUGUI skillResultSetText;
     [SerializeField] private CanvasGroup skillResultSetCanvasGroup;
@@ -95,6 +108,7 @@ public class UI_Manager : MonoBehaviour
     [Header("---Skill Description---")]
     [SerializeField] private TextMeshProUGUI skillDescriptionText;
     [SerializeField] private VideoPlayer skillVideoPlayer;
+    [SerializeField] private TextMeshProUGUI skillPointText;
 
 
     [Header("---Inventory---")]
@@ -122,9 +136,8 @@ public class UI_Manager : MonoBehaviour
     {
         pManager = Player_Manager.instance;
 
-
         // 인풋 셋팅 - 옵션창
-        Input_Manager.instance.Action_Setting(8, Option);
+        Input_Manager.instance.Action_Setting(8, PlayerUI_Setting);
     }
 
     private void Update()
@@ -156,17 +169,18 @@ public class UI_Manager : MonoBehaviour
             timer += Time.deltaTime;
             float t = Mathf.Clamp01(timer / speed);
             fadeCanvasGroup.alpha = Mathf.Lerp(start, end, EasingFunctions.OutExpo(t));
-           yield return null;
+            yield return null;
         }
         fadeCanvasGroup.alpha = end;
 
-        if(!isOn)
+        if (!isOn)
         {
             fadeSet.SetActive(false);
         }
 
         isFade = false;
     }
+
 
     #region Status
     /// <summary>
@@ -199,9 +213,12 @@ public class UI_Manager : MonoBehaviour
 
     private IEnumerator HpCall()
     {
+        // UI 최신화
         hpFSlider.value = pManager.status.curhp;
-        yield return new WaitForSeconds(0.25f);
+        hpText.text = $"{pManager.status.curhp} / {pManager.status.maxHp}";
 
+        // UI 감소 이펙트 딜레이
+        yield return new WaitForSeconds(0.25f);
         hpBSlider.DOValue(pManager.status.curhp, 0.75f).SetEase(Ease.Linear);
     }
 
@@ -213,6 +230,54 @@ public class UI_Manager : MonoBehaviour
     public void Awanking()
     {
         awankingSlider.value = pManager.status.curAwakening;
+    }
+    #endregion
+
+
+    #region Level
+    /// <summary>
+    /// 레벨업 UI 표기 기능
+    /// </summary>
+    /// <param name="level"></param>
+    public void LevelUpUI(int level)
+    {
+        if (levelUpCoroutine != null)
+            StopCoroutine(levelUpCoroutine);
+
+        levelUpCoroutine = StartCoroutine(LevelUpCall(level));
+    }
+
+    private IEnumerator LevelUpCall(int level)
+    {
+        // UI 최신화 & 표기
+        levelUpSet.SetActive(true);
+        levelUpText.text = level.ToString();
+        levelUpCanvasGroup.alpha = 1;
+
+        // 딜레이
+        yield return new WaitForSeconds(1.25f);
+
+        // 페이드 아웃
+        float timer = 0;
+        while (timer < 1)
+        {
+            timer += Time.deltaTime * 2f;
+            levelUpCanvasGroup.alpha = EasingFunctions.OutExpo(timer);
+            yield return null;
+        }
+
+        // UI 종료
+        levelUpCanvasGroup.alpha = 0;
+        levelUpSet.SetActive(false);
+    }
+
+    /// <summary>
+    /// 레벨 텍스트 최신화 로직
+    /// </summary>
+    /// <param name="level"></param>
+    public void Level(int level)
+    {
+        levelText.text = $"Lv. {level}";
     }
     #endregion
 
@@ -479,6 +544,52 @@ public class UI_Manager : MonoBehaviour
     #endregion
 
 
+    #region Player UI Button Event
+    /// <summary>
+    /// ESC로 접근하는 플레이어 UI On/Off
+    /// </summary>
+    public void PlayerUI_Setting()
+    {
+        // 시작 화면이면 무조건 옵션창으로 고정 - 아니라면 마지막에 열었던 UI로 활성화
+        PlayerUI_Setting(SaveLoad_Manager.instance.isStartScene ? 3 : (int)uiType);
+
+        // 시작화면이면 인벤, 스킬, 타이틀 복귀 UI 버튼 비활성화
+        PlayerUIButton_Setting(!SaveLoad_Manager.instance.isStartScene);
+
+        // 옵션 UI 활/비활성화
+        playerUI.SetActive(!playerUI.activeSelf);
+    }
+
+    /// <summary>
+    /// 플레이어의 옵션 UI 종류별 On Off
+    /// </summary>
+    /// <param name="index"></param>
+    public void PlayerUI_Setting(int index)
+    {
+        // 전체 비활성화
+        for (int i = 0; i < playerUISet.Count; i++)
+        {
+            playerUISet[i].SetActive(false);
+        }
+
+        uiType = (UIType)index;
+        playerUISet[index].SetActive(true);
+    }
+
+    /// <summary>
+    /// 현제 씬에 따른 인벤토리, 스킬트리, 타이틀 UI 버튼 활/비활성화
+    /// </summary>
+    /// <param name="isOn"></param>
+    private void PlayerUIButton_Setting(bool isOn)
+    {
+        foreach(GameObject button in buttonSet)
+        {
+            button.SetActive(isOn);
+        }
+    }
+    #endregion
+
+
     #region Skill
     /// <summary>
     /// 스킬 습득 결과 표기 UI
@@ -517,9 +628,9 @@ public class UI_Manager : MonoBehaviour
     /// 스킬 설명 UI
     /// </summary>
     /// <param name="data"></param>
-    public void Skill_Description(Skill_Value_SO data)
+    public void Skill_Description(Skill_UI_SO data)
     {
-        if(data != null)
+        if (data != null)
         {
             skillDescriptionText.text = data.SkillDescription;
             skillVideoPlayer.clip = data.SkillClip;
@@ -532,17 +643,19 @@ public class UI_Manager : MonoBehaviour
             skillVideoPlayer.clip = null;
         }
     }
+
+    /// <summary>
+    /// 남은 스킬포인트 표기 UI 최신화
+    /// </summary>
+    /// <param name="point"></param>
+    public void Skill_Point(int point)
+    {
+        skillPointText.text = $"보유 포인트 : {point}";
+    }
     #endregion
 
 
-    #region 인벤토리 & 쇼트컷은 따로 스크립트에서 데이터 관리 / 표기?
-    public void Option()
-    {
-        isOptionOn = !isOptionOn;
-        optionUI.SetActive(isOptionOn);
-    }
-
-
+    #region 인벤토리 & 쇼트컷
 
     public void Inventory()
     {

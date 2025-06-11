@@ -104,7 +104,7 @@ public class Hideout_Manager : MonoBehaviour
     {
         // 스테이지 기본 데이터
         stageImage.sprite = null;
-        stageTypeText.text = uiData.stageData[stageIndex].stageType.ToString();
+        stageTypeText.text = uiData.stageData[stageIndex].stageType.ToString(); // 에러발생 - 인덱스 오버?
         levelText.text = uiData.stageData[stageIndex].stageLevel.ToString();
         stageNameText.text = uiData.stageData[stageIndex].stageName;
         descriptionText.text = uiData.stageData[stageIndex].stageSummation;

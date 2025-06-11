@@ -12,7 +12,6 @@ public class Start_Manager : MonoBehaviour
 
 
     [Header("---UI---")]
-    [SerializeField] private GameObject optionSet;
     [SerializeField] private GameObject extraSet;
     [SerializeField] private GameObject exitSet;
     private List<GameObject> uiList = new List<GameObject>();
@@ -36,7 +35,6 @@ public class Start_Manager : MonoBehaviour
         SaveLoad_Manager.instance.isStartScene = true;
 
         // OnOff 용 리스트 추가
-        uiList.Add(optionSet);
         uiList.Add(extraSet);
         uiList.Add(exitSet);
     }
@@ -70,7 +68,7 @@ public class Start_Manager : MonoBehaviour
     public void Click_Option()
     {
         curUI = UI.Start;
-        optionSet.SetActive(true);
+        UI_Manager.instance.PlayerUI_Setting(3);
     }
 
     /// <summary>

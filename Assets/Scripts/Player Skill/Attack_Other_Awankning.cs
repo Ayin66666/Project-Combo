@@ -1,17 +1,23 @@
+using System.Collections.Generic;
 using System.Collections;
 using UnityEngine;
 
 public class Attack_Other_Awankning : Attack_Base
 {
     [Header("---Buff Status---")]
-    [SerializeField] private float damage;
-    [SerializeField] private float attackSpeed;
-    [SerializeField] private float criticalChance;
-    [SerializeField] private float criticalMultiplier;
-    [SerializeField] private float moveSpeed;
-
+    [SerializeField] private List<BuffStatus> buffStatus;
     private int add_PhysicalDam;
     private int add_magcalDam;
+
+    [System.Serializable]
+    public struct BuffStatus
+    {
+        public float damage;
+        public float attackSpeed;
+        public float criticalChance;
+        public float criticalMultiplier;
+        public float moveSpeed;
+    }
 
 
     [Header("--- Awankning VFX ---")]
@@ -77,8 +83,8 @@ public class Attack_Other_Awankning : Attack_Base
     private void Buff_Setting()
     {
         // 데미지 저장
-        add_PhysicalDam = (int)(Player_Manager.instance.status.physicalDamage * damage);
-        add_magcalDam = (int)(Player_Manager.instance.status.magicalDamage * damage);
+        add_PhysicalDam = (int)(Player_Manager.instance.status.physicalDamage * buffStatus[skillLevel].damage);
+        add_magcalDam = (int)(Player_Manager.instance.status.magicalDamage * buffStatus[skillLevel].damage);
     }
 
     private void Status_Setting(bool isOn)
@@ -87,18 +93,18 @@ public class Attack_Other_Awankning : Attack_Base
         {
             Player_Manager.instance.status.physicalDamage += add_PhysicalDam;
             Player_Manager.instance.status.magicalDamage += add_magcalDam;
-            Player_Manager.instance.status.criticalhit += criticalChance;
-            Player_Manager.instance.status.critical_multiplier += criticalMultiplier;
-            Player_Manager.instance.status.moveSpeed += moveSpeed;
+            Player_Manager.instance.status.criticalhit += buffStatus[skillLevel].criticalChance;
+            Player_Manager.instance.status.critical_multiplier += buffStatus[skillLevel].criticalMultiplier;
+            Player_Manager.instance.status.moveSpeed += buffStatus[skillLevel].moveSpeed;
             Player_Manager.instance.status.curStamina = Player_Manager.instance.status.maxStamina;
         }
         else
         {
             Player_Manager.instance.status.physicalDamage -= add_PhysicalDam;
             Player_Manager.instance.status.magicalDamage -= add_magcalDam;
-            Player_Manager.instance.status.criticalhit -= criticalChance;
-            Player_Manager.instance.status.critical_multiplier -= criticalMultiplier;
-            Player_Manager.instance.status.moveSpeed -= moveSpeed;
+            Player_Manager.instance.status.criticalhit -= buffStatus[skillLevel].criticalChance;
+            Player_Manager.instance.status.critical_multiplier -= buffStatus[skillLevel].criticalMultiplier;
+            Player_Manager.instance.status.moveSpeed -= buffStatus[skillLevel].moveSpeed;
         }
     }
 

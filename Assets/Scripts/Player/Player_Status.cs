@@ -8,7 +8,7 @@ public class Player_Status : MonoBehaviour
 
 
     [Header("---Status---")]
-    public int level;
+    public int curLevel;
     public int maxLevel;
 
     // Defence Status
@@ -67,8 +67,8 @@ public class Player_Status : MonoBehaviour
     /// <param name="data"></param>
     public void Status_Setting(Data data)
     {
-        level = data.level;
-
+        curLevel = data.curLevel;
+        curExp = data.curExp;
 
         curhp = data.curhp;
         maxHp = data.maxHp;
@@ -134,11 +134,27 @@ public class Player_Status : MonoBehaviour
 
     #region Level Up
     /// <summary>
+    /// 경험치 증가 로직
+    /// </summary>
+    /// <param name="exp"></param>
+    public void ExpAdd(int exp)
+    {
+        curExp += exp;
+        while (curExp >= maxExp && curLevel < expList.Count - 1)
+        {
+            curExp -= maxExp;
+            LevelUp();
+
+            maxExp = expList[curLevel];
+        }
+    }
+
+    /// <summary>
     /// 레벨 업 시 기초 스테이터스 증가
     /// </summary>
     public void LevelUp()
     {
-        level += 1;
+        curLevel += 1;
 
         // 기본 증가
         curhp += 25;
@@ -148,31 +164,21 @@ public class Player_Status : MonoBehaviour
         physicalDamage += 5;
         magicalDamage += 5;
 
+        // 스킬포인트 증가
+        Player_Manager.instance.skill.Skill_PointAdd(5);
+
         // 5레벨 당 증가
-        if (level % 5 == 0)
+        if (curLevel % 5 == 0)
         {
             critical_multiplier += 0.05f;
             staminaRecovery += 0.01f;
         }
-    }
 
-    /// <summary>
-    /// 경험치 증가 로직
-    /// </summary>
-    /// <param name="exp"></param>
-    public void ExpAdd(int exp)
-    {
-        curExp += exp;
-        if (curExp >= maxExp)
-        {
-            // 스테이터스 증가
-            LevelUp();
+        // UI 최신화
+        UI_Manager.instance.Level(curLevel);
 
-            // 남은 경험치 계산
-            int remainExp = maxExp - curExp;
-            maxExp = expList[level];
-            curExp += remainExp;
-        }
+        // 레벨업 이펙트 UI
+        UI_Manager.instance.LevelUpUI(curLevel);
     }
     #endregion
 }

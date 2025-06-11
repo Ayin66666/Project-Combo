@@ -22,7 +22,8 @@ public class Data
 
 
     [Header("---Status---")]
-    public int level;
+    public int curLevel;
+    public int curExp;
 
     // Defence Status
     public int curhp;
@@ -57,7 +58,7 @@ public class Data
 
     [Header("---Skill Tree---")]
     public int skillPoint;
-    public List<SkillData> skillData;
+    public List<int> skillLevelData;
 }
 
 
@@ -129,6 +130,10 @@ public class SaveLoad_Manager : MonoBehaviour
     [SerializeField] private GameObject removeUI;
     public bool isRemove;
 
+    [Header("---PlayTime---")]
+    private float startTime;
+    private float addTime;
+
 
     private void Awake()
     {
@@ -141,12 +146,28 @@ public class SaveLoad_Manager : MonoBehaviour
             Destroy(gameObject);
         }
 
-        DontDestroyOnLoad(gameObject);
-
+        // 저장 경로 및 씬 셋팅
         isStartScene = true;
         savePath = Application.persistentDataPath + "/";
 
+        // 시작 시간 저장
+        startTime = Time.realtimeSinceStartup;
+
+        // 슬롯 UI 최신화
         SlotUI_Setting();
+        
+        DontDestroyOnLoad(gameObject);
+    }
+
+
+    /// <summary>
+    /// 플레이타임 호출 기능
+    /// </summary>
+    /// <returns></returns>
+    private float PlayTime()
+    {
+        addTime += Time.realtimeSinceStartup - startTime;
+        return addTime + (Time.realtimeSinceStartup - startTime);
     }
 
 
@@ -162,7 +183,7 @@ public class SaveLoad_Manager : MonoBehaviour
             Data data = Get_SlotUIData(i);
             if (data != null)
             {
-                slots[i].Slot_Setting(data.chapter, data.level.ToString(), data.playTime);
+                slots[i].Slot_Setting(data.chapter, data.curLevel.ToString(), data.playTime);
             }
             else
             {
@@ -387,11 +408,16 @@ public class SaveLoad_Manager : MonoBehaviour
                     yield return null;
                 }
 
-                // 데이터 셋팅
+                // 플레이어 스테이터스
                 Player_Status.instacne.Status_Setting(data);
-                ChapterData_Manager.instance.Data_Setting(data);
-                // 인벤토리 & 장비창
+
                 // 스킬트리
+                Player_Manager.instance.skill.Skill_Setting(data);
+
+                // 스테이지
+                ChapterData_Manager.instance.Data_Setting(data);
+
+                // 인벤토리 & 장비창
 
                 // 선택 UI Off
                 SaveLoadUI(false);
@@ -426,7 +452,9 @@ public class SaveLoad_Manager : MonoBehaviour
             playTime = 0,
 
             // 스테이터스
-            level = 1,
+            curLevel = 1,
+            curExp = 0,
+
             curhp = 500,
             maxHp = 500,
             physicalDefence = 15,
@@ -458,10 +486,15 @@ public class SaveLoad_Manager : MonoBehaviour
 
 
             // 스킬트리
-            skillData = new List<SkillData>(),
+            skillLevelData = new List<int>(),
             skillPoint = 0,
         };
 
+        // 스킬 레벨 입력
+        for (int i = 0; i < 12; i++)
+        {
+            data.skillLevelData.Add(0);
+        }
 
         // 아이템 코드 초기화
         for (int i = 0; i < 40; i++)
@@ -515,9 +548,10 @@ public class SaveLoad_Manager : MonoBehaviour
             // 데이터 적용 - 챕터
             ChapterData_Manager.instance.Data_Setting(data);
 
-            // 데이터 적용 - 인벤토리 & 장비창
-
             // 데이터 적용 - 스킬트리
+            Player_Manager.instance.skill.Skill_Setting(data);
+
+            // 데이터 적용 - 인벤토리 & 장비창
 
             return (data, true);
         }
@@ -547,14 +581,10 @@ public class SaveLoad_Manager : MonoBehaviour
         {
             Data playerData = new()
             {
-                // 스테이지
-                chapter = ChapterCheck(index),
-                // playTime = ,
-                SceneName = SceneManager.GetActiveScene().name,
-                playerPos = Player_Manager.instance.action.transform.position,
-
                 // 스테이터스
-                level = Player_Manager.instance.status.level,
+                curLevel = Player_Manager.instance.status.curLevel,
+                curExp = Player_Manager.instance.status.curExp,
+
                 curhp = Player_Manager.instance.status.curhp,
                 maxHp = Player_Manager.instance.status.maxHp,
                 physicalDefence = Player_Manager.instance.status.physicalDefence,
@@ -572,11 +602,21 @@ public class SaveLoad_Manager : MonoBehaviour
                 curStamina = Player_Manager.instance.status.curStamina,
                 maxStamina = Player_Manager.instance.status.maxStamina,
 
+                // 스킬트리
+                skillPoint = Player_Manager.instance.skill.skillPoint,
+                skillLevelData = Player_Manager.instance.skill.GetSkillData(),
+
                 // 아이템
                 inevntory = new List<int>(40),
                 equipment = new List<int>(8),
 
-                // 스테이지
+                // 진행도
+                chapter = ChapterCheck(index),
+                playTime = PlayTime(),
+                SceneName = SceneManager.GetActiveScene().name,
+                playerPos = Player_Manager.instance.action.transform.position,
+
+                // 스테이지 클리어
                 clearData = new ClearData()
                 {
                     chapterList = ChapterData_Manager.instance.chapterData,
@@ -730,9 +770,9 @@ public class SaveLoad_Manager : MonoBehaviour
             // 데이터 셋팅
             Player_Manager.instance.PlayerPos_Setting(data.playerPos);
             Player_Status.instacne.Status_Setting(data);
+            Player_Manager.instance.skill.Skill_Setting(data);
             ChapterData_Manager.instance.Data_Setting(data);
             // 인벤토리 & 장비창
-            // 스킬트리
 
             // 선택 UI Off
             SaveLoadUI(false);

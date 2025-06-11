@@ -6,39 +6,6 @@ using UnityEngine.Video;
 [CreateAssetMenu(fileName = "Skill Data", menuName = "Scriptable Object/Skill Data", order = int.MaxValue)]
 public class Skill_Value_SO : ScriptableObject
 {
-    #region Property
-    public string SkillName
-    {
-        get { return skillName; }
-        private set { skillName = value; }
-    }
-
-    public string SkillDescription
-    {
-        get { return skillDescription; }
-        private set { skillDescription = value; }
-    }
-
-    public Sprite Icon
-    {
-        get { return iconImage; }
-        private set { iconImage = value; }
-    }
-
-    public VideoClip SkillClip
-    {
-        get { return clip; }
-        private set { clip = value; }
-    }
-    #endregion
-
-    [Header("---Description---")]
-    [SerializeField] private Sprite iconImage;
-    [SerializeField] private string skillName;
-    [SerializeField, TextArea] private string skillDescription;
-    [SerializeField] private VideoClip clip;
-
-
     [Header("---Status---")]
     public List<Value_Data> value_List;
 
