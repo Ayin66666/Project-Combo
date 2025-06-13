@@ -10,6 +10,9 @@ public class Player_Manager : MonoBehaviour
     public PlayerAction_Manager action; // 연결 필요 -> 이거 싱글톤 전환 꼭 해야하나?
     public Player_Status status;
     public Skill_Manager skill;
+    public Inventory_Manager inventory;
+    public Cooldown_Manager cooldown;
+    public ShortCut_Manager shortCut;
 
 
     [Header("---Player---")]

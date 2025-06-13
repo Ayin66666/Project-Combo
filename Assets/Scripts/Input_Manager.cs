@@ -1,5 +1,4 @@
 using System;
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -21,6 +20,7 @@ public class Input_Manager : MonoBehaviour
 
     [Header("--- Input Setting ---")]
     public List<InputData> inputDatas;
+    public List<InputData> shortcutInputDatas;
     public Vector3 movementInput;
 
     private void Awake()
@@ -39,6 +39,7 @@ public class Input_Manager : MonoBehaviour
 
     private void Update()
     {
+        Shortcut_Check();
         KeyDown_Check();
         KeyUp_Check();
     }
@@ -60,10 +61,34 @@ public class Input_Manager : MonoBehaviour
         inputDatas[index].inputAction += name;
     }
 
+    /// <summary>
+    /// 쇼트컷 용 인풋 액션 함수에 넣을 함수 전달
+    /// </summary>
+    /// <param name="index"></param>
+    /// <param name="name"></param>
+    /// <param name="actonIndex"></param>
+    public void ShortCut_Setting(int index, Action name)
+    {
+        shortcutInputDatas[index].inputAction += name;
+    }
+
+    private void Shortcut_Check()
+    {
+        foreach (InputData data in shortcutInputDatas)
+        {
+            if (Input.GetKeyDown(data.key))
+            {
+                data.isInput = true;
+                data.inputAction?.Invoke();
+            }
+        }
+    }
+
     private void KeyDown_Check()
     {
         movementInput = new Vector3(Input.GetAxisRaw("Horizontal"), 0, Input.GetAxisRaw("Vertical"));
 
+        // 전투 입력
         foreach (InputData data in inputDatas)
         {
             if (Input.GetKeyDown(data.key))

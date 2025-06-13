@@ -88,19 +88,6 @@ public class Player_Status : MonoBehaviour
         maxAwakening = data.maxAwakening;
         staminaRecovery = data.staminaRecovery;
     }
-
-    /// <summary>
-    /// 게임 시작 시 경험치 요구량 셋팅
-    /// </summary>
-    public void Level_Setting()
-    {
-        // 경험치 요구량은 해당 지수계수 1.5 데이터를 기반
-        for (int i = 1; i < maxLevel; i++)
-        {
-            int a = (int)(baseExp * Mathf.Pow(i, growth));
-            expList.Add(a);
-        }
-    }
     #endregion
 
 
@@ -134,6 +121,25 @@ public class Player_Status : MonoBehaviour
 
     #region Level Up
     /// <summary>
+    /// 게임 시작 시 경험치 요구량 셋팅
+    /// </summary>
+    public void Level_Setting()
+    {
+        // 최종 레벨
+        maxLevel = 25;
+
+        // 경험치 요구량은 해당 지수계수 1.5 데이터를 기반
+        for (int i = 1; i < maxLevel; i++)
+        {
+            int a = (int)(baseExp * Mathf.Pow(i, growth));
+            expList.Add(a);
+        }
+
+        // 현제 경험치
+        maxExp = expList[curLevel-1];
+    }
+
+    /// <summary>
     /// 경험치 증가 로직
     /// </summary>
     /// <param name="exp"></param>
@@ -145,7 +151,7 @@ public class Player_Status : MonoBehaviour
             curExp -= maxExp;
             LevelUp();
 
-            maxExp = expList[curLevel];
+            maxExp = expList[curLevel-1];
         }
     }
 

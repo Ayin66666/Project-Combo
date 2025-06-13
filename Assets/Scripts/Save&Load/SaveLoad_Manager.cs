@@ -543,7 +543,10 @@ public class SaveLoad_Manager : MonoBehaviour
             File.WriteAllText(savePath + fileName[slotCount], json);
 
             // 데이터 적용 - 스테이터스
-            Player_Status.instacne.Status_Setting(data);
+            Player_Manager.instance.status.Status_Setting(data);
+
+            // 데이터 적용 - 경험치
+            Player_Manager.instance.status.Level_Setting();
 
             // 데이터 적용 - 챕터
             ChapterData_Manager.instance.Data_Setting(data);
@@ -767,12 +770,19 @@ public class SaveLoad_Manager : MonoBehaviour
                 yield return null;
             }
 
-            // 데이터 셋팅
-            Player_Manager.instance.PlayerPos_Setting(data.playerPos);
-            Player_Status.instacne.Status_Setting(data);
-            Player_Manager.instance.skill.Skill_Setting(data);
+            // 데이터 적용 - 스테이터스
+            Player_Manager.instance.status.Status_Setting(data);
+
+            // 데이터 적용 - 경험치
+            Player_Manager.instance.status.Level_Setting();
+
+            // 데이터 적용 - 챕터
             ChapterData_Manager.instance.Data_Setting(data);
-            // 인벤토리 & 장비창
+
+            // 데이터 적용 - 스킬트리
+            Player_Manager.instance.skill.Skill_Setting(data);
+
+            // 데이터 적용 - 인벤토리 & 장비창
 
             // 선택 UI Off
             SaveLoadUI(false);

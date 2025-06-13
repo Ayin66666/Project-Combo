@@ -261,8 +261,8 @@ public class UI_Manager : MonoBehaviour
         float timer = 0;
         while (timer < 1)
         {
-            timer += Time.deltaTime * 2f;
-            levelUpCanvasGroup.alpha = EasingFunctions.OutExpo(timer);
+            timer += Time.deltaTime * 1.5f;
+            levelUpCanvasGroup.alpha = Mathf.Lerp(1, 0, EasingFunctions.OutExpo(timer));
             yield return null;
         }
 
