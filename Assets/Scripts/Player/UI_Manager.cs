@@ -112,6 +112,8 @@ public class UI_Manager : MonoBehaviour
 
 
     [Header("---Inventory---")]
+    [SerializeField] private GameObject itemDescriptionSet;
+    [SerializeField] private TextMeshProUGUI itemDescriptionText;
 
 
     [Header("---Short Cut---")]
@@ -655,16 +657,15 @@ public class UI_Manager : MonoBehaviour
     #endregion
 
 
-    #region 인벤토리 & 쇼트컷
-
-    public void Inventory()
+    #region Inventory
+    /// <summary>
+    /// 아이템 슬롯에 마우스 오버 시 설명 UI
+    /// </summary>
+    /// <param name="item"></param>
+    public void Item_DescriptionUI(bool isOn, Item_Base item)
     {
-
-    }
-
-    public void ShortCut()
-    {
-
+        itemDescriptionSet.SetActive(isOn);
+        itemDescriptionText.text = isOn ? item.ItemDescription : null;
     }
     #endregion
 }

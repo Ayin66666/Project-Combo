@@ -63,6 +63,19 @@ public abstract class Enemy_Base : MonoBehaviour, IDamageSysteam
     [SerializeField] private string[] animBool;
 
 
+    [Header("---Item Drop---")]
+    [SerializeField] private List<DropList> itemList;
+
+    [System.Serializable]
+    public struct DropList
+    {
+        public GameObject item;
+        public int drop_Count;
+        public int drop_Probability;
+    }
+
+
+
     [Header("---Component---")]
     public Enemy_UI enemyUI;
     [SerializeField] protected CharacterController controller;
@@ -79,6 +92,41 @@ public abstract class Enemy_Base : MonoBehaviour, IDamageSysteam
 
     private Tween attackMoveTween;
     private List<System.Func<IEnumerator>> spawnList;
+
+
+    /// <summary>
+    /// 아이템 드랍 가중치 계산 / -1의 경우 값 없음
+    /// </summary>
+    /// <returns></returns>
+    public void Item_Drop()
+    {
+        if(spawnList.Count == 0)
+        {
+            return;
+        }
+
+        // 전체 값 구하기
+        List<int> drop = new();
+        int total = 0;
+        for (int i = 0; i < itemList.Count; i++)
+        {
+            total += itemList[i].drop_Probability;
+            drop.Add(total);
+        }
+
+        // 값 선택
+        int ran = Random.Range(0, total);
+        for (int i = 0; i < drop.Count; i++)
+        {
+            if (ran < drop[i])
+            {
+                // 아이템 드랍
+                GameObject obj = Instantiate(itemList[i].item, transform.position, Quaternion.identity);
+                obj.GetComponent<Item_Drop>().Spawn();
+                return;
+            }
+        }
+    }
 
 
     #region Spawn

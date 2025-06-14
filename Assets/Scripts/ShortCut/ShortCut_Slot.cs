@@ -32,7 +32,7 @@ public class ShortCut_Slot : MonoBehaviour, IPointerEnterHandler, IPointerExitHa
             // 슬롯 데이터 리셋
             Slot_Reset();
         }
-
+        /*
         // 아이템 타입 검사
         if (item_Slot.item.itemType == Item_Base.ItemType.Consumable)
         {
@@ -45,6 +45,7 @@ public class ShortCut_Slot : MonoBehaviour, IPointerEnterHandler, IPointerExitHa
             // 소비 아이템이 아니라면
             Debug.Log("소비 아이템이 아닙니다!");
         }
+        */
     }
 
     /// <summary>

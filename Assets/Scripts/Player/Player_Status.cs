@@ -92,7 +92,7 @@ public class Player_Status : MonoBehaviour
 
 
     /// <summary>
-    /// 스테미너 회복
+    /// 스테미너 자연 회복
     /// </summary>
     private void Recovery()
     {
@@ -100,13 +100,41 @@ public class Player_Status : MonoBehaviour
             curStamina += Time.deltaTime * staminaRecovery;
     }
 
+
+    #region Item Recovery
+    /// <summary>
+    /// 체력 회복
+    /// </summary>
+    /// <param name="value"></param>
+    public void HpAdd(int value)
+    {
+        curhp += value;
+        if (curhp >= maxHp)
+        {
+            curhp = maxHp;
+        }
+    }
+
+    /// <summary>
+    /// 스테미너 회복
+    /// </summary>
+    /// <param name="value"></param>
+    public void StaminaAdd(int value)
+    {
+        curStamina += value;
+        if (curStamina >= maxStamina)
+        {
+            curStamina = maxStamina;
+        }
+    }
+
     /// <summary>
     /// 각성 게이지 회복
     /// </summary>
-    /// <param name="index"></param>
-    public void AwankingAdd(int index)
+    /// <param name="value"></param>
+    public void AwankingAdd(int value)
     {
-        curAwakening += index;
+        curAwakening += value;
         if (curAwakening >= maxAwakening)
         {
             // 최대치를 넘을 경우
@@ -117,6 +145,7 @@ public class Player_Status : MonoBehaviour
                 PlayerAction_Manager.instance.canAwakning = true;
         }
     }
+    #endregion
 
 
     #region Level Up
