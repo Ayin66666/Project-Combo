@@ -3,7 +3,7 @@ using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
-public class ShortCut_Slot : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler, IPointerClickHandler
+public class ShortCut_Slot : MonoBehaviour, IPointerClickHandler
 {
     [Header("---Setting---")]
     [SerializeField] private Inventory_Slot itemSlot;
@@ -15,7 +15,6 @@ public class ShortCut_Slot : MonoBehaviour, IPointerEnterHandler, IPointerExitHa
     [SerializeField] private TextMeshProUGUI countText;
 
 
-
     /// <summary>
     /// 슬롯에 아이템 입력
     /// </summary>
@@ -24,28 +23,26 @@ public class ShortCut_Slot : MonoBehaviour, IPointerEnterHandler, IPointerExitHa
     /// <param name="count"></param>
     public void Slot_Setting(Inventory_Slot item_Slot)
     {
-        // 이미 슬롯에 아이템이 있다면
+        // 이미 슬롯에 아이템이 있다면 - 기존 아이템 비우기
         if (haveItem)
-        {
-            // 기존 아이템 비우기
-
-            // 슬롯 데이터 리셋
             Slot_Reset();
-        }
-        /*
+
         // 아이템 타입 검사
-        if (item_Slot.item.itemType == Item_Base.ItemType.Consumable)
+        if (item_Slot.item.itemType == Item_Base.Item_Type.Consumable)
         {
-            // 소비 아이템이라면
+            // 소비 아이템이라면 - UI 셋팅
             haveItem = true;
             itemSlot = item_Slot;
+            icon.sprite = itemSlot.item.Icon;
+            countText.text = itemSlot.count.ToString();
+
+            
         }
         else
         {
             // 소비 아이템이 아니라면
             Debug.Log("소비 아이템이 아닙니다!");
         }
-        */
     }
 
     /// <summary>
@@ -81,13 +78,7 @@ public class ShortCut_Slot : MonoBehaviour, IPointerEnterHandler, IPointerExitHa
     }
 
 
-    #region 클릭 이벤트
     public void OnPointerClick(PointerEventData eventData)
-    {
-        throw new System.NotImplementedException();
-    }
-
-    public void OnPointerEnter(PointerEventData eventData)
     {
         // 마우스 우클릭 시 슬롯 내 아이템 제거
         if (eventData.button == PointerEventData.InputButton.Right)
@@ -96,10 +87,4 @@ public class ShortCut_Slot : MonoBehaviour, IPointerEnterHandler, IPointerExitHa
             Slot_Reset();
         }
     }
-
-    public void OnPointerExit(PointerEventData eventData)
-    {
-        throw new System.NotImplementedException();
-    }
-    #endregion
 }

@@ -6,6 +6,7 @@ public class ShortCut_Manager : MonoBehaviour
 {
     [Header("---Setting---")]
     [SerializeField] private List<ShortCut_Slot> slots;
+    [SerializeField] private List<ShortCut_InGame_Slot> slots_Ingame;
 
 
     private void Start()
@@ -14,6 +15,7 @@ public class ShortCut_Manager : MonoBehaviour
     }
 
 
+    #region 옵션 UI
     /// <summary>
     /// 인풋 이벤트 셋팅
     /// </summary>
@@ -36,10 +38,13 @@ public class ShortCut_Manager : MonoBehaviour
         if(slot != null)
         {
             slots[slot_Index].Slot_Setting(slot);
+            slots_Ingame[slot_Index].Slot_Setting(slot.item);
         }
         else
         {
             slots[slot_Index].Slot_Reset();
+            slots_Ingame[slot_Index].Slot_Reset();
         }
     }
+    #endregion
 }
