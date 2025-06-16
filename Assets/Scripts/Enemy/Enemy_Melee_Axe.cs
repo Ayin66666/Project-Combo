@@ -1,9 +1,6 @@
-using DG.Tweening;
 using Easing.Tweening;
 using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.UIElements;
 
 
 public class Enemy_Melee_Axe : Enemy_Base
@@ -144,6 +141,7 @@ public class Enemy_Melee_Axe : Enemy_Base
 
     private IEnumerator DieCall()
     {
+        base.Die();
         curState = State.Die;
         enemyUI.UI_OnOff(false);
 

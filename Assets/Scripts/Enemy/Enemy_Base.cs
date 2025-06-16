@@ -64,16 +64,16 @@ public abstract class Enemy_Base : MonoBehaviour, IDamageSysteam
 
 
     [Header("---Item Drop---")]
+    [SerializeField] private GameObject dropObject;
+    [SerializeField] private Vector2Int dropCount;
     [SerializeField] private List<DropList> itemList;
-
     [System.Serializable]
     public struct DropList
     {
-        public GameObject item;
-        public int drop_Count;
+        public Item_Base item;
+        public Vector2Int drop_Count;
         public int drop_Probability;
     }
-
 
 
     [Header("---Component---")]
@@ -93,40 +93,6 @@ public abstract class Enemy_Base : MonoBehaviour, IDamageSysteam
     private Tween attackMoveTween;
     private List<System.Func<IEnumerator>> spawnList;
 
-
-    /// <summary>
-    /// 아이템 드랍 가중치 계산 / -1의 경우 값 없음
-    /// </summary>
-    /// <returns></returns>
-    public void Item_Drop()
-    {
-        if(spawnList.Count == 0)
-        {
-            return;
-        }
-
-        // 전체 값 구하기
-        List<int> drop = new();
-        int total = 0;
-        for (int i = 0; i < itemList.Count; i++)
-        {
-            total += itemList[i].drop_Probability;
-            drop.Add(total);
-        }
-
-        // 값 선택
-        int ran = Random.Range(0, total);
-        for (int i = 0; i < drop.Count; i++)
-        {
-            if (ran < drop[i])
-            {
-                // 아이템 드랍
-                GameObject obj = Instantiate(itemList[i].item, transform.position, Quaternion.identity);
-                obj.GetComponent<Item_Drop>().Spawn();
-                return;
-            }
-        }
-    }
 
 
     #region Spawn
@@ -524,6 +490,52 @@ public abstract class Enemy_Base : MonoBehaviour, IDamageSysteam
         curState = State.Idle;
     }
 
-    public abstract void Die();
+    /// <summary>
+    /// 아이템 드랍 가중치 계산 / -1의 경우 값 없음
+    /// </summary>
+    /// <returns></returns>
+    public void Item_Drop()
+    {
+        if (itemList.Count == 0)
+        {
+            return;
+        }
+
+        // 드랍 횟수만큼 아이템 드랍
+        for (int i = 0; i < Random.Range(dropCount.x, dropCount.y); i++)
+        {
+            // 전체 값 구하기
+            List<int> drop = new();
+            int total = 0;
+            for (int i2 = 0; i2 < itemList.Count; i2++)
+            {
+                total += itemList[i2].drop_Probability;
+                drop.Add(total);
+            }
+
+            // 값 선택
+            int ran = Random.Range(0, total);
+            for (int i2 = 0; i2 < drop.Count; i2++)
+            {
+                if (ran < drop[i2])
+                {
+                    // 아이템 생성
+                    GameObject obj = Instantiate(dropObject, transform.position, Quaternion.identity);
+
+                    // 수량 셋팅
+                    int dropAmount = Random.Range(itemList[i2].drop_Count.x, itemList[i2].drop_Count.y + 1);
+
+                    // 아이템 셋팅
+                    obj.GetComponent<Item_Drop>().Spawn(itemList[i2].item, dropAmount);
+                    break;
+                }
+            }
+        }
+    }
+
+    public virtual void Die() 
+    {
+        Item_Drop();
+    }
     #endregion
 }

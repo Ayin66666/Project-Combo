@@ -218,6 +218,7 @@ public class Enemy_Elite_Phase2 : Enemy_Base
 
     public override void Die()
     {
+        base.Die();
         throw new System.NotImplementedException();
     }
 }

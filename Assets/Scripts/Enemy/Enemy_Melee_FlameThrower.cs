@@ -152,6 +152,7 @@ public class Enemy_Melee_FlameThrower : Enemy_Base
         curState = State.Die;
         enemyUI.UI_OnOff(false);
         nav.enabled = false;
+        base.Die();
 
         anim.SetTrigger("Hit");
         anim.SetBool("isDie", true);

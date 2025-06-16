@@ -15,6 +15,8 @@ public abstract class Item_Base : ScriptableObject
     [Header("---Item Setting---")]
     public Item_Type itemType;
     public Item_Rating itemRating;
+    public bool stackable;
+    public int maxStack;
     public int itemCode;
 
     public enum Item_Type { Equipment, Consumable, Other }

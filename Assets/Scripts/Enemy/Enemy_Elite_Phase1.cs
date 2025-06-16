@@ -95,6 +95,7 @@ public class Enemy_Elite_Phase1 : Enemy_Base
 
     public override void Die()
     {
+        base.Die();
         StartCoroutine(DieCall());
     }
 

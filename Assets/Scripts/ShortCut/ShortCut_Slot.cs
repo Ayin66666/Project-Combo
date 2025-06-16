@@ -34,7 +34,7 @@ public class ShortCut_Slot : MonoBehaviour, IPointerClickHandler
             haveItem = true;
             itemSlot = item_Slot;
             icon.sprite = itemSlot.item.Icon;
-            countText.text = itemSlot.count.ToString();
+            countText.text = itemSlot.itemCount.ToString();
 
             
         }

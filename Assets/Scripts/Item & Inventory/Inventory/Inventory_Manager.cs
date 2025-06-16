@@ -1,16 +1,123 @@
+using System;
 using System.Collections.Generic;
+using Unity.VisualScripting.Antlr3.Runtime.Misc;
 using UnityEngine;
+using static UnityEditor.Timeline.Actions.MenuPriority;
 
 public class Inventory_Manager : MonoBehaviour
 {
     [Header("--- Setting ---")]
-    [SerializeField] private List<GameObject> item_Slot;
+    [SerializeField] private List<Inventory_Slot> item_Slot;
     public Canvas canvas;
 
 
-    public void Item_Add()
+    /// <summary>
+    /// 아이템 습득 시 호출
+    /// </summary>
+    /// <param name="addItem"></param>
+    /// <param name="itemCount"></param>
+    public void Item_Add(Item_Base addItem, int itemCount)
     {
+        // 데이터 오류 체크
+        if(addItem == null || itemCount <= 0)
+        {
+            return;
+        }
 
+        // 1. 아이템 중첩 가능 여부 체크
+        if (addItem.stackable)
+        {
+            // 2. 중첩 가능 시
+            // 2-1 이미 인벤토리에 해당 아이템이 있는지 & 중첩 최대치가 아닌지
+            Inventory_Slot slot = Slot_Find(slot => slot.item.itemCode == addItem.itemCode);
+            if (slot != null)
+            {
+                // 1. 중첩 가능한 슬롯에 먼저 넣기
+                while (itemCount > 0)
+                {
+                    Inventory_Slot stackSlot = Slot_Find(slot =>
+                        slot.item != null &&
+                        slot.item.itemCode == addItem.itemCode &&
+                        slot.itemCount < slot.item.maxStack);
+
+                    if (stackSlot == null)
+                        break;
+
+                    int space = stackSlot.item.maxStack - stackSlot.itemCount;
+                    int toAdd = Mathf.Min(space, itemCount);
+                    stackSlot.Slot_Setting(addItem, stackSlot.itemCount + toAdd);
+                    itemCount -= toAdd;
+                }
+            }
+
+            // 3. 빈 슬롯 체크 후 넣기
+            itemCount = AddToEmptySlots(addItem, itemCount);
+        }
+        else
+        {
+            // 3. 중첩 불가능 시 - 빈 슬롯 검출
+            itemCount = AddToEmptySlots(addItem, itemCount);
+        }
+
+        // 그래도 남는 아이템이 있다면 - 아이템 드롭
+        if (itemCount > 0)
+        {
+            Item_Drop(addItem, itemCount);
+        }
+    }
+
+    /// <summary>
+    /// 빈 슬롯이 있다면 인풋, 아니라면 드롭
+    /// </summary>
+    /// <param name="addItem"></param>
+    /// <param name="itemCount"></param>
+    private int AddToEmptySlots(Item_Base addItem, int itemCount)
+    {
+        while (itemCount > 0)
+        {
+            Inventory_Slot emptySlot = Slot_Find(slot => !slot.haveItem);
+            if (emptySlot == null)
+            {
+                Item_Drop(addItem, itemCount);
+                break;
+            }
+
+            int toAdd = Mathf.Min(addItem.maxStack, itemCount);
+            emptySlot.Slot_Setting(addItem, toAdd);
+            itemCount -= toAdd;
+        }
+
+        return itemCount; // 남은 아이템 수 반환 (0이면 다 넣은 것)
+    }
+
+    /// <summary>
+    /// 아이템을 한계 이상으로 획득했을때 드롭 기능
+    /// </summary>
+    /// <param name="item"></param>
+    /// <param name="itemCount"></param>
+    private void Item_Drop(Item_Base item, int itemCount)
+    {
+        GameObject obj = Instantiate(gameObject, transform.position, Quaternion.identity);
+        obj.AddComponent<Item_Drop>();
+    }
+
+
+    /// <summary>
+    /// 입력값에 따른 조건 검사
+    /// </summary>
+    /// <param name="predicate"></param>
+    /// <returns></returns>
+    private Inventory_Slot Slot_Find(Func<Inventory_Slot, bool> predicate)
+    {
+        foreach (Inventory_Slot slot in item_Slot)
+        {
+            if (predicate(slot))
+            {
+                return slot;
+            }
+        }
+
+        return null;
     }
 
     /// <summary>
@@ -21,12 +128,34 @@ public class Inventory_Manager : MonoBehaviour
     public void Item_Change(Inventory_Slot slotA, Inventory_Slot slotB)
     {
         Item_Base dataA = slotA.item;
-        int countA = slotA.count;
+        int countA = slotA.itemCount;
 
         Item_Base dataB = slotB.item;
-        int countB = slotB.count;
+        int countB = slotB.itemCount;
 
         slotA.Slot_Setting(dataB, countB);
         slotB.Slot_Setting(dataA, countA);
+    }
+
+
+    /// <summary>
+    /// 아이템 습득 전 인벤토리 상태 체크
+    /// </summary>
+    /// <param name="addItem"></param>
+    /// <returns></returns>
+    public bool IsFull(Item_Base addItem)
+    {
+        foreach (var slot in item_Slot)
+        {
+            // 슬롯이 비어있으면 인벤토리는 꽉 차지 않은 상태
+            if (slot.item == null)
+                return false;
+
+            // 중첩 가능하고, 해당 아이템과 동일하며, 아직 최대 스택에 도달하지 않았다면
+            if (slot.item.itemCode == addItem.itemCode && slot.item.stackable && slot.itemCount < slot.item.maxStack)
+                return false;
+        }
+        // 빈 슬롯도 없고, 최대 스택 초과 가능한 슬롯도 없으니 꽉 찬 상태
+        return true;
     }
 }

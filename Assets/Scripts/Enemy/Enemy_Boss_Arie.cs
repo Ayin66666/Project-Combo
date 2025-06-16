@@ -403,6 +403,7 @@ public class Enemy_Boss_Arie : Enemy_Base
 
     public override void Die()
     {
+        base.Die();
         StartCoroutine(DieCall());
     }
 

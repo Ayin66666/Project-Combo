@@ -7,13 +7,10 @@ using UnityEngine.UI;
 
 public class Inventory_Slot : MonoBehaviour, IPointerClickHandler, IBeginDragHandler, IDragHandler, IEndDragHandler
 {
-    [Header("---State---")]
-    public bool haveItem;
-
-
     [Header("---Item Data---")]
     public Item_Base item;
-    public int count;
+    public bool haveItem;
+    public int itemCount;
 
 
     [Header("---UI---")]
@@ -29,22 +26,19 @@ public class Inventory_Slot : MonoBehaviour, IPointerClickHandler, IBeginDragHan
 
     #region 기능 동작
     /// <summary>
-    /// 아이템 추가 최초 1회 - 여기 체크 기능 어떻게 할지? / 인벤토리가 할건가?
+    /// 아이템 추가
     /// </summary>
     public void Slot_Setting(Item_Base data, int addCount)
     {
-        // 슬롯 리셋
-        Slot_Reset();
-
         // 아이템 추가
         haveItem = true;
         item = data;
-        count = addCount;
+        itemCount = addCount;
 
         // UI 셋팅
-        //icon.sprite = item.icon;
-        //dragUIIcon.sprite = item.icon;
-        countText.text = count.ToString();
+        icon.sprite = item.Icon;
+        dragUIIcon.sprite = item.Icon;
+        countText.text = itemCount.ToString();
     }
 
     /// <summary>
@@ -54,24 +48,11 @@ public class Inventory_Slot : MonoBehaviour, IPointerClickHandler, IBeginDragHan
     {
         haveItem = false;
         item = null;
-        count = 0;
+        itemCount = 0;
 
         icon.sprite = null;
         dragUIIcon.sprite = null;
         countText.text = "";
-    }
-
-    /// <summary>
-    /// 이미 아이템이 있는 슬롯에 수량 추가 - 여기 더하기 전에 최대 수량을 넘는지 체크하는 기능은? - 이 함수 호출하는 부분에서?
-    /// </summary>
-    /// <param name="count"></param>
-    public void Slot_CountAdd(int addCount)
-    {
-        // 아이템 추가
-        count += addCount;
-
-        // 수량 최신화
-        countText.text = count.ToString();
     }
 
     /// <summary>

@@ -104,6 +104,7 @@ public class Enemy_Range_GrenadeLauncher : Enemy_Base
     {
         curState = State.Die;
         enemyUI.UI_OnOff(false);
+        base.Die();
 
         anim.SetTrigger("Hit");
         anim.SetBool("isDie", true);
