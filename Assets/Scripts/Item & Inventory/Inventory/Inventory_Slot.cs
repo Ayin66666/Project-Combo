@@ -30,6 +30,7 @@ public class Inventory_Slot : MonoBehaviour, IPointerClickHandler, IBeginDragHan
     /// </summary>
     public void Slot_Setting(Item_Base data, int addCount)
     {
+        Debug.Log("call slot itemSetting / " + gameObject + " / " + addCount);
         // 아이템 추가
         haveItem = true;
         item = data;
@@ -60,31 +61,31 @@ public class Inventory_Slot : MonoBehaviour, IPointerClickHandler, IBeginDragHan
     /// </summary>
     public void Slot_Use()
     {
-        /*
-        // 타입 별 사용로직
+        if(!haveItem)
+        {
+            return;
+        }
+
         switch (item.itemType)
         {
-            case Item_Base.ItemType.Equipment:
+            case Item_Base.Item_Type.Equipment:
                 break;
 
-            case Item_Base.ItemType.Consumable:
-                count--;
-                if (count <= 0)
+            case Item_Base.Item_Type.Consumable:
+                item.Use();
+                itemCount--;
+                countText.text = itemCount.ToString();
+
+                if (itemCount <= 0)
                 {
-                    haveItem = false;
-                    item = null;
-                    count = 0;
+                    Slot_Reset();
                 }
-
-                countText.text = count.ToString();
                 break;
 
-            case Item_Base.ItemType.Other:
+            case Item_Base.Item_Type.Other:
                 break;
         }
 
-        item.Use();
-         */
     }
     #endregion
 
@@ -98,6 +99,7 @@ public class Inventory_Slot : MonoBehaviour, IPointerClickHandler, IBeginDragHan
             // 아이템이 있다면 동작 - 없으면 무시
             if (haveItem)
             {
+                Debug.Log("UseCall");
                 Slot_Use();
             }
         }

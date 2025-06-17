@@ -36,6 +36,7 @@ public class Player_Status : MonoBehaviour
     public int curExp;
     public int maxExp;
 
+
     [Header("---Level---")]
     public List<int> expList;
     private int baseExp = 500;
@@ -101,7 +102,7 @@ public class Player_Status : MonoBehaviour
     }
 
 
-    #region Item Recovery
+    #region Item Recovery & Equipment
     /// <summary>
     /// 체력 회복
     /// </summary>
@@ -145,6 +146,32 @@ public class Player_Status : MonoBehaviour
                 PlayerAction_Manager.instance.canAwakning = true;
         }
     }
+
+    /// <summary>
+    /// 장비 착용 & 해제 시 스테이터스 증감 로직
+    /// </summary>
+    /// <param name="isOn"></param>
+    /// <param name="status"></param>
+    public void Equipment_Status_Setting(bool isEquip, Equipment_Status_SO status)
+    {
+        int equip = isEquip ? 1 : -1;
+
+        // 스테이터스 적용
+        physicalDamage += status.PhysicalDamage * equip;
+        magicalDamage += status.MagicalDamage * equip;
+        criticalhit += status.CriticalHit * equip;
+        critical_multiplier += status.CriticalMultiplier * equip;
+        attackSpeed += status.AttackSpeed * equip;
+
+        maxHp += status.MaxHp * equip;
+        physicalDefence += status.PhysicalDefence * equip;
+        magicalDefence += status.MagicalDefence * equip;
+
+        moveSpeed += status.MoveSpeed * equip;
+        maxStamina += status.MaxStamina * equip;
+        maxAwakening += status.MaxAwakening * equip;
+        staminaRecovery += status.StaminaRecovery * equip;
+    }
     #endregion
 
 
@@ -165,7 +192,7 @@ public class Player_Status : MonoBehaviour
         }
 
         // 현제 경험치
-        maxExp = expList[curLevel-1];
+        maxExp = expList[curLevel - 1];
     }
 
     /// <summary>
@@ -180,7 +207,7 @@ public class Player_Status : MonoBehaviour
             curExp -= maxExp;
             LevelUp();
 
-            maxExp = expList[curLevel-1];
+            maxExp = expList[curLevel - 1];
         }
     }
 

@@ -13,14 +13,7 @@ public class Item_Drop : MonoBehaviour
     [SerializeField] private int count;
     [SerializeField] private GameObject pickupVFX;
     [SerializeField] private GameObject[] ratingVFX;
-    private bool isMovement;
     private bool isSpawnDelay;
-
-
-    [Header("---Movement Setting---")]
-    [SerializeField] private float curspeed;
-    [SerializeField] private Vector2 minMaxSpeed;
-    [SerializeField] private float accelerationTime;
 
 
     private void OnEnable()
@@ -37,6 +30,7 @@ public class Item_Drop : MonoBehaviour
     {
         if(!isSpawnDelay)
         {
+            Debug.Log(item + " / " + count);
             // 아이템 셋팅
             this.item = item;
             this.count = count;
@@ -59,71 +53,26 @@ public class Item_Drop : MonoBehaviour
         isSpawnDelay = false;
     }
 
-
     /// <summary>
-    /// 이동 로직 - 플레이어의 감지 범위 내로 들어오면 호출
+    /// 아이템 습득 / 파괴
     /// </summary>
-    /// <returns></returns>
-    public void Movement()
+    public void Item_Add()
     {
-        if (!isMovement && !isSpawnDelay)
-        {
-            isMovement = true;
-            StartCoroutine(Item_Movement());
-        }
+        // 아이템 습득
+        Player_Manager.instance.inventory.Item_Add(item, count);
+
+        // 드롭 아이템 파괴
+        pickupVFX.transform.parent = null;
+        pickupVFX.SetActive(true);
+        Destroy(gameObject);
     }
-
-    private IEnumerator Item_Movement()
-    {
-        rigid.useGravity = false;
-
-
-        // 가속 코루틴
-        StartCoroutine(MoveSpeed());
-
-        // 최대 10초간 추적 - 이후 습득
-        GameObject target = Player_Manager.instance.action.gameObject;
-        Vector3 moveDir = (target.transform.position - transform.position).normalized;
-
-        float ChaseTimer = 0;
-        while (ChaseTimer < 10f)
-        {
-            moveDir = (target.transform.position - transform.position).normalized;
-            transform.position += moveDir * curspeed * Time.deltaTime;
-            yield return null;
-        }
-    }
-
-    private IEnumerator MoveSpeed()
-    {
-        float timer = 0;
-        while (timer < accelerationTime)
-        {
-            float t = Mathf.Clamp01(timer / accelerationTime);
-            curspeed = Mathf.Lerp(minMaxSpeed.x, minMaxSpeed.y, EasingFunctions.OutExpo(t));
-            yield return null;
-        }
-
-        curspeed = minMaxSpeed.y;
-    }
-
 
     /// <summary>
-    /// 아이템 전달 함수
+    /// 아이템 데이터 전달
     /// </summary>
     /// <returns></returns>
     public (Item_Base item, int itemCount) Get_Item()
     {
         return (item, count);
-    }
-
-    /// <summary>
-    /// 아이템 습득 시 파괴 로직
-    /// </summary>
-    public void DestoryItem()
-    {
-        pickupVFX.transform.parent = null;
-        pickupVFX.SetActive(true);
-        Destroy(gameObject);
     }
 }

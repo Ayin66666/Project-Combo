@@ -32,6 +32,6 @@ public abstract class Item_Base : ScriptableObject
     /// </summary>
     public virtual void Use()
     {
-        // 내부 구현은 상속받은 스크립트에서 override로!
+
     }
 }

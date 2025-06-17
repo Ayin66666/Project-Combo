@@ -1,19 +1,28 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class Player_SearchAera : MonoBehaviour
 {
-    private void OnTriggerEnter(Collider other)
-    {
-        if(other.CompareTag("DropItem"))
-        {
-            Item_Drop drop = other.GetComponent<Item_Drop>();
-            (Item_Base item, int count) = drop.Get_Item();
 
-            if (!Player_Manager.instance.inventory.IsFull(item))
+    private void OnTriggerStay(Collider other)
+    {
+        if (other.CompareTag("DropItem"))
+        {
+            Debug.Log(other);
+            Item_Drop drop = other.GetComponent<Item_Drop>();
+            Debug.Log(drop);
+
+            if (drop != null)
             {
-                drop.Movement();
+                Debug.Log("add Check");
+
+                // 남은 자리 체크
+                (Item_Base item, int count) = drop.Get_Item();
+                if (!Player_Manager.instance.inventory.IsFull(item))
+                {
+                    // 아이템 추가
+                    Debug.Log("item add");
+                    drop.Item_Add();
+                }
             }
         }
     }
