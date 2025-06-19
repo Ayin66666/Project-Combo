@@ -5,7 +5,7 @@ using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
 
-public class Inventory_Slot : MonoBehaviour, IPointerClickHandler, IBeginDragHandler, IDragHandler, IEndDragHandler
+public class Inventory_Slot : MonoBehaviour, IPointerClickHandler, IPointerEnterHandler , IPointerExitHandler /*IBeginDragHandler, IDragHandler, IEndDragHandler*/
 {
     [Header("---Item Data---")]
     public Item_Base item;
@@ -20,7 +20,6 @@ public class Inventory_Slot : MonoBehaviour, IPointerClickHandler, IBeginDragHan
 
     [Header("---Drog UI---")]
     [SerializeField] private GameObject dragUI;
-    [SerializeField] private RectTransform rectTransform;
     [SerializeField] private Image dragUIIcon;
 
 
@@ -61,7 +60,7 @@ public class Inventory_Slot : MonoBehaviour, IPointerClickHandler, IBeginDragHan
     /// </summary>
     public void Slot_Use()
     {
-        if(!haveItem)
+        if (!haveItem)
         {
             return;
         }
@@ -94,7 +93,7 @@ public class Inventory_Slot : MonoBehaviour, IPointerClickHandler, IBeginDragHan
     public void OnPointerClick(PointerEventData eventData)
     {
         // 마우스 오른쪽 클릭만 체크
-        if(eventData.button == PointerEventData.InputButton.Right)
+        if (eventData.button == PointerEventData.InputButton.Right)
         {
             // 아이템이 있다면 동작 - 없으면 무시
             if (haveItem)
@@ -105,6 +104,24 @@ public class Inventory_Slot : MonoBehaviour, IPointerClickHandler, IBeginDragHan
         }
     }
 
+    public void OnPointerEnter(PointerEventData eventData)
+    {
+        if (haveItem)
+        {
+            UI_Manager.instance.Item_DescriptionUI(true, item);
+        }
+    }
+
+    public void OnPointerExit(PointerEventData eventData)
+    {
+        if (haveItem)
+        {
+            UI_Manager.instance.Item_DescriptionUI(false, null);
+        }
+    }
+
+    // 드래그 기능 - 일단 비활성화
+    /*
     // 드래그 시작
     public void OnBeginDrag(PointerEventData eventData)
     {
@@ -159,5 +176,8 @@ public class Inventory_Slot : MonoBehaviour, IPointerClickHandler, IBeginDragHan
         // 아래에 아이템 슬롯이 없다면 - 원위치
         rectTransform.anchoredPosition = Vector2.zero;
     }
+    */
+
+
     #endregion
 }

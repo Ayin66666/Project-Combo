@@ -25,6 +25,7 @@ public class UI_Manager : MonoBehaviour
     [Header("---UI Set---")]
     [SerializeField] private GameObject fightUI;
     [SerializeField] private GameObject playerUI;
+    [SerializeField] private RectTransform canvas;
 
 
     [Header("---Player UI---")]
@@ -112,7 +113,12 @@ public class UI_Manager : MonoBehaviour
 
 
     [Header("---Inventory---")]
+    [SerializeField] private Vector2 offSet;
     [SerializeField] private GameObject itemDescriptionSet;
+    [SerializeField] private RectTransform itemDescriptionTrans;
+    [SerializeField] private Image itemIconImage;
+    [SerializeField] private TextMeshProUGUI itemNameText;
+    [SerializeField] private TextMeshProUGUI itemTierText;
     [SerializeField] private TextMeshProUGUI itemDescriptionText;
 
 
@@ -664,8 +670,72 @@ public class UI_Manager : MonoBehaviour
     /// <param name="item"></param>
     public void Item_DescriptionUI(bool isOn, Item_Base item)
     {
+        if (isOn)
+        {
+            // 위치 조절
+            itemDescriptionTrans.anchoredPosition = GetTooltipPositionWithClamp(canvas, itemDescriptionTrans, Input.mousePosition, offSet);
+
+            // UI 최신화
+            itemIconImage.sprite = item.Icon;
+            itemNameText.text = item.ItemName;
+            itemTierText.text = $"{item.itemRating} ({item.itemType})";
+            itemDescriptionText.text = item.ItemDescription;
+        }
+
         itemDescriptionSet.SetActive(isOn);
-        itemDescriptionText.text = isOn ? item.ItemDescription : null;
+    }
+
+    /// <summary>
+    /// 설명 UI 위치 업데이트
+    /// </summary>
+    public void Item_DescriptionUIPosUpdata()
+    {
+        if(itemDescriptionSet.activeSelf)
+        {
+            itemDescriptionTrans.anchoredPosition = GetTooltipPositionWithClamp(canvas, itemDescriptionTrans, Input.mousePosition, offSet);
+        }
+    }
+
+    /// <summary>
+    /// Inventory UI 표기 위치 설정 UI
+    /// </summary>
+    /// <param name="canvasRect"></param>
+    /// <param name="tooltipRect"></param>
+    /// <param name="mouseScreenPosition"></param>
+    /// <param name="offset"></param>
+    /// <returns></returns>
+    private Vector2 GetTooltipPositionWithClamp(RectTransform canvasRect, RectTransform tooltipRect, Vector2 mouseScreenPosition, Vector2 offset)
+    {
+        // 마우스 → 로컬(UI) 좌표 변환
+        RectTransformUtility.ScreenPointToLocalPointInRectangle(
+            canvasRect,
+            mouseScreenPosition,
+            null,
+            out Vector2 localPoint
+        );
+
+        Vector2 anchoredPos = localPoint + offset;
+
+        // 보정값 계산
+        Vector2 tooltipSize = tooltipRect.sizeDelta;
+        Vector2 canvasSize = canvasRect.rect.size;
+
+        float halfCanvasW = canvasSize.x / 2f;
+        float halfCanvasH = canvasSize.y / 2f;
+
+        // X 보정
+        if (anchoredPos.x + tooltipSize.x > halfCanvasW)
+            anchoredPos.x = halfCanvasW - tooltipSize.x;
+        if (anchoredPos.x < -halfCanvasW)
+            anchoredPos.x = -halfCanvasW;
+
+        // Y 보정
+        if (anchoredPos.y + tooltipSize.y > halfCanvasH)
+            anchoredPos.y = halfCanvasH - tooltipSize.y;
+        if (anchoredPos.y < -halfCanvasH)
+            anchoredPos.y = -halfCanvasH;
+
+        return anchoredPos;
     }
     #endregion
 }
