@@ -46,8 +46,14 @@ public class UI_Manager : MonoBehaviour
     [SerializeField] private Slider hpBSlider;
     [SerializeField] private TextMeshProUGUI hpText;
     [SerializeField] private Slider staminaSlider;
-    [SerializeField] private Slider awankingSlider;
+    [SerializeField] private Slider awakeningSlider;
+    [SerializeField] private GameObject awakeningObj;
     private Coroutine hpCoroutine;
+
+
+    [Header("---Recovery---")]
+    [SerializeField] private GameObject recoveryTextObject;
+    [SerializeField] private Collider damagePosCollider;
 
 
     [Header("---Attack Guide---")]
@@ -153,7 +159,7 @@ public class UI_Manager : MonoBehaviour
         if (isUIOn)
         {
             Stamina();
-            Awanking();
+            Awakening();
         }
     }
 
@@ -207,8 +213,8 @@ public class UI_Manager : MonoBehaviour
         staminaSlider.maxValue = pManager.status.maxStamina;
         staminaSlider.value = pManager.status.curStamina;
 
-        awankingSlider.maxValue = pManager.status.maxAwakening;
-        awankingSlider.value = pManager.status.curAwakening;
+        awakeningSlider.maxValue = pManager.status.maxAwakening;
+        awakeningSlider.value = pManager.status.curAwakening;
     }
 
     public void Hp()
@@ -235,9 +241,49 @@ public class UI_Manager : MonoBehaviour
         staminaSlider.value = pManager.status.curStamina;
     }
 
-    public void Awanking()
+    public void Awakening()
     {
-        awankingSlider.value = pManager.status.curAwakening;
+        awakeningSlider.value = pManager.status.curAwakening;
+    }
+
+    /// <summary>
+    /// 각성 가능 여부 UI On/Off
+    /// </summary>
+    /// <param name="isOn"></param>
+    public void Awakening_Setting(bool isOn)
+    {
+        //  여기 작업 필요함!
+
+        awakeningObj.SetActive(isOn);
+    }
+
+    /// <summary>
+    /// 아이템 및 효과로 회복 시 UI 표기
+    /// </summary>
+    /// <param name="type">0 = 체력, 1 = 스테미너 2 = </param>
+    /// <param name="value"></param>
+    public void PlayerUI_Recovery(Player_Status.RecoveryType type, int value)
+    {
+        // 회복 텍스트 출력
+        GameObject obj = Instantiate(recoveryTextObject, HitVFXPos(), Quaternion.identity);
+        DamageUI d = obj.GetComponent<DamageUI>();
+        d.RecoveryUI_Setting(type, value);
+    }
+
+    private Vector3 HitVFXPos()
+    {
+        Vector3 originPosition = damagePosCollider.transform.position;
+
+        // 콜라이더의 사이즈를 가져오는 bound.size 사용
+        float range_X = damagePosCollider.bounds.size.x;
+        float range_Y = damagePosCollider.bounds.size.y;
+
+        range_X = Random.Range((range_X / 2) * -1, range_X / 2);
+        range_Y = Random.Range((range_Y / 2) * -1, range_Y / 2);
+        Vector3 RandomPostion = new Vector3(range_X, range_Y);
+
+        Vector3 respawnPosition = originPosition + RandomPostion;
+        return respawnPosition;
     }
     #endregion
 

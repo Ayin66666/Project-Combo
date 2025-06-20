@@ -476,7 +476,7 @@ public class PlayerAction_Manager : MonoBehaviour, IDamageSysteam
 
                 // 피격 데미지 UI
                 GameObject obj = Instantiate(hitDamageUI, HitVFXPos(), transform.rotation);
-                obj.GetComponent<DamageUI>().Setting(type, isCritical, calendDamage);
+                obj.GetComponent<DamageUI>().DamageUI_Setting(type, isCritical, calendDamage);
 
                 // 피격 이펙트
                 // Instantiate((type == IDamageSysteam.DamageType.Physical ? hitVFX[0] : hitVFX[1]), transform.position, Quaternion.identity);

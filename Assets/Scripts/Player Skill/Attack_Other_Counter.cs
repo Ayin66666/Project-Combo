@@ -94,7 +94,7 @@ public class Attack_Other_Counter : Attack_Base
         PlayerAction_Manager.instance.LookAt();
 
         // 게이지 상승
-        Player_Manager.instance.status.AwankingAdd(20);
+        Player_Manager.instance.status.Recovery(Player_Status.RecoveryType.Awakening, 20);
 
         // 애니메이션
         anim.SetTrigger("Action");

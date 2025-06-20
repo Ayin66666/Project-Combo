@@ -5,6 +5,7 @@ using UnityEngine;
 public class Player_Status : MonoBehaviour
 {
     public static Player_Status instacne;
+    public enum RecoveryType { Hp, Stamina, Awakening }
 
 
     [Header("---Status---")]
@@ -41,6 +42,7 @@ public class Player_Status : MonoBehaviour
     public List<int> expList;
     private int baseExp = 500;
     private float growth = 1.5f;
+
 
 
     private void Awake()
@@ -91,7 +93,6 @@ public class Player_Status : MonoBehaviour
     }
     #endregion
 
-
     /// <summary>
     /// 스테미너 자연 회복
     /// </summary>
@@ -104,47 +105,55 @@ public class Player_Status : MonoBehaviour
 
     #region Item Recovery & Equipment
     /// <summary>
-    /// 체력 회복
+    /// 아이템 & 효과로 인한 회복 기능
     /// </summary>
+    /// <param name="type"></param>
     /// <param name="value"></param>
-    public void HpAdd(int value)
+    public void Recovery(RecoveryType type, int value)
     {
-        curhp += value;
-        if (curhp >= maxHp)
+        // 회복 로직
+        switch (type)
         {
-            curhp = maxHp;
-        }
-    }
+            case RecoveryType.Hp:
+                curhp += value;
+                if (curhp >= maxHp)
+                {
+                    // 스테이터스 증가
+                    curhp = maxHp;
+                }
+                break;
 
-    /// <summary>
-    /// 스테미너 회복
-    /// </summary>
-    /// <param name="value"></param>
-    public void StaminaAdd(int value)
-    {
-        curStamina += value;
-        if (curStamina >= maxStamina)
-        {
-            curStamina = maxStamina;
-        }
-    }
+            case RecoveryType.Stamina:
+                curStamina += value;
+                if (curStamina >= maxStamina)
+                {
+                    // 스테이터스 증가
+                    curStamina = maxStamina;
+                }
+                break;
 
-    /// <summary>
-    /// 각성 게이지 회복
-    /// </summary>
-    /// <param name="value"></param>
-    public void AwankingAdd(int value)
-    {
-        curAwakening += value;
-        if (curAwakening >= maxAwakening)
-        {
-            // 최대치를 넘을 경우
-            curAwakening = maxAwakening;
+            case RecoveryType.Awakening:
+                curAwakening += value;
+                if (curAwakening >= maxAwakening)
+                {
+                    // 최대치를 넘을 경우
+                    curAwakening = maxAwakening;
 
-            // 각성 활성화
-            if (!PlayerAction_Manager.instance.canAwakning)
-                PlayerAction_Manager.instance.canAwakning = true;
+                    // 각성 활성화
+                    if (!PlayerAction_Manager.instance.canAwakning)
+                    {
+                        // 각성 활성화
+                        PlayerAction_Manager.instance.canAwakning = true;
+
+                        // 각성 UI 표기
+                        UI_Manager.instance.Awakening_Setting(true);
+                    }
+                }
+                break;
         }
+
+        // UI 표기
+        UI_Manager.instance.PlayerUI_Recovery(type, value);
     }
 
     /// <summary>

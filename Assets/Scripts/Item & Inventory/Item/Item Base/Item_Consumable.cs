@@ -41,9 +41,9 @@ public class Item_Consumable : Item_Base
     /// </summary>
     private void OneOff()
     {
-        Player_Manager.instance.status.HpAdd(healing);
-        Player_Manager.instance.status.StaminaAdd(stamina);
-        Player_Manager.instance.status.AwankingAdd(awakening);
+        Player_Manager.instance.status.Recovery(Player_Status.RecoveryType.Hp, healing);
+        Player_Manager.instance.status.Recovery(Player_Status.RecoveryType.Stamina, stamina);
+        Player_Manager.instance.status.Recovery(Player_Status.RecoveryType.Awakening, awakening);
     }
 
     /// <summary>
@@ -64,9 +64,9 @@ public class Item_Consumable : Item_Base
                 intervalTimer = 0f;
 
                 // Æ½¸¶´Ù È¸º¹
-                Player_Manager.instance.status.HpAdd(healing);
-                Player_Manager.instance.status.StaminaAdd(stamina);
-                Player_Manager.instance.status.AwankingAdd(awakening);
+                Player_Manager.instance.status.Recovery(Player_Status.RecoveryType.Hp, healing);
+                Player_Manager.instance.status.Recovery(Player_Status.RecoveryType.Stamina, stamina);
+                Player_Manager.instance.status.Recovery(Player_Status.RecoveryType.Awakening, awakening);
             }
 
             yield return null;

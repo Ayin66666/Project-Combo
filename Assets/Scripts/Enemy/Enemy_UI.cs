@@ -206,7 +206,7 @@ public class Enemy_UI : MonoBehaviour
     public void DamageUI(IDamageSysteam.DamageType type, bool isCritical, int damage)
     {
         GameObject obj = Instantiate(damageUI, HitVFXPos(), Quaternion.identity);
-        obj.GetComponent<DamageUI>().Setting(type, isCritical, damage);
+        obj.GetComponent<DamageUI>().DamageUI_Setting(type, isCritical, damage);
     }
 
     private Vector3 HitVFXPos()
