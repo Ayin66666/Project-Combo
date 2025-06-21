@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using UnityEngine;
+using static Item_Equipment;
 
 
 public class Player_Status : MonoBehaviour
@@ -161,25 +162,25 @@ public class Player_Status : MonoBehaviour
     /// </summary>
     /// <param name="isOn"></param>
     /// <param name="status"></param>
-    public void Equipment_Status_Setting(bool isEquip, Equipment_Status_SO status)
+    public void Equipment_Status_Setting(bool isEquip, ItemStatus status)
     {
         int equip = isEquip ? 1 : -1;
 
         // 스테이터스 적용
-        physicalDamage += status.PhysicalDamage * equip;
-        magicalDamage += status.MagicalDamage * equip;
-        criticalhit += status.CriticalHit * equip;
-        critical_multiplier += status.CriticalMultiplier * equip;
-        attackSpeed += status.AttackSpeed * equip;
+        physicalDamage += status.physicalDamage * equip;
+        magicalDamage += status.magicalDamage * equip;
+        criticalhit += status.criticalhit * equip;
+        critical_multiplier += status.critical_multiplier * equip;
+        attackSpeed += status.attackSpeed * equip;
 
-        maxHp += status.MaxHp * equip;
-        physicalDefence += status.PhysicalDefence * equip;
-        magicalDefence += status.MagicalDefence * equip;
+        maxHp += status.maxHp * equip;
+        physicalDefence += status.physicalDefence * equip;
+        magicalDefence += status.magicalDefence * equip;
 
-        moveSpeed += status.MoveSpeed * equip;
-        maxStamina += status.MaxStamina * equip;
-        maxAwakening += status.MaxAwakening * equip;
-        staminaRecovery += status.StaminaRecovery * equip;
+        moveSpeed += status.moveSpeed * equip;
+        maxStamina += status.maxStamina * equip;
+        maxAwakening += status.maxAwakening * equip;
+        staminaRecovery += status.staminaRecovery * equip;
     }
     #endregion
 

@@ -44,6 +44,9 @@ public class Attack_Other_Awankning : Attack_Base
         PlayerAction_Manager.instance.isAwakning = true;
         PlayerAction_Manager.instance.Special_Setting(true);
 
+        // 사용 가능 UI Off
+        UI_Manager.instance.Awakening_Setting(false);
+
         // 이펙트 On
         awankningVFX.SetActive(true);
         swordVFX.SetActive(true);

@@ -252,8 +252,6 @@ public class UI_Manager : MonoBehaviour
     /// <param name="isOn"></param>
     public void Awakening_Setting(bool isOn)
     {
-        //  여기 작업 필요함!
-
         awakeningObj.SetActive(isOn);
     }
 
