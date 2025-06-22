@@ -43,6 +43,8 @@ public class Item_Equipment : Item_Base
     /// </summary>
     public override void Use()
     {
+        Debug.Log("장비 착용");
+
         // 스테이터스 증가
         Player_Manager.instance.status.Equipment_Status_Setting(true, equipment_Status);
     }

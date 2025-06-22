@@ -30,6 +30,8 @@ public class Item_Effect_Healing : Item_Effect_SO
         }
     }
 
+
+
     /// <summary>
     /// 단발 회복 동작
     /// </summary>
@@ -58,7 +60,7 @@ public class Item_Effect_Healing : Item_Effect_SO
             {
                 intervalTimer = 0f;
 
-                // 틱마다 회복
+                // 틱 회복
                 Player_Manager.instance.status.Recovery(Player_Status.RecoveryType.Hp, hp);
                 Player_Manager.instance.status.Recovery(Player_Status.RecoveryType.Stamina, stamina);
                 Player_Manager.instance.status.Recovery(Player_Status.RecoveryType.Awakening, awakning);

@@ -30,10 +30,17 @@ public class DamageUI : MonoBehaviour
     /// <param name="damage"></param>
     public void DamageUI_Setting(IDamageSysteam.DamageType type, bool isCritical, int damage)
     {
+        Debug.Log($"타입 : {type} 크리티컬 : {isCritical} 데미지 : {damage}");
+        
+        // 보더 셋팅
         borderImage.color = type == IDamageSysteam.DamageType.Physical ? damageColor[0] : damageColor[1];
         borderImage.sprite = isCritical ? borderSprite[0] : borderSprite[1];
+        borderImage.gameObject.SetActive(true);
+        
+        // 텍스트 셋팅
         valueText.text = damage.ToString();
 
+        // UI 동작
         StartCoroutine(LookAk());
         StartCoroutine(Movement());
     }
@@ -45,10 +52,16 @@ public class DamageUI : MonoBehaviour
     /// <param name="value"></param>
     public void RecoveryUI_Setting(Player_Status.RecoveryType type, int value)
     {
-        borderImage.color = new Color(0, 0, 0, 0);
-        valueText.text = value.ToString();
-        valueText.color = recoveryColor[(int)type];
+        Debug.Log($"타입 : {type}회복 : {value}");
 
+        // 보더 셋팅
+        borderImage.gameObject.SetActive(false);
+
+        // 텍스트 셋팅
+        valueText.color = recoveryColor[(int)type];
+        valueText.text = value.ToString();
+
+        // UI 동작
         StartCoroutine(LookAk());
         StartCoroutine(Movement());
     }

@@ -20,6 +20,13 @@ public class Player_Manager : MonoBehaviour
     [SerializeField] private GameObject playerMovement;
     [SerializeField] private Animator anim;
 
+    #region 프로퍼티
+    public GameObject Player
+    {
+        get { return playerMovement; } private set { playerMovement = value; }
+    }
+    #endregion
+
 
     private void Awake()
     {

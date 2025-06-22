@@ -19,6 +19,10 @@ public class Item_Consumable : Item_Base
     [SerializeField] private int awakening;
 
 
+    [Header("---Effect---")]
+    [SerializeField] private GameObject recoveryVFX;
+
+
     public override void Use()
     {
         switch (consumableType)
@@ -41,6 +45,10 @@ public class Item_Consumable : Item_Base
     /// </summary>
     private void OneOff()
     {
+        // 회복 이펙트
+        Instantiate(recoveryVFX, Player_Manager.instance.Player.transform.position, Quaternion.identity);
+
+        // 회복
         Player_Manager.instance.status.Recovery(Player_Status.RecoveryType.Hp, healing);
         Player_Manager.instance.status.Recovery(Player_Status.RecoveryType.Stamina, stamina);
         Player_Manager.instance.status.Recovery(Player_Status.RecoveryType.Awakening, awakening);
@@ -62,6 +70,9 @@ public class Item_Consumable : Item_Base
             if (intervalTimer >= heal_interval)
             {
                 intervalTimer = 0f;
+
+                // 회복 이펙트
+                Instantiate(recoveryVFX, Player_Manager.instance.Player.transform.position, Quaternion.identity);
 
                 // 틱마다 회복
                 Player_Manager.instance.status.Recovery(Player_Status.RecoveryType.Hp, healing);

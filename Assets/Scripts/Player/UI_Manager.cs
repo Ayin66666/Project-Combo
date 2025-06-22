@@ -258,7 +258,7 @@ public class UI_Manager : MonoBehaviour
     /// <summary>
     /// 아이템 및 효과로 회복 시 UI 표기
     /// </summary>
-    /// <param name="type">0 = 체력, 1 = 스테미너 2 = </param>
+    /// <param name="type">0 = 체력, 1 = 스테미너 2 = 각성 </param>
     /// <param name="value"></param>
     public void PlayerUI_Recovery(Player_Status.RecoveryType type, int value)
     {

@@ -68,23 +68,39 @@ public class Inventory_Slot : MonoBehaviour, IPointerClickHandler, IPointerEnter
         switch (item.itemType)
         {
             case Item_Base.Item_Type.Equipment:
+                Use_Equipment();
                 break;
 
             case Item_Base.Item_Type.Consumable:
-                item.Use();
-                itemCount--;
-                countText.text = itemCount.ToString();
-
-                if (itemCount <= 0)
-                {
-                    Slot_Reset();
-                }
+                Use_Consumable();
                 break;
 
             case Item_Base.Item_Type.Other:
+                Use_Other();
                 break;
         }
 
+    }
+
+    private void Use_Equipment()
+    {
+        item.Use();
+    }
+
+    private void Use_Consumable()
+    {
+        item.Use();
+        itemCount--;
+        countText.text = itemCount.ToString();
+        if (itemCount <= 0)
+        {
+            Slot_Reset();
+        }
+    }
+
+    private void Use_Other()
+    {
+        item.Use();
     }
     #endregion
 
