@@ -12,7 +12,6 @@ public class Item_Equipment : Item_Base
     public List<Item_Effect_SO> effectList; // 스크립트 추가 필요
     public enum EquipmentType { Weapon, Head, Body, Pants, Shoes, Core }
 
-
     [System.Serializable]
     public struct ItemStatus
     {

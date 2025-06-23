@@ -13,6 +13,7 @@ public class Player_Manager : MonoBehaviour
     public Inventory_Manager inventory;
     public Cooldown_Manager cooldown;
     public ShortCut_Manager shortCut;
+    public Equipment_Manager equipment;
 
 
     [Header("---Player---")]

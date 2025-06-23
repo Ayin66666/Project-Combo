@@ -1,5 +1,7 @@
-using UnityEngine;
 using UnityEngine.EventSystems;
+using UnityEngine;
+using UnityEngine.UI;
+
 
 public class Inventory_Slot_Equipment : MonoBehaviour, IPointerClickHandler, IPointerEnterHandler, IPointerExitHandler
 {
@@ -8,15 +10,29 @@ public class Inventory_Slot_Equipment : MonoBehaviour, IPointerClickHandler, IPo
     public bool haveItem;
 
 
-    public void Equipment(Item_Equipment item)
-    {
-        // 플레이어 매니저에 스텟 증감 - 이거 따로 함수 뽑아둘건지?
-        Player_Manager.instance.status.Equipment_Status_Setting(true, item.equipment_Status);
-    }
+    [Header("---UI---")]
+    [SerializeField] private Image icon;
 
-    public void UnEquipment()
+
+    #region 프로퍼티
+    public Item_Equipment Item { get { return item; } private set { item = value; } }
+    #endregion
+
+
+    public void Item_Setting(bool equipment, Item_Equipment item)
     {
-        // 플레이어 매니저에 스텟 증강 - 이거 따로 함수 뽑아둘건지?
+        if(equipment)
+        {
+            // 장비 착용
+            icon.sprite = item.Icon;
+            this.item = item;
+        }
+        else
+        {
+            // 장비 해제
+            icon.sprite = null;
+            this.item = null;
+        }
     }
 
 
@@ -26,7 +42,7 @@ public class Inventory_Slot_Equipment : MonoBehaviour, IPointerClickHandler, IPo
         if (eventData.button == PointerEventData.InputButton.Right)
         {
             // 마우스 우클릭 시 - 아이템 해제
-            UnEquipment();
+            Player_Manager.instance.equipment.EnEquipment(this);
         }
     }
 
@@ -34,6 +50,7 @@ public class Inventory_Slot_Equipment : MonoBehaviour, IPointerClickHandler, IPo
     {
         if (haveItem)
         {
+            // 아이템 설명 UI On - 장비 아이템용 UI로 변경 필요
             UI_Manager.instance.Item_DescriptionUI(true, item);
         }
     }
@@ -42,6 +59,7 @@ public class Inventory_Slot_Equipment : MonoBehaviour, IPointerClickHandler, IPo
     {
         if (haveItem)
         {
+            // 아이템 설명 UI Off - 장비 아이템용 UI로 변경 필요
             UI_Manager.instance.Item_DescriptionUI(false, null);
         }
     }
