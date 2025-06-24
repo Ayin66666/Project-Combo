@@ -230,7 +230,6 @@ public class SaveLoad_Manager : MonoBehaviour
         }
     }
 
-
     public void NewDataUI(bool isOn)
     {
         newDataUI.SetActive(isOn);

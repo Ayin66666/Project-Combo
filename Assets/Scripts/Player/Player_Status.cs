@@ -163,25 +163,53 @@ public class Player_Status : MonoBehaviour
     /// </summary>
     /// <param name="isOn"></param>
     /// <param name="status"></param>
-    public void Equipment_Status_Setting(bool isEquip, ItemStatus status)
+    public void Equipment_Status_Setting(bool isEquip, List<Equipment_Status> status)
     {
         int equip = isEquip ? 1 : -1;
 
         // 스테이터스 적용
-        physicalDamage += status.physicalDamage * equip;
-        magicalDamage += status.magicalDamage * equip;
-        criticalhit += status.criticalhit * equip;
-        critical_multiplier += status.critical_multiplier * equip;
-        attackSpeed += status.attackSpeed * equip;
+        foreach(Equipment_Status st in status)
+        {
+            float value = st.value * equip;
+            switch (st.type)
+            {
+                case StatusType.PDamage:
+                    physicalDamage += Mathf.RoundToInt(value);
+                    break;
 
-        maxHp += status.maxHp * equip;
-        physicalDefence += status.physicalDefence * equip;
-        magicalDefence += status.magicalDefence * equip;
+                case StatusType.MDamage:
+                    magicalDamage += Mathf.RoundToInt(value);
+                    break;
 
-        moveSpeed += status.moveSpeed * equip;
-        maxStamina += status.maxStamina * equip;
-        maxAwakening += status.maxAwakening * equip;
-        staminaRecovery += status.staminaRecovery * equip;
+                case StatusType.Criticalhit:
+                    criticalhit += value;
+                    break;
+
+                case StatusType.Critical_multiplier:
+                    critical_multiplier += value;
+                    break;
+
+                case StatusType.MaxHp:
+                    maxHp += Mathf.RoundToInt(value);
+                    break;
+
+                case StatusType.PhysicalDefence:
+                    physicalDefence += Mathf.RoundToInt(value);
+                    break;
+
+                case StatusType.MagicalDefence:
+                    magicalDefence += Mathf.RoundToInt(value);
+                    break;
+
+                case StatusType.MoveSpeed:
+                    moveSpeed += Mathf.RoundToInt(value);
+                    break;
+
+                case StatusType.StaminaRecovery:
+                    staminaRecovery += Mathf.RoundToInt(value);
+                    break;
+            }
+        }
     }
     #endregion
 

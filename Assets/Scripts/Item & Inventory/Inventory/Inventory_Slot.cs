@@ -124,7 +124,14 @@ public class Inventory_Slot : MonoBehaviour, IPointerClickHandler, IPointerEnter
     {
         if (haveItem)
         {
-            UI_Manager.instance.Item_DescriptionUI(true, item);
+            if(item.itemType == Item_Base.Item_Type.Equipment)
+            {
+                UI_Manager.instance.ItemEquipment_DescriptionUI(true, (Item_Equipment)item);
+            }
+            else
+            {
+                UI_Manager.instance.Item_DescriptionUI(true, item);
+            }
         }
     }
 
@@ -132,7 +139,15 @@ public class Inventory_Slot : MonoBehaviour, IPointerClickHandler, IPointerEnter
     {
         if (haveItem)
         {
-            UI_Manager.instance.Item_DescriptionUI(false, null);
+            if (item.itemType == Item_Base.Item_Type.Equipment)
+            {
+                UI_Manager.instance.ItemEquipment_DescriptionUI(false, null);
+            }
+            else
+            {
+                UI_Manager.instance.Item_DescriptionUI(false, null);
+            }
+
         }
     }
 

@@ -51,7 +51,7 @@ public class Inventory_Slot_Equipment : MonoBehaviour, IPointerClickHandler, IPo
         if (haveItem)
         {
             // 아이템 설명 UI On - 장비 아이템용 UI로 변경 필요
-            UI_Manager.instance.Item_DescriptionUI(true, item);
+            UI_Manager.instance.ItemEquipment_DescriptionUI(true, item);
         }
     }
 
@@ -60,7 +60,7 @@ public class Inventory_Slot_Equipment : MonoBehaviour, IPointerClickHandler, IPo
         if (haveItem)
         {
             // 아이템 설명 UI Off - 장비 아이템용 UI로 변경 필요
-            UI_Manager.instance.Item_DescriptionUI(false, null);
+            UI_Manager.instance.ItemEquipment_DescriptionUI(false, null);
         }
     }
     #endregion

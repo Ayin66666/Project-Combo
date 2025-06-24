@@ -5,35 +5,45 @@ using UnityEngine;
 [CreateAssetMenu(fileName = "Item Equipment", menuName = "Item/Item Equipment", order = int.MaxValue)]
 public class Item_Equipment : Item_Base
 {
-    [Header("---Equipment Setting---")]
+    [Header("---Equipment Status---")]
     public EquipmentType equipmentType;
-    public ItemStatus equipment_Status;
+    public List<Equipment_Status> equipment_Status;
+
+
+    [Header("---Equipment Effect---")]
     public bool haveEffect;
-    public List<Item_Effect_SO> effectList; // 스크립트 추가 필요
+    public List<Item_Effect_SO> effectList;
+
+
+    [Header("---Epuipment UI---")]
+    [TextArea] public string statusText;
+    [TextArea] public string damageText;
+
+    [HideInInspector] public string[] typeText = new string[] 
+    { 
+        "무기", "머리", "상의", "하의", "신발", "코어" 
+    };
+
+    [HideInInspector] public string[] effectText = new string[]
+    {
+        "물리 공격력", "마법 공격력", "치명타 확률", "치명타 피해",
+        "최대 체력", "물리 방어력", "마법 방어력",
+        "이동 속도", "스테미너 회복력"
+    };
+
     public enum EquipmentType { Weapon, Head, Body, Pants, Shoes, Core }
+    public enum StatusType 
+    { 
+        PDamage, MDamage, Criticalhit, Critical_multiplier, 
+        MaxHp, PhysicalDefence, MagicalDefence, 
+        MoveSpeed, StaminaRecovery
+    };
 
     [System.Serializable]
-    public struct ItemStatus
+    public struct Equipment_Status
     {
-        [Header("---Attack Status---")]
-        public int physicalDamage;
-        public int magicalDamage;
-        public float attackSpeed;
-        public float criticalhit;
-        public float critical_multiplier;
-
-
-        [Header("---Defence Status---")]
-        [SerializeField] public int maxHp;
-        public int physicalDefence;
-        public int magicalDefence;
-
-
-        [Header("---Other Status---")]
-        [SerializeField] public float moveSpeed;
-        public float maxStamina;
-        public float maxAwakening;
-        public float staminaRecovery;
+        public StatusType type;
+        public float value;
     }
 
 
@@ -42,8 +52,6 @@ public class Item_Equipment : Item_Base
     /// </summary>
     public override void Use()
     {
-        Debug.Log("장비 착용");
-
         // 스테이터스 증가
         Player_Manager.instance.status.Equipment_Status_Setting(true, equipment_Status);
     }

@@ -1,5 +1,6 @@
 using DG.Tweening;
 using Easing.Tweening;
+using NUnit.Framework.Constraints;
 using System.Collections;
 using System.Collections.Generic;
 using TMPro;
@@ -126,6 +127,18 @@ public class UI_Manager : MonoBehaviour
     [SerializeField] private TextMeshProUGUI itemNameText;
     [SerializeField] private TextMeshProUGUI itemTierText;
     [SerializeField] private TextMeshProUGUI itemDescriptionText;
+
+
+    [Header("---Inventory Equipment---")]
+    [SerializeField] private Vector2 offSet_Equipment;
+    [SerializeField] private GameObject equipmentDescriptionSet;
+    [SerializeField] private RectTransform equipmentDescriptionTrans;
+    [SerializeField] private Image equipmentIconImage;
+    [SerializeField] private TextMeshProUGUI equipmentNameText;
+    [SerializeField] private TextMeshProUGUI equipmentTypeText;
+    [SerializeField] private TextMeshProUGUI equipmentEffectTypeText;
+    [SerializeField] private TextMeshProUGUI equipmentEffectValueText;
+    [SerializeField] private TextMeshProUGUI equipmentDescriptionText;
 
 
     [Header("---Short Cut---")]
@@ -634,7 +647,7 @@ public class UI_Manager : MonoBehaviour
     /// <param name="isOn"></param>
     private void PlayerUIButton_Setting(bool isOn)
     {
-        foreach(GameObject button in buttonSet)
+        foreach (GameObject button in buttonSet)
         {
             button.SetActive(isOn);
         }
@@ -730,11 +743,42 @@ public class UI_Manager : MonoBehaviour
     }
 
     /// <summary>
+    /// 장비 아이템용 아이템 슬롯 마우스 오버 시 설명 UI
+    /// </summary>
+    /// <param name="isOn"></param>
+    /// <param name="item"></param>
+    public void ItemEquipment_DescriptionUI(bool isOn, Item_Equipment item)
+    {
+        if (isOn)
+        {
+            // 위치 조절
+            equipmentDescriptionTrans.anchoredPosition = GetTooltipPositionWithClamp(canvas, itemDescriptionTrans, Input.mousePosition, offSet_Equipment);
+
+            // UI 최신화
+            equipmentIconImage.sprite = item.Icon;
+            equipmentNameText.text = item.ItemName;
+            equipmentTypeText.text = $"{item.typeText[(int)item.equipmentType]} - {item.itemRating}";
+
+            equipmentEffectTypeText.text = null;
+            equipmentEffectValueText.text = null;
+            for (int i = 0; i < item.equipment_Status.Count; i++)
+            {
+                equipmentEffectTypeText.text += $"\n{item.effectText[(int)item.equipment_Status[i].type]}";
+                equipmentEffectValueText.text += $"\n{item.equipment_Status[i].value}";
+            }
+            equipmentDescriptionText.text = item.ItemDescription;
+
+        }
+
+        equipmentDescriptionSet.SetActive(isOn);
+    }
+
+    /// <summary>
     /// 설명 UI 위치 업데이트
     /// </summary>
     public void Item_DescriptionUIPosUpdata()
     {
-        if(itemDescriptionSet.activeSelf)
+        if (itemDescriptionSet.activeSelf)
         {
             itemDescriptionTrans.anchoredPosition = GetTooltipPositionWithClamp(canvas, itemDescriptionTrans, Input.mousePosition, offSet);
         }

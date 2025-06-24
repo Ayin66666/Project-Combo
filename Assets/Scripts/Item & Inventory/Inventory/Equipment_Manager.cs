@@ -27,7 +27,7 @@ public class Equipment_Manager : MonoBehaviour
         Dictonary_Setting();
 
         // 2. 착용 장비 데이터 로드
-        Data_Setting();
+        // Data_Setting();
     }
 
 
