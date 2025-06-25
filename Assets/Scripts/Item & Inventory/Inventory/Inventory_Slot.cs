@@ -1,4 +1,3 @@
-using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 using UnityEngine.EventSystems;
@@ -84,7 +83,11 @@ public class Inventory_Slot : MonoBehaviour, IPointerClickHandler, IPointerEnter
 
     private void Use_Equipment()
     {
-        item.Use();
+        // 장착 로직 호출
+        Debug.Log(item);
+        Debug.Log((Item_Equipment)item);
+
+        Player_Manager.instance.equipment.Equipment(this, (Item_Equipment)item);
     }
 
     private void Use_Consumable()
@@ -92,14 +95,20 @@ public class Inventory_Slot : MonoBehaviour, IPointerClickHandler, IPointerEnter
         item.Use();
         itemCount--;
         countText.text = itemCount.ToString();
+
         if (itemCount <= 0)
         {
+            // UI Off
+            UI_Manager.instance.Item_DescriptionUI(false, null);
+            
+            // 슬롯 초기화
             Slot_Reset();
         }
     }
 
     private void Use_Other()
     {
+        // 아이템 설명?
         item.Use();
     }
     #endregion

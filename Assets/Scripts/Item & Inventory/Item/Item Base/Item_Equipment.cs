@@ -48,22 +48,13 @@ public class Item_Equipment : Item_Base
 
 
     /// <summary>
-    /// 장비 착용
+    /// 장비 착용 - 실제 기능은 Equipment_Manager 에서!
     /// </summary>
     public override void Use()
     {
-        // 스테이터스 증가
-        Player_Manager.instance.status.Equipment_Status_Setting(true, equipment_Status);
+        // 실제 기능은 Equipment_Manager 에서!
     }
 
-    /// <summary>
-    /// 장비 해제
-    /// </summary>
-    public void Unequip()
-    {
-        // 스테이터스 감소
-        Player_Manager.instance.status.Equipment_Status_Setting(false, equipment_Status);
-    }
 
     /// <summary>
     /// 아이템 효과

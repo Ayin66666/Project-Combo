@@ -127,21 +127,16 @@ public class Inventory_Manager : MonoBehaviour
         return null;
     }
 
+
     /// <summary>
-    /// 두 슬롯 간 아이템 교체 기능
+    /// 장비 장착 시 기존 아이템 이동
     /// </summary>
-    /// <param name="slotA">교체 슬롯 1번</param>
-    /// <param name="slotB">교체 슬롯 2번</param>
-    public void Item_Change(Inventory_Slot slotA, Inventory_Slot slotB)
+    /// <param name="slot"></param>
+    /// <param name="itme"></param>
+    public void Item_Change(Inventory_Slot slot, Item_Base item)
     {
-        Item_Base dataA = slotA.item;
-        int countA = slotA.itemCount;
-
-        Item_Base dataB = slotB.item;
-        int countB = slotB.itemCount;
-
-        slotA.Slot_Setting(dataB, countB);
-        slotB.Slot_Setting(dataA, countA);
+        // 아이템 추가
+        slot.Slot_Setting(item, 1);
     }
 
 
