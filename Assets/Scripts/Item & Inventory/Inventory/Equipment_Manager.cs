@@ -73,9 +73,7 @@ public class Equipment_Manager : MonoBehaviour
     /// <param name="item"></param>
     public void Equipment(Inventory_Slot slot, Item_Equipment item)
     {
-        Debug.Log("Call Equipment");
-
-        if(item.equipmentType == Item_Equipment.EquipmentType.Core)
+        if (item.equipmentType == Item_Equipment.EquipmentType.Core)
         {
             // 장신구 착용 - 별개의 리스트
             for (int i = 0; i < coreSlot.Count; i++)
@@ -113,7 +111,7 @@ public class Equipment_Manager : MonoBehaviour
 
                 // 스테이터스 감소
                 Player_Manager.instance.status.Equipment_Status_Setting(false, itemSlot[item.equipmentType].Item.equipment_Status);
-               
+
                 // 기존 장착 장비 인벤토리로 복귀
                 Player_Manager.instance.inventory.Item_Change(slot, itemSlot[item.equipmentType].Item);
 
@@ -141,12 +139,15 @@ public class Equipment_Manager : MonoBehaviour
     {
         // 인벤토리 내 빈 슬롯 체크
 
-        if (true)
+        if (!Player_Manager.instance.inventory.IsFull(slot.Item))
         {
             // 빈 자리가 있다면 - 장비 해제 후 슬롯 이동
 
             // 스테이터스 초기화
             Player_Manager.instance.status.Equipment_Status_Setting(false, slot.Item.equipment_Status);
+
+            // 아이템 추가
+            Player_Manager.instance.inventory.Item_Add(slot.Item, 1);
 
             // 슬롯 초기화
             slot.Item_Setting(false, null);
@@ -154,6 +155,7 @@ public class Equipment_Manager : MonoBehaviour
         else
         {
             // 빈 자리가 없다면 - 해제불가
+            UI_Manager.instance.Item_EquipmentOnOff();
         }
     }
     #endregion

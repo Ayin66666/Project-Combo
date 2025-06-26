@@ -30,7 +30,7 @@ public class DamageUI : MonoBehaviour
     /// <param name="damage"></param>
     public void DamageUI_Setting(IDamageSysteam.DamageType type, bool isCritical, int damage)
     {
-        Debug.Log($"타입 : {type} 크리티컬 : {isCritical} 데미지 : {damage}");
+        //Debug.Log($"타입 : {type} 크리티컬 : {isCritical} 데미지 : {damage}");
         
         // 보더 셋팅
         borderImage.color = type == IDamageSysteam.DamageType.Physical ? damageColor[0] : damageColor[1];
@@ -52,7 +52,7 @@ public class DamageUI : MonoBehaviour
     /// <param name="value"></param>
     public void RecoveryUI_Setting(Player_Status.RecoveryType type, int value)
     {
-        Debug.Log($"타입 : {type}회복 : {value}");
+        // Debug.Log($"타입 : {type}회복 : {value}");
 
         // 보더 셋팅
         borderImage.gameObject.SetActive(false);

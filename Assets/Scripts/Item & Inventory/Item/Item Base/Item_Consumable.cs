@@ -33,7 +33,7 @@ public class Item_Consumable : Item_Base
 
             case ConsumableType.persistence:
                 if (Cooldown_Manager.instance.IsCooldownActive(coroutine_Key)) return;
-                Cooldown_Manager.instance.Coroutine_Delegate(coroutine_Key, Persistence());
+                Cooldown_Manager.instance.StartConsumableRoutine(coroutine_Key, timeCooldown, Persistence());
                 break;
         }
     }
@@ -46,13 +46,21 @@ public class Item_Consumable : Item_Base
     private void OneOff()
     {
         // 회복 이펙트
-        Instantiate(recoveryVFX, Player_Manager.instance.Player.transform.position, Quaternion.identity);
+        GameObject obj = Instantiate(recoveryVFX, Player_Manager.instance.Player.transform.position, Quaternion.identity);
+        obj.transform.parent = Player_Manager.instance.Player.transform;
 
         // 회복
-        Player_Manager.instance.status.Recovery(Player_Status.RecoveryType.Hp, healing);
-        Player_Manager.instance.status.Recovery(Player_Status.RecoveryType.Stamina, stamina);
-        Player_Manager.instance.status.Recovery(Player_Status.RecoveryType.Awakening, awakening);
+        if (healing > 0) 
+            Player_Manager.instance.status.Recovery(Player_Status.RecoveryType.Hp, healing);
+
+        if (stamina > 0)
+            Player_Manager.instance.status.Recovery(Player_Status.RecoveryType.Stamina, stamina);
+
+        if (awakening > 0)
+            Player_Manager.instance.status.Recovery(Player_Status.RecoveryType.Awakening, awakening);
     }
+
+
 
     /// <summary>
     /// 지속 회복 로직

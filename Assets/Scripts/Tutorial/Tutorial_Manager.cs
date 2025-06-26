@@ -91,6 +91,7 @@ public class Tutorial_Manager : MonoBehaviour
     public void Tutorial_Big(int index)
     {
         PlayerAction_Manager.instance.canAction = false;
+        Player_Manager.instance.Cursor_Setting(false);
         istutorialOn = true;
 
         Time.timeScale = 0f;
@@ -118,6 +119,7 @@ public class Tutorial_Manager : MonoBehaviour
         }
 
         PlayerAction_Manager.instance.canAction = true;
+        Player_Manager.instance.Cursor_Setting(true);
         istutorialOn = false;
     }
 

@@ -30,7 +30,6 @@ public class Item_Drop : MonoBehaviour
     {
         if(!isSpawnDelay)
         {
-            Debug.Log(item + " / " + count);
             // 아이템 셋팅
             this.item = item;
             this.count = count;

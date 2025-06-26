@@ -141,6 +141,13 @@ public class UI_Manager : MonoBehaviour
     [SerializeField] private TextMeshProUGUI equipmentDescriptionText;
 
 
+    [Header("---Equipment OnOff---")]
+    [SerializeField] private GameObject equipmentOnOffSet;
+    [SerializeField] private CanvasGroup equipmentOnOffCanvasGroup;
+    [SerializeField] private TextMeshProUGUI equipmentOnOffText;
+    private Coroutine equipmentOnOffCoroutine;
+
+
     [Header("---Short Cut---")]
     [SerializeField] private GameObject obj;
     #endregion
@@ -623,6 +630,9 @@ public class UI_Manager : MonoBehaviour
 
         // 옵션 UI 활/비활성화
         playerUI.SetActive(!playerUI.activeSelf);
+
+        // 마우스 커서 셋팅
+        Player_Manager.instance.Cursor_Setting(!playerUI.activeSelf);
     }
 
     /// <summary>
@@ -721,6 +731,36 @@ public class UI_Manager : MonoBehaviour
 
 
     #region Inventory
+    /// <summary>
+    /// 장비 해제 성공 여부 표기 UI
+    /// </summary>
+    /// <param name="isSuccess"></param>
+    public void Item_EquipmentOnOff()
+    {
+        if (equipmentOnOffCoroutine != null)
+            StopCoroutine(equipmentOnOffCoroutine);
+
+        equipmentOnOffCoroutine = StartCoroutine(ItemEquipmentOnOffCall());
+    }
+
+    private IEnumerator ItemEquipmentOnOffCall()
+    {
+        equipmentOnOffSet.SetActive(true);
+        equipmentOnOffText.text = "인벤토리 공간이 부족합니다!";
+        equipmentOnOffCanvasGroup.alpha = 1;
+
+        float timer = 0;
+        while(timer < 1)
+        {
+            timer += Time.deltaTime;
+            equipmentOnOffCanvasGroup.alpha = Mathf.Lerp(1, 0, EasingFunctions.OutExpo(timer));
+            yield return null;
+        }
+
+        equipmentOnOffCanvasGroup.alpha = 0;
+        equipmentOnOffSet.SetActive(false);
+    }
+
     /// <summary>
     /// 아이템 슬롯에 마우스 오버 시 설명 UI
     /// </summary>

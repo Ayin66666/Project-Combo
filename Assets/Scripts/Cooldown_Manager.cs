@@ -63,7 +63,6 @@ public class Cooldown_Manager : MonoBehaviour
     public void Coroutine_Delegate(string key, IEnumerator coroutine)
     {
         if (coroutine_Dictionary.ContainsKey(key)) return;
-
         coroutine_Dictionary.Add(key, StartCoroutine(coroutine));
     }
 
@@ -80,9 +79,10 @@ public class Cooldown_Manager : MonoBehaviour
         {
             duration = duration,
             startTime = Time.time,
-            coroutine = StartCoroutine(CooldownCoroutine(key))
         };
+
         cooldowns[key] = data;
+        data.coroutine = StartCoroutine(CooldownCoroutine(key));
     }
 
     /// <summary>

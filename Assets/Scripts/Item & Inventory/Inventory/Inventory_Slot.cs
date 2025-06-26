@@ -28,7 +28,6 @@ public class Inventory_Slot : MonoBehaviour, IPointerClickHandler, IPointerEnter
     /// </summary>
     public void Slot_Setting(Item_Base data, int addCount)
     {
-        Debug.Log("call slot itemSetting / " + gameObject + " / " + addCount);
         // 아이템 추가
         haveItem = true;
         item = data;
@@ -84,10 +83,13 @@ public class Inventory_Slot : MonoBehaviour, IPointerClickHandler, IPointerEnter
     private void Use_Equipment()
     {
         // 장착 로직 호출
-        Debug.Log(item);
-        Debug.Log((Item_Equipment)item);
-
         Player_Manager.instance.equipment.Equipment(this, (Item_Equipment)item);
+
+        // UI Off
+        UI_Manager.instance.ItemEquipment_DescriptionUI(false, null);
+
+        // 슬롯 초기화
+        Slot_Reset();
     }
 
     private void Use_Consumable()
@@ -108,6 +110,9 @@ public class Inventory_Slot : MonoBehaviour, IPointerClickHandler, IPointerEnter
 
     private void Use_Other()
     {
+        // UI Off
+        UI_Manager.instance.Item_DescriptionUI(false, null);
+
         // 아이템 설명?
         item.Use();
     }
@@ -123,7 +128,6 @@ public class Inventory_Slot : MonoBehaviour, IPointerClickHandler, IPointerEnter
             // 아이템이 있다면 동작 - 없으면 무시
             if (haveItem)
             {
-                Debug.Log("UseCall");
                 Slot_Use();
             }
         }

@@ -15,6 +15,8 @@ public class Item_Effect_Healing : Item_Effect_SO
     [SerializeField] private int awakning;
     protected enum Type { oneoff, persistence }
 
+    [Header("---effect---")]
+    [SerializeField] private GameObject effect;
 
     protected override void Effect()
     {
@@ -25,7 +27,7 @@ public class Item_Effect_Healing : Item_Effect_SO
                 break;
 
             case Type.persistence:
-                Cooldown_Manager.instance.Coroutine_Delegate(key, Healing_Persistence());
+                Cooldown_Manager.instance.StartConsumableRoutine(key, cooldown, Healing_Persistence());
                 break;
         }
     }
@@ -37,9 +39,19 @@ public class Item_Effect_Healing : Item_Effect_SO
     /// </summary>
     private void Healing_Oneoff()
     {
-        Player_Manager.instance.status.Recovery(Player_Status.RecoveryType.Hp, hp);
-        Player_Manager.instance.status.Recovery(Player_Status.RecoveryType.Stamina, stamina);
-        Player_Manager.instance.status.Recovery(Player_Status.RecoveryType.Awakening, awakning);
+        // ÀÌÆåÆ® »ý¼º
+        GameObject obj = Instantiate(effect, Player_Manager.instance.Player.transform.position, Quaternion.identity);
+        obj.transform.parent = Player_Manager.instance.Player.transform;
+
+        // Æ½ È¸º¹
+        if (hp > 0)
+            Player_Manager.instance.status.Recovery(Player_Status.RecoveryType.Hp, hp);
+
+        if (stamina > 0)
+            Player_Manager.instance.status.Recovery(Player_Status.RecoveryType.Stamina, stamina);
+
+        if (awakning > 0)
+            Player_Manager.instance.status.Recovery(Player_Status.RecoveryType.Awakening, awakning);
     }
 
     /// <summary>
@@ -48,6 +60,7 @@ public class Item_Effect_Healing : Item_Effect_SO
     /// <returns></returns>
     private IEnumerator Healing_Persistence()
     {
+        Debug.Log($"Call Equipment Healing / Duration & interval : {effect_duration}, {heal_interval} / (Hp : {hp} / Stamina : {stamina} / Awakning : {awakning})");
         float timer = 0f;
         float intervalTimer = 0f;
 
@@ -61,9 +74,14 @@ public class Item_Effect_Healing : Item_Effect_SO
                 intervalTimer = 0f;
 
                 // Æ½ È¸º¹
-                Player_Manager.instance.status.Recovery(Player_Status.RecoveryType.Hp, hp);
-                Player_Manager.instance.status.Recovery(Player_Status.RecoveryType.Stamina, stamina);
-                Player_Manager.instance.status.Recovery(Player_Status.RecoveryType.Awakening, awakning);
+                if (hp > 0)
+                    Player_Manager.instance.status.Recovery(Player_Status.RecoveryType.Hp, hp);
+
+                if (stamina > 0)
+                    Player_Manager.instance.status.Recovery(Player_Status.RecoveryType.Stamina, stamina);
+
+                if (awakning > 0)
+                    Player_Manager.instance.status.Recovery(Player_Status.RecoveryType.Awakening, awakning);
             }
 
             yield return null;

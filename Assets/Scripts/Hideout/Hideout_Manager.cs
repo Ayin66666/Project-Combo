@@ -91,7 +91,7 @@ public class Hideout_Manager : MonoBehaviour
         UI_Manager.instance.UI_Setting(isOn);
 
         // 커서 셋팅
-        Player_Manager.instance.Cursor_Setting(false);
+        Player_Manager.instance.Cursor_Setting(!isOn);
 
         // 스테이지 UI
         selectSet.SetActive(isOn);

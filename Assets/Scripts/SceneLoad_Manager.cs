@@ -100,6 +100,9 @@ public class SceneLoad_Manager : MonoBehaviour
         // 페이드 종료
         UI_Manager.instance.Fade(false, 1.5f);
 
+        // 마우스 커서 설정
+        Player_Manager.instance.Cursor_Setting(false);
+
         // 팁 실행
         if (tipCoroutine != null)
             StopCoroutine(tipCoroutine);
@@ -125,8 +128,12 @@ public class SceneLoad_Manager : MonoBehaviour
                 loadText.text = "Press SpaceBar to Start.";
             }
 
+            // 스테이지 진입
             if (Input.GetKeyDown(KeyCode.Space) && progressbar.value >= 1f && operation.progress >= 0.9f)
             {
+                // 마우스 커서 설정
+                Player_Manager.instance.Cursor_Setting(true);
+
                 // 페이드 종료
                 UI_Manager.instance.Fade(true, 1.5f);
                 while(UI_Manager.instance.isFade)

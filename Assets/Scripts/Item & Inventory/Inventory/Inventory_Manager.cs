@@ -26,14 +26,14 @@ public class Inventory_Manager : MonoBehaviour
         // 1. 아이템 중첩 가능 여부 체크
         if (addItem.stackable)
         {
-            Debug.Log("중첩가능 - 아이템 체크1");
+            //.Log("중첩가능 - 아이템 체크1");
             // 2. 중첩 가능 시
             // 2-1 이미 인벤토리에 해당 아이템이 있는지 & 중첩 최대치가 아닌지
             Inventory_Slot slot = Slot_Find(slot => 
             slot.item != null && slot.item.itemCode == addItem.itemCode);
             if (slot != null)
             {
-                Debug.Log("중첩가능 - 아이템 체크2");
+                //Debug.Log("중첩가능 - 아이템 체크2");
 
                 // 1. 중첩 가능한 슬롯에 먼저 넣기
                 while (itemCount > 0)
@@ -54,13 +54,13 @@ public class Inventory_Manager : MonoBehaviour
                 }
             }
 
-            Debug.Log("중첩가능 - 아이템 체크 후 빈슬롯 넣기");
+            //Debug.Log("중첩가능 - 아이템 체크 후 빈슬롯 넣기");
             // 3. 빈 슬롯 체크 후 넣기
             itemCount = AddToEmptySlots(addItem, itemCount);
         }
         else
         {
-            Debug.Log("중첩불가능 - 빈슬롯 넣기");
+            //Debug.Log("중첩불가능 - 빈슬롯 넣기");
             // 3. 중첩 불가능 시 - 빈 슬롯 검출
             itemCount = AddToEmptySlots(addItem, itemCount);
         }
@@ -68,7 +68,7 @@ public class Inventory_Manager : MonoBehaviour
         // 그래도 남는 아이템이 있다면 - 아이템 드롭
         if (itemCount > 0)
         {
-            Debug.Log("최종 - 아이템 드롭");
+            //Debug.Log("최종 - 아이템 드롭");
             Item_Drop(addItem, itemCount);
         }
     }
@@ -157,6 +157,7 @@ public class Inventory_Manager : MonoBehaviour
             if (slot.item.itemCode == addItem.itemCode && slot.item.stackable && slot.itemCount < slot.item.maxStack)
                 return false;
         }
+
         // 빈 슬롯도 없고, 최대 스택 초과 가능한 슬롯도 없으니 꽉 찬 상태
         return true;
     }
