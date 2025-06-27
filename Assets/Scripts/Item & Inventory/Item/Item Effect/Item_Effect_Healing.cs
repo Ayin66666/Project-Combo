@@ -27,7 +27,7 @@ public class Item_Effect_Healing : Item_Effect_SO
                 break;
 
             case Type.persistence:
-                Cooldown_Manager.instance.StartConsumableRoutine(key, cooldown, Healing_Persistence());
+                Player_Manager.instance.cooldown.EffectUse(Item_Cooldown_Manager.Type.Weapon, Healing_Persistence(), cooldown);
                 break;
         }
     }
@@ -86,7 +86,5 @@ public class Item_Effect_Healing : Item_Effect_SO
 
             yield return null;
         }
-
-        Cooldown_Manager.instance.Remove(key);
     }
 }

@@ -6,11 +6,11 @@ using UnityEngine;
 public class Item_Consumable : Item_Base
 {
     [Header("---Consumable Setting---")]
-    [SerializeField] protected ConsumableType consumableType;
+    public ConsumableType consumableType;
     [SerializeField] private float timeCooldown;
     [SerializeField] private float effect_duration;
     [SerializeField] private float heal_interval;
-    protected enum ConsumableType { oneoff, persistence }
+    public enum ConsumableType { oneoff, persistence }
 
 
     [Header("---Heal Setting---")]
@@ -32,8 +32,7 @@ public class Item_Consumable : Item_Base
                 break;
 
             case ConsumableType.persistence:
-                if (Cooldown_Manager.instance.IsCooldownActive(coroutine_Key)) return;
-                Cooldown_Manager.instance.StartConsumableRoutine(coroutine_Key, timeCooldown, Persistence());
+                Player_Manager.instance.cooldown.EffectUse(Item_Cooldown_Manager.Type.Consuumable_Persistence, Persistence(), timeCooldown);
                 break;
         }
     }
@@ -90,8 +89,6 @@ public class Item_Consumable : Item_Base
 
             yield return null;
         }
-
-        Cooldown_Manager.instance.Remove(coroutine_Key);
     }
     #endregion
 }

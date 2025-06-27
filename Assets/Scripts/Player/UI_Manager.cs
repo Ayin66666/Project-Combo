@@ -150,6 +150,11 @@ public class UI_Manager : MonoBehaviour
 
     [Header("---Short Cut---")]
     [SerializeField] private GameObject obj;
+
+    [SerializeField] private GameObject itemCooldownSet;
+    [SerializeField] private CanvasGroup itemCooldownCanvsgroup;
+    [SerializeField] private TextMeshProUGUI itemCooldownText;
+    private Coroutine itemCooldownCoroutine;
     #endregion
 
 
@@ -750,9 +755,9 @@ public class UI_Manager : MonoBehaviour
         equipmentOnOffCanvasGroup.alpha = 1;
 
         float timer = 0;
-        while(timer < 1)
+        while (timer < 1)
         {
-            timer += Time.deltaTime;
+            timer += Time.unscaledDeltaTime;
             equipmentOnOffCanvasGroup.alpha = Mathf.Lerp(1, 0, EasingFunctions.OutExpo(timer));
             yield return null;
         }
@@ -864,6 +869,37 @@ public class UI_Manager : MonoBehaviour
             anchoredPos.y = -halfCanvasH;
 
         return anchoredPos;
+    }
+    #endregion
+
+    #region Shortcut
+    /// <summary>
+    /// 사용하려는 소비 아이템이 쿨타임일 경우
+    /// </summary>
+    public void ItemCooldownUI(float time)
+    {
+        if (itemCooldownCoroutine != null)
+            StopCoroutine(itemCooldownCoroutine);
+
+        itemCooldownCoroutine = StartCoroutine(ItemCooldownUICall(time));
+    }
+
+    private IEnumerator ItemCooldownUICall(float time)
+    {
+        itemCooldownSet.SetActive(true);
+        itemCooldownCanvsgroup.alpha = 1f;
+        itemCooldownText.text = $"재사용 대기시간이 {time}초 남았습니다!";
+        yield return new WaitForSeconds(0.25f);
+
+        float timer = 0;
+        while (timer < 1)
+        {
+            timer += Time.unscaledDeltaTime;
+            itemCooldownCanvsgroup.alpha = Mathf.Lerp(1, 0, EasingFunctions.OutExpo(timer));
+            yield return null;
+        }
+
+        itemCooldownSet.SetActive(false);
     }
     #endregion
 }

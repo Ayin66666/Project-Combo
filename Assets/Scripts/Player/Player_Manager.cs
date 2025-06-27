@@ -11,7 +11,7 @@ public class Player_Manager : MonoBehaviour
     public Player_Status status;
     public Skill_Manager skill;
     public Inventory_Manager inventory;
-    public Cooldown_Manager cooldown;
+    public Item_Cooldown_Manager cooldown;
     public ShortCut_Manager shortCut;
     public Equipment_Manager equipment;
 

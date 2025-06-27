@@ -49,7 +49,7 @@ public class ShortCut_InGame_Slot : MonoBehaviour
         float timer = 0;
         while(timer < 1)
         {
-            Cooldown_Manager.instance.GetCooldown(item.coroutine_Key);
+
             yield return null;
         }
     }

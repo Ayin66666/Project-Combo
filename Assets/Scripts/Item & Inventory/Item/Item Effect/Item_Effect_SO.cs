@@ -15,9 +15,9 @@ public abstract class Item_Effect_SO : ScriptableObject
     public void Use()
     {
         // 쿨타임 체크
-        if (!Cooldown_Manager.instance.IsCooldownActive(key))
+        if (Player_Manager.instance.cooldown.Cooldown_Check(Item_Cooldown_Manager.Type.Weapon))
         {
-            // 효과 동작
+            // 기능 동작
             Effect();
         }
     }

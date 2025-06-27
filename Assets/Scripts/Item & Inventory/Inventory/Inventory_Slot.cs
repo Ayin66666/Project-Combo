@@ -94,17 +94,31 @@ public class Inventory_Slot : MonoBehaviour, IPointerClickHandler, IPointerEnter
 
     private void Use_Consumable()
     {
-        item.Use();
-        itemCount--;
-        countText.text = itemCount.ToString();
+        // 쿨타임 체크
+        Item_Cooldown_Manager.Type type = 
+            ((Item_Consumable)item).consumableType == Item_Consumable.ConsumableType.oneoff ? 
+            Item_Cooldown_Manager.Type.Consumable_Oneoff : Item_Cooldown_Manager.Type.Consuumable_Persistence;
 
-        if (itemCount <= 0)
+        if (Player_Manager.instance.cooldown.Cooldown_Check(type))
         {
-            // UI Off
-            UI_Manager.instance.Item_DescriptionUI(false, null);
-            
-            // 슬롯 초기화
-            Slot_Reset();
+            // 기능 동작
+            item.Use();
+            itemCount--;
+            countText.text = itemCount.ToString();
+
+            if (itemCount <= 0)
+            {
+                // UI Off
+                UI_Manager.instance.Item_DescriptionUI(false, null);
+
+                // 슬롯 초기화
+                Slot_Reset();
+            }
+        }
+        else
+        {
+            // 사용 불가 UI?
+            UI_Manager.instance.ItemCooldownUI(Player_Manager.instance.cooldown.Cooldown(type));
         }
     }
 
