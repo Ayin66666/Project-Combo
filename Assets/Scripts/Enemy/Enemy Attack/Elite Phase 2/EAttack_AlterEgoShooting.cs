@@ -143,17 +143,17 @@ public class EAttack_AlterEgoShooting : Attack_Base
         // 1번 - 시작 데미지
         (bool isCritical, int damage) = enemy.DamageCalculation(value_Normal[1]);
         Skill_Value_SO.Value_Data skillData = value_Normal[1].levelValue.GetData(skillLevel);
-        value_Normal[1].attackCollider.Damage_Setting(skillData.type, skillData.attackEffect, isCritical, skillData.hitCount, damage);
+        value_Normal[1].attackCollider.Damage_Setting(skillData.type, skillData.attackEffect, isCritical, skillData.hitCount, damage, AttackCollider_Controller.Owner.Enemy);
 
         // 2번 - 중간 데미지
         (isCritical, damage) = enemy.DamageCalculation(value_Normal[2]);
         skillData = value_Normal[2].levelValue.GetData(skillLevel);
-        value_Normal[2].attackCollider.Damage_Setting(skillData.type, skillData.attackEffect, isCritical, skillData.hitCount, damage);
+        value_Normal[2].attackCollider.Damage_Setting(skillData.type, skillData.attackEffect, isCritical, skillData.hitCount, damage, AttackCollider_Controller.Owner.Enemy);
 
         // 3번 - 최종 데미지
         (isCritical, damage) = enemy.DamageCalculation(value_Normal[3]);
         skillData = value_Normal[3].levelValue.GetData(skillLevel);
-        value_Normal[3].attackCollider.Damage_Setting(skillData.type, skillData.attackEffect, isCritical, skillData.hitCount, damage);
+        value_Normal[3].attackCollider.Damage_Setting(skillData.type, skillData.attackEffect, isCritical, skillData.hitCount, damage, AttackCollider_Controller.Owner.Enemy);
 
         // 1번 콜라이더
         GameObject obj = Instantiate(bullet[0], shootPos[0].position, Quaternion.identity);

@@ -179,7 +179,7 @@ public class Attack_Samsh_DoubleSlash : Attack_Base
             skillData = value_Awakening[index].levelValue.GetData(skillLevel);
 
             if(value_Awakening[index].attackCollider != null)
-                value_Awakening[index].attackCollider.Damage_Setting(skillData.type, skillData.attackEffect, isCritical, skillData.hitCount, damage);
+                value_Awakening[index].attackCollider.Damage_Setting(skillData.type, skillData.attackEffect, isCritical, skillData.hitCount, damage, AttackCollider_Controller.Owner.Player);
         }
         else
         {
@@ -187,7 +187,7 @@ public class Attack_Samsh_DoubleSlash : Attack_Base
             skillData = value_Normal[index].levelValue.GetData(skillLevel);
 
             if (value_Awakening[index].attackCollider != null)
-                value_Normal[index].attackCollider.Damage_Setting(skillData.type, skillData.attackEffect, isCritical, skillData.hitCount, damage);
+                value_Normal[index].attackCollider.Damage_Setting(skillData.type, skillData.attackEffect, isCritical, skillData.hitCount, damage, AttackCollider_Controller.Owner.Player);
         }
     }
 

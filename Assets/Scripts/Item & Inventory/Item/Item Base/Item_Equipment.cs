@@ -61,6 +61,13 @@ public class Item_Equipment : Item_Base
     /// </summary>
     public void Effect()
     {
-
+        if(haveEffect)
+        {
+            // 이펙트 리스트 내에 이펙트 동작
+            for (int i = 0; i < effectList.Count; i++)
+            {
+                effectList[i].Effect();
+            }
+        }
     }
 }

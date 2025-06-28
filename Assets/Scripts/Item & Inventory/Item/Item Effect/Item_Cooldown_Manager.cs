@@ -5,7 +5,8 @@ public class Item_Cooldown_Manager : MonoBehaviour
 {
     [Header("---Setting---")]
     private CooldownData[] cooldownData;
-    public enum Type { Weapon, Consumable_Oneoff, Consuumable_Persistence }
+    public enum Type { Equipment, Consumable_Oneoff, Consuumable_Persistence }
+
     private class CooldownData
     {
         public bool isCooldown;

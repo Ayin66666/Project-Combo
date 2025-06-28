@@ -94,7 +94,7 @@ public class Attack_Additional_RushSlash : Attack_Base
             skillData = value_Awakening[0].levelValue.GetData(skillLevel);
 
             if (value_Awakening[0].attackCollider != null)
-                value_Awakening[0].attackCollider.Damage_Setting(skillData.type, skillData.attackEffect, isCritical, skillData.hitCount, damage);
+                value_Awakening[0].attackCollider.Damage_Setting(skillData.type, skillData.attackEffect, isCritical, skillData.hitCount, damage, AttackCollider_Controller.Owner.Player);
         }
         else
         {
@@ -102,7 +102,7 @@ public class Attack_Additional_RushSlash : Attack_Base
             skillData = value_Normal[0].levelValue.GetData(skillLevel);
 
             if (value_Awakening[0].attackCollider != null)
-                value_Normal[0].attackCollider.Damage_Setting(skillData.type, skillData.attackEffect, isCritical, skillData.hitCount, damage);
+                value_Normal[0].attackCollider.Damage_Setting(skillData.type, skillData.attackEffect, isCritical, skillData.hitCount, damage, AttackCollider_Controller.Owner.Player);
         }
     }
 

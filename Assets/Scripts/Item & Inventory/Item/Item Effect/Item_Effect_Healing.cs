@@ -18,16 +18,16 @@ public class Item_Effect_Healing : Item_Effect_SO
     [Header("---effect---")]
     [SerializeField] private GameObject effect;
 
-    protected override void Effect()
+    public override void Effect()
     {
         switch (type)
         {
             case Type.oneoff:
-                Healing_Oneoff();
+                Player_Manager.instance.cooldown.EffectUse(Item_Cooldown_Manager.Type.Equipment, Healing_Oneoff(), cooldown);
                 break;
 
             case Type.persistence:
-                Player_Manager.instance.cooldown.EffectUse(Item_Cooldown_Manager.Type.Weapon, Healing_Persistence(), cooldown);
+                Player_Manager.instance.cooldown.EffectUse(Item_Cooldown_Manager.Type.Equipment, Healing_Persistence(), cooldown);
                 break;
         }
     }
@@ -37,7 +37,7 @@ public class Item_Effect_Healing : Item_Effect_SO
     /// <summary>
     /// 단발 회복 동작
     /// </summary>
-    private void Healing_Oneoff()
+    private IEnumerator Healing_Oneoff()
     {
         // 이펙트 생성
         GameObject obj = Instantiate(effect, Player_Manager.instance.Player.transform.position, Quaternion.identity);
@@ -52,6 +52,8 @@ public class Item_Effect_Healing : Item_Effect_SO
 
         if (awakning > 0)
             Player_Manager.instance.status.Recovery(Player_Status.RecoveryType.Awakening, awakning);
+
+        yield return null;
     }
 
     /// <summary>

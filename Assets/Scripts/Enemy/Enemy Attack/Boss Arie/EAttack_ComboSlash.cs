@@ -30,7 +30,7 @@ public class EAttack_ComboSlash : Attack_Base
         {
             (bool isCritical, int damage) = enemy.DamageCalculation(value_Normal[i]);
             Skill_Value_SO.Value_Data skillData = value_Normal[i].levelValue.GetData(skillLevel);
-            value_Normal[i].attackCollider.Damage_Setting(skillData.type, skillData.attackEffect, isCritical, skillData.hitCount, damage);
+            value_Normal[i].attackCollider.Damage_Setting(skillData.type, skillData.attackEffect, isCritical, skillData.hitCount, damage, AttackCollider_Controller.Owner.Enemy);
         }
 
         // 애니메이션 호출

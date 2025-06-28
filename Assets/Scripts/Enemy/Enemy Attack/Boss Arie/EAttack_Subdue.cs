@@ -37,7 +37,7 @@ public class EAttack_Subdue : Attack_Base
         {
             (bool isCrit, int dam) = enemy.DamageCalculation(value_Normal[i]);
             Skill_Value_SO.Value_Data skillData1 = value_Normal[i].levelValue.GetData(skillLevel);
-            value_Normal[i].attackCollider.Damage_Setting(skillData1.type, skillData1.attackEffect, isCrit, skillData1.hitCount, dam);
+            value_Normal[i].attackCollider.Damage_Setting(skillData1.type, skillData1.attackEffect, isCrit, skillData1.hitCount, dam, AttackCollider_Controller.Owner.Enemy);
         }
 
         // 차징 애니메이션

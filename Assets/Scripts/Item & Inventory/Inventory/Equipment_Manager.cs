@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -20,6 +21,8 @@ public class Equipment_Manager : MonoBehaviour
         public Item_Equipment.EquipmentType EquipmentType { get { return equipmentType; } private set { equipmentType = value; } }
     }
 
+    public System.Action itemEffect;
+
 
     private void Start()
     {
@@ -29,6 +32,35 @@ public class Equipment_Manager : MonoBehaviour
         // 2. 착용 장비 데이터 로드
         // Data_Setting();
     }
+
+
+    #region 장비 효과
+    public void Use_ItemEffect()
+    {
+        // 조건부에 따른 이펙트 호출
+        itemEffect?.Invoke();
+    }
+
+    /// <summary>
+    /// 장비 효과 추가
+    /// </summary>
+    /// <param name="effect"></param>
+    public void Add_ItemEffect(Action effect)
+    {
+        Debug.Log("이펙트 추가");
+        itemEffect += effect;
+    }
+
+    /// <summary>
+    /// 장비 효과 제거
+    /// </summary>
+    /// <param name="effect"></param>
+    public void Remove_ItemEffect(Action effect)
+    {
+        Debug.Log("이펙트 제거");
+        itemEffect -= effect;
+    }
+    #endregion
 
 
     #region 스크립트 초기 실행 로직
@@ -80,14 +112,19 @@ public class Equipment_Manager : MonoBehaviour
             {
                 if (!coreSlot[i].slot.haveItem)
                 {
-                    Debug.Log("Equipment - Core / New");
                     // 슬롯이 비어있다면 해당 슬롯에 착용
+                    Debug.Log("Equipment - Core / New");
                     coreSlot[i].slot.Item_Setting(true, item);
+
+                    // 해당 장비에 추가효과가 있다면 액션에 추가
+                    if (item.haveEffect)
+                        Player_Manager.instance.equipment.Add_ItemEffect(item.Effect);
                     return;
                 }
             }
 
             // 빈 슬롯이 없다면 - 첫번째 슬롯에 장착
+            Debug.Log("Equipment - Core/Change");
 
             // 스테이터스 감소
             Player_Manager.instance.status.Equipment_Status_Setting(false, coreSlot[0].slot.Item.equipment_Status);
@@ -99,7 +136,10 @@ public class Equipment_Manager : MonoBehaviour
             Player_Manager.instance.status.Equipment_Status_Setting(true, item.equipment_Status);
             coreSlot[0].slot.Item_Setting(true, item);
 
-            Debug.Log("Equipment - Core/Change");
+            // 해당 장비에 추가효과가 있다면 액션에 추가
+            if (item.haveEffect)
+                Player_Manager.instance.equipment.Add_ItemEffect(item.Effect);
+
         }
         else
         {
@@ -118,6 +158,10 @@ public class Equipment_Manager : MonoBehaviour
                 // 장착
                 Player_Manager.instance.status.Equipment_Status_Setting(true, item.equipment_Status);
                 itemSlot[item.equipmentType].Item_Setting(true, item);
+
+                // 해당 장비에 추가효과가 있다면 액션에 추가
+                if (item.haveEffect)
+                    Player_Manager.instance.equipment.Add_ItemEffect(item.Effect);
             }
             else
             {
@@ -127,6 +171,10 @@ public class Equipment_Manager : MonoBehaviour
                 // 장착
                 Player_Manager.instance.status.Equipment_Status_Setting(true, item.equipment_Status);
                 itemSlot[item.equipmentType].Item_Setting(true, item);
+
+                // 해당 장비에 추가효과가 있다면 액션에 추가
+                if (item.haveEffect)
+                    Player_Manager.instance.equipment.Add_ItemEffect(item.Effect);
             }
         }
     }
@@ -138,13 +186,16 @@ public class Equipment_Manager : MonoBehaviour
     public void EnEquipment(Inventory_Slot_Equipment slot)
     {
         // 인벤토리 내 빈 슬롯 체크
-
         if (!Player_Manager.instance.inventory.IsFull(slot.Item))
         {
             // 빈 자리가 있다면 - 장비 해제 후 슬롯 이동
 
             // 스테이터스 초기화
             Player_Manager.instance.status.Equipment_Status_Setting(false, slot.Item.equipment_Status);
+
+            // 해당 장비에 추가효과가 있다면 효과 제거
+            if (slot.Item.haveEffect)
+                Player_Manager.instance.equipment.Remove_ItemEffect(slot.Item.Effect);
 
             // 아이템 추가
             Player_Manager.instance.inventory.Item_Add(slot.Item, 1);

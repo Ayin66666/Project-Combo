@@ -888,7 +888,7 @@ public class UI_Manager : MonoBehaviour
     {
         itemCooldownSet.SetActive(true);
         itemCooldownCanvsgroup.alpha = 1f;
-        itemCooldownText.text = $"재사용 대기시간이 {time}초 남았습니다!";
+        itemCooldownText.text = $"재사용 대기시간이 {(int)time}초 남았습니다!";
         yield return new WaitForSeconds(0.25f);
 
         float timer = 0;

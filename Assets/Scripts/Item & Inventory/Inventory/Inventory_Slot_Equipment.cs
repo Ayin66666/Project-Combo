@@ -26,6 +26,11 @@ public class Inventory_Slot_Equipment : MonoBehaviour, IPointerClickHandler, IPo
             // Àåºñ Âø¿ë
             icon.sprite = item.Icon;
             this.item = item;
+
+            if(item.haveEffect)
+            {
+                Player_Manager.instance.equipment.Add_ItemEffect(item.Effect);
+            }
         }
         else
         {

@@ -213,7 +213,7 @@ public class Attack_Other_Counter : Attack_Base
     {
         (bool isCritical, int damage) = PlayerAction_Manager.instance.DamageCalculation(value_Normal[index], skillLevel);
         Skill_Value_SO.Value_Data skillData = value_Normal[index].levelValue.GetData(skillLevel);
-        value_Normal[index].attackCollider.Damage_Setting(skillData.type, skillData.attackEffect, isCritical, skillData.hitCount, damage);
+        value_Normal[index].attackCollider.Damage_Setting(skillData.type, skillData.attackEffect, isCritical, skillData.hitCount, damage, AttackCollider_Controller.Owner.Player);
     }
 
     public override void Attack_Reset()

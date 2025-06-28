@@ -67,7 +67,7 @@ public class EAttack_Shooting_Barrage : Attack_Base
         // 아마 미사용
         (bool isCritical, int damage) = enemy.DamageCalculation(value_Normal[0]);
         Skill_Value_SO.Value_Data skillData = value_Normal[0].levelValue.GetData(skillLevel);
-        value_Normal[0].attackCollider.Damage_Setting(skillData.type, skillData.attackEffect, isCritical, skillData.hitCount, damage);
+        value_Normal[0].attackCollider.Damage_Setting(skillData.type, skillData.attackEffect, isCritical, skillData.hitCount, damage, AttackCollider_Controller.Owner.Enemy);
     }
 
     public override void Attack_Reset()

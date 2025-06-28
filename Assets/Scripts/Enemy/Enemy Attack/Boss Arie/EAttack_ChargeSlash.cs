@@ -43,7 +43,7 @@ public class EAttack_ChargeSlash : Attack_Base
             (bool isCritical, int damage) = enemy.DamageCalculation(value_Normal[i]);
             Value value = value_Normal[i];
             Skill_Value_SO.Value_Data skillData = value.levelValue.GetData(skillLevel);
-            value_Normal[i].attackCollider.Damage_Setting(skillData.type, skillData.attackEffect, isCritical, skillData.hitCount, damage);
+            value_Normal[i].attackCollider.Damage_Setting(skillData.type, skillData.attackEffect, isCritical, skillData.hitCount, damage, AttackCollider_Controller.Owner.Enemy);
         }
 
         int attackIndex = 0;
