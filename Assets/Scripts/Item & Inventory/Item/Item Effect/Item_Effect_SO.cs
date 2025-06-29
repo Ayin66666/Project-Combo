@@ -14,7 +14,6 @@ public abstract class Item_Effect_SO : ScriptableObject
         // 쿨타임 체크
         if (Player_Manager.instance.cooldown.Cooldown_Check(Item_Cooldown_Manager.Type.Equipment))
         {
-            Debug.Log("Call Effect Use");
             // 기능 동작
             Effect();
         }

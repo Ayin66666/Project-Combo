@@ -116,6 +116,9 @@ public class Attack_Collider_Shooting : MonoBehaviour
             other.GetComponent<IDamageSysteam>().Take_Damage(gameObject, damageType, hitType, isCritical, attackCount, damage);
             Hit();
 
+            // 장비 효과 동작
+            Player_Manager.instance.equipment.Use_ItemEffect();
+
             if(isDestoryByHit)
                 Destroy(gameObject);
         }

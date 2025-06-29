@@ -84,6 +84,10 @@ public class Attack_Collider_AOE : MonoBehaviour
             // 데미지
             other.GetComponent<IDamageSysteam>().Take_Damage(gameObject, damageType, hitEffect, isCritical, hitCount, damage);
 
+            // 장비 효과 동작
+            if (owner == ColliderOwner.Player)
+                Player_Manager.instance.equipment.Use_ItemEffect();
+
             // 피격 이펙트
             if (hitVFX != null)
                 Instantiate(hitVFX, other.transform.position, Quaternion.identity);

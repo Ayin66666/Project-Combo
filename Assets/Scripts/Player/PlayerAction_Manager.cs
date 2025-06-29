@@ -646,7 +646,7 @@ public class PlayerAction_Manager : MonoBehaviour, IDamageSysteam
         cinemachineCam[1].SetActive(isOn);
     }
 
-    private Vector3 HitVFXPos()
+    public Vector3 HitVFXPos()
     {
         Vector3 originPosition = damagePosCollider.transform.position;
 
