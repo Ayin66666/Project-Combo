@@ -23,10 +23,6 @@ public abstract class Item_Base : ScriptableObject
     public enum Item_Rating { TierI, TierII, TierIII, TierVI, TierV }
 
 
-    [Header("---Cooldown Setting---")]
-    public string coroutine_Key;
-
-
     /// <summary>
     /// ½½·Ô & ¼ÒÆ®ÄÆ¿¡¼­ È£Ãâ
     /// </summary>

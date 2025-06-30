@@ -22,7 +22,7 @@ public class Item_Effect_BulletShooting : Item_Effect_SO
 
     public override void Effect()
     {
-        Player_Manager.instance.cooldown.EffectUse(Item_Cooldown_Manager.Type.Equipment, Shooting(), cooldown);
+        Player_Manager.instance.cooldown.EffectUse(Key, Shooting(), Cooldown);
     }
 
     private GameObject FindEnemy()
@@ -46,8 +46,10 @@ public class Item_Effect_BulletShooting : Item_Effect_SO
 
     private IEnumerator Shooting()
     {
+        Debug.Log($"Bullet Call!");
         for (int i = 0; i < Random.Range(spawnCount.x, spawnCount.y); i++)
         {
+            Debug.Log($"Bullet! {i}");
             Vector3 pos = Player_Manager.instance.action.HitVFXPos();
             GameObject obj = Instantiate(bulletObj, pos, Quaternion.identity);
             Attack_Collider_Shooting shoot = obj.GetComponent<Attack_Collider_Shooting>();

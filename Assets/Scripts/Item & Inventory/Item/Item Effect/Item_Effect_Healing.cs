@@ -9,7 +9,6 @@ public class Item_Effect_Healing : Item_Effect_SO
     [SerializeField] private Type type;
     [SerializeField] private float effect_duration;
     [SerializeField] private float heal_interval;
-
     [SerializeField] private int hp;
     [SerializeField] private int stamina;
     [SerializeField] private int awakning;
@@ -18,21 +17,21 @@ public class Item_Effect_Healing : Item_Effect_SO
     [Header("---effect---")]
     [SerializeField] private GameObject effect;
 
+
+
     public override void Effect()
     {
         switch (type)
         {
             case Type.oneoff:
-                Player_Manager.instance.cooldown.EffectUse(Item_Cooldown_Manager.Type.Equipment, Healing_Oneoff(), cooldown);
+                Player_Manager.instance.cooldown.EffectUse(Key, Healing_Oneoff(), Cooldown);
                 break;
 
             case Type.persistence:
-                Player_Manager.instance.cooldown.EffectUse(Item_Cooldown_Manager.Type.Equipment, Healing_Persistence(), cooldown);
+                Player_Manager.instance.cooldown.EffectUse(Key, Healing_Persistence(), Cooldown);
                 break;
         }
     }
-
-
 
     /// <summary>
     /// 단발 회복 동작

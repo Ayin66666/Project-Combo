@@ -61,12 +61,18 @@ public class Item_Equipment : Item_Base
     /// </summary>
     public void Effect()
     {
-        if(haveEffect && Player_Manager.instance.cooldown.Cooldown_Check(Item_Cooldown_Manager.Type.Equipment))
+        if(haveEffect)
         {
             // 이펙트 리스트 내에 이펙트 동작
             for (int i = 0; i < effectList.Count; i++)
             {
-                effectList[i].Effect();
+                // 해당 효과의 쿨타임 체크
+                (bool isCooldown, float remainingTime) = Player_Manager.instance.cooldown.Cooldown_Check(effectList[i].Key);
+                if (isCooldown == false)
+                {
+                    Debug.Log($"이펙트 호출 {i}번째!");
+                    effectList[i].Effect();
+                }
             }
         }
     }

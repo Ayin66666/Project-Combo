@@ -6,6 +6,9 @@ using UnityEngine;
 public class Item_Consumable : Item_Base
 {
     [Header("---Consumable Setting---")]
+    [SerializeField] private string key;
+    public string Key { get { return key; } private set { key = value; } }
+
     public ConsumableType consumableType;
     [SerializeField] private float timeCooldown;
     [SerializeField] private float effect_duration;
@@ -28,11 +31,11 @@ public class Item_Consumable : Item_Base
         switch (consumableType)
         {
             case ConsumableType.oneoff:
-                OneOff();
+                Player_Manager.instance.cooldown.EffectUse(key, OneOff(), timeCooldown);
                 break;
 
             case ConsumableType.persistence:
-                Player_Manager.instance.cooldown.EffectUse(Item_Cooldown_Manager.Type.Consuumable_Persistence, Persistence(), timeCooldown);
+                Player_Manager.instance.cooldown.EffectUse(key, Persistence(), timeCooldown);
                 break;
         }
     }
@@ -42,7 +45,7 @@ public class Item_Consumable : Item_Base
     /// <summary>
     /// 즉시 회복 로직
     /// </summary>
-    private void OneOff()
+    private IEnumerator OneOff()
     {
         // 회복 이펙트
         GameObject obj = Instantiate(recoveryVFX, Player_Manager.instance.Player.transform.position, Quaternion.identity);
@@ -57,9 +60,9 @@ public class Item_Consumable : Item_Base
 
         if (awakening > 0)
             Player_Manager.instance.status.Recovery(Player_Status.RecoveryType.Awakening, awakening);
+
+        yield return null;
     }
-
-
 
     /// <summary>
     /// 지속 회복 로직
@@ -79,7 +82,8 @@ public class Item_Consumable : Item_Base
                 intervalTimer = 0f;
 
                 // 회복 이펙트
-                Instantiate(recoveryVFX, Player_Manager.instance.Player.transform.position, Quaternion.identity);
+                GameObject obj = Instantiate(recoveryVFX, Player_Manager.instance.Player.transform.position, Quaternion.identity);
+                obj.transform.parent = Player_Manager.instance.Player.transform;
 
                 // 틱마다 회복
                 Player_Manager.instance.status.Recovery(Player_Status.RecoveryType.Hp, healing);

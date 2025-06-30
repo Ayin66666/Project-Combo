@@ -1,23 +1,15 @@
-using System.Collections;
 using UnityEngine;
 
 
 public abstract class Item_Effect_SO : ScriptableObject
 {
     [Header("---Effect Setting---")]
-    public float cooldown;
+    [SerializeField] private string key;
+    [SerializeField] private float cooldown;
 
+    public string Key { get { return key; } private set { key = value; } }
+    public float Cooldown { get { return cooldown; } private set { cooldown = value; } }
 
-    public void EffectUse()
-    {
-        Debug.Log("Call Effect");
-        // 쿨타임 체크
-        if (Player_Manager.instance.cooldown.Cooldown_Check(Item_Cooldown_Manager.Type.Equipment))
-        {
-            // 기능 동작
-            Effect();
-        }
-    }
 
     /// <summary>
     /// 기능 구현부
