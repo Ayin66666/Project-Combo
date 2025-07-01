@@ -7,6 +7,7 @@ public class ShortCut_Slot : MonoBehaviour, IPointerClickHandler
 {
     [Header("---Setting---")]
     [SerializeField] private Inventory_Slot itemSlot;
+    [SerializeField] private Item_Base item;
     [SerializeField] private bool haveItem;
 
 
@@ -35,8 +36,6 @@ public class ShortCut_Slot : MonoBehaviour, IPointerClickHandler
             itemSlot = item_Slot;
             icon.sprite = itemSlot.item.Icon;
             countText.text = itemSlot.itemCount.ToString();
-
-            
         }
         else
         {

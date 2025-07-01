@@ -46,5 +46,13 @@ public class ShortCut_Manager : MonoBehaviour
             slots_Ingame[slot_Index].Slot_Reset();
         }
     }
+
+    /// <summary>
+    /// 제작 필요 / 쇼트컷 선택 UI 표기 / 키보드 1234 입력 받아서 해당 값 입력?
+    /// </summary>
+    public void Shortcut_Setting()
+    {
+
+    }
     #endregion
 }

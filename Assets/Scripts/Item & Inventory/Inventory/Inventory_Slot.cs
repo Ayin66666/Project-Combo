@@ -4,7 +4,7 @@ using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
 
-public class Inventory_Slot : MonoBehaviour, IPointerClickHandler, IPointerEnterHandler , IPointerExitHandler /*IBeginDragHandler, IDragHandler, IEndDragHandler*/
+public class Inventory_Slot : MonoBehaviour, IPointerClickHandler, IPointerEnterHandler, IPointerExitHandler /*IBeginDragHandler, IDragHandler, IEndDragHandler*/
 {
     [Header("---Item Data---")]
     public Item_Base item;
@@ -12,14 +12,14 @@ public class Inventory_Slot : MonoBehaviour, IPointerClickHandler, IPointerEnter
     public int itemCount;
 
 
-    [Header("---UI---")]
+    [Header("---Slot UI---")]
     [SerializeField] private Image icon;
     [SerializeField] private TextMeshProUGUI countText;
 
 
-    [Header("---Drog UI---")]
-    [SerializeField] private GameObject dragUI;
-    [SerializeField] private Image dragUIIcon;
+    [Header("---Menu UI---")]
+    [SerializeField] private GameObject menuSet;
+
 
 
     #region 기능 동작
@@ -35,7 +35,6 @@ public class Inventory_Slot : MonoBehaviour, IPointerClickHandler, IPointerEnter
 
         // UI 셋팅
         icon.sprite = item.Icon;
-        dragUIIcon.sprite = item.Icon;
         countText.text = itemCount.ToString();
     }
 
@@ -49,12 +48,11 @@ public class Inventory_Slot : MonoBehaviour, IPointerClickHandler, IPointerEnter
         itemCount = 0;
 
         icon.sprite = null;
-        dragUIIcon.sprite = null;
         countText.text = "";
     }
 
     /// <summary>
-    /// 아이템 사용?
+    /// 아이템 사용
     /// </summary>
     public void Slot_Use()
     {
@@ -128,15 +126,62 @@ public class Inventory_Slot : MonoBehaviour, IPointerClickHandler, IPointerEnter
     #endregion
 
 
+    #region Item Meun
+    /// <summary>
+    /// 메뉴 UI 표기 
+    /// </summary>
+    public void Meun()
+    {
+        if (haveItem)
+            menuSet.SetActive(true);
+    }
+
+    /// <summary>
+    /// 아이템 사용
+    /// </summary>
+    public void Click_Use()
+    {
+        // 메뉴 UI 종료
+        menuSet.SetActive(false);
+
+        // 아이템 사용
+        Slot_Use();
+    }
+
+    /// <summary>
+    /// 쇼트컷 등록
+    /// </summary>
+    public void Click_Shortcut()
+    {
+        // 메뉴 UI 종료
+        menuSet.SetActive(false);
+
+        // 쇼트컷 등록 기능 호출 - 함수 제작 필요
+        Player_Manager.instance.shortCut.Shortcut_Setting();
+    }
+    #endregion
+
+
     #region 클릭 기능 - 좌클릭 = 이동 | 우클릭 = 사용 | 드래그용 오브젝트 추가할 것!
     public void OnPointerClick(PointerEventData eventData)
     {
+        // 아이템이 있다면
+        if (!haveItem)
+        {
+            return;
+        }
+
         // 마우스 오른쪽 클릭만 체크
         if (eventData.button == PointerEventData.InputButton.Right)
         {
-            // 아이템이 있다면 동작 - 없으면 무시
-            if (haveItem)
+            if (item.itemType == Item_Base.Item_Type.Consumable)
             {
+                // 소비 아이템이라면 메뉴 UI 표기
+                Meun();
+            }
+            else
+            {
+                // 이외 아이템은 즉시 사용
                 Slot_Use();
             }
         }
@@ -146,7 +191,7 @@ public class Inventory_Slot : MonoBehaviour, IPointerClickHandler, IPointerEnter
     {
         if (haveItem)
         {
-            if(item.itemType == Item_Base.Item_Type.Equipment)
+            if (item.itemType == Item_Base.Item_Type.Equipment)
             {
                 UI_Manager.instance.ItemEquipment_DescriptionUI(true, (Item_Equipment)item);
             }
@@ -172,65 +217,5 @@ public class Inventory_Slot : MonoBehaviour, IPointerClickHandler, IPointerEnter
 
         }
     }
-
-    // 드래그 기능 - 일단 비활성화
-    /*
-    // 드래그 시작
-    public void OnBeginDrag(PointerEventData eventData)
-    {
-        // 드래그 UI 활성화
-        dragUI.SetActive(true);
-    }
-
-    // 드래그 중
-    public void OnDrag(PointerEventData eventData)
-    {
-        // 드래그 간 위치 최신화
-        rectTransform.anchoredPosition = eventData.position;
-    }
-
-    // 드래그 종료
-    public void OnEndDrag(PointerEventData eventData)
-    {
-        // 드래그 종료 시 위치 체크
-        List<RaycastResult> raycastResults = new List<RaycastResult>();
-        GraphicRaycaster raycaster = Player_Manager.instance.inventory.canvas.GetComponent<GraphicRaycaster>();
-        raycaster.Raycast(eventData, raycastResults);
-
-        // 검출된 슬롯 체크
-        foreach(RaycastResult result in raycastResults)
-        {
-            // 아래에 아이템 슬롯이 있다면 - 해당 위치와 교환
-            Inventory_Slot slot = result.gameObject.GetComponent<Inventory_Slot>();
-            if (slot != null)
-            {
-                Player_Manager.instance.inventory.Item_Change(this, slot);
-                return;
-            }
-
-            // 장비 슬롯이 있다면 - 장비 아이템의 경우 장착
-            Inventory_Slot_Equipment slotEq = result.gameObject.GetComponent<Inventory_Slot_Equipment>();
-            if (slotEq != null)
-            {
-                return;
-            }
-
-            // 아래에 쇼트컷 슬롯이 있다면 - 소비 아이템의 경우 장착
-            ShortCut_Slot slotSh = result.gameObject.GetComponent<ShortCut_Slot>();
-            if (slotSh != null)
-            {
-                return;
-            }
-        }
-
-        // 드래그 UI 비활성화
-        dragUI.SetActive(false);
-
-        // 아래에 아이템 슬롯이 없다면 - 원위치
-        rectTransform.anchoredPosition = Vector2.zero;
-    }
-    */
-
-
     #endregion
 }
