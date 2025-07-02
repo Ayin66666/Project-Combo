@@ -74,12 +74,22 @@ public class Input_Manager : MonoBehaviour
 
     private void Shortcut_Check()
     {
+        // 입력 체크
         foreach (InputData data in shortcutInputDatas)
         {
             if (Input.GetKeyDown(data.key))
             {
                 data.isInput = true;
                 data.inputAction?.Invoke();
+            }
+        }
+
+        // 입력 종료 체크
+        foreach (InputData data in shortcutInputDatas)
+        {
+            if (Input.GetKeyUp(data.key))
+            {
+                data.isInput = false;
             }
         }
     }

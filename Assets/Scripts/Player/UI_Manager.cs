@@ -1,6 +1,5 @@
 using DG.Tweening;
 using Easing.Tweening;
-using NUnit.Framework.Constraints;
 using System.Collections;
 using System.Collections.Generic;
 using TMPro;
@@ -22,7 +21,7 @@ public class UI_Manager : MonoBehaviour
     public enum UIType { Item, Skill, Tutorial, Option, Exit }
     private Player_Manager pManager;
 
-
+    #region UI set
     [Header("---UI Set---")]
     [SerializeField] private GameObject fightUI;
     [SerializeField] private GameObject playerUI;
@@ -37,6 +36,7 @@ public class UI_Manager : MonoBehaviour
     [Header("---Fade UI---")]
     [SerializeField] private GameObject fadeSet;
     [SerializeField] private CanvasGroup fadeCanvasGroup;
+    #endregion
 
 
     #region Player Fight UI
@@ -119,7 +119,7 @@ public class UI_Manager : MonoBehaviour
     [SerializeField] private TextMeshProUGUI skillPointText;
 
 
-    [Header("---Inventory---")]
+    [Header("---Item Description---")]
     [SerializeField] private Vector2 offSet;
     [SerializeField] private GameObject itemDescriptionSet;
     [SerializeField] private RectTransform itemDescriptionTrans;
@@ -129,7 +129,7 @@ public class UI_Manager : MonoBehaviour
     [SerializeField] private TextMeshProUGUI itemDescriptionText;
 
 
-    [Header("---Inventory Equipment---")]
+    [Header("---Equipment Description---")]
     [SerializeField] private Vector2 offSet_Equipment;
     [SerializeField] private GameObject equipmentDescriptionSet;
     [SerializeField] private RectTransform equipmentDescriptionTrans;
@@ -148,9 +148,12 @@ public class UI_Manager : MonoBehaviour
     private Coroutine equipmentOnOffCoroutine;
 
 
-    [Header("---Short Cut---")]
-    [SerializeField] private GameObject obj;
+    [Header("---Shortcut Select---")]
+    [SerializeField] private GameObject shortcutSet;
+    [SerializeField] private TextMeshProUGUI resultText;
 
+
+    [Header("---Shortcut Cooldown---")]
     [SerializeField] private GameObject itemCooldownSet;
     [SerializeField] private CanvasGroup itemCooldownCanvsgroup;
     [SerializeField] private TextMeshProUGUI itemCooldownText;
@@ -872,7 +875,43 @@ public class UI_Manager : MonoBehaviour
     }
     #endregion
 
+
     #region Shortcut
+    /// <summary>
+    /// 쇼트컷 선택 UI OnOff
+    /// </summary>
+    /// <param name="isOn"></param>
+    public void Shortcut_SelectUI(bool isOn)
+    {
+        shortcutSet.SetActive(isOn);
+    }
+
+    /// <summary>
+    /// 쇼트컷 등록에서 지정된 키 이외의 키를 눌렸을 경우
+    /// </summary>
+    public void Shortcut_ResultUI()
+    {
+        StartCoroutine(ShortcutResultUICall());
+    }
+
+    private IEnumerator ShortcutResultUICall()
+    {
+        resultText.alpha = 1;
+
+        yield return new WaitForSeconds(0.25f);
+
+        // Fade Out
+        float timer = 0;
+        while (timer < 1)
+        {
+            timer += Time.deltaTime;
+            resultText.alpha = Mathf.Lerp(1, 0, timer);
+            yield return null;
+        }
+        resultText.alpha = 0;
+    }
+
+
     /// <summary>
     /// 사용하려는 소비 아이템이 쿨타임일 경우
     /// </summary>

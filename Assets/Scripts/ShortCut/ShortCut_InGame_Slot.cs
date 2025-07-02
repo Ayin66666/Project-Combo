@@ -17,6 +17,7 @@ public class ShortCut_InGame_Slot : MonoBehaviour
     /// <param name="item"></param>
     public void Slot_Setting(Item_Base item)
     {
+        this.item = item;
         icon.sprite = item.Icon;
     }
 
@@ -45,12 +46,13 @@ public class ShortCut_InGame_Slot : MonoBehaviour
 
     private IEnumerator CooldownCall()
     {
-        cooldown.fillAmount = 1;
+        cooldown.fillAmount = 0;
         float timer = 0;
         while(timer < 1)
         {
-
+            cooldown.fillAmount = Mathf.Lerp(0, 1, Player_Manager.instance.cooldown.SlotUI_Cooldown(((Item_Consumable)item).Key));
             yield return null;
         }
+        cooldown.fillAmount = 1;
     }
 }

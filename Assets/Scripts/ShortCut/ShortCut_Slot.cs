@@ -1,14 +1,15 @@
 using TMPro;
-using UnityEngine;
 using UnityEngine.EventSystems;
+using UnityEngine;
 using UnityEngine.UI;
+
 
 public class ShortCut_Slot : MonoBehaviour, IPointerClickHandler
 {
     [Header("---Setting---")]
     [SerializeField] private Inventory_Slot itemSlot;
     [SerializeField] private Item_Base item;
-    [SerializeField] private bool haveItem;
+    public bool haveItem;
 
 
     [Header("---UI---")]
@@ -68,6 +69,9 @@ public class ShortCut_Slot : MonoBehaviour, IPointerClickHandler
             // 아이템 사용
             itemSlot.Slot_Use();
 
+            // 쿨타임 호출
+            Player_Manager.instance.shortCut.IngameSlotCooldown(this);
+
             // 아이템 잔량 확인
             if (!itemSlot.haveItem)
             {
@@ -75,7 +79,6 @@ public class ShortCut_Slot : MonoBehaviour, IPointerClickHandler
             }
         }
     }
-
 
     public void OnPointerClick(PointerEventData eventData)
     {
