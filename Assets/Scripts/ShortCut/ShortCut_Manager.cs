@@ -25,6 +25,40 @@ public class ShortCut_Manager : MonoBehaviour
     }
 
 
+    #region 세이브 & 로드
+    /// <summary>
+    /// 데이터 로드 시 동작
+    /// </summary>
+    public void LoadData(Data data)
+    {
+        if(data != null)
+        {
+            for (int i = 0; i < data.shortcut.Count; i++)
+            {
+                // 여기 슬롯 데이터 반환하는 함수나 변수 자체를 public으로 변경 필요
+                slots[i].Slot_Setting(Player_Manager.instance.inventory.item_Slot[data.shortcut[i]]);
+            }
+        }
+    }
+
+    /// <summary>
+    /// 세이브 시 쇼트컷 데이터 전달
+    /// </summary>
+    /// <returns></returns>
+    public List<int> GetShortcutData()
+    {
+        // 해당 쇼트컷에 연결된 슬롯 인덱스를 저장
+        List<int> data = new List<int>();
+        for (int i = 0; i < slots.Count; i++)
+        {
+            data.Add(slots[i].itemSlot.slotIndex);
+        }
+
+        return data;
+    }
+    #endregion
+
+
     #region 옵션 UI
     /// <summary>
     /// 인풋 이벤트 셋팅

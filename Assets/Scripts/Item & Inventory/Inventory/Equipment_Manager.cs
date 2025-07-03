@@ -7,8 +7,8 @@ public class Equipment_Manager : MonoBehaviour
 {
     [Header("---Equipment Slot---")]
     [SerializeField] private List<SlotData> slots; // 외부 셋팅용
-    private Dictionary<Item_Equipment.EquipmentType, Inventory_Slot_Equipment> itemSlot; // 실제 데이터 1
     [SerializeField] private List<SlotData> coreSlot; // 실제 데이터 2
+    private Dictionary<Item_Equipment.EquipmentType, Inventory_Slot_Equipment> itemSlot; // 실제 데이터 1
 
     /// <summary>
     /// 딕셔너리 용 장비 슬롯 데이터
@@ -32,6 +32,10 @@ public class Equipment_Manager : MonoBehaviour
         // 2. 착용 장비 데이터 로드
         // Data_Setting();
     }
+
+
+
+
 
 
     #region 장비 효과
@@ -82,6 +86,32 @@ public class Equipment_Manager : MonoBehaviour
             }
         }
     }
+    #endregion
+
+
+    #region 세이브 & 로드 로직
+    /// <summary>
+    /// 세이브 시 장비 데이터 전달
+    /// </summary>
+    /// <returns></returns>
+    public List<int> GetEquipmentData()
+    {
+        List<int> data = new List<int>();
+
+        // 장비
+        for (int i = 0; i < slots.Count; i++)
+        {
+            data.Add(slots[i].slot.Item.itemCode);
+        }
+
+        // 코어
+        for (int i = 0; i < coreSlot.Count; i++)
+        {
+            data.Add(coreSlot[i].slot.Item.itemCode);
+        }
+
+        return data;
+    }
 
     /// <summary>
     /// 게임 로드 시 데이터 셋팅
@@ -93,10 +123,8 @@ public class Equipment_Manager : MonoBehaviour
         Data data = SaveLoad_Manager.instance.LoadData(SaveLoad_Manager.instance.curSlot);
 
         // 데이터 적용
-
     }
     #endregion
-
 
     #region 장비 착용 & 해제 로직
     /// <summary>
@@ -115,6 +143,9 @@ public class Equipment_Manager : MonoBehaviour
                     // 슬롯이 비어있다면 해당 슬롯에 착용
                     Debug.Log("Equipment - Core / New");
                     coreSlot[i].slot.Item_Setting(true, item);
+
+                    // 스테이터스 UI 최신화
+                    UI_Manager.instance.Status_Setting();
 
                     // 해당 장비에 추가효과가 있다면 액션에 추가
                     if (item.haveEffect)
@@ -135,6 +166,9 @@ public class Equipment_Manager : MonoBehaviour
             // 신규 장비 장착
             Player_Manager.instance.status.Equipment_Status_Setting(true, item.equipment_Status);
             coreSlot[0].slot.Item_Setting(true, item);
+
+            // 스테이터스 UI 최신화
+            UI_Manager.instance.Status_Setting();
 
             // 해당 장비에 추가효과가 있다면 액션에 추가
             if (item.haveEffect)
@@ -159,6 +193,9 @@ public class Equipment_Manager : MonoBehaviour
                 Player_Manager.instance.status.Equipment_Status_Setting(true, item.equipment_Status);
                 itemSlot[item.equipmentType].Item_Setting(true, item);
 
+                // 스테이터스 UI 최신화
+                UI_Manager.instance.Status_Setting();
+
                 // 해당 장비에 추가효과가 있다면 액션에 추가
                 if (item.haveEffect)
                     Player_Manager.instance.equipment.Add_ItemEffect(item.Effect);
@@ -171,6 +208,9 @@ public class Equipment_Manager : MonoBehaviour
                 // 장착
                 Player_Manager.instance.status.Equipment_Status_Setting(true, item.equipment_Status);
                 itemSlot[item.equipmentType].Item_Setting(true, item);
+
+                // 스테이터스 UI 최신화
+                UI_Manager.instance.Status_Setting();
 
                 // 해당 장비에 추가효과가 있다면 액션에 추가
                 if (item.haveEffect)
@@ -192,6 +232,9 @@ public class Equipment_Manager : MonoBehaviour
 
             // 스테이터스 초기화
             Player_Manager.instance.status.Equipment_Status_Setting(false, slot.Item.equipment_Status);
+
+            // 스테이터스 UI 최신화
+            UI_Manager.instance.Status_Setting();
 
             // 해당 장비에 추가효과가 있다면 효과 제거
             if (slot.Item.haveEffect)

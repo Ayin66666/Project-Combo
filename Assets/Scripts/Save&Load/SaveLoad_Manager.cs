@@ -5,6 +5,7 @@ using TMPro;
 using System;
 using System.IO;
 using UnityEngine.SceneManagement;
+using MagicaCloth2;
 
 
 #region Data
@@ -50,6 +51,7 @@ public class Data
     [Header("---Item---")]
     public List<int> inevntory;
     public List<int> equipment;
+    public List<int> shortcut;
 
 
     [Header("---Chapter---")]
@@ -92,6 +94,7 @@ public class StageData
 public class SaveLoad_Manager : MonoBehaviour
 {
     public static SaveLoad_Manager instance;
+    private Player_Manager pManager;
 
 
     [Header("---Save Setting---")]
@@ -155,7 +158,9 @@ public class SaveLoad_Manager : MonoBehaviour
 
         // 슬롯 UI 최신화
         SlotUI_Setting();
-        
+
+        pManager = Player_Manager.instance;
+
         DontDestroyOnLoad(gameObject);
     }
 
@@ -475,7 +480,7 @@ public class SaveLoad_Manager : MonoBehaviour
             // 아이템
             inevntory = new List<int>(40),
             equipment = new List<int>(8),
-
+            shortcut = new List<int>(4),
 
             // 스테이지
             clearData = new ClearData()
@@ -505,6 +510,12 @@ public class SaveLoad_Manager : MonoBehaviour
         for (int i = 0; i < 8; i++)
         {
             data.equipment.Add(-1);
+        }
+
+        // 쇼트컷 초기화
+        for (int i = 0; i < 4; i++)
+        {
+            data.shortcut.Add(-1);
         }
 
 
@@ -609,8 +620,9 @@ public class SaveLoad_Manager : MonoBehaviour
                 skillLevelData = Player_Manager.instance.skill.GetSkillData(),
 
                 // 아이템
-                inevntory = new List<int>(40),
-                equipment = new List<int>(8),
+                inevntory = Player_Manager.instance.inventory.GetItemData(),
+                equipment = Player_Manager.instance.equipment.GetEquipmentData(),
+                shortcut = Player_Manager.instance.shortCut.GetShortcutData(),
 
                 // 진행도
                 chapter = ChapterCheck(index),
@@ -624,6 +636,13 @@ public class SaveLoad_Manager : MonoBehaviour
                     chapterList = ChapterData_Manager.instance.chapterData,
                 }
             };
+
+
+            // 쇼트컷 데이터 셋팅
+            for (int i = 0; i < playerData.shortcut.Count; i++)
+            {
+
+            }
 
             // 데이터 저장
             string data = JsonUtility.ToJson(playerData);
@@ -769,19 +788,23 @@ public class SaveLoad_Manager : MonoBehaviour
                 yield return null;
             }
 
-            // 데이터 적용 - 스테이터스
-            Player_Manager.instance.status.Status_Setting(data);
-
-            // 데이터 적용 - 경험치
-            Player_Manager.instance.status.Level_Setting();
-
             // 데이터 적용 - 챕터
             ChapterData_Manager.instance.Data_Setting(data);
 
+            // 데이터 적용 - 스테이터스
+            pManager.status.Status_Setting(data);
+
+            // 데이터 적용 - 경험치
+            pManager.status.Level_Setting();
+
             // 데이터 적용 - 스킬트리
-            Player_Manager.instance.skill.Skill_Setting(data);
+            pManager.skill.Skill_Setting(data);
 
             // 데이터 적용 - 인벤토리 & 장비창
+            pManager.inventory.Inventory_Setting(data);
+
+            // 데이터 적용 - 쇼트컷
+            pManager.shortCut.LoadData(data);
 
             // 선택 UI Off
             SaveLoadUI(false);

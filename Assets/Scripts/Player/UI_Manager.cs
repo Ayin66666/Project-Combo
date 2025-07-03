@@ -158,8 +158,13 @@ public class UI_Manager : MonoBehaviour
     [SerializeField] private CanvasGroup itemCooldownCanvsgroup;
     [SerializeField] private TextMeshProUGUI itemCooldownText;
     private Coroutine itemCooldownCoroutine;
-    #endregion
 
+
+    [Header("---Inventory & Equipment Status---")]
+    [SerializeField] private TextMeshProUGUI[] attackStatusText;
+    [SerializeField] private TextMeshProUGUI[] defenceStatusText;
+    [SerializeField] private TextMeshProUGUI[] otherStatusText;
+    #endregion
 
 
     private void Awake()
@@ -636,6 +641,9 @@ public class UI_Manager : MonoBehaviour
         // 시작화면이면 인벤, 스킬, 타이틀 복귀 UI 버튼 비활성화
         PlayerUIButton_Setting(!SaveLoad_Manager.instance.isStartScene);
 
+        // 스테이터스 UI 최신화
+        Status_Setting();
+
         // 옵션 UI 활/비활성화
         playerUI.SetActive(!playerUI.activeSelf);
 
@@ -739,6 +747,29 @@ public class UI_Manager : MonoBehaviour
 
 
     #region Inventory
+    /// <summary>
+    /// 스테이터스 최신화
+    /// </summary>
+    public void Status_Setting()
+    {
+        Player_Status status = Player_Manager.instance.status;
+
+        attackStatusText[0].text = $"물리 공격력 : {status.physicalDamage}";
+        attackStatusText[1].text = $"마법 공격력 : {status.magicalDamage}";
+        attackStatusText[2].text = $"치명타 확률 : {status.criticalhit}%";
+        attackStatusText[3].text = $"치명타 배율 : {status.critical_multiplier}%";
+        attackStatusText[4].text = $"공격 속도 : {status.attackSpeed}";
+
+        defenceStatusText[0].text = $"체력 : {status.curhp} / {status.maxHp}";
+        defenceStatusText[1].text = $"스테미너 : {status.maxStamina}";
+        defenceStatusText[2].text = $"물리 저항력 : {status.physicalDefence}";
+        defenceStatusText[3].text = $"마법 저항력 : {status.magicalDefence}";
+
+        otherStatusText[0].text = $"이동 속도 : {status.moveSpeed}";
+        otherStatusText[1].text = $"스테미너 회복력 : {status.staminaRecovery}";
+        otherStatusText[2].text = $"경험치 : {status.curExp}";
+    }
+
     /// <summary>
     /// 장비 해제 성공 여부 표기 UI
     /// </summary>

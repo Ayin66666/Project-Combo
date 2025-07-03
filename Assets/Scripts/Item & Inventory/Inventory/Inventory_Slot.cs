@@ -6,6 +6,10 @@ using UnityEngine.UI;
 
 public class Inventory_Slot : MonoBehaviour, IPointerClickHandler, IPointerEnterHandler, IPointerExitHandler /*IBeginDragHandler, IDragHandler, IEndDragHandler*/
 {
+    [Header("---Slot Setting---")]
+    public int slotIndex;
+
+
     [Header("---Item Data---")]
     public Item_Base item;
     public bool haveItem;
@@ -23,6 +27,15 @@ public class Inventory_Slot : MonoBehaviour, IPointerClickHandler, IPointerEnter
 
 
     #region 기능 동작
+    /// <summary>
+    /// 슬롯의 인덱스 셋팅
+    /// </summary>
+    /// <param name="index"></param>
+    public void SlotIndex_Setting(int index)
+    {
+        slotIndex = index;
+    }
+
     /// <summary>
     /// 아이템 추가
     /// </summary>

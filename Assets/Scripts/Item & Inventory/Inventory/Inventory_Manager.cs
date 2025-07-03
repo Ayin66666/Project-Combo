@@ -6,10 +6,38 @@ using System.Collections.Generic;
 public class Inventory_Manager : MonoBehaviour
 {
     [Header("--- Setting ---")]
-    [SerializeField] private List<Inventory_Slot> item_Slot;
-    public Canvas canvas;
+    public List<Inventory_Slot> item_Slot;
 
 
+    #region 세이브 & 로드
+    /// <summary>
+    /// 세이브 시 데이터 전달
+    /// </summary>
+    /// <returns></returns>
+    public List<int> GetItemData()
+    {
+        List<int> data = new List<int>();
+        for (int i = 0; i < item_Slot.Count; i++)
+        {
+            data[i] = item_Slot[i].item.itemCode;
+        }
+
+        return data;
+    }
+
+    /// <summary>
+    /// 게임 시작 시 데이터 로드
+    /// </summary>
+    /// <param name="data"></param>
+    /// <returns></returns>
+    public void Inventory_Setting(Data data)
+    {
+
+    }
+    #endregion
+
+
+    #region 기능 동작
     /// <summary>
     /// 아이템 습득 시 호출
     /// </summary>
@@ -108,7 +136,6 @@ public class Inventory_Manager : MonoBehaviour
         obj.AddComponent<Item_Drop>();
     }
 
-
     /// <summary>
     /// 입력값에 따른 조건 검사
     /// </summary>
@@ -127,7 +154,6 @@ public class Inventory_Manager : MonoBehaviour
         return null;
     }
 
-
     /// <summary>
     /// 장비 장착 시 기존 아이템 이동
     /// </summary>
@@ -138,7 +164,6 @@ public class Inventory_Manager : MonoBehaviour
         // 아이템 추가
         slot.Slot_Setting(item, 1);
     }
-
 
     /// <summary>
     /// 아이템 습득 전 인벤토리 상태 체크
@@ -161,4 +186,7 @@ public class Inventory_Manager : MonoBehaviour
         // 빈 슬롯도 없고, 최대 스택 초과 가능한 슬롯도 없으니 꽉 찬 상태
         return true;
     }
+
+
+    #endregion
 }

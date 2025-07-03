@@ -7,8 +7,8 @@ using UnityEngine.UI;
 public class ShortCut_Slot : MonoBehaviour, IPointerClickHandler
 {
     [Header("---Setting---")]
-    [SerializeField] private Inventory_Slot itemSlot;
-    [SerializeField] private Item_Base item;
+    public Inventory_Slot itemSlot;
+    public Item_Base item;
     public bool haveItem;
 
 
