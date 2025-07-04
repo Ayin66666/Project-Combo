@@ -4,12 +4,26 @@ using UnityEngine;
 
 public class ItemData_Container : MonoBehaviour
 {
+    public static ItemData_Container instance;
+
     [Header("---Setting---")]
     [SerializeField] private List<Item_Base> items;
     private Dictionary<int, Item_Base> itemDatas;
 
 
     private void Awake()
+    {
+        if (instance == null)
+        {
+            instance = this;
+        }
+        else
+        {
+            Destroy(gameObject);
+        }
+    }
+
+    private void Start()
     {
         Data_Setting();
     }
@@ -43,9 +57,11 @@ public class ItemData_Container : MonoBehaviour
     /// <returns></returns>
     public Item_Base FindItem(int itemCode)
     {
+        Debug.Log("Call ItemFind");
         // ºó ½½·Ô Ã¼Å©
         if(itemCode == -1)
         {
+            Debug.Log("ItemFind = Empty");
             return null;
         }
 
@@ -54,6 +70,7 @@ public class ItemData_Container : MonoBehaviour
         {
             if(item.itemCode == itemCode)
             {
+                Debug.Log($"ItemFind = {item}");
                 return item;
             }
         }

@@ -14,15 +14,24 @@ public class Inventory_Manager : MonoBehaviour
     /// 세이브 시 데이터 전달
     /// </summary>
     /// <returns></returns>
-    public List<int> GetItemData()
+    public List<Vector2Int> GetItemData()
     {
-        List<int> data = new List<int>();
+        List<Vector2Int> item = new List<Vector2Int>();
         for (int i = 0; i < item_Slot.Count; i++)
         {
-            data[i] = item_Slot[i].item.itemCode;
+            if (item_Slot[i].haveItem)
+            {
+                Vector2Int data = new Vector2Int(item_Slot[i].item.itemCode, item_Slot[i].itemCount);
+                item.Add(data);
+            }
+            else
+            {
+                Vector2Int data = new Vector2Int(-1, 0);
+                item.Add(data);
+            }
         }
 
-        return data;
+        return item;
     }
 
     /// <summary>
@@ -32,7 +41,25 @@ public class Inventory_Manager : MonoBehaviour
     /// <returns></returns>
     public void Inventory_Setting(Data data)
     {
+        Debug.Log($"인벤토리 데이터 로드 데이터 체크 - {data}");
+        Debug.Log($"인벤토리 데이터 로드 슬롯 체크 - {item_Slot.Count}");
+        for (int i = 0; i < item_Slot.Count; i++)
+        {
+            Debug.Log("for문 호출");
+            if (data.itemData[i].itemCode != -1)
+            {
+                Debug.Log("if문 호출");
+                Debug.Log(ItemData_Container.instance);
+                Item_Base item = ItemData_Container.instance.FindItem(data.itemData[i].itemCode);
 
+                Debug.Log(item);
+                Debug.Log($"슬롯 null 체크 {i}번째 = {item_Slot[i]}");
+                if (item != null)
+                {
+                    item_Slot[i].Slot_Setting(item, data.itemData[i].itemCount);
+                }
+            }
+        }
     }
     #endregion
 
@@ -46,7 +73,7 @@ public class Inventory_Manager : MonoBehaviour
     public void Item_Add(Item_Base addItem, int itemCount)
     {
         // 데이터 오류 체크
-        if(addItem == null || itemCount <= 0)
+        if (addItem == null || itemCount <= 0)
         {
             return;
         }
@@ -57,7 +84,7 @@ public class Inventory_Manager : MonoBehaviour
             //.Log("중첩가능 - 아이템 체크1");
             // 2. 중첩 가능 시
             // 2-1 이미 인벤토리에 해당 아이템이 있는지 & 중첩 최대치가 아닌지
-            Inventory_Slot slot = Slot_Find(slot => 
+            Inventory_Slot slot = Slot_Find(slot =>
             slot.item != null && slot.item.itemCode == addItem.itemCode);
             if (slot != null)
             {
@@ -186,7 +213,5 @@ public class Inventory_Manager : MonoBehaviour
         // 빈 슬롯도 없고, 최대 스택 초과 가능한 슬롯도 없으니 꽉 찬 상태
         return true;
     }
-
-
     #endregion
 }

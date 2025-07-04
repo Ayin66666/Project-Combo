@@ -35,8 +35,11 @@ public class ShortCut_Manager : MonoBehaviour
         {
             for (int i = 0; i < data.shortcut.Count; i++)
             {
-                // 여기 슬롯 데이터 반환하는 함수나 변수 자체를 public으로 변경 필요
-                slots[i].Slot_Setting(Player_Manager.instance.inventory.item_Slot[data.shortcut[i]]);
+                if (data.shortcut[i] != -1)
+                {
+                    // 여기 슬롯 데이터 반환하는 함수나 변수 자체를 public으로 변경 필요
+                    slots[i].Slot_Setting(Player_Manager.instance.inventory.item_Slot[data.shortcut[i]]);
+                }
             }
         }
     }
@@ -51,7 +54,7 @@ public class ShortCut_Manager : MonoBehaviour
         List<int> data = new List<int>();
         for (int i = 0; i < slots.Count; i++)
         {
-            data.Add(slots[i].itemSlot.slotIndex);
+            data.Add(slots[i].haveItem ? slots[i].itemSlot.slotIndex : -1);
         }
 
         return data;

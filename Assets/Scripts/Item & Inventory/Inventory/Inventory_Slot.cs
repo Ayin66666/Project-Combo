@@ -41,6 +41,8 @@ public class Inventory_Slot : MonoBehaviour, IPointerClickHandler, IPointerEnter
     /// </summary>
     public void Slot_Setting(Item_Base data, int addCount)
     {
+        Debug.Log($"Call slot item Setting{data} {addCount}");
+
         // 아이템 추가
         haveItem = true;
         item = data;

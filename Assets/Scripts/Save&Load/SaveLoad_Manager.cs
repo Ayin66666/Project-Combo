@@ -5,7 +5,6 @@ using TMPro;
 using System;
 using System.IO;
 using UnityEngine.SceneManagement;
-using MagicaCloth2;
 
 
 #region Data
@@ -49,7 +48,7 @@ public class Data
 
 
     [Header("---Item---")]
-    public List<int> inevntory;
+    public List<ItemData> itemData;
     public List<int> equipment;
     public List<int> shortcut;
 
@@ -63,6 +62,12 @@ public class Data
     public List<int> skillLevelData;
 }
 
+[System.Serializable]
+public class ItemData
+{
+    public int itemCode;
+    public int itemCount;
+}
 
 [System.Serializable]
 public class ClearData
@@ -125,7 +130,7 @@ public class SaveLoad_Manager : MonoBehaviour
 
 
     [Header("---Load UI---")]
-    [SerializeField] private GameObject loadUI; 
+    [SerializeField] private GameObject loadUI;
     public bool isLoad;
 
 
@@ -159,9 +164,12 @@ public class SaveLoad_Manager : MonoBehaviour
         // 슬롯 UI 최신화
         SlotUI_Setting();
 
-        pManager = Player_Manager.instance;
-
         DontDestroyOnLoad(gameObject);
+    }
+
+    private void Start()
+    {
+        pManager = Player_Manager.instance;
     }
 
 
@@ -200,7 +208,7 @@ public class SaveLoad_Manager : MonoBehaviour
 
     public void SlotUI_ButtonOff()
     {
-        foreach(Save_Slot slot in slots)
+        foreach (Save_Slot slot in slots)
         {
             slot.ButtonOnOff(false);
         }
@@ -478,7 +486,7 @@ public class SaveLoad_Manager : MonoBehaviour
             staminaRecovery = 5f,
 
             // 아이템
-            inevntory = new List<int>(40),
+            itemData = new List<ItemData>(),
             equipment = new List<int>(8),
             shortcut = new List<int>(4),
 
@@ -503,7 +511,7 @@ public class SaveLoad_Manager : MonoBehaviour
         // 아이템 코드 초기화
         for (int i = 0; i < 40; i++)
         {
-            data.inevntory.Add(-1);
+            data.itemData.Add(new ItemData { itemCode = -1, itemCount = 0});
         }
 
         // 장비 코드 초기화
@@ -517,7 +525,6 @@ public class SaveLoad_Manager : MonoBehaviour
         {
             data.shortcut.Add(-1);
         }
-
 
         // 스테이지 세부 데이터 저장
         for (int i = 0; i < ChapterData_Manager.instance.chapterUIData.Count; i++)
@@ -620,7 +627,7 @@ public class SaveLoad_Manager : MonoBehaviour
                 skillLevelData = Player_Manager.instance.skill.GetSkillData(),
 
                 // 아이템
-                inevntory = Player_Manager.instance.inventory.GetItemData(),
+                itemData = new List<ItemData>(),
                 equipment = Player_Manager.instance.equipment.GetEquipmentData(),
                 shortcut = Player_Manager.instance.shortCut.GetShortcutData(),
 
@@ -638,10 +645,15 @@ public class SaveLoad_Manager : MonoBehaviour
             };
 
 
-            // 쇼트컷 데이터 셋팅
-            for (int i = 0; i < playerData.shortcut.Count; i++)
+            // 인벤토리 데이터 셋팅
+            List<Vector2Int> items = Player_Manager.instance.inventory.GetItemData();
+            for (int i = 0; i < 40; i++)
             {
-
+                playerData.itemData.Add(new ItemData
+                {
+                    itemCode = items[i].x,
+                    itemCount = items[i].y
+                });
             }
 
             // 데이터 저장
@@ -787,6 +799,9 @@ public class SaveLoad_Manager : MonoBehaviour
             {
                 yield return null;
             }
+
+            Debug.Log(data);
+            Debug.Log(pManager);
 
             // 데이터 적용 - 챕터
             ChapterData_Manager.instance.Data_Setting(data);

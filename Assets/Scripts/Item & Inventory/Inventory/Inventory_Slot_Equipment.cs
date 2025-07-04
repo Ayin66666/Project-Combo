@@ -26,8 +26,9 @@ public class Inventory_Slot_Equipment : MonoBehaviour, IPointerClickHandler, IPo
             // 장비 착용
             icon.sprite = item.Icon;
             this.item = item;
+            haveItem = true;
 
-            if(item.haveEffect)
+            if (item.haveEffect)
             {
                 Player_Manager.instance.equipment.Add_ItemEffect(item.Effect);
             }
@@ -37,6 +38,7 @@ public class Inventory_Slot_Equipment : MonoBehaviour, IPointerClickHandler, IPo
             // 장비 해제
             icon.sprite = null;
             this.item = null;
+            haveItem = false;
         }
     }
 

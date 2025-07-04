@@ -21,24 +21,20 @@ public class Equipment_Manager : MonoBehaviour
         public Item_Equipment.EquipmentType EquipmentType { get { return equipmentType; } private set { equipmentType = value; } }
     }
 
-    public System.Action itemEffect;
+    public Action itemEffect;
 
 
-    private void Start()
+    private void Awake()
     {
-        // 1. 장비 슬롯 데이터 할당
+        // 장비 슬롯 데이터 할당
         Dictonary_Setting();
-
-        // 2. 착용 장비 데이터 로드
-        // Data_Setting();
     }
 
 
-
-
-
-
     #region 장비 효과
+    /// <summary>
+    /// 조건부에 따른 이펙트 호출 - 현제는 타격시만 존재
+    /// </summary>
     public void Use_ItemEffect()
     {
         // 조건부에 따른 이펙트 호출
@@ -101,15 +97,22 @@ public class Equipment_Manager : MonoBehaviour
         // 장비
         for (int i = 0; i < slots.Count; i++)
         {
-            data.Add(slots[i].slot.Item.itemCode);
+            data.Add(slots[i].slot.haveItem ? slots[i].slot.Item.itemCode : -1);
+            Debug.Log(slots[i].slot.haveItem ? slots[i].slot.Item.itemCode : -1);
         }
 
         // 코어
         for (int i = 0; i < coreSlot.Count; i++)
         {
-            data.Add(coreSlot[i].slot.Item.itemCode);
+            data.Add(coreSlot[i].slot.haveItem ? coreSlot[i].slot.Item.itemCode : -1);
+            Debug.Log(coreSlot[i].slot.haveItem ? coreSlot[i].slot.Item.itemCode : -1);
         }
 
+
+        for (int i = 0; i < data.Count; i++)
+        {
+            Debug.Log($"장비 아이템 체크 {i}번째 데이터 : {data[i]}");
+        }
         return data;
     }
 
@@ -122,9 +125,29 @@ public class Equipment_Manager : MonoBehaviour
         // 데이터 로드
         Data data = SaveLoad_Manager.instance.LoadData(SaveLoad_Manager.instance.curSlot);
 
-        // 데이터 적용
+        // 장비 착용
+        for (int i = 0; i < 5; i++)
+        {
+            if(data.equipment[i] != -1)
+            {
+                Item_Base item = ItemData_Container.instance.FindItem(data.equipment[i]);
+                slots[i].slot.Item_Setting(true, (Item_Equipment)item);
+            }
+        }
+
+        // 코어 착용
+        for (int i = 5; i < 8; i++)
+        {
+            if (data.equipment[i] != -1)
+            {
+                Item_Base item = ItemData_Container.instance.FindItem(data.equipment[i]);
+                int coreIndex = i - 5;
+                coreSlot[coreIndex].slot.Item_Setting(true, (Item_Equipment)item);
+            }
+        }
     }
     #endregion
+
 
     #region 장비 착용 & 해제 로직
     /// <summary>
@@ -146,10 +169,6 @@ public class Equipment_Manager : MonoBehaviour
 
                     // 스테이터스 UI 최신화
                     UI_Manager.instance.Status_Setting();
-
-                    // 해당 장비에 추가효과가 있다면 액션에 추가
-                    if (item.haveEffect)
-                        Player_Manager.instance.equipment.Add_ItemEffect(item.Effect);
                     return;
                 }
             }
@@ -169,10 +188,6 @@ public class Equipment_Manager : MonoBehaviour
 
             // 스테이터스 UI 최신화
             UI_Manager.instance.Status_Setting();
-
-            // 해당 장비에 추가효과가 있다면 액션에 추가
-            if (item.haveEffect)
-                Player_Manager.instance.equipment.Add_ItemEffect(item.Effect);
 
         }
         else
@@ -195,10 +210,6 @@ public class Equipment_Manager : MonoBehaviour
 
                 // 스테이터스 UI 최신화
                 UI_Manager.instance.Status_Setting();
-
-                // 해당 장비에 추가효과가 있다면 액션에 추가
-                if (item.haveEffect)
-                    Player_Manager.instance.equipment.Add_ItemEffect(item.Effect);
             }
             else
             {
@@ -211,10 +222,6 @@ public class Equipment_Manager : MonoBehaviour
 
                 // 스테이터스 UI 최신화
                 UI_Manager.instance.Status_Setting();
-
-                // 해당 장비에 추가효과가 있다면 액션에 추가
-                if (item.haveEffect)
-                    Player_Manager.instance.equipment.Add_ItemEffect(item.Effect);
             }
         }
     }

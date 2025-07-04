@@ -68,6 +68,7 @@ public class UI_Manager : MonoBehaviour
     [Header("---Mini Map---")]
     [SerializeField] private GameObject NiniMapSet;
     [SerializeField] private RectTransform miniMapRect;
+    private Coroutine minimapCoroutine;
 
 
     [Header("---Quest---")]
@@ -413,14 +414,23 @@ public class UI_Manager : MonoBehaviour
     /// <param name="isUp"></param>
     public void MiniMap_SizeSetting(bool isUp)
     {
-        // 기존 트윈이 실행 중이면 중단
-        miniMapRect.DOKill();
+        if(minimapCoroutine != null)
+            StopCoroutine(minimapCoroutine);
 
-        // 목표 크기 설정
-        Vector2 targetScale = isUp ? Vector2.one : new Vector2(0.7f, 0.7f);
+        minimapCoroutine = StartCoroutine(MinimapSizeCall(isUp));
+    }
 
-        // 트윈 실행 (0.4초 동안 부드럽게 크기 조정)
-        miniMapRect.DOScale(targetScale, 0.4f).SetEase(Ease.OutQuad);
+    public IEnumerator MinimapSizeCall(bool isUp)
+    {
+        Vector3 start = isUp ? new Vector3(0.7f, 0.7f, 1f) : Vector3.one;
+        Vector3 end = isUp ? Vector2.one : new Vector3(0.7f, 0.7f, 1f);
+        float timer = 0;
+        while(timer < 1)
+        {
+            timer += Time.deltaTime;
+            miniMapRect.localScale = Vector3.Lerp(start, end, EasingFunctions.OutExpo(timer));
+            yield return null;
+        }
     }
 
 
