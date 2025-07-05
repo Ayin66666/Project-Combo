@@ -28,10 +28,9 @@ public class Inventory_Slot_Equipment : MonoBehaviour, IPointerClickHandler, IPo
             this.item = item;
             haveItem = true;
 
+            // 장비 효과 추가
             if (item.haveEffect)
-            {
                 Player_Manager.instance.equipment.Add_ItemEffect(item.Effect);
-            }
         }
         else
         {
@@ -39,6 +38,10 @@ public class Inventory_Slot_Equipment : MonoBehaviour, IPointerClickHandler, IPo
             icon.sprite = null;
             this.item = null;
             haveItem = false;
+
+            // 장비 효과 제거
+            if(item.haveEffect)
+                Player_Manager.instance.equipment.Remove_ItemEffect(item.Effect);
         }
     }
 

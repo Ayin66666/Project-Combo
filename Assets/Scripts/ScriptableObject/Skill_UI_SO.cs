@@ -1,5 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Video;
 
@@ -11,7 +9,7 @@ public class Skill_UI_SO : ScriptableObject
     [SerializeField] private Sprite iconImage;
     [SerializeField] private VideoClip clip;
     [SerializeField] private string skillName;
-    [SerializeField, TextArea] private string skillDescription;
+    [SerializeField, TextArea] private string[] skillDescription;
 
 
     #region Property
@@ -22,7 +20,7 @@ public class Skill_UI_SO : ScriptableObject
 
     }
 
-    public string SkillDescription
+    public string[] SkillDescription
     {
         get { return skillDescription; }
         private set { skillDescription = value; }

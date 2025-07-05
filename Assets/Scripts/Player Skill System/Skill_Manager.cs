@@ -1,16 +1,18 @@
 using System.Collections.Generic;
+using Unity.VisualScripting.Antlr3.Runtime.Misc;
 using UnityEngine;
 
 
 [System.Serializable]
 public class SkillData
 {
+    // 스킬 레벨을 attack_base에서 빼는게 맞지만 구조상 이미 너무 늦어버림
     public SkillType type;
     public string skillNmae;
-    public int skillLevel;
+    public Attack_Base attack;
+    public Skill_UI_SO ui;
     public enum SkillType { Normal, Smash, Other }
 }
-
 
 /*
 0 1 2 3 = 일반
@@ -25,16 +27,8 @@ public class Skill_Manager : MonoBehaviour
 {
     [Header("---Skill Tree Setting---")]
     public int skillPoint;
-    public List<Skill> skillData;
+    public List<SkillData> skillData;
     public List<Skill_Slot> slots;
-
-
-    [System.Serializable]
-    public struct Skill
-    {
-        public Skill_UI_SO uiData;
-        public Attack_Base attack;
-    }
 
 
     /// <summary>
@@ -67,7 +61,7 @@ public class Skill_Manager : MonoBehaviour
         // 슬롯 UI 셋팅
         for (int i = 0; i < slots.Count; i++)
         {
-            slots[i].UI_Setting(skillData[i].uiData, skillData[i].attack.skillLevel, i);
+            slots[i].UI_Setting(skillData[i], i);
         }
     }
 
@@ -78,10 +72,18 @@ public class Skill_Manager : MonoBehaviour
     /// <param name="skill_Index"></param>
     public void Skill_LevelUp(int skill_Index)
     {
+        // 최대레벨 체크
+        if (skillData[skill_Index].attack.skillLevel >= 5)
+        {
+            UI_Manager.instance.Skill_Result(2);
+            return;
+        }
+
         // 스킬표인트 체크
         if (skillPoint < 1)
         {
-            // 스킬포인트가 부족하다면 - 안내 UI 표가
+            // 스킬포인트가 부족하다면 - 안내 UI 표기
+            UI_Manager.instance.Skill_Result(1);
             return;
         }
 
@@ -89,16 +91,15 @@ public class Skill_Manager : MonoBehaviour
         if (skillData[skill_Index].attack.skillLevel < 5)
         {
             // 최대레벨보다 낮다면 - 레벨 업
-            skillData[skill_Index].attack.skillLevel++;
             skillPoint--;
+            skillData[skill_Index].attack.skillLevel++;
+
+            // UI 최신화
+            UI_Manager.instance.Skill_Description(skillData[skill_Index].ui, skillData[skill_Index].attack.skillLevel);
+            slots[skill_Index].LevelUp();
 
             // 습득 성공 UI
-            UI_Manager.instance.Skill_Result(true);
-        }
-        else
-        {
-            // 최대레벨이라면 - 안내 UI 표기
-            UI_Manager.instance.Skill_Result(false);
+            UI_Manager.instance.Skill_Result(0);
         }
     }
 

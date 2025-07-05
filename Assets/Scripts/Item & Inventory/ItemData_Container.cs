@@ -8,7 +8,7 @@ public class ItemData_Container : MonoBehaviour
 
     [Header("---Setting---")]
     [SerializeField] private List<Item_Base> items;
-    private Dictionary<int, Item_Base> itemDatas;
+    private Dictionary<int, Item_Base> itemDatas = new Dictionary<int, Item_Base>();
 
 
     private void Awake()

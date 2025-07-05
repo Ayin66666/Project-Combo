@@ -800,9 +800,6 @@ public class SaveLoad_Manager : MonoBehaviour
                 yield return null;
             }
 
-            Debug.Log(data);
-            Debug.Log(pManager);
-
             // 데이터 적용 - 챕터
             ChapterData_Manager.instance.Data_Setting(data);
 
@@ -815,8 +812,11 @@ public class SaveLoad_Manager : MonoBehaviour
             // 데이터 적용 - 스킬트리
             pManager.skill.Skill_Setting(data);
 
-            // 데이터 적용 - 인벤토리 & 장비창
+            // 데이터 적용 - 인벤토리
             pManager.inventory.Inventory_Setting(data);
+
+            // 데이터 적용 - 장비
+            pManager.equipment.Equipment_Setting();
 
             // 데이터 적용 - 쇼트컷
             pManager.shortCut.LoadData(data);

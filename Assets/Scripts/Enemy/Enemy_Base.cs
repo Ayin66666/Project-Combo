@@ -89,8 +89,6 @@ public abstract class Enemy_Base : MonoBehaviour, IDamageSysteam
     protected Coroutine movementCoroutine;
     protected Coroutine hitCoroutine;
     private Coroutine attackMovementCoroutine;
-
-    private Tween attackMoveTween;
     private List<System.Func<IEnumerator>> spawnList;
 
 
@@ -272,7 +270,8 @@ public abstract class Enemy_Base : MonoBehaviour, IDamageSysteam
                 CameraEffect_Manager.instance.Camera_Shack(1, 0.1f);
 
                 // 플레이어 각성 게이지
-                Player_Manager.instance.status.Recovery(Player_Status.RecoveryType.Awakening, (int)(calDamage * 0.25f));
+                if (!Player_Manager.instance.action.isAwakning)
+                    Player_Manager.instance.status.Recovery(Player_Status.RecoveryType.Awakening, (int)(calDamage * 0.25f));
 
                 // 사망 체크
                 if (curHp <= 0)
