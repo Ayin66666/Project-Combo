@@ -144,6 +144,23 @@ public class Attack_Samsh_DoubleSlash : Attack_Base
 
     public override void AttackVFX(int index)
     {
+        // 사운드
+        switch (index)
+        {
+            case 0:
+                Player_Sound.instance.Sound_Smash(Player_Sound.Smash.Smash2_Slash);
+                break;
+
+            case 1:
+                Player_Sound.instance.Sound_Smash(Player_Sound.Smash.Smash2_Sting);
+                break;
+
+            case 2:
+                Player_Sound.instance.Sound_Smash(Player_Sound.Smash.Smash2_Rush);
+                break;
+        }
+
+        // 이펙트
         doubleSlashVFX[index].SetActive(true);
     }
 

@@ -141,6 +141,23 @@ public class Attack_Smash_UpperSlash : Attack_Base
 
     public override void AttackVFX(int index)
     {
+        // 사운드
+        switch (index)
+        {
+            case 0:
+                Player_Sound.instance.Sound_Smash(Player_Sound.Smash.Smash1_Slash1);
+                break;
+
+            case 1:
+                Player_Sound.instance.Sound_Smash(Player_Sound.Smash.Samsh1_Slash2);
+                break;
+
+            case 2:
+                Player_Sound.instance.Sound_Smash(Player_Sound.Smash.Samsh1_Strike);
+                break;
+        }
+
+        // 이펙트
         upperSlashVFX[index].SetActive(true);
     }
 

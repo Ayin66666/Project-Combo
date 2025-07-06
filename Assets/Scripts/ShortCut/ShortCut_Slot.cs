@@ -80,13 +80,20 @@ public class ShortCut_Slot : MonoBehaviour, IPointerClickHandler
         }
     }
 
+
     public void OnPointerClick(PointerEventData eventData)
     {
         // 마우스 우클릭 시 슬롯 내 아이템 제거
         if (eventData.button == PointerEventData.InputButton.Right)
         {
             // 슬롯 초기화
-            Slot_Reset();
+            if(haveItem)
+            {
+                // 클릭 사운드
+                Player_Sound.instance.Sound_System(Player_Sound.System.Click);
+
+                Slot_Reset();
+            }
         }
     }
 }

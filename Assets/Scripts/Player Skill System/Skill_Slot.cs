@@ -2,6 +2,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.EventSystems;
 using TMPro;
+using static Cinemachine.DocumentationSortingAttribute;
 
 
 public class Skill_Slot : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler, IPointerClickHandler
@@ -31,7 +32,8 @@ public class Skill_Slot : MonoBehaviour, IPointerEnterHandler, IPointerExitHandl
         // UI Setting
         iconImage.sprite = data.ui.Icon;
         nameText.text = data.ui.SkillName;
-        levelText.text = $"{data.attack.skillLevel + 1} / 5";
+        int level = Mathf.Min(data.attack.skillLevel + 1, 5);
+        levelText.text = $"{level} / 5";
     }
 
     /// <summary>
@@ -39,7 +41,8 @@ public class Skill_Slot : MonoBehaviour, IPointerEnterHandler, IPointerExitHandl
     /// </summary>
     public void LevelUp()
     {
-        levelText.text = $"{data.attack.skillLevel + 1} / 5";
+        int level = Mathf.Min(data.attack.skillLevel + 1, 5);
+        levelText.text = $"{level} / 5";
     }
     #endregion
 

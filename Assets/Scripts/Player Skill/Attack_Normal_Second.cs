@@ -65,6 +65,8 @@ public class Attack_Normal_Second : Attack_Base
 
     public override void AttackVFX(int index)
     {
+        Player_Sound.instance.Sound_Normal(Player_Sound.Normal.Normal2);
+
         Instantiate(attackVFX, vfxPos.position, vfxPos.rotation);
     }
 

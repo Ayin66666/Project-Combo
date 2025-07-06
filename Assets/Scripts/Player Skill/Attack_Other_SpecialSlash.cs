@@ -29,11 +29,15 @@ public class Attack_Other_SpecialSlash : Attack_Base
     private IEnumerator UseCall()
     {
         PlayerAction_Manager.instance.MovementLock(cancelType, true);
-        PlayerAction_Manager.instance.isAttack = true;
-        PlayerAction_Manager.instance.Animation_Reset();
-
-        // 콜라이더 무시
         PlayerAction_Manager.instance.Collider_Ignore(true);
+        PlayerAction_Manager.instance.Animation_Reset();
+        PlayerAction_Manager.instance.isAttack = true;
+
+        // 데미지 셋팅
+        for (int i = 0; i < value_Normal.Count; i++)
+        {
+            DamageCal(i);
+        }
 
         // 차징
         anim.SetTrigger("Action");
@@ -41,11 +45,8 @@ public class Attack_Other_SpecialSlash : Attack_Base
         anim.SetBool("isSpecialSlash", true);
         attackVFX[0].SetActive(true);
 
-        // 데미지 셋팅
-        for (int i = 0; i < value_Normal.Count; i++)
-        {
-            DamageCal(i);
-        }
+        // 사운드
+        Player_Sound.instance.Sound_Speical(Player_Sound.Special.Special_Charge);
 
         //카메라 전환
         brain.m_DefaultBlend.m_Time = 0;
@@ -151,6 +152,29 @@ public class Attack_Other_SpecialSlash : Attack_Base
 
     public override void AttackVFX(int index)
     {
+        // 사운드
+        switch (index)
+        {
+            case 2: // 점프
+                Player_Sound.instance.Sound_Speical(Player_Sound.Special.Special_Jump);
+                break;
+
+            case 3:
+            case 4:
+            case 5: // 공중 검기
+                Player_Sound.instance.Sound_Speical(Player_Sound.Special.Special_SwordAura);
+                break;
+
+            case 7: // 내려찍기
+                Player_Sound.instance.Sound_Speical(Player_Sound.Special.Special_Strike);
+                break;
+
+            case 11: // 범위 베기
+                Player_Sound.instance.Sound_Speical(Player_Sound.Special.Special_BackstepSlash);
+                break;
+        }
+
+
         attackVFX[index].SetActive(true);
     }
 

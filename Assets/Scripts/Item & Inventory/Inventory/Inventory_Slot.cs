@@ -186,6 +186,9 @@ public class Inventory_Slot : MonoBehaviour, IPointerClickHandler, IPointerEnter
             return;
         }
 
+        // 클릭 사운드
+        Player_Sound.instance.Sound_System(Player_Sound.System.Click);
+
         // 마우스 오른쪽 클릭만 체크
         if (eventData.button == PointerEventData.InputButton.Right)
         {

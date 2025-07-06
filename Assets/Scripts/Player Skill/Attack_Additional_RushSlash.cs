@@ -82,6 +82,10 @@ public class Attack_Additional_RushSlash : Attack_Base
 
     public override void AttackVFX(int index)
     {
+        // »ç¿îµå
+        if (index == 0)
+            Player_Sound.instance.Sound_Skill(Player_Sound.Skill.RushSlash);
+
         attackVFX[index].SetActive(true);
     }
 

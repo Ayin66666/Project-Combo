@@ -46,12 +46,16 @@ public class Attack_Smash_ChargeSlash : Attack_Base
             // 차징
             if(chargeCount < 1)
             {
+                Player_Sound.instance.Sound_Smash(Player_Sound.Smash.Smash4_Charge);
+
                 chargeCount += Time.deltaTime * (PlayerAction_Manager.instance.isAwakning ? 1f : 0.5f);
             }
 
             // 2단계
             if (chargeCount >= 0.5f && chargeVFX[0].activeSelf)
             {
+                Player_Sound.instance.Sound_Smash(Player_Sound.Smash.Smash4_Charge);
+
                 chargeVFX[0].SetActive(false);
                 chargeVFX[1].SetActive(true);
             }
@@ -59,6 +63,8 @@ public class Attack_Smash_ChargeSlash : Attack_Base
             // 3단계
             if(chargeCount >= 1f && chargeVFX[1].activeSelf)
             {
+                Player_Sound.instance.Sound_Smash(Player_Sound.Smash.Smash4_Charge);
+
                 chargeVFX[1].SetActive(false);
                 chargeVFX[2].SetActive(true);
             }
@@ -111,10 +117,12 @@ public class Attack_Smash_ChargeSlash : Attack_Base
         int a = chargeCount < 0.5f ? 0 : (chargeCount < 1f ? 1 : 2);
         if (index == 0)
         {
+            Player_Sound.instance.Sound_Smash(Player_Sound.Smash.Smash4_Slash12);
             slashVFX[a].SetActive(true);
         }
         else
         {
+            Player_Sound.instance.Sound_Smash(Player_Sound.Smash.Smash4_Slash3);
             slashExplosionVFX[a].SetActive(true);
         }
     }

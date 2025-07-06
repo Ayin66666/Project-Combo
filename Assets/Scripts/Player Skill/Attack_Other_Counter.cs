@@ -47,6 +47,10 @@ public class Attack_Other_Counter : Attack_Base
         anim.SetBool("isCounterReady", true);
         anim.SetBool("isCounter", true);
 
+
+        // 사운드
+        Player_Sound.instance.Sound_Skill(Player_Sound.Skill.Counter_Start);
+
         // 카운터 대기
         float timer = 0;
         while (timer < counterTime)
@@ -114,7 +118,7 @@ public class Attack_Other_Counter : Attack_Base
         while (anim.GetBool("isCounter"))
         {
             timer += Time.deltaTime;
-            if(timer > time && Input_Manager.instance.movementInput.magnitude > 0)
+            if (timer > time && Input_Manager.instance.movementInput.magnitude > 0)
             {
                 anim.SetBool("isCounter", false);
                 break;
@@ -168,10 +172,10 @@ public class Attack_Other_Counter : Attack_Base
 
         PlayerAction_Manager.instance.isAttack = false;
         float timer = 0;
-        while(anim.GetBool("isCounter"))
+        while (anim.GetBool("isCounter"))
         {
             timer += Time.deltaTime;
-            if(timer > time && Input_Manager.instance.movementInput.magnitude > 0)
+            if (timer > time && Input_Manager.instance.movementInput.magnitude > 0)
             {
                 anim.SetBool("isCounter", false);
                 break;
@@ -201,6 +205,19 @@ public class Attack_Other_Counter : Attack_Base
 
     public override void AttackVFX(int index)
     {
+        // 사운드
+        switch (index)
+        {
+            case 0:
+                Player_Sound.instance.Sound_Skill(Player_Sound.Skill.Counter_Success);
+                break;
+
+            case 1:
+                Player_Sound.instance.Sound_Skill(Player_Sound.Skill.Counter_Add);
+                break;
+        }
+
+        // 이펙트
         counterVFX[index].SetActive(true);
     }
 

@@ -51,6 +51,9 @@ public class Attack_Other_Awankning : Attack_Base
         awankningVFX.SetActive(true);
         swordVFX.SetActive(true);
 
+        // 사운드
+        Player_Sound.instance.Sound_Skill(Player_Sound.Skill.Awakening);
+
         // 능력치 강화
         Buff_Setting();
         Status_Setting(true);

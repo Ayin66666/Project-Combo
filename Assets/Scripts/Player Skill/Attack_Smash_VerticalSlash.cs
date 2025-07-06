@@ -148,6 +148,16 @@ public class Attack_Smash_VerticalSlash : Attack_Base
 
     public void Veritcal_Aura(int index)
     {
+        // 사운드
+        if(index == 0 || index == 1)
+        {
+            Player_Sound.instance.Sound_Smash(Player_Sound.Smash.Smash3_Aura12);
+        }
+        else
+        {
+            Player_Sound.instance.Sound_Smash(Player_Sound.Smash.Smash3_Aura34);
+        }
+
         // 이펙트
         Vector3 ppp = PlayerAction_Manager.instance.shootTarget.transform.position - PlayerAction_Manager.instance.bodyObject.transform.position;
         GameObject obj = Instantiate(auraVFX, shotPos.position, PlayerAction_Manager.instance.transform.localRotation);

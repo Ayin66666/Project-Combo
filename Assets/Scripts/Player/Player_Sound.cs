@@ -1,0 +1,146 @@
+using System.Collections.Generic;
+using UnityEngine;
+
+
+public class Player_Sound : MonoBehaviour
+{
+    public static Player_Sound instance;
+
+    [Header("---Component---")]
+    [SerializeField] private AudioSource audioSource_Player;
+    [SerializeField] private AudioSource audioSource_UI;
+
+    #region Fight
+    [Header("---Fight Sound---")]
+    [SerializeField] private AudioClip[] playerFight_Normal;
+    [SerializeField] private AudioClip[] playerFight_Smash;
+    [SerializeField] private AudioClip[] playerFight_Skill;
+    [SerializeField] private AudioClip[] playerFight_Special;
+
+    private Dictionary<Normal, AudioClip> normalSound;
+    private Dictionary<Smash, AudioClip> smashSound;
+    private Dictionary<Skill, AudioClip> skillSound;
+    private Dictionary<Special, AudioClip> specialSound;
+
+    public enum Normal { Normal1, Normal2, Normal3, Normal4 }
+    public enum Skill { RushSlash, Counter_Start, Counter_Success, Counter_Add, Awakening }
+    public enum Special { Special_Charge, Special_Jump, Special_SwordAura, Special_Strike, Special_BackstepSlash }
+    public enum Smash
+    {
+        Smash1_Slash1, Samsh1_Slash2, Samsh1_Strike,
+        Smash2_Slash, Smash2_Sting, Smash2_Rush,
+        Smash3_Aura12, Smash3_Aura34,
+        Smash4_Charge, Smash4_Slash12, Smash4_Slash3
+    }
+    #endregion
+
+    #region UI
+    [Header("---UI Sound---")]
+    [SerializeField] private AudioClip[] ingame;
+    [SerializeField] private AudioClip[] system;
+    private Dictionary<IngameSystem, AudioClip> inGameSystemSound;
+    private Dictionary<System, AudioClip> systemSound;
+
+    public enum IngameSystem { ItemUse, Recovery, Reward, StageClear }
+    public enum System { Click, Save, LoadingEnd }
+    #endregion
+
+
+    private void Awake()
+    {
+        if (instance == null)
+        {
+            instance = this;
+        }
+        else
+        {
+            Destroy(gameObject);
+        }
+
+        // Setting();
+    }
+
+    private void Setting()
+    {
+        // 플레이어 전투
+        normalSound = new Dictionary<Normal, AudioClip>();
+        for (int i = 0; i < playerFight_Normal.Length; i++)
+        {
+            normalSound[(Normal)i] = playerFight_Normal[i];
+        }
+
+        smashSound = new Dictionary<Smash, AudioClip>();
+        for (int i = 0; i < playerFight_Smash.Length; i++)
+        {
+            smashSound[(Smash)i] = playerFight_Smash[i];
+        }
+
+        skillSound = new Dictionary<Skill, AudioClip>();
+        for (int i = 0; i < playerFight_Skill.Length; i++)
+        {
+            skillSound[(Skill)i] = playerFight_Skill[i];
+        }
+
+        specialSound = new Dictionary<Special, AudioClip>();
+        for (int i = 0; i < playerFight_Special.Length; i++)
+        {
+            specialSound[(Special)i] = playerFight_Special[i];
+        }
+
+
+        // 시스템 & UI
+        inGameSystemSound = new Dictionary<IngameSystem, AudioClip>();
+        for (int i = 0; i < ingame.Length; i++)
+        {
+            inGameSystemSound[(IngameSystem)i] = ingame[i];
+        }
+
+        systemSound = new Dictionary<System, AudioClip>();
+        for (int i = 0; i < ingame.Length; i++)
+        {
+            systemSound[(System)i] = ingame[i];
+        }
+    }
+
+
+    #region 플레이어 전투 사운드
+    public void Sound_Normal(Normal type)
+    {
+        Debug.Log($"Sound Call {type}");
+        // audioSource_Player.PlayOneShot(normalSound[type]);
+    }
+
+    public void Sound_Smash(Smash type)
+    {
+        Debug.Log($"Sound Call {type}");
+        // audioSource_Player.PlayOneShot(smashSound[type]);
+    }
+
+    public void Sound_Skill(Skill type)
+    {
+        Debug.Log($"Sound Call {type}");
+        // audioSource_Player.PlayOneShot(skillSound[type]);
+    }
+
+    public void Sound_Speical(Special type)
+    {
+        Debug.Log($"Sound Call {type}");
+        // audioSource_Player.PlayOneShot(specialSound[type]);
+    }
+    #endregion
+
+
+    #region 플레이어 UI 사운드
+    public void Sound_Ingame(IngameSystem type)
+    {
+        Debug.Log($"Sound Call {type}");
+        // audioSource_UI.PlayOneShot(inGameSystemSound[type]);
+    }
+
+    public void Sound_System(System type)
+    {
+        Debug.Log($"Sound Call {type}");
+        // audioSource_UI.PlayOneShot(systemSound[type]);
+    }
+    #endregion
+}

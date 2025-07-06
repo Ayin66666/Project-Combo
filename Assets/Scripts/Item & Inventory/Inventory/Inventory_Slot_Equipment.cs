@@ -21,7 +21,7 @@ public class Inventory_Slot_Equipment : MonoBehaviour, IPointerClickHandler, IPo
 
     public void Item_Setting(bool equipment, Item_Equipment item)
     {
-        if(equipment)
+        if (equipment)
         {
             // 장비 착용
             icon.sprite = item.Icon;
@@ -40,7 +40,7 @@ public class Inventory_Slot_Equipment : MonoBehaviour, IPointerClickHandler, IPo
             haveItem = false;
 
             // 장비 효과 제거
-            if(item.haveEffect)
+            if (item.haveEffect)
                 Player_Manager.instance.equipment.Remove_ItemEffect(item.Effect);
         }
     }
@@ -52,7 +52,14 @@ public class Inventory_Slot_Equipment : MonoBehaviour, IPointerClickHandler, IPo
         if (eventData.button == PointerEventData.InputButton.Right)
         {
             // 마우스 우클릭 시 - 아이템 해제
-            Player_Manager.instance.equipment.EnEquipment(this);
+            if (haveItem)
+            {
+                // 클릭 사운드
+                Player_Sound.instance.Sound_System(Player_Sound.System.Click);
+
+                // 장비 해제
+                Player_Manager.instance.equipment.EnEquipment(this);
+            }
         }
     }
 

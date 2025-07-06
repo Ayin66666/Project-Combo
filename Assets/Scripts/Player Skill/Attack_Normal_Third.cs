@@ -63,6 +63,8 @@ public class Attack_Normal_Third : Attack_Base
 
     public override void AttackVFX(int index)
     {
+        Player_Sound.instance.Sound_Normal(Player_Sound.Normal.Normal3);
+
         Instantiate(attackVFX, vfxPos.position, vfxPos.rotation);
 
     }

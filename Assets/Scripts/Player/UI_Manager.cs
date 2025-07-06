@@ -341,13 +341,13 @@ public class UI_Manager : MonoBehaviour
         levelUpCanvasGroup.alpha = 1;
 
         // 딜레이
-        yield return new WaitForSeconds(1.25f);
+        yield return new WaitForSeconds(1f);
 
         // 페이드 아웃
         float timer = 0;
         while (timer < 1)
         {
-            timer += Time.deltaTime * 1.5f;
+            timer += Time.deltaTime * 1.25f;
             levelUpCanvasGroup.alpha = Mathf.Lerp(1, 0, EasingFunctions.OutExpo(timer));
             yield return null;
         }
@@ -645,6 +645,9 @@ public class UI_Manager : MonoBehaviour
     /// </summary>
     public void PlayerUI_Setting()
     {
+        // 클릭 사운드
+        Player_Sound.instance.Sound_System(Player_Sound.System.Click);
+
         // 시작 화면이면 무조건 옵션창으로 고정 - 아니라면 마지막에 열었던 UI로 활성화
         PlayerUI_Setting(SaveLoad_Manager.instance.isStartScene ? 3 : (int)uiType);
 
@@ -675,6 +678,10 @@ public class UI_Manager : MonoBehaviour
             playerUISet[i].SetActive(false);
         }
 
+        // 클릭 사운드
+        Player_Sound.instance.Sound_System(Player_Sound.System.Click);
+
+        // UI On
         uiType = (UIType)index;
         playerUISet[index].SetActive(true);
     }

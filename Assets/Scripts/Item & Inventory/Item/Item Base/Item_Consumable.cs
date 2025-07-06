@@ -28,6 +28,9 @@ public class Item_Consumable : Item_Base
 
     public override void Use()
     {
+        // 회복 사운드
+        Player_Sound.instance.Sound_Ingame(Player_Sound.IngameSystem.Recovery);
+
         switch (consumableType)
         {
             case ConsumableType.oneoff:
