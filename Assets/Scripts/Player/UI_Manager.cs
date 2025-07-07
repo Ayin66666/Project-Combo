@@ -660,10 +660,12 @@ public class UI_Manager : MonoBehaviour
         // 옵션 UI 활/비활성화
         playerUI.SetActive(!playerUI.activeSelf);
 
-        // 마우스 커서 셋팅 - 시작화면은 락 제거
-        if(!SaveLoad_Manager.instance.isStartScene)
-            Player_Manager.instance.Cursor_Setting(!playerUI.activeSelf);
+        // 타임 스케일 조정
+        Time.timeScale = playerUI.activeSelf ? 0 : 1;
 
+        // 마우스 커서 셋팅 - 시작화면은 락 제거
+        if (!SaveLoad_Manager.instance.isStartScene)
+            Player_Manager.instance.Cursor_Setting(!playerUI.activeSelf);
     }
 
     /// <summary>
@@ -720,12 +722,12 @@ public class UI_Manager : MonoBehaviour
         skillResultSetText.text = isSuccess == 0 ? "습득 성공" : isSuccess == 1 ? "스킬 포인트가 부족합니다!" : "이미 최대 레벨입니다!";
         skillResultSetCanvasGroup.alpha = 1;
 
-        yield return new WaitForSeconds(0.25f);
+        yield return new WaitForSecondsRealtime(0.25f);
 
         float timer = 0;
         while (timer < 1)
         {
-            timer += Time.deltaTime * 1.25f;
+            timer += Time.unscaledDeltaTime * 1.25f;
             skillResultSetCanvasGroup.alpha = Mathf.Lerp(1, 0, EasingFunctions.OutExpo(timer));
             yield return null;
         }

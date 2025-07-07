@@ -78,6 +78,7 @@ namespace UnityTemplateProjects
 
         void OnEnable()
         {
+            
             m_TargetCameraState.SetFromTransform(transform);
             m_InterpolatingCameraState.SetFromTransform(transform);
         }
@@ -114,6 +115,7 @@ namespace UnityTemplateProjects
         
         void Update()
         {
+            Cursor.visible = false;
             Vector3 translation = Vector3.zero;
 
 #if ENABLE_LEGACY_INPUT_MANAGER

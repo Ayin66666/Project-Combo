@@ -2,7 +2,6 @@ using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.EventSystems;
 using TMPro;
-using static Cinemachine.DocumentationSortingAttribute;
 
 
 public class Skill_Slot : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler, IPointerClickHandler
@@ -32,8 +31,8 @@ public class Skill_Slot : MonoBehaviour, IPointerEnterHandler, IPointerExitHandl
         // UI Setting
         iconImage.sprite = data.ui.Icon;
         nameText.text = data.ui.SkillName;
-        int level = Mathf.Min(data.attack.skillLevel + 1, 5);
-        levelText.text = $"{level} / 5";
+        int level = Mathf.Min(data.attack.skillLevel + 1, data.attack.maxLevel);
+        levelText.text = $"{level} / {data.attack.maxLevel}";
     }
 
     /// <summary>
@@ -41,8 +40,8 @@ public class Skill_Slot : MonoBehaviour, IPointerEnterHandler, IPointerExitHandl
     /// </summary>
     public void LevelUp()
     {
-        int level = Mathf.Min(data.attack.skillLevel + 1, 5);
-        levelText.text = $"{level} / 5";
+        int level = Mathf.Min(data.attack.skillLevel + 1, data.attack.maxLevel);
+        levelText.text = $"{level} / {data.attack.maxLevel}";
     }
     #endregion
 
@@ -57,7 +56,7 @@ public class Skill_Slot : MonoBehaviour, IPointerEnterHandler, IPointerExitHandl
     public void OnPointerClick(PointerEventData eventData)
     {
         // 스킬 슬롯 클릭
-        Player_Manager.instance.skill.Skill_LevelUp(skill_Index);
+        Player_Manager.instance.skill.Skill_LevelUp(skill_Index, data.attack.maxLevel);
     }
 
     public void OnPointerExit(PointerEventData eventData)

@@ -61,19 +61,7 @@ public abstract class Hideout_Object_Base : MonoBehaviour
             iconCanvasGroup.alpha = Mathf.Lerp(start, end, timer);
             yield return null;
         }
-    }
-
-    protected IEnumerator IconUseOff()
-    {
-        float timer = 0f;
-        while (timer < 1)
-        {
-            timer += Time.deltaTime * 0.65f;
-            iconCanvasGroup.alpha = Mathf.Lerp(1, 0, EasingFunctions.InOutElastic(timer));
-            yield return null;
-        }
-
-        iconCanvasGroup.alpha = 0f;
+        iconCanvasGroup.alpha = 0;
     }
 
     protected void LookAt()

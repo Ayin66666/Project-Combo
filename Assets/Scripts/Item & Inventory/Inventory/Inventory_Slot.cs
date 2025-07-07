@@ -215,7 +215,8 @@ public class Inventory_Slot : MonoBehaviour, IPointerClickHandler, IPointerEnter
             }
             else
             {
-                UI_Manager.instance.Item_DescriptionUI(true, item);
+                if (!menuSet.activeSelf)
+                    UI_Manager.instance.Item_DescriptionUI(true, item);
             }
         }
     }

@@ -51,6 +51,10 @@ public class Skill_Manager : MonoBehaviour
     /// </summary>
     public void Skill_Setting(Data data)
     {
+        // 스킬포인트 셋팅
+        skillPoint = data.skillPoint;
+        UI_Manager.instance.Skill_Point(skillPoint);
+
         // 스킬 데이터 셋팅
         for (int i = 0; i < data.skillLevelData.Count; i++)
         {
@@ -69,10 +73,10 @@ public class Skill_Manager : MonoBehaviour
     /// 스킬 노드 클릭 시 호출되는 기능 - 스킬 레벨 업
     /// </summary>
     /// <param name="skill_Index"></param>
-    public void Skill_LevelUp(int skill_Index)
+    public void Skill_LevelUp(int skill_Index, int maxLevel)
     {
         // 최대레벨 체크
-        if (skillData[skill_Index].attack.skillLevel >= 5)
+        if (skillData[skill_Index].attack.skillLevel >= maxLevel)
         {
             UI_Manager.instance.Skill_Result(2);
             return;
@@ -87,7 +91,7 @@ public class Skill_Manager : MonoBehaviour
         }
 
         // 레벨 체크
-        if (skillData[skill_Index].attack.skillLevel < 5)
+        if (skillData[skill_Index].attack.skillLevel < maxLevel)
         {
             // 최대레벨보다 낮다면 - 레벨 업
             skillPoint--;
@@ -96,6 +100,7 @@ public class Skill_Manager : MonoBehaviour
             // UI 최신화
             UI_Manager.instance.Skill_Description(skillData[skill_Index].ui, skillData[skill_Index].attack.skillLevel);
             slots[skill_Index].LevelUp();
+            UI_Manager.instance.Skill_Point(skillPoint);
 
             // 습득 성공 UI
             UI_Manager.instance.Skill_Result(0);

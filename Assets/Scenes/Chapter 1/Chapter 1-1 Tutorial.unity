@@ -3491,11 +3491,11 @@ RectTransform:
   m_Children: []
   m_Father: {fileID: 140061357}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0, y: 1}
-  m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 0, y: -10}
+  m_AnchorMin: {x: 0.5, y: 1}
+  m_AnchorMax: {x: 0.5, y: 1}
+  m_AnchoredPosition: {x: -0.000061035156, y: -5}
   m_SizeDelta: {x: 350, y: 50}
-  m_Pivot: {x: 0, y: 1}
+  m_Pivot: {x: 0.5, y: 1}
 --- !u!114 &493127140
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -4115,11 +4115,11 @@ RectTransform:
   m_Children: []
   m_Father: {fileID: 784811142}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0, y: 1}
-  m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 0, y: -10}
+  m_AnchorMin: {x: 0.5, y: 1}
+  m_AnchorMax: {x: 0.5, y: 1}
+  m_AnchoredPosition: {x: 0, y: -5}
   m_SizeDelta: {x: 350, y: 50}
-  m_Pivot: {x: 0, y: 1}
+  m_Pivot: {x: 0.5, y: 1}
 --- !u!114 &672933852
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -6218,11 +6218,10 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: "Q \uD0A4 \uAC01\uC131 : \uACF5\uACA9 \uBC0F \uC774\uB3D9\uC18D\uB3C4 \uC99D\uAC00
-    & \uC77C\uBD80 \uACF5\uACA9 \uAC15\uD654\nE \uD0A4 \uAC00\uB4DC : \uD0C0\uC774\uBC0D\uC5D0
-    \uB9DE\uCDB0 \uBC29\uC5B4 \uC2DC 1\uCD08\uAC04 \uBB34\uC801 \uC9C0\uC18D \nR\uD0A4
-    \uB3CC\uC9C4 : \uC2A4\uBA54\uC26C \uC0AC\uC6A9 \uD6C4 \uC0AC\uC6A9 \uAC00\uB2A5
-    & \uC2DC\uC804 \uC2DC \uB3CC\uC9C4 \uACF5\uACA9"
+  m_text: "\uAC01\uC131(Q) : \uC2A4\uD14C\uC774\uD130\uC2A4 \uBC84\uD504 & \uC77C\uBD80
+    \uACF5\uACA9 \uAC15\uD654\n\uAC00\uB4DC(E) : \uD0C0\uC774\uBC0D\uC5D0 \uB9DE\uCDB0
+    \uBC29\uC5B4 \uC2DC 1\uCD08\uAC04 \uBB34\uC801 \uC9C0\uC18D \n\uB3CC\uC9C4\uC5F0\uCC38(R)
+    : \uC2A4\uBA54\uC26C \uC0AC\uC6A9 \uD6C4 \uD65C\uC131\uD654\uB418\uB294 \uCD94\uAC00\uACF5\uACA9"
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: f0b8e338f0504b04c948ed9de570bca1, type: 2}
   m_sharedMaterial: {fileID: -6256499527232880871, guid: f0b8e338f0504b04c948ed9de570bca1,
@@ -6262,7 +6261,7 @@ MonoBehaviour:
   m_textAlignment: 65535
   m_characterSpacing: 0
   m_wordSpacing: 0
-  m_lineSpacing: 0
+  m_lineSpacing: 30
   m_lineSpacingMax: 0
   m_paragraphSpacing: 0
   m_charWidthMaxAdj: 0
@@ -6463,8 +6462,8 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: "WASD\uB85C \uC774\uB3D9, Shift\uB85C \uB300\uC26C, \uB9C8\uC6B0\uC2A4
-    \uD654\uBA74 \uD68C\uC804"
+  m_text: "WASD\uB85C \uC774\uB3D9, Shift\uB85C \uB300\uC26C, \n\uB9C8\uC6B0\uC2A4\uB85C
+    \uD654\uBA74 \uD68C\uC804\uC774 \uAC00\uB2A5\uD558\uB2E4"
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: f0b8e338f0504b04c948ed9de570bca1, type: 2}
   m_sharedMaterial: {fileID: -6256499527232880871, guid: f0b8e338f0504b04c948ed9de570bca1,
@@ -7887,11 +7886,11 @@ RectTransform:
   m_Children: []
   m_Father: {fileID: 1983341193}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0, y: 1}
-  m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 0, y: -10}
+  m_AnchorMin: {x: 0.5, y: 1}
+  m_AnchorMax: {x: 0.5, y: 1}
+  m_AnchoredPosition: {x: 0, y: -5}
   m_SizeDelta: {x: 350, y: 50}
-  m_Pivot: {x: 0, y: 1}
+  m_Pivot: {x: 0.5, y: 1}
 --- !u!114 &1238269239
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -9796,7 +9795,7 @@ MonoBehaviour:
   m_fontSizeMin: 18
   m_fontSizeMax: 72
   m_fontStyle: 0
-  m_HorizontalAlignment: 1
+  m_HorizontalAlignment: 2
   m_VerticalAlignment: 512
   m_textAlignment: 65535
   m_characterSpacing: 0
@@ -12409,11 +12408,11 @@ RectTransform:
   m_Children: []
   m_Father: {fileID: 795034700}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0, y: 1}
-  m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 0, y: -10}
+  m_AnchorMin: {x: 0.5, y: 1}
+  m_AnchorMax: {x: 0.5, y: 1}
+  m_AnchoredPosition: {x: 0, y: -5}
   m_SizeDelta: {x: 350, y: 50}
-  m_Pivot: {x: 0, y: 1}
+  m_Pivot: {x: 0.5, y: 1}
 --- !u!114 &1934498556
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -13755,12 +13754,12 @@ MonoBehaviour:
   m_fontSizeMin: 18
   m_fontSizeMax: 72
   m_fontStyle: 0
-  m_HorizontalAlignment: 1
+  m_HorizontalAlignment: 2
   m_VerticalAlignment: 512
   m_textAlignment: 65535
   m_characterSpacing: 0
   m_wordSpacing: 0
-  m_lineSpacing: 0
+  m_lineSpacing: 30
   m_lineSpacingMax: 0
   m_paragraphSpacing: 0
   m_charWidthMaxAdj: 0

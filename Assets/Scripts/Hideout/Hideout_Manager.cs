@@ -30,6 +30,7 @@ public class Hideout_Manager : MonoBehaviour
     private ClearData_Manager sd_Manager;
 
 
+    #region UI
     [Header("---Description UI---")]
     [SerializeField] private TextMeshProUGUI stageTypeText;
     [SerializeField] private TextMeshProUGUI levelText;
@@ -49,6 +50,16 @@ public class Hideout_Manager : MonoBehaviour
     [SerializeField] private GameObject enterUI;
     [SerializeField] private CanvasGroup enterCanvasGroup;
     private Coroutine enterCoroutine;
+
+
+    [Header("---Icon UI---")]
+    [SerializeField] private GameObject iconSet;
+    [SerializeField] private CanvasGroup iconCanvasGroup;
+    private bool isUIOn;
+    private bool isPlayerIn;
+    private Quaternion originalRot;
+    protected Coroutine uiCoroutine;
+    #endregion
 
 
     private void Awake()
@@ -82,6 +93,7 @@ public class Hideout_Manager : MonoBehaviour
     }
 
 
+    #region UI
     /// <summary>
     /// UI On/Off
     /// </summary>
@@ -89,6 +101,9 @@ public class Hideout_Manager : MonoBehaviour
     {
         // 플레이어 UI
         UI_Manager.instance.UI_Setting(isOn);
+
+        // 플레이어 동작
+        Player_Manager.instance.action.canAction = !isOn;
 
         // 커서 셋팅
         Player_Manager.instance.Cursor_Setting(!isOn);
@@ -117,7 +132,6 @@ public class Hideout_Manager : MonoBehaviour
         // 진입 데이터 셋팅
         curSelectStage = uiData.stageData[stageIndex].sceneName;
     }
-
 
     /// <summary>
     /// 스테이지 진입 조건 불만족 시 안내 UI
@@ -152,6 +166,92 @@ public class Hideout_Manager : MonoBehaviour
         // UI 비활성화
         enterUI.SetActive(false);
     }
+    #endregion
+
+
+    #region Icon
+    /// <summary>
+    /// 오브젝트 위에 아이콘 UI On/Off
+    /// </summary>
+    /// <param name="isOn"></param>
+    public void Icon_Setting(bool isOn)
+    {
+        if (uiCoroutine != null)
+            StopCoroutine(uiCoroutine);
+
+        uiCoroutine = StartCoroutine(isOn ? IconOn() : IconOff());
+    }
+
+    protected IEnumerator IconOn()
+    {
+        if (isUIOn) yield break;
+        isUIOn = true;
+
+        // 아이콘 활성화
+        iconCanvasGroup.alpha = 1;
+        while (isPlayerIn)
+        {
+            // 바라보기
+            LookAt();
+
+            yield return null;
+        }
+    }
+
+    protected IEnumerator IconOff()
+    {
+        if (!isUIOn) yield break;
+        isUIOn = false;
+
+        // 아이콘 비활성화
+        float start = iconCanvasGroup.alpha;
+        float end = 0;
+        float timer = 0;
+        while (timer < 1)
+        {
+            timer += Time.deltaTime;
+            iconCanvasGroup.alpha = Mathf.Lerp(start, end, timer);
+            yield return null;
+        }
+    }
+
+    protected IEnumerator IconUseOff()
+    {
+        float timer = 0f;
+        while (timer < 1)
+        {
+            timer += Time.deltaTime * 0.65f;
+            iconCanvasGroup.alpha = Mathf.Lerp(1, 0, EasingFunctions.InOutElastic(timer));
+            yield return null;
+        }
+
+        iconCanvasGroup.alpha = 0f;
+    }
+
+    protected void LookAt()
+    {
+
+        Vector3 lookDir = iconSet.transform.position - PlayerAction_Manager.instance.cam.transform.position;
+        lookDir.y = 0;
+        iconSet.transform.rotation = Quaternion.LookRotation(lookDir.normalized);
+
+
+        Quaternion targetRot = Quaternion.LookRotation(lookDir.normalized); // 카메라 바라보는 방향
+        float deltaY = Quaternion.Angle(originalRot, targetRot);            // 두 회전 사이의 전체 각도 차이
+
+        // 회전 방향을 자기 기준으로 얻기 위해 Vector3.Angle 대신 SignedAngle 사용
+        Vector3 originalForward = originalRot * Vector3.forward;
+        Vector3 targetForward = targetRot * Vector3.forward;
+        float signedAngle = Vector3.SignedAngle(originalForward, targetForward, Vector3.up);
+
+        float clampedAngle = Mathf.Clamp(signedAngle, -45f, 45f); // ±30도 제한
+
+        // 제한된 회전 각도만큼 회전한 새로운 방향 계산
+        Quaternion limitedRot = Quaternion.AngleAxis(clampedAngle, Vector3.up) * originalRot;
+
+        iconSet.transform.rotation = limitedRot;
+    }
+    #endregion
 
 
     #region 아지트 입장 시 데이터 최신화 로직

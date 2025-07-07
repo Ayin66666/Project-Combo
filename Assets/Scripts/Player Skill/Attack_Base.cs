@@ -12,6 +12,7 @@ public abstract class Attack_Base : MonoBehaviour
     public CancelType cancelType;
     public bool haveAwakningValue;
     public int skillLevel;
+    public int maxLevel;
     public List<Value> value_Normal;
     public List<Value> value_Awakening;
     [SerializeField] protected string[] nextAttackData;

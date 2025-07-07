@@ -40,6 +40,10 @@ public class PlayerAction_Manager : MonoBehaviour, IDamageSysteam
 
 
     [Header("---Dash Setting---")]
+    [SerializeField] private Transform dashPos;
+    [SerializeField] private float dashPower;
+    [SerializeField] private float dashTime;
+    [SerializeField] private int dashStamina;
     private Coroutine dashCoroutine;
     private Vector3 dashDir;
     private bool isDash;
@@ -118,6 +122,7 @@ public class PlayerAction_Manager : MonoBehaviour, IDamageSysteam
         {
             if (!isLockOn)
             {
+                // 카메라 제어
                 Look();
             }
 
@@ -236,15 +241,6 @@ public class PlayerAction_Manager : MonoBehaviour, IDamageSysteam
 
             // 회전 보간
             camHolder.transform.rotation = Quaternion.RotateTowards(camHolder.transform.rotation, targetRotation, currentSpeed * Time.deltaTime);
-
-            /*
-            Vector3 lookDir = (target.transform.position - camHolder.transform.position).normalized;
-            lookDir.y = 0;
-            Quaternion lookRotation = Quaternion.LookRotation(lookDir);
-
-            camHolder.transform.DOKill();  // 기존 트위닝 중단
-            camHolder.transform.DORotateQuaternion(lookRotation, 0);
-            */
             yield return null;
         }
     }
@@ -345,7 +341,7 @@ public class PlayerAction_Manager : MonoBehaviour, IDamageSysteam
         if (dashCoroutine != null)
             StopCoroutine(dashCoroutine);
 
-        dashCoroutine = StartCoroutine(DashCall());
+        dashCoroutine = StartCoroutine(DashCallNew());
     }
 
     private IEnumerator DashCall()
@@ -389,6 +385,57 @@ public class PlayerAction_Manager : MonoBehaviour, IDamageSysteam
 
             canDash = true;
             isDash = false;
+        }
+    }
+
+    private IEnumerator DashCallNew()
+    {
+        if (!canAction || !canDash || pManager.status.curStamina < dashStamina)
+        {
+            yield break;
+        }
+        else
+        {
+            canDash = false;
+            isDash = true;
+            pManager.status.curStamina -= dashStamina;
+
+            // 애니메이션 리셋
+            anim.ResetTrigger("Action");
+            Animation_Reset();
+
+            // 애니메이션 호출
+            anim.SetTrigger("Action");
+            anim.SetBool("isDodge", true);
+            anim.SetBool("isDodgeDelay", true);
+            anim.SetFloat("DashMotion", 0);
+
+            // 대쉬
+            Vector3 dir = dashDir;
+            float timer = 0;
+            while (timer < 1)
+            {
+                timer += Time.deltaTime / dashTime;
+                controller.Move(EasingFunctions.OutExpo(timer) * Time.deltaTime * dir * dashPower);
+                anim.SetFloat("DashMotion", timer);
+                yield return null;
+            }
+            anim.SetBool("isDodge", false);
+            anim.SetFloat("DashMotion", 0);
+            canDash = true;
+            isDash = false;
+
+            // 대쉬 종료 후 애니메이션
+            while (anim.GetBool("isDodgeDelay"))
+            {
+                // 이동 입력 감지 시 즉시 대쉬 딜레이모션 제거
+                if(Input_Manager.instance.movementInput.magnitude != 0)
+                {
+                    anim.SetBool("isDodgeDelay", false);
+                }
+
+                yield return null;
+            }
         }
     }
 

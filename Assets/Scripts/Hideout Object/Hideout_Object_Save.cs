@@ -11,7 +11,10 @@ public class Hideout_Object_Save : Hideout_Object_Base
     public override void Use()
     {
         isUsed = true;
-        
+
+        // 플레이어 정지
+        Player_Manager.instance.action.canAction = false;
+
         // UI On
         SaveLoad_Manager.instance.SaveLoadUI(true);
 
@@ -38,6 +41,9 @@ public class Hideout_Object_Save : Hideout_Object_Base
     {
         // 마우스 커서 설정
         Player_Manager.instance.Cursor_Setting(true);
+
+        // 플레이어 정지
+        Player_Manager.instance.action.canAction = true;
 
         isUsed = false;
     }
