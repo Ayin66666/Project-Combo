@@ -1,60 +1,59 @@
-using System.Collections;
 using UnityEngine;
 
 
 public class Street_Light : MonoBehaviour
 {
     [Header("---Setting---")]
-    [SerializeField] private LightType lightType;
-    [SerializeField] private float maxIntensity;
-    [SerializeField] private float minIntensity;
-    [SerializeField] private Light[] lightObject;
-    private enum LightType { Normal, Flicker }
-
-    [Header("Flicker Settings")]
-    [SerializeField] private float flickerDurationMin;
-    [SerializeField] private float flickerDurationMax;
-    [SerializeField] private float waitBetweenFlickerMin;
-    [SerializeField] private float waitBetweenFlickerMax;
-    private Coroutine coroutine;
+    [SerializeField] private State currentState;
+    [SerializeField] private float targetDuration;
+    [SerializeField] private float minIntensity = 0.3f;
+    [SerializeField] private float maxIntensity = 1.0f;
+    [SerializeField] private float flickerDuration = 0.1f;
+    [SerializeField] private float waitDuration = 1.5f;
+    [SerializeField] private Light[] lights;
 
 
-    private void OnEnable()
+    private float timer;
+    private enum State { Waiting, Flickering }
+
+
+    private void Start()
     {
-        switch (lightType)
-        {
-            case LightType.Normal:
-                break;
+        ResetWait();
+    }
 
-            case LightType.Flicker:
-                if (coroutine != null) StopCoroutine(coroutine);
-                coroutine = StartCoroutine(OnOff());
-                break;
+    private void Update()
+    {
+        timer += Time.deltaTime;
+
+        if (timer >= targetDuration)
+        {
+            if (currentState == State.Waiting)
+            {
+                // Flicker Ω√¿€
+                float newIntensity = Random.Range(minIntensity, maxIntensity * 0.4f);
+                foreach (var light in lights)
+                    light.intensity = newIntensity;
+
+                currentState = State.Flickering;
+                targetDuration = flickerDuration;
+            }
+            else
+            {
+                // ¥ŸΩ√ π‡∞‘
+                foreach (var light in lights)
+                    light.intensity = maxIntensity;
+
+                ResetWait();
+            }
+
+            timer = 0f;
         }
     }
 
-    private IEnumerator OnOff()
+    private void ResetWait()
     {
-        while(gameObject.activeSelf)
-        {
-            int flickerCount = Random.Range(2, 6);
-            for (int i = 0; i < flickerCount; i++)
-            {
-                for (int i2 = 0; i2 < lightObject.Length; i2++)
-                {
-                    lightObject[i2].intensity = Random.Range(minIntensity, maxIntensity * 0.4f);
-                }
-                yield return new WaitForSeconds(Random.Range(flickerDurationMin, flickerDurationMax));
-
-                // ¥ŸΩ√ π‡∞‘
-                for (int i2 = 0; i2 < lightObject.Length; i2++)
-                {
-                    lightObject[1].intensity = maxIntensity;
-                }
-                yield return new WaitForSeconds(Random.Range(flickerDurationMin, flickerDurationMax));
-            }
-
-            yield return new WaitForSeconds(Random.Range(waitBetweenFlickerMin, waitBetweenFlickerMax));
-        }
+        currentState = State.Waiting;
+        targetDuration = Random.Range(waitDuration, waitDuration + 1f);
     }
 }
