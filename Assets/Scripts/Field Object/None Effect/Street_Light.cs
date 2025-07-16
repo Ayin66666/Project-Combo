@@ -4,6 +4,7 @@ using UnityEngine;
 public class Street_Light : MonoBehaviour
 {
     [Header("---Setting---")]
+    [SerializeField] private Type type;
     [SerializeField] private State currentState;
     [SerializeField] private float targetDuration;
     [SerializeField] private float minIntensity = 0.3f;
@@ -11,18 +12,40 @@ public class Street_Light : MonoBehaviour
     [SerializeField] private float flickerDuration = 0.1f;
     [SerializeField] private float waitDuration = 1.5f;
     [SerializeField] private Light[] lights;
-
-
     private float timer;
+
+    private enum Type { None, Flicker }
     private enum State { Waiting, Flickering }
 
 
     private void Start()
     {
-        ResetWait();
+        switch (type)
+        {
+            case Type.None:
+                break;
+
+            case Type.Flicker:
+                ResetWait();
+                break;
+        }
+
     }
 
-    private void Update()
+    private void FixedUpdate()
+    {
+        switch (type)
+        {
+            case Type.None:
+                break;
+
+            case Type.Flicker:
+                FMovement();
+                break;
+        }
+    }
+
+    private void FMovement()
     {
         timer += Time.deltaTime;
 
