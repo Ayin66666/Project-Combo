@@ -18,9 +18,12 @@ public class Field_Normal : Field_Base
     private IEnumerator StartCall()
     {
         // 문 동작
-        foreach (GameObject obj in door)
+        if(door != null)
         {
-            obj.SetActive(true);
+            foreach (GameObject obj in door)
+            {
+                obj.SetActive(true);
+            }
         }
 
         // 시작 다이얼로그 체크
@@ -51,16 +54,17 @@ public class Field_Normal : Field_Base
         while (enemyCount > 0)
         {
             // 몬스터 체크
-            foreach (var enemy in spawnDatas[0].enemys)
+            for (int i = 0; i < spawnDatas[0].enemys.Count; i++)
             {
-                if (enemy == null)
-                    enemyCount--;
+                if (spawnDatas[0].enemys[i] == null)
+                    spawnDatas[0].enemys.RemoveAt(i);
             }
+            enemyCount = spawnDatas[0].enemys.Count;
 
             // 다이얼로그 체크
             if (haveDialog)
             {
-                for (int i = 0; i < countDialogData.Count; i++)
+                for (int i = countDialogData.Count; i >= 0; i--)
                 {
                     if (countDialogData[i].useCount <= enemyCount && !countDialogData[i].isUsed)
                     {
@@ -76,8 +80,15 @@ public class Field_Normal : Field_Base
 
         // 필드 종료
         Field_End();
-    }
 
+        /*
+        enemyCount = spawnDatas[0].enemys.Count;
+        while(enemyCount > 0)
+        {
+            yield return checkInterval;
+        }
+        */
+    }
 
     public override void Field_End()
     {
