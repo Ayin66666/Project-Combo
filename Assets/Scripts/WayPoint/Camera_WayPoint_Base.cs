@@ -1,7 +1,6 @@
-using System.Collections;
 using System.Collections.Generic;
-using Unity.VisualScripting;
 using UnityEngine;
+
 
 public class Camera_WayPoint_Base : MonoBehaviour
 {

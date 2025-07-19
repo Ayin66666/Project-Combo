@@ -1,6 +1,5 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
+
 
 public class Camera_WayPoint_Controller : Camera_WayPoint_Base
 {
@@ -28,7 +27,7 @@ public class Camera_WayPoint_Controller : Camera_WayPoint_Base
         foreach (WayPoint_Controller wayPoint in data.wayPoints)
         {
             wayPoint.wayPoint_Base.image.transform.position = UI_Image_Position(wayPoint.wayPoint_Base);
-            wayPoint.wayPoint_Base.text.text = WayPointDistance(wayPoint.wayPoint_Base) + "M";
+            wayPoint.wayPoint_Base.text.text = WayPointDistance(wayPoint.wayPoint_Base) + "M"; // 여기 에러 발생 - 스테이지 넘어가면 발생하는거 봐선 저 foreach 내에 오브젝트가 없어서 그런듯?
         }    
     }
 }

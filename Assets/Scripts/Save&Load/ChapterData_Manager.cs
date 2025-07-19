@@ -7,10 +7,13 @@ public class ChapterData_Manager : MonoBehaviour
     public static ChapterData_Manager instance;
 
 
-    [Header("---Data---")]
+    [Header("---Stage Data---")]
     public int chapterCount;
-    public List<ChapterData> chapterData;
     public List<Chapter_Data_SO> chapterUIData;
+
+
+    [Header("---Claer Data---")]
+    public Data claerData;
 
 
     private void Awake()
@@ -23,32 +26,35 @@ public class ChapterData_Manager : MonoBehaviour
         {
             Destroy(gameObject);
         }
-
     }
 
 
     /// <summary>
-    /// 게임 시작 시 데이터 로드
+    /// 데이터 로드
     /// </summary>
     public void Data_Setting(Data data)
     {
-        chapterData = data.clearData.chapterList;
-        chapterCount = chapterData.Count;
+        claerData = data;
     }
 
     /// <summary>
-    /// 클리어 데이터 업데이트
+    /// 스테이지 클리어 시 데이터 최신화 로직
     /// </summary>
-    /// <param name="data"></param>
-    public void Data_Updata(int chapterIndex, ChapterData data)
+    /// <param name="chapter"></param>
+    /// <param name="stage"></param>
+    /// <param name="rank"></param>
+    public void Data_Updata(int chapter, int stage, StageData data)
     {
-        if (chapterIndex >= 0 && chapterIndex < chapterData.Count)
-        {
-            chapterData[chapterIndex] = data;
-        }
-        else
-        {
-            Debug.LogWarning($"잘못된 챕터 인덱스입니다: {chapterIndex}");
-        }
+        claerData.claerData.chapterList[chapter].stageList[stage].isClear = true;
+        claerData.claerData.chapterList[chapter].stageList[stage].clearRank = data.clearRank;
+        claerData.claerData.chapterList[chapter].stageList[stage].clearTime = data.clearTime;
+    }
+
+    /// <summary>
+    /// 아지트 입장 시 데이터 전달 로직
+    /// </summary>
+    public ChapterData Chapter_Setting(int chapterIndex)
+    {
+        return claerData.claerData.chapterList[chapterIndex];
     }
 }

@@ -4264,8 +4264,8 @@ Transform:
   - {fileID: 2145226332}
   - {fileID: 1813795054}
   - {fileID: 458439398}
-  - {fileID: 1577750059}
   - {fileID: 440019711}
+  - {fileID: 1577750059}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &1455945028
@@ -4288,9 +4288,6 @@ MonoBehaviour:
   - {fileID: 3310878835271977548}
   - {fileID: 1055186617}
   uiData: {fileID: 11400000, guid: 41ad6f6cc60338f45a269b35bc06fab0, type: 2}
-  stageClearData:
-    chapterName: 
-    stageList: []
   stageTypeText: {fileID: 1036854923}
   levelText: {fileID: 1193948497}
   stageNameText: {fileID: 554372825}

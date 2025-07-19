@@ -23,12 +23,6 @@ public class Hideout_Manager : MonoBehaviour
 
     [Header("---Data---")]
     [SerializeField] private Chapter_Data_SO uiData; // 스테이지 UI 데이터
-    [SerializeField] private ChapterData stageClearData; // 저장용 데이터 - 클리어 여부
-
-
-    [Header("---Component---")]
-    private ClearData_Manager sd_Manager;
-
 
     #region UI
     [Header("---Description UI---")]
@@ -72,16 +66,12 @@ public class Hideout_Manager : MonoBehaviour
         {
             Destroy(gameObject);
         }
-
-        sd_Manager = ClearData_Manager.instance;
     }
 
     private void Start()
     {
         // 스테이지 셋팅
         Data_Setting();
-        DescriptionUI_Setting(0);
-        StageSlot_Setting();
 
         // 페이드 종료
         UI_Manager.instance.Fade(false, 1.5f);
@@ -117,6 +107,8 @@ public class Hideout_Manager : MonoBehaviour
     /// </summary>
     public void DescriptionUI_Setting(int stageIndex)
     {
+        Debug.Log(stageIndex);
+
         // 스테이지 기본 데이터
         stageImage.sprite = null;
         stageTypeText.text = uiData.stageData[stageIndex].stageType.ToString(); // 에러발생 - 인덱스 오버?
@@ -126,8 +118,8 @@ public class Hideout_Manager : MonoBehaviour
         ddText.text = uiData.stageData[stageIndex].stageDescription;
 
         // 클리어 데이터
-        clearTimeText.text = stageClearData.stageList[stageIndex].clearTime.ToString();
-        rankText.text = stageClearData.stageList[stageIndex].clearRank.ToString();
+        clearTimeText.text = ChapterData_Manager.instance.claerData.claerData.chapterList[curChapter].stageList[stageIndex].clearTime.ToString();
+        rankText.text = ChapterData_Manager.instance.claerData.claerData.chapterList[curChapter].stageList[stageIndex].clearRank.ToString();
 
         // 진입 데이터 셋팅
         curSelectStage = uiData.stageData[stageIndex].sceneName;
@@ -260,50 +252,23 @@ public class Hideout_Manager : MonoBehaviour
     /// </summary>
     public void Data_Setting()
     {
-        // 아지트 진입 시 동작 - 데이터 셋팅 로직
-        Data saveData = SaveLoad_Manager.instance.LoadData(SaveLoad_Manager.instance.curSlot);
-        ChapterData ch = saveData.clearData.chapterList[curChapter];
-        stageClearData = ch;
+        // 데이터 받아오기
+        ChapterData data = ChapterData_Manager.instance.Chapter_Setting(curChapter);
 
+        // 데이터 적용
 
-        // 스테이지 클리어 후 아지트 진입 시 동작 - 데이터 최신화 로직
-        if (sd_Manager != null && sd_Manager.haveNewData)
-        {
-            // 데이터 로드
-            (int chapter, int stageIndex, StageData data) = sd_Manager.Get_StageData();
-
-
-            // 지금 스테이지에 맞는 데이터 & 데이터 인덱스에 문제가 없다면
-            if (curChapter == chapter && stageIndex < ch.stageList.Count)
-            {
-                // 데이터 셋팅
-                saveData.clearData.chapterList[curChapter].stageList[stageIndex] = data;
-
-                // 세이브 최신화
-                SaveLoad_Manager.instance.Save(SaveLoad_Manager.instance.curSlot);
-            }
-            else
-            {
-                Debug.Log($"데이터 최신화 에러 / 챕터 인덱스 : {chapter} / 스테이지 인덱스 : {stageIndex}");
-            }
-        }
-    }
-
-    /// <summary>
-    /// 아지트 입장 시 선택 슬롯 UI 최신화 기능
-    /// </summary>
-    public void StageSlot_Setting()
-    {
-        // 선택 슬롯 UI 셋팅
-        Data data = SaveLoad_Manager.instance.LoadData(SaveLoad_Manager.instance.curSlot);
-        ChapterData cData = data.clearData.chapterList[curChapter];
+        // 1번 스테이지는 무조건 입장 가능 - 클리어 여부 상관 x
         slots[0].SlotUI_Setting(uiData, 0, true);
+
+        // 이전 스테이지가 클리어되어 있으면 입장 가능
         for (int i = 1; i < slots.Count; i++)
         {
-            // 이전 스테이지가 클리어되어 있으면 입장 가능
-            bool canEnter = cData.stageList[i - 1].isClear;
+            bool canEnter = data.stageList[i - 1].isClear;
             slots[i].SlotUI_Setting(uiData, i, canEnter);
         }
+
+        // 설명 UI 설정 - 최초 실행 시 무조건 0번 설명이 나오도록?
+        DescriptionUI_Setting(0);
     }
     #endregion
 

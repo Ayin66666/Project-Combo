@@ -16,7 +16,7 @@ public class Hideout_StageSlot : MonoBehaviour, IPointerEnterHandler, IPointerEx
     public void SlotUI_Setting(Chapter_Data_SO data, int index, bool canSelect)
     {
         this.canSelect = canSelect;
-        stageIndex = data.stageData.Count;
+        stageIndex = index;
         nameText.text = data.stageData[index].stageType + " " + data.stageData[index].stageName;
     }
 

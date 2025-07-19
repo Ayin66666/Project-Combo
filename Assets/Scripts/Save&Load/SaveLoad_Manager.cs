@@ -54,7 +54,7 @@ public class Data
 
 
     [Header("---Chapter---")]
-    public ClearData clearData;
+    public ClearData claerData;
 
 
     [Header("---Skill Tree---")]
@@ -363,14 +363,14 @@ public class SaveLoad_Manager : MonoBehaviour
         }
 
         // 데이터의 손상 체크
-        if (data.clearData?.chapterList == null)
+        if (data.claerData?.chapterList == null)
         {
             Debug.LogError($"[ChapterCheck] clearData 또는 chapterList가 null입니다. index: {index}");
             return ChapterData_Manager.instance.chapterUIData[0].chapterName;
         }
 
         // 챕터 체크
-        foreach (var chapter in data.clearData.chapterList)
+        foreach (var chapter in data.claerData.chapterList)
         {
             // 챕터 내의 스테이지 클리어
             foreach (var stage in chapter.stageList)
@@ -387,9 +387,6 @@ public class SaveLoad_Manager : MonoBehaviour
         // 예기치 못한 사태로 데이터가 없을 경우
         return ChapterData_Manager.instance.chapterUIData[0].chapterName;
     }
-
-
-
 
     private IEnumerator CreateDataCall(int index)
     {
@@ -491,11 +488,10 @@ public class SaveLoad_Manager : MonoBehaviour
             shortcut = new List<int>(4),
 
             // 스테이지
-            clearData = new ClearData()
+            claerData = new ClearData()
             {
                 chapterList = new List<ChapterData>(ChapterData_Manager.instance.chapterUIData.Count)
             },
-
 
             // 스킬트리
             skillLevelData = new List<int>(),
@@ -550,7 +546,7 @@ public class SaveLoad_Manager : MonoBehaviour
                 chapter.stageList.Add(stage);
             }
 
-            data.clearData.chapterList.Add(chapter);
+            data.claerData.chapterList.Add(chapter);
         }
 
         // 데이터 저장
@@ -638,10 +634,7 @@ public class SaveLoad_Manager : MonoBehaviour
                 playerPos = Player_Manager.instance.action.transform.position,
 
                 // 스테이지 클리어
-                clearData = new ClearData()
-                {
-                    chapterList = ChapterData_Manager.instance.chapterData,
-                }
+                claerData = ChapterData_Manager.instance.claerData.claerData,
             };
 
 
@@ -816,7 +809,7 @@ public class SaveLoad_Manager : MonoBehaviour
             pManager.inventory.Inventory_Setting(data);
 
             // 데이터 적용 - 장비
-            pManager.equipment.Equipment_Setting();
+            pManager.equipment.Equipment_Setting(data);
 
             // 데이터 적용 - 쇼트컷
             pManager.shortCut.LoadData(data);

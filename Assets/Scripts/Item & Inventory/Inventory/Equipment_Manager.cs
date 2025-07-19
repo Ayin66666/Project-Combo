@@ -120,11 +120,8 @@ public class Equipment_Manager : MonoBehaviour
     /// 게임 로드 시 데이터 셋팅
     /// </summary>
     /// <param name="data"></param>
-    public void Equipment_Setting()
+    public void Equipment_Setting(Data data)
     {
-        // 데이터 로드
-        Data data = SaveLoad_Manager.instance.LoadData(SaveLoad_Manager.instance.curSlot);
-
         // 장비 착용
         for (int i = 0; i < 5; i++)
         {

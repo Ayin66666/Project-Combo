@@ -68,6 +68,12 @@ public class Player_Manager : MonoBehaviour
         action.canAttack = isOn;
         action.canDash = isOn;
         action.canMovement = isOn;
+
+        if (!isOn)
+        {
+            anim.SetBool("isMove", false);
+            anim.SetBool("isStop", true);
+        }
     }
 
     /// <summary>

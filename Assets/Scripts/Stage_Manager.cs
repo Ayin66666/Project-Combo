@@ -6,6 +6,19 @@ public class Stage_Manager : MonoBehaviour
 {
     public static Stage_Manager instance;
 
+    [Header("---Stage Data---")]
+    [SerializeField] private int chapter;
+    [SerializeField] private int stage;
+    [SerializeField] private List<Data> rankData;
+    private float startTime;
+
+
+    [System.Serializable]
+    public struct Data
+    {
+        public float time;
+        public StageData.Rank rank;
+    }
 
     [Header("---State---")]
     [SerializeField] private bool haveStartDialog;
@@ -112,6 +125,9 @@ public class Stage_Manager : MonoBehaviour
         {
             WayPoint(true, 0);
         }
+
+        // 타이머 동작
+        startTime = Time.time;
     }
 
     /// <summary>
@@ -129,6 +145,9 @@ public class Stage_Manager : MonoBehaviour
 
         // 클리어 경험치
         Player_Manager.instance.status.ExpAdd(stageData.stageData[stageIndex].stageClearExp);
+
+        // 클리어 데이터 셋팅
+        ClearData();
 
         // 클리어 UI
         UI_Manager.instance.FieldClear_Normal();
@@ -149,6 +168,30 @@ public class Stage_Manager : MonoBehaviour
 
         // 씬 이동
         SceneLoad_Manager.LoadScene(nextScene);
+    }
+
+    /// <summary>
+    /// 게임 클리어 시점의 시간 & 랭크 셋팅
+    /// </summary>
+    public void ClearData()
+    {
+        // 데이터 생성
+        StageData clearData = new StageData
+        {
+            isClear = true,
+            clearTime = Time.time - startTime,
+            clearRank = StageData.Rank.N,
+        };
+
+        // 랭크 셋팅
+        for (int i = 0; i < rankData.Count; i++)
+        {
+            if (clearData.clearTime < rankData[i].time)
+                clearData.clearRank = rankData[i].rank;
+        }
+
+        // 데이터 전달
+        ChapterData_Manager.instance.Data_Updata(chapter, stage, clearData);
     }
 
     /// <summary>

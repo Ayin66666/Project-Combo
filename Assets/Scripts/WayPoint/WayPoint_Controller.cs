@@ -1,7 +1,6 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+
 
 public class WayPoint_Controller : MonoBehaviour
 {
@@ -15,20 +14,24 @@ public class WayPoint_Controller : MonoBehaviour
 
     private void OnEnable()
     {
-        previous_Parent = this.gameObject;
+        previous_Parent = gameObject;
         WayPoint_Setting();
     }
-
+    
     void Update()
     {
-        // 상호작용 거리체크
-        if(wayPoint_Base.Get_Distance(transform.position, wayPoint_Base.target.transform.position) < wayPoint_Base.interact_Distance)
+        // if문 추가
+        if (wayPoint_Base != null)
         {
-            wayPoint_Base.Enable_WayPoint(false);
-        }
-        else
-        {
-            wayPoint_Base.Enable_WayPoint(true);
+            // 상호작용 거리체크
+            if (wayPoint_Base.Get_Distance(transform.position, wayPoint_Base.target.transform.position) < wayPoint_Base.interact_Distance)
+            {
+                wayPoint_Base.Enable_WayPoint(false);
+            }
+            else
+            {
+                wayPoint_Base.Enable_WayPoint(true);
+            }
         }
     }
 
@@ -41,7 +44,8 @@ public class WayPoint_Controller : MonoBehaviour
         wayPoint_Base.text = wayPoint_UI.GetComponentInChildren<Text>();
 
         // 웨이포인트와 플레이어 위치 설정
-        wayPoint_Base.Set_Target(GameObject.FindGameObjectWithTag("Player"));
+        //wayPoint_Base.Set_Target(GameObject.FindGameObjectWithTag("Player"));
+        wayPoint_Base.Set_Target(Player_Manager.instance.Player);
         wayPoint_Base.Set_Transform(transform);
 
         // 웨이포인트 UI 캔버스 변경
