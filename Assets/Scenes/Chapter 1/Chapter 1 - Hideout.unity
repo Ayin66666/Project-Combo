@@ -897,14 +897,14 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 308252904}
   serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: -10.36, y: 0, z: -5.16}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 729975716}
   - {fileID: 1700303326}
-  m_Father: {fileID: 0}
+  m_Father: {fileID: 1100996023}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!135 &308252906
 SphereCollider:
@@ -2481,7 +2481,7 @@ GameObject:
   m_Component:
   - component: {fileID: 766611617}
   m_Layer: 0
-  m_Name: Map - New
+  m_Name: Map
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -3492,6 +3492,39 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1070356585}
   m_CullTransparentMesh: 1
+--- !u!1 &1100996022
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1100996023}
+  m_Layer: 0
+  m_Name: Stage Object
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1100996023
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1100996022}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children:
+  - {fileID: 308252905}
+  - {fileID: 2482321320406070153}
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1113688482
 GameObject:
   m_ObjectHideFlags: 0
@@ -4598,7 +4631,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: "\uC138\uC774\uBE0C & \uB85C\uB4DC"
+  m_text: "\uC2A4\uD14C\uC774\uC9C0 \uC120\uD0DD"
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: f0b8e338f0504b04c948ed9de570bca1, type: 2}
   m_sharedMaterial: {fileID: -6256499527232880871, guid: f0b8e338f0504b04c948ed9de570bca1,
@@ -5891,7 +5924,7 @@ PrefabInstance:
   serializedVersion: 2
   m_Modification:
     serializedVersion: 3
-    m_TransformParent: {fileID: 0}
+    m_TransformParent: {fileID: 1100996023}
     m_Modifications:
     - target: {fileID: 3783161379322745563, guid: 239a3f813356ba8419283095787f506c,
         type: 3}
@@ -5953,6 +5986,12 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 239a3f813356ba8419283095787f506c, type: 3}
+--- !u!4 &2482321320406070153 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 5446441121609411934, guid: 239a3f813356ba8419283095787f506c,
+    type: 3}
+  m_PrefabInstance: {fileID: 2482321320406070152}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &3310878835271977547
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -6150,6 +6189,5 @@ SceneRoots:
   - {fileID: 706415636}
   - {fileID: 2056393978}
   - {fileID: 766611617}
-  - {fileID: 308252905}
-  - {fileID: 2482321320406070152}
   - {fileID: 1455945027}
+  - {fileID: 1100996023}

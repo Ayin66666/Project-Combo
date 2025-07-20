@@ -9,16 +9,9 @@ public class Stage_Manager : MonoBehaviour
     [Header("---Stage Data---")]
     [SerializeField] private int chapter;
     [SerializeField] private int stage;
-    [SerializeField] private List<Data> rankData;
+    [SerializeField] private StageData_SO stageData;
     private float startTime;
 
-
-    [System.Serializable]
-    public struct Data
-    {
-        public float time;
-        public StageData.Rank rank;
-    }
 
     [Header("---State---")]
     [SerializeField] private bool haveStartDialog;
@@ -49,12 +42,6 @@ public class Stage_Manager : MonoBehaviour
     [SerializeField] private Transform startSpawnPos;
     public Vector3 spawnPos;
     public Quaternion spawnRotation;
-
-
-    [Header("---Clear Exp---")]
-    [SerializeField] private Chapter_Data_SO stageData;
-    [SerializeField] private int stageIndex;
-
 
     // Defence
     public int curhp;
@@ -144,7 +131,7 @@ public class Stage_Manager : MonoBehaviour
         Player_Manager.instance.Player_Action_Setting(false);
 
         // 클리어 경험치
-        Player_Manager.instance.status.ExpAdd(stageData.stageData[stageIndex].stageClearExp);
+        Player_Manager.instance.status.ExpAdd(stageData.ClearExp);
 
         // 클리어 데이터 셋팅
         ClearData();
@@ -184,10 +171,10 @@ public class Stage_Manager : MonoBehaviour
         };
 
         // 랭크 셋팅
-        for (int i = 0; i < rankData.Count; i++)
+        for (int i = 0; i < stageData.Data.Count; i++)
         {
-            if (clearData.clearTime < rankData[i].time)
-                clearData.clearRank = rankData[i].rank;
+            if (clearData.clearTime < stageData.Data[i].time)
+                clearData.clearRank = stageData.Data[i].rank;
         }
 
         // 데이터 전달
