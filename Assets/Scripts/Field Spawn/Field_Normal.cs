@@ -80,20 +80,12 @@ public class Field_Normal : Field_Base
 
         // 필드 종료
         Field_End();
-
-        /*
-        enemyCount = spawnDatas[0].enemys.Count;
-        while(enemyCount > 0)
-        {
-            yield return checkInterval;
-        }
-        */
     }
 
     public override void Field_End()
     {
         // 클리어 UI
-        UI_Manager.instance.FieldClear_Normal();
+        UI_Manager.instance.FieldClearUI(UI_Manager.ClearType.Normal);
 
         // 종료 다이얼로그
         if (haveEndDialog)

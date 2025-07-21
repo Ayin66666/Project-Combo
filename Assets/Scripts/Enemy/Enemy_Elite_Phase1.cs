@@ -1,12 +1,15 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Video;
 
 
 public class Enemy_Elite_Phase1 : Enemy_Base
 {
     [Header("---Component---")]
     [SerializeField] private Enemy_Elite_Controller phaseController;
+    [SerializeField] private VideoClip[] clips;
+    private VideoPlayer video;
 
 
     [Header("---Dead Setting---")]
@@ -22,11 +25,17 @@ public class Enemy_Elite_Phase1 : Enemy_Base
 
     private void Start()
     {
+        video = GetComponent<VideoPlayer>();
         Spawn();
     }
 
     private void Update()
     {
+        if(curState == State.Die)
+        {
+            return;
+        }
+
         if(curState == State.Idle)
         {
             Think();
@@ -89,8 +98,22 @@ public class Enemy_Elite_Phase1 : Enemy_Base
 
     protected override IEnumerator Spawn_CutScene()
     {
-        yield return new WaitForSeconds(0.5f);
+        // 플레이어 동작 제어
+        Player_Manager.instance.Player_Action_Setting(false);
+
+        // 컷신
+        video.clip = clips[0];
+        video.Play();
+        yield return new WaitForSeconds(0.1f);
+        while (video.isPlaying)
+        {
+            yield return null;
+        }
+
         curState = State.Idle;
+
+        // 플레이어 동작 제어
+        Player_Manager.instance.Player_Action_Setting(true);
     }
 
     public override void Die()
@@ -105,12 +128,22 @@ public class Enemy_Elite_Phase1 : Enemy_Base
 
         enemyUI.gameObject.SetActive(false);
 
-        // 애니메이션 - 이거 애니메이션으로 컷씬 찍는게?
+        // 애니메이션
         anim.SetTrigger("Hit");
         anim.SetBool("isDie", true);
-        yield return new WaitUntil(() => anim.GetBool("isDie"));
+        while(anim.GetBool("isDie"))
+        {
+            yield return null;
+        }
 
         // 컷신
+        video.clip = clips[1];
+        video.Play();
+        yield return new WaitForSeconds(0.1f);
+        while (video.isPlaying)
+        {
+            yield return null;
+        }
 
         // 2페이즈 전환
         phaseController.Stage_Spawn(1);

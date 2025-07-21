@@ -1,13 +1,12 @@
 using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Video;
+
 
 public class Enemy_Elite_Phase2 : Enemy_Base
 {
     [Header("---Setting---")]
     [SerializeField] private Enemy_Elite_Controller phaseController;
-    [SerializeField] private int a;
-
     [SerializeField] private GameObject[] weapons;
 
     // 근접 패턴
@@ -31,18 +30,30 @@ public class Enemy_Elite_Phase2 : Enemy_Base
     };
 
 
+    [Header("---Compoment---")]
+    private VideoPlayer video;
+    [SerializeField] private VideoClip dieClip;
+
+
     private void Start()
     {
+        video = GetComponent<VideoPlayer>();
         Spawn();
     }
 
     private void Update()
     {
+        if(curState == State.Die)
+        {
+            return;
+        }
+
         if (curState == State.Idle)
         {
             Think();
         }
     }
+
 
     protected override void Think()
     {
@@ -61,7 +72,6 @@ public class Enemy_Elite_Phase2 : Enemy_Base
             StartCoroutine(Patten_Use(pattens_Range, ran));
         }
     }
-
 
     /// <summary>
     /// 공격 기능
@@ -212,13 +222,41 @@ public class Enemy_Elite_Phase2 : Enemy_Base
 
     protected override IEnumerator Spawn_CutScene()
     {
-        yield return null;
+        // 2페이즈는 스폰 컷신 X
         curState = State.Idle;
+        yield return null;
     }
 
     public override void Die()
     {
-        base.Die();
-        throw new System.NotImplementedException();
+        StartCoroutine(DieCall());
+    }
+
+    private IEnumerator DieCall()
+    {
+        // 애니메이션
+        anim.SetTrigger("Action");
+        anim.SetBool("isDie", true);
+        while(anim.GetBool("isDie"))
+        {
+            yield return null;
+        }
+
+        // 신체 비활성화
+        body.SetActive(false);
+
+        // 사망 컷신
+        video.clip = dieClip;
+        yield return new WaitForSeconds(0.1f);
+        while (video.isPlaying)
+        {
+            yield return null;
+        }
+
+        // 아이템 드랍
+        Item_Drop();
+
+        // 사망 전달
+        phaseController.Stage_End();
     }
 }

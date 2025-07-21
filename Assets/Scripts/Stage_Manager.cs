@@ -136,16 +136,9 @@ public class Stage_Manager : MonoBehaviour
         // 클리어 데이터 셋팅
         ClearData();
 
-        // 클리어 UI
-        UI_Manager.instance.FieldClear_Normal();
+        // 클리어 UI - 이 함수 내부에 Fade 동작도 같이 있음!
+        UI_Manager.instance.StageClearUI();
         while (UI_Manager.instance.isClear)
-        {
-            yield return null;
-        }
-
-        // 페이드 인
-        UI_Manager.instance.Fade(true, 1.5f);
-        while (UI_Manager.instance.isFade)
         {
             yield return null;
         }

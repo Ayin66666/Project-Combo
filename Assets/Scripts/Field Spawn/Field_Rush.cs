@@ -35,25 +35,21 @@ public class Field_Rush : Field_Base
         {
             // 몬스터 소환 - 몬스터
             enemyCount = spawnDatas[i].enemys.Count;
-            for (int j = 0; j < spawnDatas[i].enemys.Count; j++)
+            foreach(GameObject enemy in spawnDatas[i].enemys)
             {
-                spawnDatas[i].enemys[j].SetActive(true);
-            }
-
-            // 몬스터 수 체크
-            int aliveCount = 0;
-            foreach (var enemy in spawnDatas[i].enemys)
-            {
-                if (enemy != null)
-                    aliveCount++;
+                enemy.SetActive(true); 
             }
 
             // 라운드 종료 대기
-            while (true)
+            while (enemyCount == 0)
             {
-                // 몬스터 체크
-                if (aliveCount == 0)
-                    break;
+                // 몬스터 수 체크
+                for (int j = 0; j < spawnDatas[i].enemys.Count; j++)
+                {
+                    if (spawnDatas[0].enemys[i] == null)
+                        spawnDatas[0].enemys.RemoveAt(j);
+                }
+                enemyCount = spawnDatas[i].enemys.Count;
 
                 yield return checkInterval;
             }
@@ -69,7 +65,7 @@ public class Field_Rush : Field_Base
     public override void Field_End()
     {
         // 클리어 UI
-        UI_Manager.instance.FieldClear_Normal();
+        UI_Manager.instance.FieldClearUI(UI_Manager.ClearType.Normal);
 
         // 종료 다이얼로그
         if (haveEndDialog)

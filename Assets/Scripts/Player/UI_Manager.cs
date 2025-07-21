@@ -87,9 +87,16 @@ public class UI_Manager : MonoBehaviour
     private Coroutine dialogCoroutine;
 
 
-    [Header("---Clear UI---")]
+    [Header("---Field Clear UI---")]
     [SerializeField] private GameObject fieldClearSet;
     [SerializeField] private CanvasGroup fieldClearCanvasGroup;
+    [SerializeField] private TextMeshProUGUI fieldClearText;
+    public enum ClearType { Normal, Boss }
+
+
+    [Header("---Stage Clear UI---")]
+    [SerializeField] private GameObject stageClearSet;
+    [SerializeField] private CanvasGroup stageClearUICanvasGroup;
 
 
     [Header("---Die UI---")]
@@ -414,7 +421,7 @@ public class UI_Manager : MonoBehaviour
     /// <param name="isUp"></param>
     public void MiniMap_SizeSetting(bool isUp)
     {
-        if(minimapCoroutine != null)
+        if (minimapCoroutine != null)
             StopCoroutine(minimapCoroutine);
 
         minimapCoroutine = StartCoroutine(MinimapSizeCall(isUp));
@@ -425,7 +432,7 @@ public class UI_Manager : MonoBehaviour
         Vector3 start = isUp ? new Vector3(0.7f, 0.7f, 1f) : Vector3.one;
         Vector3 end = isUp ? Vector2.one : new Vector3(0.7f, 0.7f, 1f);
         float timer = 0;
-        while(timer < 1)
+        while (timer < 1)
         {
             timer += Time.deltaTime;
             miniMapRect.localScale = Vector3.Lerp(start, end, EasingFunctions.OutExpo(timer));
@@ -559,14 +566,26 @@ public class UI_Manager : MonoBehaviour
     /// <summary>
     /// 전투 승리 UI
     /// </summary>
-    public void FieldClear_Normal()
+
+    public void FieldClearUI(ClearType type)
     {
-        StartCoroutine(FieldClaerNormalCall());
+        StartCoroutine(FieldClaerUIlCall(type));
     }
 
-    private IEnumerator FieldClaerNormalCall()
+    private IEnumerator FieldClaerUIlCall(ClearType type)
     {
         fieldClearSet.SetActive(true);
+        switch (type)
+        {
+            case ClearType.Normal:
+                fieldClearText.text = "지역정리 완료";
+                break;
+
+            case ClearType.Boss:
+                fieldClearText.text = "주 목표 처리 완료";
+                break;
+        }
+
         isClear = true;
 
         // 페이드 인
@@ -592,6 +611,43 @@ public class UI_Manager : MonoBehaviour
             yield return null;
         }
         fieldClearCanvasGroup.alpha = 0;
+
+        // 종료
+        fieldClearSet.SetActive(false);
+        isClear = false;
+    }
+
+
+    /// <summary>
+    /// 스테이지 클리어 시 UI
+    /// </summary>
+    public void StageClearUI()
+    {
+        StartCoroutine(StageClearUICall());
+    }
+
+    private IEnumerator StageClearUICall()
+    {
+        isClear = true;
+        stageClearSet.SetActive(true);
+        stageClearUICanvasGroup.alpha = 0;
+
+        float timer = 0;
+        while (timer < 1)
+        {
+            timer += Time.deltaTime * 3f;
+            stageClearUICanvasGroup.alpha = Mathf.Lerp(0, 1, EasingFunctions.OutExpo(timer));
+            yield return null;
+        }
+
+        // 딜레이
+        Fade(true, 1.5f);
+        while(isFade)
+        {
+            yield return null;
+        }
+        stageClearUICanvasGroup.alpha = 0;
+        stageClearSet.SetActive(false);
 
         // 종료
         fieldClearSet.SetActive(false);
