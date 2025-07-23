@@ -8,11 +8,14 @@ public class Field_Rush : Field_Base
     [SerializeField] private List<DialogData> datas;
     [SerializeField] private float nextRoundDelay;
     private readonly WaitForSeconds checkInterval = new WaitForSeconds(1f);
+    private List<Enemy_Base> enemyList;
+    private Coroutine checkCoroutine;
 
 
     public override void Field_Start()
     {
-        StartCoroutine(StartCall());
+        if(checkCoroutine != null) StopCoroutine(checkCoroutine);
+        checkCoroutine = StartCoroutine(StartCall());
     }
 
     private IEnumerator StartCall()
@@ -31,25 +34,36 @@ public class Field_Rush : Field_Base
         UI_Manager.instance.MiniMap_SizeSetting(false);
 
         // 몬스터 소환 - 라운드
+        enemyList = new List<Enemy_Base>();
         for (int i = 0; i < datas.Count; i++)
         {
+            enemyList.Clear();
+
             // 몬스터 소환 - 몬스터
             enemyCount = spawnDatas[i].enemys.Count;
-            foreach(GameObject enemy in spawnDatas[i].enemys)
+            for (int j = 0; j < spawnDatas[0].enemys.Count; j++)
             {
-                enemy.SetActive(true); 
+                GameObject obj = Stage_Manager.instance.enemy_Container.Spawn_Enemy(spawnDatas[0].enemys[j].enemy);
+                enemyList.Add(obj.GetComponent<Enemy_Base>());
+
+                obj.transform.position = spawnDatas[0].enemys[j].spawnPos.position;
+                obj.transform.rotation = spawnDatas[0].enemys[j].spawnPos.rotation;
+                obj.SetActive(true);
+
+                // 스폰 딜레이
+                yield return new WaitForSeconds(spawnDatas[i].spawnDelay);
             }
 
             // 라운드 종료 대기
             while (enemyCount == 0)
             {
                 // 몬스터 수 체크
-                for (int j = 0; j < spawnDatas[i].enemys.Count; j++)
+                for (int j = 0; i < enemyList.Count; i++)
                 {
-                    if (spawnDatas[0].enemys[i] == null)
-                        spawnDatas[0].enemys.RemoveAt(j);
+                    if (enemyList[i].curState == Enemy_Base.State.Die || !enemyList[i].gameObject.activeSelf)
+                        enemyList.RemoveAt(i);
                 }
-                enemyCount = spawnDatas[i].enemys.Count;
+                enemyCount = enemyList.Count;
 
                 yield return checkInterval;
             }
@@ -64,6 +78,8 @@ public class Field_Rush : Field_Base
 
     public override void Field_End()
     {
+        isClear = true;
+
         // 클리어 UI
         UI_Manager.instance.FieldClearUI(UI_Manager.ClearType.Normal);
 
@@ -79,5 +95,25 @@ public class Field_Rush : Field_Base
 
         // 맵 UI 최대화
         UI_Manager.instance.MiniMap_SizeSetting(true);
+    }
+
+    public override void Field_Reset()
+    {
+        isClear = false;
+
+        // 체크 중단
+        if (checkCoroutine != null) StopCoroutine(checkCoroutine);
+
+        // 문 개방
+        foreach (GameObject door in door)
+        {
+            door.SetActive(false);
+        }
+
+        // 몬스터 제거
+        foreach (Enemy_Base e in enemyList)
+        {
+            e.Reset_Enemy();
+        }
     }
 }

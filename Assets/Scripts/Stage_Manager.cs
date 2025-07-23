@@ -20,6 +20,10 @@ public class Stage_Manager : MonoBehaviour
     [SerializeField] private string nextScene;
 
 
+    [Header("---Spawn---")]
+    [SerializeField] private List<Field_Base> spawn;
+
+
     [Header("---Dialog---")]
     [SerializeField] private List<Dialog_Data_SO> dialogDatas;
 
@@ -33,6 +37,7 @@ public class Stage_Manager : MonoBehaviour
 
 
     [Header("---Component---")]
+    public Enemy_Container enemy_Container;
     [SerializeField] private AudioSource bgmAudio;
     [SerializeField] private AudioClip[] bgmClips;
     [SerializeField] private Waypoint_Manager wayPointManager;
@@ -42,26 +47,6 @@ public class Stage_Manager : MonoBehaviour
     [SerializeField] private Transform startSpawnPos;
     public Vector3 spawnPos;
     public Quaternion spawnRotation;
-
-    // Defence
-    public int curhp;
-    public int maxHp;
-    public int physicalDefence;
-    public int magicalDefence;
-
-    // Attack Status
-    public int physcialDamage;
-    public int magicalDamage;
-    public float attackSpeed;
-    public float criticalhit;
-    public float critical_multiplier;
-
-    // Other Status
-    public float moveSpeed;
-    public float curSteamina;
-    public float maxSteamina;
-    public float curAwankning;
-    public float maxAwankning;
 
 
     private void Awake()
@@ -229,22 +214,6 @@ public class Stage_Manager : MonoBehaviour
         // 위치 저장
         spawnPos = pos.position;
         spawnRotation = Player_Manager.instance.transform.rotation;
-
-        // 스텟 저장
-        curhp = Player_Manager.instance.status.curhp;
-        maxHp = Player_Manager.instance.status.maxHp;
-        physicalDefence = Player_Manager.instance.status.physicalDefence;
-        magicalDamage = Player_Manager.instance.status.magicalDefence;
-        physcialDamage = Player_Manager.instance.status.physicalDamage;
-        magicalDamage = Player_Manager.instance.status.magicalDamage;
-        attackSpeed = Player_Manager.instance.status.attackSpeed;
-        criticalhit = Player_Manager.instance.status.criticalhit;
-        critical_multiplier = Player_Manager.instance.status.critical_multiplier;
-        moveSpeed = Player_Manager.instance.status.moveSpeed;
-        curSteamina = Player_Manager.instance.status.curStamina;
-        maxSteamina = Player_Manager.instance.status.maxStamina;
-        curAwankning = Player_Manager.instance.status.curAwakening;
-        maxAwankning = Player_Manager.instance.status.maxAwakening;
     }
 
     /// <summary>
@@ -252,28 +221,22 @@ public class Stage_Manager : MonoBehaviour
     /// </summary>
     public void CheckPoint_Call()
     {
+        // 스테이지 리셋
+        foreach (Field_Base field in spawn)
+        {
+            if (!field.isClear) field.Field_Reset();
+        }
+
         // 스테이터스 변경
-        Player_Manager.instance.status.curhp = curhp;
-        Player_Manager.instance.status.maxHp = maxHp;
-        Player_Manager.instance.status.physicalDefence = physicalDefence;
-        Player_Manager.instance.status.magicalDefence = magicalDamage;
-        Player_Manager.instance.status.physicalDamage = physcialDamage;
-        Player_Manager.instance.status.magicalDamage = magicalDamage;
-        Player_Manager.instance.status.attackSpeed = attackSpeed;
-        Player_Manager.instance.status.criticalhit = criticalhit;
-        Player_Manager.instance.status.critical_multiplier = critical_multiplier;
-        Player_Manager.instance.status.moveSpeed = moveSpeed;
-        Player_Manager.instance.status.curStamina = curSteamina;
-        Player_Manager.instance.status.maxStamina = maxSteamina;
-        Player_Manager.instance.status.curAwakening = curAwankning;
-        Player_Manager.instance.status.maxAwakening = maxAwankning;
+        Player_Manager.instance.status.curhp = Player_Manager.instance.status.maxHp;
+        Player_Manager.instance.status.curStamina = Player_Manager.instance.status.maxStamina;
+        Player_Manager.instance.status.curAwakening = 0;
 
         // UI 리셋
         UI_Manager.instance.Hp();
+        UI_Manager.instance.Awakening();
 
         // 플레이어 위치 이동
         PlayerAction_Manager.instance.Pos_Setting(spawnPos, spawnRotation);
-
-        // 스테이지 리셋
     }
 }

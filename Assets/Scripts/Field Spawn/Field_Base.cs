@@ -1,5 +1,7 @@
 using System.Collections.Generic;
+using System.Collections;
 using UnityEngine;
+
 
 [System.Serializable]
 public class DialogData
@@ -11,11 +13,19 @@ public class DialogData
     public Dialog_Data_SO dialog;
 }
 
+[System.Serializable]
+public class EnemySpawnData
+{
+    public Enemy_Container.Enemy enemy;
+    [SerializeField] public Transform spawnPos;
+}
+
 
 public abstract class Field_Base : MonoBehaviour
 {
     [Header("---Setting---")]
     [SerializeField] protected FieldType fieldType;
+    public bool isClear;
     [SerializeField] protected GameObject[] door;
     protected enum FieldType { Normal, Rush, Guard, Puzzle, Boss }
     public enum UseType { Stage_Start, Stage_End, EnemyCount, Hp }
@@ -50,7 +60,7 @@ public abstract class Field_Base : MonoBehaviour
     public struct SpawnData
     {
         [SerializeField] private string dataName;
-        public List<GameObject> enemys;
+        public List<EnemySpawnData> enemys;
         public float spawnDelay;
     }
 
@@ -72,4 +82,10 @@ public abstract class Field_Base : MonoBehaviour
     /// 필드 종료
     /// </summary>
     public abstract void Field_End();
+
+
+    /// <summary>
+    /// 플레이어 사망 후 체크포인트 복귀 시 리셋 기능
+    /// </summary>
+    public abstract void Field_Reset();
 }

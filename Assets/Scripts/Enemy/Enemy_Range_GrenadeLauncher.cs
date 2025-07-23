@@ -3,28 +3,25 @@ using UnityEngine;
 
 public class Enemy_Range_GrenadeLauncher : Enemy_Base
 {
-    private void Start()
+    private void OnEnable()
     {
         Spawn();
     }
 
-    private void FixedUpdate()
-    {
-        if (curState == State.Groggy || curState == State.Die)
-        {
-            return;
-        }
-
-        if (curState == State.Idle)
-        {
-            Think();
-        }
-    }
 
     protected override void Think()
     {
-        curState = State.Think;
+        // ªÁ∏¡ √º≈©
+        if (curState == State.Groggy || curState == State.Die) return;
 
+        // «√∑π¿ÃæÓ ªÁ∏¡ √º≈©
+        if (Player_Manager.instance.action.isDie)
+        {
+            curState = State.Idle;
+            return;
+        }
+
+        curState = State.Think;
         LookAt(target, 0.05f);
         Check_Target();
 
@@ -91,12 +88,13 @@ public class Enemy_Range_GrenadeLauncher : Enemy_Base
         }
         anim.SetFloat("Movement", 0);
 
-        curState = State.Idle;
+        Think();
     }
 
 
     public override void Die()
     {
+        Hit_Reset();
         StartCoroutine(DieCall());
     }
 
@@ -104,17 +102,46 @@ public class Enemy_Range_GrenadeLauncher : Enemy_Base
     {
         curState = State.Die;
         enemyUI.UI_OnOff(false);
+        nav.enabled = false;
+
+        // æ∆¿Ã≈€ µÂ∂¯
         base.Die();
 
         anim.SetTrigger("Hit");
         anim.SetBool("isDie", true);
-        yield return new WaitWhile(() => anim.GetBool("isDie"));
+        while(anim.GetBool("isDie"))
+        {
+            yield return null;
+        }
 
-        body.transform.parent = null;
-        Destroy(gameObject);
+        // ∫π±Õ µÙ∑π¿Ã
+        yield return new WaitForSeconds(1f);
+
+        // «Æ∏µ ∫π±Õ
+        if (Stage_Manager.instance != null)
+        {
+            Stage_Manager.instance.enemy_Container.Return_Enemy(Enemy_Container.Enemy.GrenadeLauncher, gameObject);
+        }
+        else
+        {
+            Destroy(gameObject);
+        }
     }
 
+    public override void Reset_Enemy()
+    {
+        base.Reset_Enemy();
 
+        // «Æ∏µ ∫π±Õ
+        if (Stage_Manager.instance != null)
+        {
+            Stage_Manager.instance.enemy_Container.Return_Enemy(Enemy_Container.Enemy.GrenadeLauncher, gameObject);
+        }
+        else
+        {
+            Destroy(gameObject);
+        }
+    }
 
     protected override IEnumerator Spawn_CutScene()
     {

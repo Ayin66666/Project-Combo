@@ -8,30 +8,26 @@ public class Enemy_Melee_Axe : Enemy_Base
     [Header("---Tutorial Setting---")]
     [SerializeField] private Transform dashPos;
 
-
-    private void Start()
+    private void OnEnable()
     {
         Spawn();
     }
 
-    private void FixedUpdate()
+    protected override void Think()
     {
-        if(curState == State.Groggy || curState == State.Die)
+        // 사망 체크
+        if (curState == State.Groggy || curState == State.Die) return;
+
+        // 플레이어 사망 체크
+        if (Player_Manager.instance.action.isDie)
         {
+            curState = State.Idle;
             return;
         }
 
-        if (curState == State.Idle)
-        {
-            Think();
-        }
-    }
 
-
-    protected override void Think()
-    {
+        // 판단
         curState = State.Think;
-
         LookAt(target, 0.05f);
         Check_Target();
 
@@ -130,21 +126,25 @@ public class Enemy_Melee_Axe : Enemy_Base
         }
         anim.SetFloat("Movement", 0);
 
-        curState = State.Idle;
+        Think();
     }
 
 
     public override void Die()
     {
+        Hit_Reset();
         StartCoroutine(DieCall());
     }
 
     private IEnumerator DieCall()
     {
-        base.Die();
         curState = State.Die;
         enemyUI.UI_OnOff(false);
 
+        // 아이템 드랍
+        base.Die();
+
+        // 사망 애니메이션
         anim.SetTrigger("Hit");
         anim.SetBool("isDie",true);
         while(anim.GetBool("isDie"))
@@ -152,11 +152,34 @@ public class Enemy_Melee_Axe : Enemy_Base
             yield return null;
         }
 
-        body.transform.parent = null;
-        Destroy(gameObject);
+        // 복귀 딜레이
+        yield return new WaitForSeconds(1f);
+
+        // 풀링 복귀
+        if (Stage_Manager.instance != null)
+        {
+            Stage_Manager.instance.enemy_Container.Return_Enemy(Enemy_Container.Enemy.Axe, gameObject);
+        }
+        else
+        {
+            Destroy(gameObject);
+        }
     }
 
+    public override void Reset_Enemy()
+    {
+        base.Reset_Enemy();
 
+        // 풀링 복귀
+        if (Stage_Manager.instance != null)
+        {
+            Stage_Manager.instance.enemy_Container.Return_Enemy(Enemy_Container.Enemy.Axe, gameObject);
+        }
+        else
+        {
+            Destroy(gameObject);
+        }
+    }
 
     protected override IEnumerator Spawn_CutScene()
     {

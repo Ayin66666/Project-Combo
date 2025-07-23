@@ -46,6 +46,8 @@ public class Field_Boss : Field_Base
 
     public override void Field_End()
     {
+        isClear = true;
+
         // Å¬¸®¾î UI
         UI_Manager.instance.FieldClearUI(UI_Manager.ClearType.Boss);
 
@@ -61,5 +63,10 @@ public class Field_Boss : Field_Base
         {
             obj.SetActive(false);
         }
+    }
+
+    public override void Field_Reset()
+    {
+
     }
 }

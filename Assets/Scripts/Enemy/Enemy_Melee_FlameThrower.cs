@@ -6,28 +6,25 @@ using Easing.Tweening;
 
 public class Enemy_Melee_FlameThrower : Enemy_Base
 {
-    private void Start()
+    private void OnEnable()
     {
         Spawn();
     }
 
-    private void FixedUpdate()
-    {
-        if (curState == State.Groggy || curState == State.Die)
-        {
-            return;
-        }
-
-        if (curState == State.Idle)
-        {
-            Think();
-        }
-    }
 
     protected override void Think()
     {
-        curState = State.Think;
+        // 사망 체크
+        if (curState == State.Groggy || curState == State.Die) return;
 
+        // 플레이어 사망 체크
+        if (Player_Manager.instance.action.isDie)
+        {
+            curState = State.Idle;
+            return;
+        }
+
+        curState = State.Think;
         LookAt(target, 0.05f);
         Check_Target();
 
@@ -132,18 +129,13 @@ public class Enemy_Melee_FlameThrower : Enemy_Base
         }
         anim.SetFloat("Movement", 0);
 
-        curState = State.Idle;
+        Think();
     }
 
 
     public override void Die()
     {
-        if(hitCoroutine != null)
-            StopCoroutine(hitCoroutine);
-
-        if(movementCoroutine != null)
-            StopCoroutine(movementCoroutine);
-
+        Hit_Reset();
         movementCoroutine = StartCoroutine(DieCall());
     }
 
@@ -152,8 +144,11 @@ public class Enemy_Melee_FlameThrower : Enemy_Base
         curState = State.Die;
         enemyUI.UI_OnOff(false);
         nav.enabled = false;
+
+        // 아이템 드랍
         base.Die();
 
+        // 애니메이션
         anim.SetTrigger("Hit");
         anim.SetBool("isDie", true);
         while(anim.GetBool("isDie"))
@@ -161,10 +156,34 @@ public class Enemy_Melee_FlameThrower : Enemy_Base
             yield return null;
         }
 
-        body.transform.parent = null;
-        Destroy(gameObject);
+        // 복귀 딜레이
+        yield return new WaitForSeconds(1f);
+
+        // 풀링 복귀
+        if (Stage_Manager.instance != null)
+        {
+            Stage_Manager.instance.enemy_Container.Return_Enemy(Enemy_Container.Enemy.Flame, gameObject);
+        }
+        else
+        {
+            Destroy(gameObject);
+        }
     }
 
+    public override void Reset_Enemy()
+    {
+        base.Reset_Enemy();
+
+        // 풀링 복귀
+        if (Stage_Manager.instance != null)
+        {
+            Stage_Manager.instance.enemy_Container.Return_Enemy(Enemy_Container.Enemy.Flame, gameObject);
+        }
+        else
+        {
+            Destroy(gameObject);
+        }
+    }
 
     protected override IEnumerator Spawn_CutScene()
     {

@@ -92,6 +92,15 @@ public abstract class Enemy_Base : MonoBehaviour, IDamageSysteam
     private List<System.Func<IEnumerator>> spawnList;
 
 
+    /// <summary>
+    /// 스테이지 초기화 시 호출 - 기능 정지 / 스테이트 None / 비활성화
+    /// </summary>
+    public virtual void Reset_Enemy()
+    {
+        curState = State.None;
+        Hit_Reset();
+        gameObject.SetActive(false);
+    }
 
     #region Spawn
     public void Spawn()
@@ -136,6 +145,7 @@ public abstract class Enemy_Base : MonoBehaviour, IDamageSysteam
         enemyUI.UI_Setting();
         enemyUI.UI_OnOff(true);
 
+        // 소환 애니메이션
         anim.SetTrigger("Action");
         anim.SetBool("isSpawn", true);
         while (anim.GetBool("isSpawn"))
@@ -143,9 +153,13 @@ public abstract class Enemy_Base : MonoBehaviour, IDamageSysteam
             yield return null;
         }
 
+        // UI 셋팅
         enemyUI.UI_Setting();
         enemyUI.UI_OnOff(true);
+
+        // 동작 - FSM
         curState = State.Idle;
+        Think();
     }
 
     protected IEnumerator Spawn_Movement()
@@ -231,12 +245,39 @@ public abstract class Enemy_Base : MonoBehaviour, IDamageSysteam
 
     public void LookAt(GameObject target, float lookSpeed)
     {
+        /*
+        // 과거 동작 방식 (튜토리얼 기준 130~150)
         Vector3 lookDir = (target.transform.position - transform.position).normalized;
         lookDir.y = 0;
         Quaternion lookRotation = Quaternion.LookRotation(lookDir);
 
         transform.DOKill();  // 기존 트위닝 중단
         transform.DORotateQuaternion(lookRotation, lookSpeed);  // Quaternion을 사용하여 부드럽게 회전
+        */
+
+        // 신규 방식 (튜토리얼 기준 150~170)
+        if (target == null) return;
+
+        Vector3 dir = target.transform.position - transform.position;
+        dir.y = 0f;
+        if (dir.sqrMagnitude < 0.001f) return;
+
+        Quaternion targetRot = Quaternion.LookRotation(dir);
+
+        if (lookSpeed <= 0f)
+        {
+            // 즉시 회전
+            transform.rotation = targetRot;
+        }
+        else
+        {
+            // 부드럽게 회전 (1프레임 기준)
+            transform.rotation = Quaternion.RotateTowards(
+                transform.rotation,
+                targetRot,
+                lookSpeed * Time.deltaTime
+            );
+        }
     }
 
     public void Delay()
@@ -353,7 +394,7 @@ public abstract class Enemy_Base : MonoBehaviour, IDamageSysteam
         body.transform.DOShakePosition(duration, strength, 10, 90, false, true);
     }
 
-    private void Hit_Reset()
+    protected void Hit_Reset()
     {
         nav.enabled = false;
 
