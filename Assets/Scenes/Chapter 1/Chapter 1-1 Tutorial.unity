@@ -906,7 +906,7 @@ PrefabInstance:
     - target: {fileID: 6128732596220289370, guid: 579f2b79d95604449b0224586be2ef83,
         type: 3}
       propertyPath: haveEndDialog
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 6128732596220289370, guid: 579f2b79d95604449b0224586be2ef83,
         type: 3}
@@ -922,7 +922,7 @@ PrefabInstance:
         type: 3}
       propertyPath: endDialog.dialog
       value: 
-      objectReference: {fileID: 11400000, guid: f70022ef597f1934bb14cb6708e5b3d3,
+      objectReference: {fileID: 11400000, guid: 2d4d016829d6a5b42a2e0659968b2812,
         type: 2}
     - target: {fileID: 6128732596220289370, guid: 579f2b79d95604449b0224586be2ef83,
         type: 3}
@@ -953,7 +953,7 @@ PrefabInstance:
     - target: {fileID: 6128732596220289370, guid: 579f2b79d95604449b0224586be2ef83,
         type: 3}
       propertyPath: countDialogData.Array.size
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 6128732596220289370, guid: 579f2b79d95604449b0224586be2ef83,
         type: 3}
@@ -974,6 +974,22 @@ PrefabInstance:
         type: 3}
       propertyPath: spawnDatas.Array.data[1].dataName
       value: "\uD29C\uD1A0 \uC18C\uD658"
+      objectReference: {fileID: 0}
+    - target: {fileID: 6128732596220289370, guid: 579f2b79d95604449b0224586be2ef83,
+        type: 3}
+      propertyPath: countDialogData.Array.data[0].dialog
+      value: 
+      objectReference: {fileID: 11400000, guid: 6ac917e5099e36044b97c7eee15fb9bd,
+        type: 2}
+    - target: {fileID: 6128732596220289370, guid: 579f2b79d95604449b0224586be2ef83,
+        type: 3}
+      propertyPath: countDialogData.Array.data[0].useType
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 6128732596220289370, guid: 579f2b79d95604449b0224586be2ef83,
+        type: 3}
+      propertyPath: countDialogData.Array.data[0].dialogName
+      value: "1\uBC88 \uC804\uD22C \uC885"
       objectReference: {fileID: 0}
     - target: {fileID: 6128732596220289370, guid: 579f2b79d95604449b0224586be2ef83,
         type: 3}
@@ -1955,7 +1971,7 @@ PrefabInstance:
         type: 3}
       propertyPath: dialogData
       value: 
-      objectReference: {fileID: 11400000, guid: da7e728493beec24a8ec6f0ea18f5de7,
+      objectReference: {fileID: 11400000, guid: d16ca799c00dd4b4e8c14dcf99fc68b4,
         type: 2}
     - target: {fileID: 8731196973168743881, guid: 9723acd8f4a818344b16e2dd6c642de5,
         type: 3}
@@ -3656,7 +3672,7 @@ PrefabInstance:
         type: 3}
       propertyPath: endDialog.dialog
       value: 
-      objectReference: {fileID: 11400000, guid: 68477a9d3e444d441b669a57de4d2b04,
+      objectReference: {fileID: 11400000, guid: 5a1b124f67616724d87fc60d831d3345,
         type: 2}
     - target: {fileID: 6128732596220289370, guid: 579f2b79d95604449b0224586be2ef83,
         type: 3}
@@ -8045,11 +8061,11 @@ MonoBehaviour:
   nextScene: Chapter 1 - Hideout
   spawn: []
   dialogDatas:
-  - {fileID: 11400000, guid: 4a006be205311cc45aad97c868271f98, type: 2}
-  - {fileID: 11400000, guid: da7e728493beec24a8ec6f0ea18f5de7, type: 2}
-  - {fileID: 11400000, guid: f70022ef597f1934bb14cb6708e5b3d3, type: 2}
-  - {fileID: 11400000, guid: 68477a9d3e444d441b669a57de4d2b04, type: 2}
-  - {fileID: 11400000, guid: eb2fe0adcc6e231479b21ee865717f36, type: 2}
+  - {fileID: 11400000, guid: 6ac917e5099e36044b97c7eee15fb9bd, type: 2}
+  - {fileID: 11400000, guid: d16ca799c00dd4b4e8c14dcf99fc68b4, type: 2}
+  - {fileID: 11400000, guid: 2d4d016829d6a5b42a2e0659968b2812, type: 2}
+  - {fileID: 11400000, guid: 5a1b124f67616724d87fc60d831d3345, type: 2}
+  - {fileID: 11400000, guid: e31f013c2058dad438c6d10ecef47172, type: 2}
   questDatas: {fileID: 11400000, guid: 0f85c3ef2680d7a49a5d9078b3ddb010, type: 2}
   doors:
   - {fileID: 763872311}
@@ -20522,5 +20538,5 @@ SceneRoots:
   - {fileID: 822182714}
   - {fileID: 759159271}
   - {fileID: 319570389}
-  - {fileID: 1341823932}
   - {fileID: 811790862}
+  - {fileID: 1341823932}
