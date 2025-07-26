@@ -149,13 +149,23 @@ public class Attack_Smash_VerticalSlash : Attack_Base
     public void Veritcal_Aura(int index)
     {
         // 사운드
-        if(index == 0 || index == 1)
+        switch (index)
         {
-            Player_Sound.instance.Sound_Smash(Player_Sound.Smash.Smash3_Aura12);
-        }
-        else
-        {
-            Player_Sound.instance.Sound_Smash(Player_Sound.Smash.Smash3_Aura34);
+            case 0:
+                Player_Sound.instance.Sound_Smash(Player_Sound.Smash.Smash3_1);
+                break;
+
+            case 1:
+                Player_Sound.instance.Sound_Smash(Player_Sound.Smash.Smash3_2);
+                break;
+
+            case 2:
+                Player_Sound.instance.Sound_Smash(Player_Sound.Smash.Smash3_3);
+                break;
+
+            case 3:
+                Player_Sound.instance.Sound_Smash(Player_Sound.Smash.Smash3_4);
+                break;
         }
 
         // 이펙트

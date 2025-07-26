@@ -117,12 +117,12 @@ public class Attack_Smash_ChargeSlash : Attack_Base
         int a = chargeCount < 0.5f ? 0 : (chargeCount < 1f ? 1 : 2);
         if (index == 0)
         {
-            Player_Sound.instance.Sound_Smash(Player_Sound.Smash.Smash4_Slash12);
+            Player_Sound.instance.Sound_Smash(Player_Sound.Smash.Smash4_Slash);
             slashVFX[a].SetActive(true);
         }
         else
         {
-            Player_Sound.instance.Sound_Smash(Player_Sound.Smash.Smash4_Slash3);
+            Player_Sound.instance.Sound_Smash(Player_Sound.Smash.Smash4_Slash);
             slashExplosionVFX[a].SetActive(true);
         }
     }

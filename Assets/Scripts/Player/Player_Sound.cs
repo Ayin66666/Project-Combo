@@ -17,6 +17,7 @@ public class Player_Sound : MonoBehaviour
     [SerializeField] private AudioClip[] playerFight_Skill;
     [SerializeField] private AudioClip[] playerFight_Special;
 
+
     private Dictionary<Normal, AudioClip> normalSound;
     private Dictionary<Smash, AudioClip> smashSound;
     private Dictionary<Skill, AudioClip> skillSound;
@@ -27,10 +28,10 @@ public class Player_Sound : MonoBehaviour
     public enum Special { Special_Charge, Special_Jump, Special_SwordAura, Special_Strike, Special_BackstepSlash }
     public enum Smash
     {
-        Smash1_Slash1, Samsh1_Slash2, Samsh1_Strike,
-        Smash2_Slash, Smash2_Sting, Smash2_Rush,
-        Smash3_Aura12, Smash3_Aura34,
-        Smash4_Charge, Smash4_Slash12, Smash4_Slash3
+        Smash1_1, Samsh1_2, Samsh1_3,
+        Smash2_1, Smash2_2, Smash2_3,
+        Smash3_1, Smash3_2, Smash3_3, Smash3_4,
+        Smash4_Charge, Smash4_Slash
     }
     #endregion
 
@@ -57,7 +58,7 @@ public class Player_Sound : MonoBehaviour
             Destroy(gameObject);
         }
 
-        // Setting();
+        Setting();
     }
 
     private void Setting()
@@ -107,25 +108,25 @@ public class Player_Sound : MonoBehaviour
     public void Sound_Normal(Normal type)
     {
         Debug.Log($"Sound Call {type}");
-        // audioSource_Player.PlayOneShot(normalSound[type]);
+        audioSource_Player.PlayOneShot(normalSound[type]);
     }
 
     public void Sound_Smash(Smash type)
     {
         Debug.Log($"Sound Call {type}");
-        // audioSource_Player.PlayOneShot(smashSound[type]);
+        audioSource_Player.PlayOneShot(smashSound[type]);
     }
 
     public void Sound_Skill(Skill type)
     {
         Debug.Log($"Sound Call {type}");
-        // audioSource_Player.PlayOneShot(skillSound[type]);
+        audioSource_Player.PlayOneShot(skillSound[type]);
     }
 
     public void Sound_Speical(Special type)
     {
         Debug.Log($"Sound Call {type}");
-        // audioSource_Player.PlayOneShot(specialSound[type]);
+        audioSource_Player.PlayOneShot(specialSound[type]);
     }
     #endregion
 

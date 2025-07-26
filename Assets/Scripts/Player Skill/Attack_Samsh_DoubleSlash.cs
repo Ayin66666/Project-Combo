@@ -148,15 +148,15 @@ public class Attack_Samsh_DoubleSlash : Attack_Base
         switch (index)
         {
             case 0:
-                Player_Sound.instance.Sound_Smash(Player_Sound.Smash.Smash2_Slash);
+                Player_Sound.instance.Sound_Smash(Player_Sound.Smash.Smash2_1);
                 break;
 
             case 1:
-                Player_Sound.instance.Sound_Smash(Player_Sound.Smash.Smash2_Sting);
+                Player_Sound.instance.Sound_Smash(Player_Sound.Smash.Smash2_2);
                 break;
 
             case 2:
-                Player_Sound.instance.Sound_Smash(Player_Sound.Smash.Smash2_Rush);
+                Player_Sound.instance.Sound_Smash(Player_Sound.Smash.Smash2_3);
                 break;
         }
 
