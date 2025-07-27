@@ -906,7 +906,7 @@ PrefabInstance:
     - target: {fileID: 6128732596220289370, guid: 579f2b79d95604449b0224586be2ef83,
         type: 3}
       propertyPath: haveEndDialog
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 6128732596220289370, guid: 579f2b79d95604449b0224586be2ef83,
         type: 3}

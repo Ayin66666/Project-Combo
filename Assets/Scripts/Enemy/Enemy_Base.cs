@@ -78,6 +78,7 @@ public abstract class Enemy_Base : MonoBehaviour, IDamageSysteam
 
     [Header("---Component---")]
     public Enemy_UI enemyUI;
+    public Enemy_Sound sound;
     [SerializeField] protected CharacterController controller;
     [SerializeField] protected NavMeshAgent nav;
     [SerializeField] protected Animator anim;
@@ -296,6 +297,9 @@ public abstract class Enemy_Base : MonoBehaviour, IDamageSysteam
         {
             return;
         }
+
+        // 사운드
+        sound.Sound(Enemy_Sound.SoundKey.Hit.ToString());
 
         // 데미지 계산
         for (int i = 0; i < hitCount; i++)

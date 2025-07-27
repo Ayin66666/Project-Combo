@@ -16,13 +16,14 @@ public class Player_Sound : MonoBehaviour
     [SerializeField] private AudioClip[] playerFight_Smash;
     [SerializeField] private AudioClip[] playerFight_Skill;
     [SerializeField] private AudioClip[] playerFight_Special;
-
+    [SerializeField] private AudioClip[] player_Movement;
+    [SerializeField] private AudioClip[] hit;
 
     private Dictionary<Normal, AudioClip> normalSound;
     private Dictionary<Smash, AudioClip> smashSound;
     private Dictionary<Skill, AudioClip> skillSound;
     private Dictionary<Special, AudioClip> specialSound;
-
+    private Dictionary<Movement, AudioClip> movementSound;
     public enum Normal { Normal1, Normal2, Normal3, Normal4 }
     public enum Skill { RushSlash, Counter_Start, Counter_Success, Counter_Add, Awakening }
     public enum Special { Special_Charge, Special_Jump, Special_SwordAura, Special_Strike, Special_BackstepSlash }
@@ -33,6 +34,7 @@ public class Player_Sound : MonoBehaviour
         Smash3_1, Smash3_2, Smash3_3, Smash3_4,
         Smash4_Charge, Smash4_Slash
     }
+    public enum Movement { Move, Dash }
     #endregion
 
     #region UI
@@ -88,6 +90,12 @@ public class Player_Sound : MonoBehaviour
             specialSound[(Special)i] = playerFight_Special[i];
         }
 
+        movementSound = new Dictionary<Movement, AudioClip>();
+        for (int i = 0; i < player_Movement.Length; i++)
+        {
+            movementSound[(Movement)i] = player_Movement[i];
+        }
+
 
         // ╫ц╫╨еш & UI
         inGameSystemSound = new Dictionary<IngameSystem, AudioClip>();
@@ -127,6 +135,30 @@ public class Player_Sound : MonoBehaviour
     {
         Debug.Log($"Sound Call {type}");
         audioSource_Player.PlayOneShot(specialSound[type]);
+    }
+
+    public void Sound_Movement(Movement type)
+    {
+        audioSource_Player.PlayOneShot(movementSound[type]);
+    }
+
+    public void Sound_Hit()
+    {
+        audioSource_Player.PlayOneShot(hit[Random.Range(0, hit.Length)]);
+    }
+
+    public void Sound_Walk(bool isOn)
+    {
+        if (isOn && !audioSource_Player.isPlaying)
+        {
+            Debug.Log("Call Sound On");
+            audioSource_Player.Play();
+        }
+        else if(!isOn && audioSource_Player.isPlaying)
+        {
+            Debug.Log("Call Sound off");
+            audioSource_Player.Pause();
+        }
     }
     #endregion
 

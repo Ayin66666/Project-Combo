@@ -321,15 +321,24 @@ public class PlayerAction_Manager : MonoBehaviour, IDamageSysteam
             //플레이어 정면 조절
             if (moveDir.magnitude != 0)
             {
+                // 사운드
+                Player_Sound.instance.Sound_Walk(true);
+
+                // 애니메이션
                 anim.SetBool("isMove", true);
                 anim.SetBool("isStop", false);
 
+                // 동작
                 transform.rotation = Quaternion.Euler(0f, angle, 0f);
                 Vector3 mDir = new Vector3(camDir.x, 0, camDir.z).normalized;
                 controller.Move(pManager.status.moveSpeed * Time.deltaTime * mDir);
             }
             else
             {
+                // 사운드
+                Player_Sound.instance.Sound_Walk(false);
+
+                // 애니메이션
                 anim.SetBool("isMove", false);
                 anim.SetBool("isStop", true);
             }
@@ -410,13 +419,16 @@ public class PlayerAction_Manager : MonoBehaviour, IDamageSysteam
             anim.SetBool("isDodgeDelay", true);
             anim.SetFloat("DashMotion", 0);
 
+            // 사운드
+            Player_Sound.instance.Sound_Movement(Player_Sound.Movement.Dash);
+
             // 대쉬
             Vector3 dir = dashDir;
             float timer = 0;
             while (timer < 1)
             {
                 timer += Time.deltaTime / dashTime;
-                controller.Move(EasingFunctions.OutExpo(timer) * Time.deltaTime * dir * dashPower);
+                controller.Move(dashPower * EasingFunctions.OutExpo(timer) * Time.deltaTime * dir);
                 anim.SetFloat("DashMotion", timer);
                 yield return null;
             }
@@ -458,6 +470,7 @@ public class PlayerAction_Manager : MonoBehaviour, IDamageSysteam
         if (!isGoround)
         {
             Vector3 dir = new Vector3(0, (isDash ? -20f : -9.81f), 0);
+            Debug.Log($"{isGoround} / {dir}");
             controller.Move(dir * Time.deltaTime);
         }
     }
@@ -499,6 +512,9 @@ public class PlayerAction_Manager : MonoBehaviour, IDamageSysteam
         {
             return;
         }
+
+        // 피격 사운드
+        Player_Sound.instance.Sound_Hit();
 
         // 데미지 계산
         int calDamage = damage - (type == IDamageSysteam.DamageType.Physical ? pManager.status.physicalDefence : pManager.status.magicalDefence);
