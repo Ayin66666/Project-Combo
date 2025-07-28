@@ -4,6 +4,7 @@ using UnityEngine;
 public class EAttack_Flame : Attack_Base
 {
     [Header("---Setting---")]
+    [SerializeField] private Enemy_Elite_Phase1 elite;
     [SerializeField] private GameObject chargeVFX;
     [SerializeField] private GameObject attackVFX;
     [SerializeField] private Attack_Collider_AOE attackCollider;
@@ -23,6 +24,9 @@ public class EAttack_Flame : Attack_Base
 
         DamageCal(0);
 
+        // 사운드
+        elite.sound.Sound(Enemy_Elite_Phase1.SoundKey.FlameCharge.ToString());
+
         // 차징
         anim.SetTrigger("Action");
         anim.SetBool("isFlameCharge", true);
@@ -37,6 +41,9 @@ public class EAttack_Flame : Attack_Base
 
         // 공격 딜레이
         yield return new WaitForSeconds(0.1f);
+
+        // 사운드
+        elite.sound.Sound(Enemy_Elite_Phase1.SoundKey.Flame.ToString());
 
         // 공격
         anim.SetBool("isFlameCharge", false);

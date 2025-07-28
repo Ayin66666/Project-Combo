@@ -6,6 +6,7 @@ using UnityEngine;
 public class EAttack_AlterEgoShooting : Attack_Base
 {
     [Header("---Setting---")]
+    [SerializeField] private Enemy_Elite_Phase2 elite;
     [SerializeField] private Transform backstepPos;
     [SerializeField] private Transform forwardstepPos;
 
@@ -33,6 +34,9 @@ public class EAttack_AlterEgoShooting : Attack_Base
     private IEnumerator UseCall()
     {
         enemy.curState = Enemy_Base.State.Attack;
+
+        // 사운드
+        elite.sound.Sound(Enemy_Elite_Phase2.SoundKey.Backstep_Move.ToString());
 
         // 백스탭
         anim.SetTrigger("Action");
@@ -77,6 +81,9 @@ public class EAttack_AlterEgoShooting : Attack_Base
 
         yield return new WaitForSeconds(0.05f);
 
+        // 사운드
+        elite.sound.Sound(Enemy_Elite_Phase2.SoundKey.Forward_Move.ToString());
+
         // 전진 이동
         anim.SetTrigger("Action");
         anim.SetBool("isAlterStep", true);
@@ -94,6 +101,8 @@ public class EAttack_AlterEgoShooting : Attack_Base
         anim.SetFloat("AnimValue", 1);
         anim.SetBool("isAlterStep", false);
 
+        // 사운드
+        elite.sound.Sound(Enemy_Elite_Phase2.SoundKey.AlterEgo_Charge.ToString());
 
         // 강화 사격 - 차징
         anim.SetTrigger("Action");
@@ -163,6 +172,9 @@ public class EAttack_AlterEgoShooting : Attack_Base
         // 2 3 4번 콜라이더
         for (int i = 1; i < 4; i++)
         {
+            // 사운드
+            elite.sound.Sound(Enemy_Elite_Phase2.SoundKey.AlterEgo_Shoot.ToString());
+
             // 이펙트 소환
             Instantiate(bullet[1], shootPos[i].position, Quaternion.identity);
 

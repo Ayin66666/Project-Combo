@@ -14,6 +14,7 @@ public class EAttack_BackstepSniping : Attack_Base
     Vector3 shotDir;
 
     [Header("---Component---")]
+    [SerializeField] private Enemy_Elite_Phase2 elite;
     [SerializeField] private LineRenderer line;
 
 
@@ -35,6 +36,9 @@ public class EAttack_BackstepSniping : Attack_Base
         anim.SetBool("isBackstep", true);
         anim.SetBool("isBackstepSniping", true);
 
+        // 사운드
+        elite.sound.Sound(Enemy_Elite_Phase2.SoundKey.Backstep_Move.ToString());
+
         // 이동
         Vector3 startPos = enemy.transform.position;
         Vector3 endPos = backstepPos.position;
@@ -48,6 +52,9 @@ public class EAttack_BackstepSniping : Attack_Base
         }
         anim.SetFloat("AnimValue", 1);
         anim.SetBool("isBackstep", false);
+
+        // 사운드
+        elite.sound.Sound(Enemy_Elite_Phase2.SoundKey.BackstepShooting_Charge.ToString());
 
         // 조준
         anim.SetFloat("AnimValue", 0);
@@ -96,6 +103,9 @@ public class EAttack_BackstepSniping : Attack_Base
 
     public override void AttackVFX(int index)
     {
+        // 사운드
+        elite.sound.Sound(Enemy_Elite_Phase2.SoundKey.BackstepShooting_Shoot.ToString());
+
         // 발사 이펙트
         Instantiate(shootVFX, shotPos.position, Quaternion.identity);
 

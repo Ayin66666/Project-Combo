@@ -15,6 +15,10 @@ public class Enemy_Range_Gunner_Animation : MonoBehaviour
 
     public void Shoot()
     {
+        // 사운드
+        enemy.sound.Sound(Enemy_Range_Gunner.SoundKey.Shoot.ToString());
+
+        // 이펙트
         enemy.attackDatas[0].AttackVFX(0);
     }
 

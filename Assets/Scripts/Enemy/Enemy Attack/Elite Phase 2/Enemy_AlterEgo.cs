@@ -1,6 +1,4 @@
-using DG.Tweening;
 using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 
@@ -19,11 +17,14 @@ public class Enemy_AlterEgo : MonoBehaviour
     [SerializeField] private GameObject shootVFX;
     [SerializeField] private GameObject bullet;
 
+
     [Header("---Component---")]
+    [SerializeField] private Enemy_Sound sound;
     [SerializeField] private Animator anim;
     [SerializeField] private LineRenderer line;
     [SerializeField] private Transform shotPos;
     [SerializeField] private GameObject target;
+    private enum SoundKey { Spawn, Shoot }
 
 
     /// <summary>
@@ -54,6 +55,9 @@ public class Enemy_AlterEgo : MonoBehaviour
     {
         // 분신 소환 이펙트
         alterSpawnVFX.SetActive(true);
+
+        // 사운드
+        sound.Sound(SoundKey.Spawn.ToString());
 
         // 바라보기
         Vector3 lookDir = (target.transform.position - transform.position).normalized;
@@ -101,6 +105,9 @@ public class Enemy_AlterEgo : MonoBehaviour
     {
         //발사 이펙트
         Instantiate(shootVFX, shotPos.position, Quaternion.identity);
+
+        // 사운드
+        sound.Sound(SoundKey.Shoot.ToString());
 
         // 탄 발사
         GameObject obj = Instantiate(this.bullet, shotPos.position, Quaternion.identity);

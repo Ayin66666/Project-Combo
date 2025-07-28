@@ -36,6 +36,10 @@ public class Enemy_Range_GrenadeLauncher_Animation : MonoBehaviour
 
     public void GrenadeShoot()
     {
+        // 사운드
+        enemy.sound.Sound(Enemy_Range_GrenadeLauncher.SoundKey.Shoot.ToString());
+
+        // 이펙트
         enemy.attackDatas[0].AttackVFX(0);
     }
 

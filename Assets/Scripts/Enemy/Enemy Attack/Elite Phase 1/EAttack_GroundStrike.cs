@@ -1,10 +1,12 @@
 using System.Collections;
+using System.ComponentModel;
 using UnityEngine;
 
 
 public class EAttack_GroundStrike : Attack_Base
 {
     [Header("---Setting---")]
+    [SerializeField] private Enemy_Elite_Phase1 elite;
     [SerializeField] private GameObject[] attackVFX;
 
 
@@ -47,6 +49,9 @@ public class EAttack_GroundStrike : Attack_Base
 
     public override void AttackVFX(int index)
     {
+        string key = (index == 0 ? Enemy_Elite_Phase1.SoundKey.GroundStrike1_1 : Enemy_Elite_Phase1.SoundKey.GroundStrike1_2).ToString();
+        elite.sound.Sound(key);
+
         attackVFX[index].SetActive(true);
     }
 

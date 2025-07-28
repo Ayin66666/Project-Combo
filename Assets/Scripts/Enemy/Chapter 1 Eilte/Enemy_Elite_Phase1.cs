@@ -11,10 +11,17 @@ public class Enemy_Elite_Phase1 : Enemy_Base
     [SerializeField] private VideoClip[] clips;
     private VideoPlayer video;
 
+    public enum SoundKey 
+    { 
+        GroundStrike1_1, GroundStrike1_2, 
+        FlameCharge, Flame, 
+        MachineGunCharge, MachineGun,
+        MisslieCharge, MisslieShoot
+    }
+
 
     [Header("---Dead Setting---")]
     [SerializeField] private List<DeadExplosion> explosions;
-    public int a;
     [System.Serializable]
     public struct DeadExplosion
     {
@@ -31,36 +38,30 @@ public class Enemy_Elite_Phase1 : Enemy_Base
 
     private void Update()
     {
-        if(curState == State.Die)
+        if (curState == State.Die)
         {
             return;
         }
 
-        if(curState == State.Idle)
+        if (curState == State.Idle)
         {
             Think();
         }
-        
-        /*
-        if(Input.GetKeyUp(KeyCode.U))
-        {
-            attackDatas[a].Use();
-        }
-        */
     }
+
 
     protected override void Think()
     {
         curState = State.Think;
 
         Check_Target();
-        if(targetRange <= 5)
+        if (targetRange <= 5)
         {
             int ran = Random.Range(0, attackDatas.Count);
             attackDatas[0].Use();
         }
 
-        if(targetRange > 5)
+        if (targetRange > 5)
         {
             int ran = Random.Range(1, attackDatas.Count);
             attackDatas[ran].Use();
@@ -125,13 +126,15 @@ public class Enemy_Elite_Phase1 : Enemy_Base
     private IEnumerator DieCall()
     {
         curState = State.Die;
-
         enemyUI.gameObject.SetActive(false);
+
+        // 사운드
+        sound.Sound(Enemy_Sound.SoundKey.Die.ToString());
 
         // 애니메이션
         anim.SetTrigger("Hit");
         anim.SetBool("isDie", true);
-        while(anim.GetBool("isDie"))
+        while (anim.GetBool("isDie"))
         {
             yield return null;
         }

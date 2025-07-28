@@ -29,6 +29,27 @@ public class Enemy_Elite_Phase2 : Enemy_Base
         { 3,4,0 },{ 4,0,1 },{ 2,3,4 }
     };
 
+    public enum SoundKey 
+    {
+        // 이동
+        Backstep_Move, Forward_Move,
+
+        // 백스탭 슈팅
+        BackstepShooting_Charge, BackstepShooting_Shoot,
+
+        // 트리플
+        TripeShooting_Shoot12, TripeShooting_Shoot3,
+
+        // 얼터에고
+        AlterEgo_Charge, AlterEgo_Shoot,
+
+        // 미사일 호출
+        Misslie_Charge, Misslie_Shoot, Misslie_Off,
+
+        // 건 슬래쉬
+        GunSlash_Slash12, GunSlash_Slash3
+    }
+
 
     [Header("---Compoment---")]
     private VideoPlayer video;

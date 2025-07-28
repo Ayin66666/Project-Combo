@@ -5,6 +5,7 @@ using UnityEngine;
 public class EAttack_Messile : Attack_Base
 {
     [Header("---Setting---")]
+    [SerializeField] private Enemy_Elite_Phase1 elite;
     [SerializeField] private GameObject shootVFX;
     [SerializeField] private GameObject[] bullet_Messile;
     [SerializeField] private Transform[] shotPos;
@@ -32,6 +33,9 @@ public class EAttack_Messile : Attack_Base
         enemy.LookAt(PlayerAction_Manager.instance.gameObject, 0.25f);
 
         isOn = true;
+
+        // 사운드
+        elite.sound.Sound(Enemy_Elite_Phase1.SoundKey.MisslieCharge.ToString());
 
         // 애니메이션 - 비행 시작
         anim.SetTrigger("Action");
@@ -93,6 +97,9 @@ public class EAttack_Messile : Attack_Base
 
     private IEnumerator MisslieCall()
     {
+        // 사운드
+        elite.sound.Sound(Enemy_Elite_Phase1.SoundKey.MisslieShoot.ToString());
+
         // 발사 이펙트 & 발사
         for (int i1 = 0; i1 < shotPos.Length; i1++)
         {

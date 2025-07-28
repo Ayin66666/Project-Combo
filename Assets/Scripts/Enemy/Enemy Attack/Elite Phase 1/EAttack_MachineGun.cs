@@ -1,10 +1,12 @@
-using DG.Tweening;
 using System.Collections;
 using UnityEngine;
+using DG.Tweening;
+
 
 public class EAttack_MachineGun : Attack_Base
 {
     [Header("---Setting---")]
+    [SerializeField] private Enemy_Elite_Phase1 elite;
     [SerializeField] private GameObject bullet;
     [SerializeField] private GameObject shootVFX;
     [SerializeField] private Transform[] shotPos;
@@ -25,6 +27,9 @@ public class EAttack_MachineGun : Attack_Base
 
         enemy.LookAt(PlayerAction_Manager.instance.gameObject, 0.15f);
         yield return new WaitForSeconds(0.15f);
+
+        // 사운드
+        elite.sound.Sound(Enemy_Elite_Phase1.SoundKey.MachineGunCharge.ToString());
 
         // 애니메이션
         anim.SetTrigger("Action");
@@ -83,6 +88,9 @@ public class EAttack_MachineGun : Attack_Base
 
     private void Shooting()
     {
+        // 사운드
+        elite.sound.Sound(Enemy_Elite_Phase1.SoundKey.MachineGun.ToString());
+
         for (int i = 0; i < shotPos.Length; i++)
         {
             // 발사 이펙트

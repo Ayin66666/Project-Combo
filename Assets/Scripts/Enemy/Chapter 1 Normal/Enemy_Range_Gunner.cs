@@ -4,6 +4,7 @@ using UnityEngine;
 
 public class Enemy_Range_Gunner : Enemy_Base
 {
+    public enum SoundKey { Shoot }
     private void OnEnable()
     {
         Spawn();
@@ -106,6 +107,9 @@ public class Enemy_Range_Gunner : Enemy_Base
 
         // 아이템 드랍
         base.Die();
+
+        // 사운드
+        sound.Sound(Enemy_Sound.SoundKey.Die.ToString());
 
         anim.SetTrigger("Hit");
         anim.SetBool("isDie", true);

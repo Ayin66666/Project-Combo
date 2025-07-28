@@ -5,6 +5,7 @@ using UnityEngine;
 public class EAttack_TripleShooting : Attack_Base
 {
     [Header("---Setting---")]
+    [SerializeField] private Enemy_Elite_Phase2 elite;
     [SerializeField] private Transform stepPos;
     [SerializeField] private Transform shootPos;
     [SerializeField] private GameObject attackVFX;
@@ -26,6 +27,9 @@ public class EAttack_TripleShooting : Attack_Base
         anim.SetFloat("AnimValue", 0);
         anim.SetBool("isTripleMove", true);
         anim.SetBool("isTriple", true);
+
+        // 사운드
+        elite.sound.Sound(Enemy_Elite_Phase2.SoundKey.Forward_Move.ToString());
 
         // 이동
         Vector3 startPos = enemy.transform.position;
@@ -62,6 +66,10 @@ public class EAttack_TripleShooting : Attack_Base
     {
         // 공격이펙트
         GameObject obj = Instantiate(attackVFX, shootPos.position, Quaternion.identity);
+
+        // 사운드
+        string key = index <= 1 ? Enemy_Elite_Phase2.SoundKey.TripeShooting_Shoot12.ToString() : Enemy_Elite_Phase2.SoundKey.TripeShooting_Shoot3.ToString();
+        elite.sound.Sound(key);
 
         // 콜라이더
         (bool isCritical, int damage) = enemy.DamageCalculation(value_Normal[index]);
