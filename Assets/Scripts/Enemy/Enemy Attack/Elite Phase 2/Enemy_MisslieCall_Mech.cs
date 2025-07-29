@@ -1,7 +1,7 @@
-using DG.Tweening;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using DG.Tweening;
 
 
 public class Enemy_MisslieCall_Mech : MonoBehaviour
@@ -25,6 +25,7 @@ public class Enemy_MisslieCall_Mech : MonoBehaviour
     [SerializeField] private GameObject missliePosSet;
     [SerializeField] private Collider misslieSpawnCollider;
     [SerializeField] private Collider misslieTargetCollider;
+    [SerializeField] private AudioClip[] clips;
 
 
     [Header("---VFX---")]
@@ -32,10 +33,18 @@ public class Enemy_MisslieCall_Mech : MonoBehaviour
     [SerializeField] private GameObject destoryVFX;
     [SerializeField] private GameObject[] misslies;
 
+
     [Header("---Component---")]
+    private AudioSource audio;
     [SerializeField] private Animator anim;
     [SerializeField] private Transform[] shotPos;
     private bool isOn;
+
+
+    private void Awake()
+    {
+        audio = GetComponent<AudioSource>();
+    }
 
 
     public void Damage_Setting(IDamageSysteam.DamageType dType, IDamageSysteam.HitVFX hVFX, bool isCri, int count, int dam, GameObject target)
@@ -78,6 +87,11 @@ public class Enemy_MisslieCall_Mech : MonoBehaviour
         int ran = Random.Range(7, 10);
         for (int i = 0; i < ran; i++)
         {
+            // 사운드
+            audio.clip = clips[0];
+            audio.Play();
+
+            // 애니메이션
             anim.SetBool("isMisslieShooting", true);
             anim.SetTrigger("Action");
             Misslie();
@@ -90,6 +104,10 @@ public class Enemy_MisslieCall_Mech : MonoBehaviour
         }
 
         isOn = false;
+
+        // 사운드
+        audio.clip = clips[1];
+        audio.Play();
 
         // 종료 - 폭발 애니메이션 대기
         anim.SetTrigger("Action");

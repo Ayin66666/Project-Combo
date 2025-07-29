@@ -14,6 +14,41 @@ public class Enemy_Boss_Arie : Enemy_Base
     [SerializeField] private Vector2 delayTime;
     [SerializeField] private int attackUse;
     private enum Phase { Phase1, Phase2 };
+    public enum SoundKey
+    {
+        // 이동
+        Movement_FrontStep, Movement_Backstep,
+
+        // 콤보
+        Combo12, Combo3,
+
+        // 콤보 어퍼
+        ComboUpper1, ComboUpper2, ComboUpperExplosion,
+
+        // 대쉬 어퍼
+        DashUpper_Upper, DashUpper_360, DashUpper_Explosion,
+
+        // 얼터에고
+        AlterEgo_Slash1, AlterEgo_Slash2, AlterEgo_Upper, AlterEgo_360,
+
+        // 러쉬
+        Rush_Sting, Rush_Slash, Rush_360,
+
+        // 차지 슬래쉬
+        ChargeSlash_Charge, ChargeSlash_Upper, ChargeSlash_Sting, ChargeSlash_360,
+
+        // 에너지 오브
+        EnergyOrb_Charge, EnergyOrb_Shoot, EnergyOrb_Drop,
+
+        // 스트라이크
+        Strike_1, Strike_Rush, Strike_3,
+
+        // 잡기
+        Subdue_Slash12, Subdue_Strike, Subdue_Slash3, Subdue_Slash4,
+
+        // 스페셜
+        Special_Charge, Special_Jump, Special_SwordAura, Special_AirCharge, Special_Laser1, Special_Explosion
+    }
 
 
     [Header("---Cut Scene---")]
@@ -96,10 +131,10 @@ public class Enemy_Boss_Arie : Enemy_Base
             //Bosster_Setting(false);
         }
 
-        
+
         if (curState == State.Idle)
         {
-             //Think();
+            //Think();
         }
     }
 
@@ -121,7 +156,7 @@ public class Enemy_Boss_Arie : Enemy_Base
         float end = isOn ? 100 : 0;
         float timer = 0;
         float t = isOn ? 0 : 100;
-        while(timer < 1)
+        while (timer < 1)
         {
             timer += Time.deltaTime * (isOn ? 2f : 1f);
             t = Mathf.Lerp(start, end, EasingFunctions.OutExpo(timer));
@@ -141,7 +176,7 @@ public class Enemy_Boss_Arie : Enemy_Base
 
     private IEnumerator WeaponCall(bool isOn)
     {
-        if(!isOn) weaponVFX.SetActive(false);
+        if (!isOn) weaponVFX.SetActive(false);
 
         float start = isOn ? 0 : 100;
         float end = isOn ? 100 : 0;
@@ -346,11 +381,11 @@ public class Enemy_Boss_Arie : Enemy_Base
 
         // 스폰 컷신
         enemyUI.CutScene(clips[0]);
-        while(enemyUI.isCutScene)
+        while (enemyUI.isCutScene)
         {
             yield return null;
         }
-        
+
         // 애니메이션
         anim.SetTrigger("Action");
         anim.SetBool("isSpawn", true);
@@ -358,7 +393,7 @@ public class Enemy_Boss_Arie : Enemy_Base
         {
             yield return null;
         }
-        
+
         yield return null;
         curState = State.Idle;
     }

@@ -6,6 +6,7 @@ using Easing.Tweening;
 public class EAttack_GunSlash : Attack_Base
 {
     [Header("---Setting---")]
+    [SerializeField] private Enemy_Elite_Phase2 elite;
     [SerializeField] private GameObject[] meleeVFX;
     [SerializeField] private GameObject chargeVFX;
 
@@ -101,6 +102,11 @@ public class EAttack_GunSlash : Attack_Base
 
     public override void AttackVFX(int index)
     {
+        string key = index <= 1 ? 
+            Enemy_Elite_Phase2.SoundKey.GunSlash_Slash12.ToString() :
+            Enemy_Elite_Phase2.SoundKey.GunSlash_Slash3.ToString();
+
+        elite.sound.Sound(key);
         meleeVFX[index].SetActive(true);
 
         if(index == 2)

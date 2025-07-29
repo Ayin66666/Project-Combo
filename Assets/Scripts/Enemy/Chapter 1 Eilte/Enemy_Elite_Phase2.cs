@@ -44,7 +44,7 @@ public class Enemy_Elite_Phase2 : Enemy_Base
         AlterEgo_Charge, AlterEgo_Shoot,
 
         // 미사일 호출
-        Misslie_Charge, Misslie_Shoot, Misslie_Off,
+        Misslie_Charge, Misslie_GunShoot, Misslie_Shoot, Misslie_Off,
 
         // 건 슬래쉬
         GunSlash_Slash12, GunSlash_Slash3

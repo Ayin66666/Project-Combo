@@ -6,6 +6,7 @@ using UnityEngine;
 public class EAttack_MissileCall : Attack_Base
 {
     [Header("---Setting---")]
+    [SerializeField] private Enemy_Elite_Phase2 elite;
     [SerializeField] private GameObject bullet;
     [SerializeField] private GameObject shootVFX;
     [SerializeField] private Transform shootPos;
@@ -74,6 +75,9 @@ public class EAttack_MissileCall : Attack_Base
             yield return new WaitForSeconds(0.05f);
         }
 
+        // 사운드
+        elite.sound.Sound(Enemy_Elite_Phase2.SoundKey.Misslie_Off.ToString());
+
         // 총기 난사 - 종료
         anim.SetTrigger("Action");
         anim.SetBool("isMisslieShotgun", false);
@@ -87,6 +91,9 @@ public class EAttack_MissileCall : Attack_Base
 
     public void MechSpawn()
     {
+        // 사운드
+        elite.sound.Sound(Enemy_Elite_Phase2.SoundKey.Misslie_Charge.ToString());
+
         // 메카닉 소환
         GameObject obj = Instantiate(mech, mechSpawnPos.position, Quaternion.identity);
         Enemy_MisslieCall_Mech mech_Misslie = obj.GetComponent<Enemy_MisslieCall_Mech>();
@@ -110,6 +117,9 @@ public class EAttack_MissileCall : Attack_Base
     {
         // 발사 이펙트
         Instantiate(shootVFX, shootPos.position, shootPos.rotation);
+
+        // 사운드
+        elite.sound.Sound(Enemy_Elite_Phase2.SoundKey.Misslie_GunShoot.ToString());
 
         // 총알 소환
         GameObject obj = Instantiate(bullet, shootPos.position, Quaternion.identity);
