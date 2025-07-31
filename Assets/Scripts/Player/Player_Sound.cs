@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Collections;
 using UnityEngine;
 
 
@@ -42,11 +43,18 @@ public class Player_Sound : MonoBehaviour
     [SerializeField] private AudioClip[] ingame;
     [SerializeField] private AudioClip[] system;
     private Dictionary<IngameSystem, AudioClip> inGameSystemSound;
-    private Dictionary<System, AudioClip> systemSound;
+    private Dictionary<SystemSound, AudioClip> systemSound;
 
     public enum IngameSystem { ItemUse, Recovery, Reward, StageClear }
-    public enum System { Click, Save, LoadingEnd }
+    public enum SystemSound { Click, Out, Save, LoadingEnd }
     #endregion
+
+    [System.Serializable]
+    public struct Data
+    {
+        public AudioSource audio;
+        public string name;
+    }
 
 
     private void Awake()
@@ -104,10 +112,10 @@ public class Player_Sound : MonoBehaviour
             inGameSystemSound[(IngameSystem)i] = ingame[i];
         }
 
-        systemSound = new Dictionary<System, AudioClip>();
+        systemSound = new Dictionary<SystemSound, AudioClip>();
         for (int i = 0; i < ingame.Length; i++)
         {
-            systemSound[(System)i] = ingame[i];
+            systemSound[(SystemSound)i] = ingame[i];
         }
     }
 
@@ -170,7 +178,7 @@ public class Player_Sound : MonoBehaviour
         // audioSource_UI.PlayOneShot(inGameSystemSound[type]);
     }
 
-    public void Sound_System(System type)
+    public void Sound_System(SystemSound type)
     {
         Debug.Log($"Sound Call {type}");
         // audioSource_UI.PlayOneShot(systemSound[type]);

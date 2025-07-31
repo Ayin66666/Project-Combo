@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
 using UnityEngine.Audio;
 using UnityEngine.UI;
@@ -22,14 +23,15 @@ public class Option_Manager : MonoBehaviour
     [Header("---Frame rate---")]
     [SerializeField] private int[] flame;
     private Dictionary<int, int> frameDic = new Dictionary<int, int>();
-    [SerializeField] private Dropdown dropdown_Framerate;
-    [SerializeField] private Dropdown dropdown_Vsync;
+    [SerializeField] private TMP_Dropdown dropdown_Framerate;
+    [SerializeField] private TMP_Dropdown dropdown_Vsync;
+    private bool isVsync;
+    private int flameIndex;
 
 
     [Header("---Component---")]
     [SerializeField] private AudioSource uiAudio;
     [SerializeField] private AudioMixer mixer;
-    [SerializeField] private AudioClip[] clips;
 
 
     private void Awake()
@@ -40,17 +42,6 @@ public class Option_Manager : MonoBehaviour
             frameDic.Add(i, flame[i]);
         }
     }
-
-
-    #region Start Setting
-    /// <summary>
-    /// 저장되어 있던 옵션 설정 받아오기?
-    /// </summary>
-    public void Data_Setting()
-    {
-        
-    }
-    #endregion
 
 
     #region Sound
@@ -97,9 +88,26 @@ public class Option_Manager : MonoBehaviour
 
 
     #region Frame
+    /// <summary>
+    /// 프레임 제한
+    /// </summary>
+    /// <param name="value"></param>
     public void Setting_FPS(int value)
     {
-        Application.targetFrameRate = frameDic[value];
+        flameIndex = value;
+        Application.targetFrameRate = isVsync ? -1 : frameDic[value];
+    }
+
+    /// <summary>
+    /// 수직 동기화
+    /// </summary>
+    /// <param name="isOn"></param>
+    public void Setting_VSync(int value)
+    {
+        isVsync = value == 1 ? true : false;
+        QualitySettings.vSyncCount = value;
+
+        Application.targetFrameRate = isVsync ? -1 : frameDic[flameIndex];
     }
     #endregion
 }
