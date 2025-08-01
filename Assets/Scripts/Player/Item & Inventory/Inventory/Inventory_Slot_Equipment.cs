@@ -55,7 +55,7 @@ public class Inventory_Slot_Equipment : MonoBehaviour, IPointerClickHandler, IPo
             if (haveItem)
             {
                 // 클릭 사운드
-                Player_Sound.instance.Sound_System(Player_Sound.System.Click);
+                Player_Sound.instance.Sound_System(Player_Sound.SystemSound.Click);
 
                 // 장비 해제
                 Player_Manager.instance.equipment.EnEquipment(this);

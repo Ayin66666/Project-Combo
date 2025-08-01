@@ -36,6 +36,9 @@ public class Field_Normal : Field_Base
         if (haveStartDialog)
             UI_Manager.instance.Dialog_Fight(startDialog.dialog);
 
+        // 사운드
+        Field_BGM();
+
         // 맵 UI 최소화
         UI_Manager.instance.MiniMap_SizeSetting(false);
 

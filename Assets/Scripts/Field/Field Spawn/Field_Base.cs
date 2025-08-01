@@ -73,6 +73,13 @@ public abstract class Field_Base : MonoBehaviour
     [SerializeField] protected DialogData endDialog;
 
 
+    [Header("---Sound---")]
+    [SerializeField] protected bool haveSoundEffect;
+    [SerializeField] protected SoundEffect soundEffect;
+    [SerializeField] protected int soundIndex;
+    protected enum SoundEffect { Chanage, Off }
+
+
     /// <summary>
     /// 몬스터 스폰 시작
     /// </summary>
@@ -83,6 +90,26 @@ public abstract class Field_Base : MonoBehaviour
     /// </summary>
     public abstract void Field_End();
 
+    /// <summary>
+    /// 스테이지 시작 시 사운드 변경 or 종료 기능
+    /// </summary>
+    public void Field_BGM()
+    {
+        // 사운드
+        if (haveSoundEffect)
+        {
+            switch (soundEffect)
+            {
+                case SoundEffect.Chanage:
+                    Stage_Manager.instance.BGM(true, soundIndex);
+                    break;
+
+                case SoundEffect.Off:
+                    Stage_Manager.instance.BGM(false, -1);
+                    break;
+            }
+        }
+    }
 
     /// <summary>
     /// 플레이어 사망 후 체크포인트 복귀 시 리셋 기능

@@ -28,11 +28,19 @@ public class Field_Boss : Field_Base
         // 보스 소환
         boss.gameObject.SetActive(true);
 
-        // 다이얼로그
-        if(haveStartDialog)
+        // 컷신 대기 -> 여기부터 구현 필요 (컷신 대기 / 체력에 따른 다이얼로그 표기 / 페이즈 2 변환 간 대기 등등)
+        while(boss.isActiveAndEnabled)
         {
-
+            yield return null;
         }
+
+        // 사운드
+        Field_BGM();
+
+        // 다이얼로그
+        if (haveStartDialog)
+            UI_Manager.instance.Dialog_Fight(startDialog.dialog);
+
 
         // 스테이지 체크
         while (boss == null)

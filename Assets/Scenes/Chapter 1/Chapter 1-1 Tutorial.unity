@@ -8058,6 +8058,7 @@ MonoBehaviour:
   haveStartDialog: 1
   haveStartQuest: 0
   haveStartwayPoint: 0
+  haveStartBGM: 1
   nextScene: Chapter 1 - Hideout
   spawn: []
   dialogDatas:
@@ -8071,7 +8072,8 @@ MonoBehaviour:
   - {fileID: 763872311}
   enemy_Container: {fileID: 1906269349}
   bgmAudio: {fileID: 811790861}
-  bgmClips: []
+  bgmClips:
+  - {fileID: 8300000, guid: 6ae7712f6823745d99d03a43d48fa7e7, type: 3}
   wayPointManager: {fileID: 864558473}
   startSpawnPos: {fileID: 1071848851}
   spawnPos: {x: 0, y: 0, z: 0}
@@ -8085,7 +8087,8 @@ AudioSource:
   m_GameObject: {fileID: 811790859}
   m_Enabled: 1
   serializedVersion: 4
-  OutputAudioMixerGroup: {fileID: 0}
+  OutputAudioMixerGroup: {fileID: 2738002761010111274, guid: a16e470131048034fb827108e7a8e857,
+    type: 2}
   m_audioClip: {fileID: 0}
   m_PlayOnAwake: 0
   m_Volume: 0.1

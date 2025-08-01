@@ -702,7 +702,7 @@ public class UI_Manager : MonoBehaviour
     public void PlayerUI_Setting()
     {
         // 클릭 사운드
-        Player_Sound.instance.Sound_System(Player_Sound.System.Click);
+        Player_Sound.instance.Sound_System(Player_Sound.SystemSound.Click);
 
         // 시작 화면이면 무조건 옵션창으로 고정 - 아니라면 마지막에 열었던 UI로 활성화
         PlayerUI_Setting(SaveLoad_Manager.instance.isStartScene ? 3 : (int)uiType);
@@ -737,7 +737,7 @@ public class UI_Manager : MonoBehaviour
         }
 
         // 클릭 사운드
-        Player_Sound.instance.Sound_System(Player_Sound.System.Click);
+        Player_Sound.instance.Sound_System(Player_Sound.SystemSound.Click);
 
         // UI On
         uiType = (UIType)index;

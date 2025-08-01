@@ -90,7 +90,7 @@ public class ShortCut_Slot : MonoBehaviour, IPointerClickHandler
             if(haveItem)
             {
                 // 클릭 사운드
-                Player_Sound.instance.Sound_System(Player_Sound.System.Click);
+                Player_Sound.instance.Sound_System(Player_Sound.SystemSound.Click);
 
                 Slot_Reset();
             }

@@ -17,6 +17,7 @@ public class Stage_Manager : MonoBehaviour
     [SerializeField] private bool haveStartDialog;
     [SerializeField] private bool haveStartQuest;
     [SerializeField] private bool haveStartwayPoint;
+    [SerializeField] private bool haveStartBGM;
     [SerializeField] private string nextScene;
 
 
@@ -81,22 +82,16 @@ public class Stage_Manager : MonoBehaviour
         CheckPoint_Seting(startSpawnPos);
 
         // 시작 다이얼로그
-        if (haveStartDialog)
-        {
-            Dialog(0);
-        }
+        if (haveStartDialog) Dialog(0);
 
         // 시작 목표
-        if (haveStartQuest)
-        {
-            Quest(0);
-        }
+        if (haveStartQuest) Quest(0);
 
         // 웨이포인트
-        if (haveStartwayPoint)
-        {
-            WayPoint(true, 0);
-        }
+        if (haveStartwayPoint) WayPoint(true, 0);
+
+        // BGM
+        if(haveStartBGM) BGM(true, 0);
 
         // 타이머 동작
         startTime = Time.time;
@@ -181,10 +176,17 @@ public class Stage_Manager : MonoBehaviour
     /// BGM 호출
     /// </summary>
     /// <param name="index"></param>
-    public void BGM(int index)
+    public void BGM(bool isOn, int index)
     {
-        bgmAudio.clip = bgmClips[index];
-        bgmAudio.Play();
+        if(isOn)
+        {
+            bgmAudio.clip = bgmClips[index];
+            bgmAudio.Play();
+        }
+        else
+        {
+            bgmAudio.Pause();
+        }
     }
 
     /// <summary>
