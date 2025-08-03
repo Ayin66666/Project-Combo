@@ -113,9 +113,9 @@ public class Player_Sound : MonoBehaviour
         }
 
         systemSound = new Dictionary<SystemSound, AudioClip>();
-        for (int i = 0; i < ingame.Length; i++)
+        for (int i = 0; i < system.Length; i++)
         {
-            systemSound[(SystemSound)i] = ingame[i];
+            systemSound[(SystemSound)i] = system[i];
         }
     }
 
@@ -175,13 +175,13 @@ public class Player_Sound : MonoBehaviour
     public void Sound_Ingame(IngameSystem type)
     {
         Debug.Log($"Sound Call {type}");
-        // audioSource_UI.PlayOneShot(inGameSystemSound[type]);
+        audioSource_UI.PlayOneShot(inGameSystemSound[type]);
     }
 
     public void Sound_System(SystemSound type)
     {
         Debug.Log($"Sound Call {type}");
-        // audioSource_UI.PlayOneShot(systemSound[type]);
+        audioSource_UI.PlayOneShot(systemSound[type]);
     }
     #endregion
 }

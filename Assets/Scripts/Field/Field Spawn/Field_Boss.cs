@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using System.Collections;
 using UnityEngine;
 
@@ -9,11 +10,18 @@ public class Field_Boss : Field_Base
     private  WaitForSeconds delay = new WaitForSeconds(1f);
 
 
-    // 엘리트 몬스터 용 소환 트리 추가할 지?
-    // 일부러 코드도 베이스 기반 구현으로 나눴는데 합칠 필요도 없다
-    // 기존에 엘리트 제어코드 제거하고 소환코드 여기에 하는 것도?
-    // 체크 대상을 컨트롤러로 잡고 제어하면 문제 없을듯 / 결론 - 그냥 하나로 사용
-    
+    [Header("---Dialog---")]
+    [SerializeField] private List<Dialog> dialogs;
+
+    [System.Serializable]
+    public class Dialog
+    {
+        [SerializeField] private string dialogName;
+        public bool isUsed;
+        public int hp;
+        public Dialog_Data_SO dialog;
+    }
+
 
     public override void Field_Start()
     {
@@ -29,7 +37,7 @@ public class Field_Boss : Field_Base
         boss.gameObject.SetActive(true);
 
         // 컷신 대기 -> 여기부터 구현 필요 (컷신 대기 / 체력에 따른 다이얼로그 표기 / 페이즈 2 변환 간 대기 등등)
-        while(boss.isActiveAndEnabled)
+        while(boss.isCutScene)
         {
             yield return null;
         }
@@ -45,11 +53,24 @@ public class Field_Boss : Field_Base
         // 스테이지 체크
         while (boss == null)
         {
+            Dialog_Check();
             yield return delay;
         }
 
         // 스테이지 종료
         Field_End();
+    }
+
+    private void Dialog_Check()
+    {
+        for (int i = 0; i < dialogs.Count; i++)
+        {
+            if (boss.curHp <= dialogs[i].hp && !dialogs[i].isUsed)
+            {
+                UI_Manager.instance.Dialog_Fight(dialogs[i].dialog);
+                dialogs[i].isUsed = true;
+            }
+        }
     }
 
     public override void Field_End()

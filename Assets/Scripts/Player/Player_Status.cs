@@ -256,7 +256,7 @@ public class Player_Status : MonoBehaviour
     public void LevelUp()
     {
         // 레벨업 사운드
-        Player_Sound.instance.Sound_Ingame(Player_Sound.IngameSystem.Reward);
+        // Player_Sound.instance.Sound_Ingame(Player_Sound.IngameSystem.Reward);
 
         // 기본 증가
         curLevel += 1;

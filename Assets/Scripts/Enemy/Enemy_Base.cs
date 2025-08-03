@@ -17,6 +17,7 @@ public abstract class Enemy_Base : MonoBehaviour, IDamageSysteam
     [SerializeField] protected bool isAttack;
     public bool isPatten;
     public bool isGroggy;
+    public bool isCutScene;
     private enum EnemyType { Normal, Elite, Boss }
     protected enum SpawnType { None, Movement, CutScene }
     public enum State { None, Spawn, Idle, Think, Chase, Attack, Delay, Groggy, Die }

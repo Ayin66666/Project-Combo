@@ -36,7 +36,13 @@ public class Attack_Smash_ChargeSlash : Attack_Base
         // 0단계
         chargeVFX[0].SetActive(true);
 
-        // 차징
+        // 차징 사운드 체크
+        bool[] isCharge = new bool[3]
+        {
+            true, true, true
+        };
+
+
         float timer = 0;
         chargeCount = 0;
         while (Input_Manager.instance.inputDatas[1].isInput && timer < 3)
@@ -46,7 +52,11 @@ public class Attack_Smash_ChargeSlash : Attack_Base
             // 차징
             if(chargeCount < 1)
             {
-                Player_Sound.instance.Sound_Smash(Player_Sound.Smash.Smash4_Charge);
+                if (isCharge[0])
+                {
+                    isCharge[0] = false;
+                    Player_Sound.instance.Sound_Smash(Player_Sound.Smash.Smash4_Charge);
+                }
 
                 chargeCount += Time.deltaTime * (PlayerAction_Manager.instance.isAwakning ? 1f : 0.5f);
             }
@@ -54,7 +64,11 @@ public class Attack_Smash_ChargeSlash : Attack_Base
             // 2단계
             if (chargeCount >= 0.5f && chargeVFX[0].activeSelf)
             {
-                Player_Sound.instance.Sound_Smash(Player_Sound.Smash.Smash4_Charge);
+                if (isCharge[1])
+                {
+                    isCharge[1] = false;
+                    Player_Sound.instance.Sound_Smash(Player_Sound.Smash.Smash4_Charge);
+                }
 
                 chargeVFX[0].SetActive(false);
                 chargeVFX[1].SetActive(true);
@@ -63,7 +77,11 @@ public class Attack_Smash_ChargeSlash : Attack_Base
             // 3단계
             if(chargeCount >= 1f && chargeVFX[1].activeSelf)
             {
-                Player_Sound.instance.Sound_Smash(Player_Sound.Smash.Smash4_Charge);
+                if (isCharge[2])
+                {
+                    isCharge[2] = false;
+                    Player_Sound.instance.Sound_Smash(Player_Sound.Smash.Smash4_Charge);
+                }
 
                 chargeVFX[1].SetActive(false);
                 chargeVFX[2].SetActive(true);
