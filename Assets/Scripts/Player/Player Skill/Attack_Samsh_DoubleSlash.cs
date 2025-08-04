@@ -32,6 +32,9 @@ public class Attack_Samsh_DoubleSlash : Attack_Base
         PlayerAction_Manager.instance.isSmash = true;
         PlayerAction_Manager.instance.LookAt();
 
+        // 다음 공격 UI 호출
+        UI_Manager.instance.AttackGuide(nextAttackData);
+
         // 데미지 계산
         for (int i = 0; i < value_Normal.Count; i++)
         {

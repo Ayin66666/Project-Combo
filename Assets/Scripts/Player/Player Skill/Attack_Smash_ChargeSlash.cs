@@ -28,6 +28,9 @@ public class Attack_Smash_ChargeSlash : Attack_Base
         PlayerAction_Manager.instance.MovementLock(cancelType, true);
         PlayerAction_Manager.instance.isAttack = true;
 
+        // 다음 공격 UI 호출
+        UI_Manager.instance.AttackGuide(nextAttackData);
+
         anim.SetTrigger("Smash");
         anim.SetBool("isAttack", true);
         anim.SetBool("isSmash", true);

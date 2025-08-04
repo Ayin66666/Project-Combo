@@ -97,6 +97,9 @@ public class Attack_Other_Counter : Attack_Base
         PlayerAction_Manager.instance.isAttack = true;
         PlayerAction_Manager.instance.LookAt();
 
+        // 다음 공격 UI 호출
+        UI_Manager.instance.AttackGuide(nextAttackData);
+
         // 게이지 상승
         Player_Manager.instance.status.Recovery(Player_Status.RecoveryType.Awakening, 20);
 

@@ -142,7 +142,7 @@ public class Player_Sound : MonoBehaviour
     public void Sound_Speical(Special type)
     {
         Debug.Log($"Sound Call {type}");
-        audioSource_Player.PlayOneShot(specialSound[type]);
+        //audioSource_Player.PlayOneShot(specialSound[type]);
     }
 
     public void Sound_Movement(Movement type)

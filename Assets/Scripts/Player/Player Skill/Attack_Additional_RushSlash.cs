@@ -23,6 +23,9 @@ public class Attack_Additional_RushSlash : Attack_Base
         PlayerAction_Manager.instance.Animation_Reset();
         PlayerAction_Manager.instance.isAttack = true;
 
+        // 다음 공격 UI 호출
+        UI_Manager.instance.AttackGuide(nextAttackData);
+
         // 데미지 계산
         for (int i = 0; i < value_Normal.Count; i++)
         {

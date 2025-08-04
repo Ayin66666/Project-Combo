@@ -35,6 +35,9 @@ public class Attack_Smash_UpperSlash : Attack_Base
         PlayerAction_Manager.instance.isAttack = true;
         PlayerAction_Manager.instance.isSmash = true;
 
+        // 다음 공격 UI 호출
+        UI_Manager.instance.AttackGuide(nextAttackData);
+
         // 데미지 계산
         for (int i = 0; i < value_Normal.Count; i++)
         {
