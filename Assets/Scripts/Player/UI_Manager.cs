@@ -515,15 +515,15 @@ public class UI_Manager : MonoBehaviour
                         break;
 
                     case Dialog_Data_SO.EventType.Tooltip:
-                        Tutorial_Manager.instance.Tutorial_Tooltip(type.eventDatas[i].typeOnOff, type.eventDatas[i].typeIndex);
+                        Stage_Tutorial.instance.Tutorial_Tooltip(type.eventDatas[i].typeOnOff, type.eventDatas[i].typeIndex);
                         break;
 
                     case Dialog_Data_SO.EventType.Tutorial:
-                        Tutorial_Manager.instance.Tutorial_Big(type.eventDatas[i].typeIndex);
+                        Stage_Tutorial.instance.Tutorial_Big(type.eventDatas[i].typeIndex);
                         break;
 
                     case Dialog_Data_SO.EventType.Spawn:
-                        Tutorial_Manager.instance.Tutorial_Spawn(type.eventDatas[i].typeIndex);
+                        Stage_Tutorial.instance.Tutorial_Spawn(type.eventDatas[i].typeIndex);
                         break;
 
                     case Dialog_Data_SO.EventType.StageEnd:
@@ -801,18 +801,16 @@ public class UI_Manager : MonoBehaviour
         if (data != null)
         {
             skillDescriptionText.text = data.SkillDescription[index];
-            /*
+            
             skillVideoPlayer.clip = data.SkillClip;
             skillVideoPlayer.Play();
-            */
         }
         else
         {
             skillDescriptionText.text = "";
-            /*
+            
             skillVideoPlayer.Pause();
             skillVideoPlayer.clip = null;
-            */
         }
     }
 
