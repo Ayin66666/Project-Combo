@@ -294,10 +294,7 @@ public abstract class Enemy_Base : MonoBehaviour, IDamageSysteam
     #region Hit
     public void Take_Damage(GameObject attackObj, IDamageSysteam.DamageType type, IDamageSysteam.HitVFX hit, bool isCirtical, int hitCount, int damage)
     {
-        if (curState == State.Die)
-        {
-            return;
-        }
+        if (curState == State.Die) return;
 
         // 사운드
         sound.Sound(Enemy_Sound.SoundKey.Hit.ToString());
@@ -465,6 +462,7 @@ public abstract class Enemy_Base : MonoBehaviour, IDamageSysteam
 
         // 재동작
         curState = State.Idle;
+        Think();
     }
 
     public IEnumerator Hit_Down(GameObject attackObj)
@@ -505,6 +503,7 @@ public abstract class Enemy_Base : MonoBehaviour, IDamageSysteam
         // 재동작
         isGroggy = false;
         curState = State.Idle;
+        Think();
     }
 
     public IEnumerator Hit_Groggy()
@@ -533,6 +532,7 @@ public abstract class Enemy_Base : MonoBehaviour, IDamageSysteam
         isGroggy = false;
         curGroggy = maxGroggy;
         curState = State.Idle;
+        Think();
     }
 
     /// <summary>

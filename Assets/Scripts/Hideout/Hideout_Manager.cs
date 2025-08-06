@@ -75,11 +75,8 @@ public class Hideout_Manager : MonoBehaviour
 
         // 페이드 종료
         UI_Manager.instance.Fade(false, 1.5f);
-
-        // 플레이어 활성화
-        Player_Manager.instance.Player_Hideout_Setting();
-        Player_Manager.instance.PlayerPos_Setting(startPos.position);
-        Player_Manager.instance.PlayerOnOff_Setting(true);
+        
+        Player_Setting();
     }
 
 
@@ -269,6 +266,19 @@ public class Hideout_Manager : MonoBehaviour
 
         // 설명 UI 설정 - 최초 실행 시 무조건 0번 설명이 나오도록?
         DescriptionUI_Setting(0);
+    }
+
+    public void Player_Setting()
+    {
+        // 스테이터스 조절
+        Player_Manager.instance.status.curhp = Player_Manager.instance.status.maxHp;
+        Player_Manager.instance.status.curStamina = Player_Manager.instance.status.maxStamina;
+        Player_Manager.instance.status.curAwakening = 0;
+
+        // 플레이어 활성화
+        Player_Manager.instance.Player_Hideout_Setting();
+        Player_Manager.instance.PlayerPos_Setting(startPos.position);
+        Player_Manager.instance.PlayerOnOff_Setting(true);
     }
     #endregion
 

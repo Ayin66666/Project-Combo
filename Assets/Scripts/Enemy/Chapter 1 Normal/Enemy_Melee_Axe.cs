@@ -27,7 +27,6 @@ public class Enemy_Melee_Axe : Enemy_Base
             return;
         }
 
-
         // ÆÇ´Ü
         curState = State.Think;
         LookAt(target, 0.05f);

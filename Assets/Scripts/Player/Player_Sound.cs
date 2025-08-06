@@ -175,7 +175,7 @@ public class Player_Sound : MonoBehaviour
     public void Sound_Ingame(IngameSystem type)
     {
         Debug.Log($"Sound Call {type}");
-        audioSource_UI.PlayOneShot(inGameSystemSound[type]);
+        // audioSource_UI.PlayOneShot(inGameSystemSound[type]);
     }
 
     public void Sound_System(SystemSound type)
