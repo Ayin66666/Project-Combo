@@ -64,18 +64,24 @@ public class Stage_Manager : MonoBehaviour
 
     private void Start()
     {
-        Stage_Start();
+        StartCoroutine(Stage_Start());
     }
 
 
-    public void Stage_Start()
+    public IEnumerator Stage_Start()
     {
+        // 플레이어 이동
+        Player_Manager.instance.PlayerPos_Setting(spawnPos);
+
         // 페이드 종료
         UI_Manager.instance.Fade(false, 1.5f);
+        while(UI_Manager.instance.isFade)
+        {
+            yield return null;
+        }
 
         // 플레이어 활성화
         Player_Manager.instance.Player_Action_Setting(true);
-        Player_Manager.instance.PlayerPos_Setting(spawnPos);
         Player_Manager.instance.PlayerOnOff_Setting(true);
 
         // 시작 체크포인트 셋팅

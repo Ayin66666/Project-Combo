@@ -404,15 +404,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 802125e19966b7a4ebc13306dee711e7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  image: {fileID: 1540976191}
+  image: {fileID: 0}
   trans: {fileID: 1537920261}
-  endText: {fileID: 1537920262}
-  audio: {fileID: 1508028542}
+  endText: {fileID: 0}
+  audioS: {fileID: 0}
   endPos: 3795
   scrollSpeed: 300
-  speedUpval: 600
-  isScrolling: 0
-  scrollingEnd: 0
+  speedUpval: 2
   speedUp: 0
 --- !u!82 &1508028542
 AudioSource:
@@ -778,7 +776,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &1540976189
 RectTransform:
   m_ObjectHideFlags: 0

@@ -69,8 +69,9 @@ public class Start_Manager : MonoBehaviour
     /// </summary>
     public void Click_Option()
     {
-        curUI = UI.Start;
-        UI_Manager.instance.PlayerUI_Setting(3);
+        Debug.Log("Call option");
+        curUI = UI.Option;
+        UI_Manager.instance.PlayerUI_Setting(4);
     }
 
     /// <summary>
@@ -78,7 +79,7 @@ public class Start_Manager : MonoBehaviour
     /// </summary>
     public void Click_Extra()
     {
-        curUI = UI.Start;
+        curUI = UI.Extra;
         extraSet.SetActive(true);
     }
 
@@ -87,7 +88,7 @@ public class Start_Manager : MonoBehaviour
     /// </summary>
     public void Click_Exit()
     {
-        curUI = UI.Start;
+        curUI = UI.Exit;
         exitSet.SetActive(true);
     }
 
