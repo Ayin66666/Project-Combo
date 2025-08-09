@@ -7,9 +7,9 @@ using UnityEngine.Video;
 public class Enemy_Elite_Phase1 : Enemy_Base
 {
     [Header("---Component---")]
-    [SerializeField] private Enemy_Elite_Controller phaseController;
     [SerializeField] private VideoClip[] clips;
     private VideoPlayer video;
+
 
     public enum SoundKey 
     { 
@@ -149,6 +149,6 @@ public class Enemy_Elite_Phase1 : Enemy_Base
         }
 
         // 2페이즈 전환
-        phaseController.Stage_Spawn(1);
+        Destroy(gameObject);
     }
 }

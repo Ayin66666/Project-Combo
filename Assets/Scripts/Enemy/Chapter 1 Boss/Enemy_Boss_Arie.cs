@@ -3,6 +3,7 @@ using UnityEngine;
 using UnityEngine.Video;
 using Easing.Tweening;
 
+
 public class Enemy_Boss_Arie : Enemy_Base
 {
     [Header("---Setting---")]
@@ -53,7 +54,7 @@ public class Enemy_Boss_Arie : Enemy_Base
 
     [Header("---Cut Scene---")]
     [SerializeField] private VideoClip[] clips;
-
+    [SerializeField] private Dialog_Data_SO phase2Dialog;
 
     [Header("---Attack Setting---")]
     [SerializeField] private int attackCount;
@@ -108,11 +109,6 @@ public class Enemy_Boss_Arie : Enemy_Base
     private Coroutine weaponCoroutine;
 
 
-    private void Start()
-    {
-        Spawn();
-    }
-
     private void Update()
     {
         if (curState == State.Die)
@@ -131,10 +127,13 @@ public class Enemy_Boss_Arie : Enemy_Base
             //Bosster_Setting(false);
         }
 
-
-        if (curState == State.Idle)
+        // 페이즈 전환
+        if (curHp <= 1000 && curPhase == Phase.Phase1)
         {
-            //Think();
+            if (movementCoroutine != null)
+                StopCoroutine(movementCoroutine);
+
+            movementCoroutine = StartCoroutine(Phase_Change());
         }
     }
 
@@ -198,14 +197,8 @@ public class Enemy_Boss_Arie : Enemy_Base
     #region Attack
     protected override void Think()
     {
-        // 페이즈 전환
-        if (curHp <= 1000 && curPhase == Phase.Phase1)
-        {
-            movementCoroutine = StartCoroutine(Phase_Change());
-        }
-
-
         Check_Target();
+        /*
         // 일반 공격
         int ran = Random.Range(0, 4);
         if (targetRange <= 5)
@@ -220,9 +213,9 @@ public class Enemy_Boss_Arie : Enemy_Base
             attackCount++;
             movementCoroutine = StartCoroutine(ChaseMovement(ran));
         }
-
-        /*
-        if (attackCount == 5)
+        */
+        
+        if (attackCount <= 5)
         {
             // 강화 공격
             attackCount = 0;
@@ -246,7 +239,6 @@ public class Enemy_Boss_Arie : Enemy_Base
                 movementCoroutine = StartCoroutine(ChaseMovement(ran));
             }
         }
-        */
     }
 
     private IEnumerator Patten_Use(int[,] pattens, int type)
@@ -386,6 +378,10 @@ public class Enemy_Boss_Arie : Enemy_Base
             yield return null;
         }
 
+        // 2 페이즈 시작 대사
+        UI_Manager.instance.Dialog_Fight(phase2Dialog);
+
+
         // 애니메이션
         anim.SetTrigger("Action");
         anim.SetBool("isSpawn", true);
@@ -394,21 +390,14 @@ public class Enemy_Boss_Arie : Enemy_Base
             yield return null;
         }
 
-        yield return null;
         curState = State.Idle;
+        Think();
     }
 
     private IEnumerator Phase_Change()
     {
         curPhase = Phase.Phase2;
         curState = State.Spawn;
-
-        // 2페이즈 컷씬
-        enemyUI.CutScene(clips[1]);
-        while (enemyUI.isCutScene)
-        {
-            yield return null;
-        }
 
         // 보스 강화
         enemyName = phase2_Status.ObjectName;
@@ -425,6 +414,13 @@ public class Enemy_Boss_Arie : Enemy_Base
         magicalDefence = phase2_Status.Magical_Defence;
         anim.SetFloat("AttackSpeed", 1.15f);
 
+        // 2페이즈 컷씬
+        enemyUI.CutScene(clips[1]);
+        while (enemyUI.isCutScene)
+        {
+            yield return null;
+        }
+
         // 페이즈 전환 애니메이션
         anim.SetTrigger("Action");
         anim.SetBool("isPhaseAnim", true);
@@ -434,6 +430,7 @@ public class Enemy_Boss_Arie : Enemy_Base
         }
 
         curState = State.Idle;
+        Think();
     }
 
     public override void Die()

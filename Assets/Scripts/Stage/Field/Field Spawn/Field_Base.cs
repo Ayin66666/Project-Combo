@@ -91,6 +91,12 @@ public abstract class Field_Base : MonoBehaviour
     public abstract void Field_End();
 
     /// <summary>
+    /// 플레이어 사망 후 체크포인트 복귀 시 리셋 기능
+    /// </summary>
+    public abstract void Field_Reset();
+
+
+    /// <summary>
     /// 스테이지 시작 시 사운드 변경 or 종료 기능
     /// </summary>
     public void Field_BGM()
@@ -112,7 +118,15 @@ public abstract class Field_Base : MonoBehaviour
     }
 
     /// <summary>
-    /// 플레이어 사망 후 체크포인트 복귀 시 리셋 기능
+    /// 문 On / Off
     /// </summary>
-    public abstract void Field_Reset();
+    /// <param name="isOn"></param>
+    public void Door_Setting(bool isOn)
+    {
+        // 문 개방
+        foreach (GameObject obj in door)
+        {
+            obj.SetActive(isOn);
+        }
+    }
 }

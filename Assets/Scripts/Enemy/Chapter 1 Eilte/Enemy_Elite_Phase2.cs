@@ -6,7 +6,6 @@ using UnityEngine.Video;
 public class Enemy_Elite_Phase2 : Enemy_Base
 {
     [Header("---Setting---")]
-    [SerializeField] private Enemy_Elite_Controller phaseController;
     [SerializeField] private GameObject[] weapons;
 
     // 근접 패턴
@@ -278,6 +277,6 @@ public class Enemy_Elite_Phase2 : Enemy_Base
         Item_Drop();
 
         // 사망 전달
-        phaseController.Stage_End();
+        Destroy(gameObject);
     }
 }
