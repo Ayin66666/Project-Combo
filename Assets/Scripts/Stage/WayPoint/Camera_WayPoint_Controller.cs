@@ -3,13 +3,9 @@ using UnityEngine;
 
 public class Camera_WayPoint_Controller : Camera_WayPoint_Base
 {
-    private void Awake()
+    private void FixedUpdate()
     {
-        WayPoint_Setting();
-    }
-
-    private void Update()
-    {
+        // 이거 스테이지 인 아웃에서 온오프 기능 만들어야 할듯?
         if (data.wayPoints != null && data.wayPoints.Count > 0) // 여기 에러 발생 - 아마 스테이지 내에 웨이포인트 관련 기능이 없어서 그런듯?
         {
             UpdateUI();

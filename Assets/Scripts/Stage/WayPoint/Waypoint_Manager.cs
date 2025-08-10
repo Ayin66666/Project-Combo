@@ -20,7 +20,7 @@ public class Waypoint_Manager : MonoBehaviour
 
     private void Start()
     {
-        camera_WayPoint_Base = PlayerAction_Manager.instance.cam.GetComponent<Camera_WayPoint_Base>();
+        camera_WayPoint_Base = Player_Manager.instance.wayPointBase;
     }
 
     /// <summary>

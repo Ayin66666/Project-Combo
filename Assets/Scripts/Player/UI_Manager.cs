@@ -539,26 +539,42 @@ public class UI_Manager : MonoBehaviour
     /// 퀘스트 호출 기능
     /// </summary>
     /// <param name="data"></param>
-    public void Quset(Quest_Data_SO.Data data)
+    public void Quset(bool isOn, Quest_Data_SO.Data data)
     {
         if (questCoroutine != null)
             StopCoroutine(questCoroutine);
 
-        questCoroutine = StartCoroutine(QusetCall(data));
+        questCoroutine = StartCoroutine(QusetCall(isOn, data));
     }
 
-    private IEnumerator QusetCall(Quest_Data_SO.Data data)
+    private IEnumerator QusetCall(bool isOn, Quest_Data_SO.Data data)
     {
-        questCanvasGroup.alpha = 0;
-        questTitleText.text = $"{data.questTitle}";
-        questDescriptionText.text = $"{data.questDescription}";
-
-        float timer = 0;
-        while (timer < 1)
+        if (isOn)
         {
-            timer += Time.deltaTime * 1.25f;
-            questCanvasGroup.alpha = timer;
-            yield return null;
+            questCanvasGroup.alpha = 0;
+            questTitleText.text = $"{data.questTitle}";
+            questDescriptionText.text = $"{data.questDescription}";
+
+            float timer = 0;
+            while (timer < 1)
+            {
+                timer += Time.deltaTime * 1.25f;
+                questCanvasGroup.alpha = timer;
+                yield return null;
+            }
+            questCanvasGroup.alpha = 1;
+        }
+        else
+        {
+            questCanvasGroup.alpha = 1;
+            float timer = 0;
+            while (timer < 1)
+            {
+                timer -= Time.deltaTime * 1.25f;
+                questCanvasGroup.alpha = timer;
+                yield return null;
+            }
+            questCanvasGroup.alpha = 0;
         }
     }
 

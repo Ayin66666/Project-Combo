@@ -16,6 +16,11 @@ public class Player_Manager : MonoBehaviour
     public Equipment_Manager equipment;
 
 
+    [Header("---WayPoint---")]
+    public Camera_WayPoint_Base wayPointBase;
+    public Camera_WayPoint_Controller wayPointcontroller;
+
+
     [Header("---Player---")]
     [SerializeField] private GameObject playerSet;
     [SerializeField] private GameObject playerMovement;

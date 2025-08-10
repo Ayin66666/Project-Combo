@@ -113,11 +113,18 @@ public class Stage_Manager : MonoBehaviour
 
     private IEnumerator StageEndCall()
     {
+        // 웨이포인트 셋팅
+        Player_Manager.instance.wayPointcontroller.WayPoint_Setting();
+
         // 플레이어 동작 비활성화
         Player_Manager.instance.Player_Action_Setting(false);
 
         // 클리어 경험치
         Player_Manager.instance.status.ExpAdd(stageData.ClearExp);
+
+        // 퀘스트 비활성화 - 여기 생성되는 데이터는 그냥 빈 데이터
+        Quest_Data_SO.Data data = new Quest_Data_SO.Data();
+        UI_Manager.instance.Quset(false, data);
 
         // 클리어 데이터 셋팅
         ClearData();
@@ -175,7 +182,7 @@ public class Stage_Manager : MonoBehaviour
     /// <param name="index">퀘스트 인덱스</param>
     public void Quest(int index)
     {
-        UI_Manager.instance.Quset(questDatas.Datas[index]);
+        UI_Manager.instance.Quset(true, questDatas.Datas[index]);
     }
 
     /// <summary>
