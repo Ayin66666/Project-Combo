@@ -8,7 +8,7 @@ public class Field_Rush : Field_Base
     [SerializeField] private List<DialogData> datas;
     [SerializeField] private float nextRoundDelay;
     private readonly WaitForSeconds checkInterval = new WaitForSeconds(1f);
-    private List<Enemy_Base> enemyList;
+    private List<GameObject> enemyList;
     private Coroutine checkCoroutine;
 
 
@@ -34,7 +34,6 @@ public class Field_Rush : Field_Base
         UI_Manager.instance.MiniMap_SizeSetting(false);
 
         // 몬스터 소환 - 라운드
-        enemyList = new List<Enemy_Base>();
         for (int i = 0; i < datas.Count; i++)
         {
             enemyList.Clear();
@@ -44,7 +43,7 @@ public class Field_Rush : Field_Base
             for (int j = 0; j < spawnDatas[0].enemys.Count; j++)
             {
                 GameObject obj = Stage_Manager.instance.enemy_Container.Spawn_Enemy(spawnDatas[0].enemys[j].enemy);
-                enemyList.Add(obj.GetComponent<Enemy_Base>());
+                enemyList.Add(obj);
 
                 obj.transform.position = spawnDatas[0].enemys[j].spawnPos.position;
                 obj.transform.rotation = spawnDatas[0].enemys[j].spawnPos.rotation;
@@ -55,12 +54,12 @@ public class Field_Rush : Field_Base
             }
 
             // 라운드 종료 대기
-            while (enemyCount == 0)
+            while (enemyCount <= 0)
             {
                 // 몬스터 수 체크
-                for (int j = 0; i < enemyList.Count; i++)
+                for (int j = enemyList.Count; i > 0; i--)
                 {
-                    if (enemyList[i].curState == Enemy_Base.State.Die || !enemyList[i].gameObject.activeSelf)
+                    if (enemyList[i] == null)
                         enemyList.RemoveAt(i);
                 }
                 enemyCount = enemyList.Count;
@@ -111,9 +110,9 @@ public class Field_Rush : Field_Base
         }
 
         // 몬스터 제거
-        foreach (Enemy_Base e in enemyList)
+        foreach (GameObject e in enemyList)
         {
-            e.Reset_Enemy();
+            e.GetComponent<Enemy_Base>().Reset_Enemy();
         }
     }
 }
