@@ -48,6 +48,7 @@ public class Enemy_Range_GrenadeLauncher : Enemy_Base
         anim.SetFloat("Movement", timer);
         while (targetRange > attackRange)
         {
+            if (curState == State.Die) yield break;
             if (timer < 1)
             {
                 timer += Time.deltaTime * 2.5f;

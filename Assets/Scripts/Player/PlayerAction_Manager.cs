@@ -1055,6 +1055,14 @@ public class PlayerAction_Manager : MonoBehaviour, IDamageSysteam
         Vector3 finalOffset = target - transform.position;
         controller.Move(finalOffset);
     }
+
+    /// <summary>
+    /// 스테이지 종료 시 모든 공격 초기화 기능
+    /// </summary>
+    public void Attack_Reset()
+    {
+        otherAttakcs[2].Attack_Reset();
+    }
     #endregion
 
 

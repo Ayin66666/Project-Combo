@@ -8,7 +8,7 @@ public class Field_Rush : Field_Base
     [SerializeField] private List<DialogData> datas;
     [SerializeField] private float nextRoundDelay;
     private readonly WaitForSeconds checkInterval = new WaitForSeconds(1f);
-    private List<GameObject> enemyList;
+    [SerializeField] private List<GameObject> enemyList;
     private Coroutine checkCoroutine;
 
 
@@ -34,19 +34,19 @@ public class Field_Rush : Field_Base
         UI_Manager.instance.MiniMap_SizeSetting(false);
 
         // 몬스터 소환 - 라운드
-        for (int i = 0; i < datas.Count; i++)
+        for (int i = 0; i < spawnDatas.Count; i++)
         {
+            enemyList = new List<GameObject>();
             enemyList.Clear();
 
             // 몬스터 소환 - 몬스터
-            enemyCount = spawnDatas[i].enemys.Count;
-            for (int j = 0; j < spawnDatas[0].enemys.Count; j++)
+            for (int j = 0; j < spawnDatas[i].enemys.Count; j++)
             {
-                GameObject obj = Stage_Manager.instance.enemy_Container.Spawn_Enemy(spawnDatas[0].enemys[j].enemy);
+                GameObject obj = Stage_Manager.instance.enemy_Container.Spawn_Enemy(spawnDatas[i].enemys[j].enemy);
                 enemyList.Add(obj);
 
-                obj.transform.position = spawnDatas[0].enemys[j].spawnPos.position;
-                obj.transform.rotation = spawnDatas[0].enemys[j].spawnPos.rotation;
+                obj.transform.position = spawnDatas[i].enemys[j].spawnPos.position;
+                obj.transform.rotation = spawnDatas[i].enemys[j].spawnPos.rotation;
                 obj.SetActive(true);
 
                 // 스폰 딜레이
@@ -54,14 +54,11 @@ public class Field_Rush : Field_Base
             }
 
             // 라운드 종료 대기
-            while (enemyCount <= 0)
+            enemyCount = spawnDatas[i].enemys.Count;
+            while (enemyCount > 0)
             {
                 // 몬스터 수 체크
-                for (int j = enemyList.Count; i > 0; i--)
-                {
-                    if (enemyList[i] == null)
-                        enemyList.RemoveAt(i);
-                }
+                enemyList.RemoveAll(enemy => enemy.GetComponent<Enemy_Base>().curState == Enemy_Base.State.Die);
                 enemyCount = enemyList.Count;
 
                 yield return checkInterval;

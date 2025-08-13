@@ -656,6 +656,7 @@ public class UI_Manager : MonoBehaviour
             yield return null;
         }
 
+        yield return new WaitForSeconds(1.5f);
         // µÙ∑π¿Ã
         Fade(true, 1.5f);
         while(isFade)

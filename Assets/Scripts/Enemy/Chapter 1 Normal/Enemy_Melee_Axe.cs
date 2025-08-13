@@ -58,7 +58,8 @@ public class Enemy_Melee_Axe : Enemy_Base
         anim.SetFloat("Movement", timer);
         while (targetRange > attackRange)
         {
-            if(timer < 1)
+            if (curState == State.Die) yield break;
+            if (timer < 1)
             {
                 timer += Time.deltaTime * 2.5f;
                 anim.SetFloat("Movement", timer);

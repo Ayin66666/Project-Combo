@@ -61,6 +61,7 @@ public class Enemy_Melee_FlameThrower : Enemy_Base
         anim.SetFloat("Movement", 0);
         while (targetRange > attackRange)
         {
+            if (curState == State.Die) yield break;
             if (timer < 1)
             {
                 timer += Time.deltaTime * 2.5f;
