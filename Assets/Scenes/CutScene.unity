@@ -134589,7 +134589,7 @@ Transform:
   m_GameObject: {fileID: 606228789}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -1, z: -0, w: 0.0000029504295}
-  m_LocalPosition: {x: -31.4971, y: 15.553109, z: 164.79051}
+  m_LocalPosition: {x: -1.9372482, y: -0.6710024, z: -0.025924683}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 1
   m_Children:
@@ -134606,7 +134606,7 @@ Transform:
   - {fileID: 1238450147}
   - {fileID: 1836990578}
   - {fileID: 118835732}
-  m_Father: {fileID: 0}
+  m_Father: {fileID: 624077125}
   m_LocalEulerAnglesHint: {x: 0, y: 180, z: 0}
 --- !u!95 &606228792
 Animator:
@@ -134618,18 +134618,13 @@ Animator:
   m_GameObject: {fileID: 606228789}
   m_Enabled: 1
   m_Avatar: {fileID: 9000000, guid: 800cb12389f02684c8089abf6ad26414, type: 3}
-  m_Controller: {fileID: 9100000, guid: f38b0d3841894c44a9e065a13065a825, type: 2}
+  m_Controller: {fileID: 9100000, guid: deeb41c9607d0654cadfa21e9e18053a, type: 2}
   m_CullingMode: 1
   m_UpdateMode: 0
   m_ApplyRootMotion: 0
   m_LinearVelocityBlending: 0
   m_StabilizeFeet: 0
-  m_WarningMessage: "\nBinding warning: Some generic clip(s) animate transforms that
-    are already bound by a Humanoid avatar. These transforms can only be changed
-    by Humanoid clips.\n\tTransform 'Middle Intermediate.R'\n\tTransform 'Neck'\n\tTransform
-    'Lower Arm.R'\n\tTransform 'Little Distal.R'\n\tTransform 'Index Distal.R'\n\tTransform
-    'Little Proximal.L'\n\tTransform 'LeftEye'\n\tTransform 'Index Proximal.R'\n\tTransform
-    'Lower Leg.R'\n\tTransform 'Upper Arm.L'\n\tand more ..."
+  m_WarningMessage: 
   m_HasTransformHierarchy: 1
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorStateOnDisable: 0
@@ -135589,6 +135584,60 @@ Transform:
   - {fileID: 1246072337}
   m_Father: {fileID: 1153561827}
   m_LocalEulerAnglesHint: {x: -9.183, y: -28.405, z: -6.424}
+--- !u!1 &624077124
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 624077125}
+  - component: {fileID: 624077126}
+  m_Layer: 0
+  m_Name: Elite - CutScene Phase2 Die
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &624077125
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 624077124}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: -29.559853, y: 16.224112, z: 164.81644}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children:
+  - {fileID: 606228790}
+  - {fileID: 5591791682897044735}
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &624077126
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 624077124}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a3ebdb79859095544b4c8f305c610e6f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  body_Yuria: {fileID: 606228789}
+  anim_Yuria: {fileID: 606228792}
+  bulliet_VFX: {fileID: 0}
+  shootPos_Yuria: {fileID: 0}
+  body_Eunha: {fileID: 428599207483052898}
+  anim_Eunha: {fileID: 9043257202968428088}
+  swordAura_VFX: {fileID: 0}
+  shootPos_Eunha: {fileID: 0}
 --- !u!1001 &624183705
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -288205,61 +288254,6 @@ Transform:
     type: 3}
   m_PrefabInstance: {fileID: 1167148182}
   m_PrefabAsset: {fileID: 0}
---- !u!1 &1168132899
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 1168132901}
-  - component: {fileID: 1168132900}
-  m_Layer: 0
-  m_Name: TimeLine
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!320 &1168132900
-PlayableDirector:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1168132899}
-  m_Enabled: 1
-  serializedVersion: 3
-  m_PlayableAsset: {fileID: 11400000, guid: f4cf5f46eadf17c4891f05a1661e8f32, type: 2}
-  m_InitialState: 1
-  m_WrapMode: 2
-  m_DirectorUpdateMode: 1
-  m_InitialTime: 0
-  m_SceneBindings:
-  - key: {fileID: -1980258489948467116, guid: f4cf5f46eadf17c4891f05a1661e8f32, type: 2}
-    value: {fileID: 606228792}
-  - key: {fileID: -5671286603125786407, guid: f4cf5f46eadf17c4891f05a1661e8f32, type: 2}
-    value: {fileID: 343624284}
-  - key: {fileID: -4126009094693596085, guid: f4cf5f46eadf17c4891f05a1661e8f32, type: 2}
-    value: {fileID: 9043257202968428088}
-  m_ExposedReferences:
-    m_References: []
---- !u!4 &1168132901
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1168132899}
-  serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -31.448341, y: 15.836781, z: 162.91034}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 0}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1169904100
 GameObject:
   m_ObjectHideFlags: 0
@@ -352080,38 +352074,6 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 1767157659}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!1 &1333909757
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 1333909758}
-  m_Layer: 0
-  m_Name: "\uD0C0\uC784\uB77C\uC778 \uB8E8\uD2B8\uBAA8\uC158 \uB044\uB294 \uBC29\uBC95
-    \uCC3E\uC544\uC57C\uD568"
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &1333909758
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1333909757}
-  serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -31.689222, y: 16.309057, z: 163.67453}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1001 &1333955608
 PrefabInstance:
@@ -445965,6 +445927,38 @@ Transform:
   - {fileID: 2006808335}
   m_Father: {fileID: 1741556621}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &1673699132
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1673699133}
+  m_Layer: 0
+  m_Name: "\uC560\uB2C8\uBA54\uC774\uC158 \uBC30\uCE58 \uC644\uB8CC - \uC774\uBCA4\uD2B8
+    \uBC30\uCE58 \uD544\uC694"
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1673699133
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1673699132}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: -31.671438, y: 15.291563, z: 164.57506}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1674775952
 GameObject:
   m_ObjectHideFlags: 0
@@ -445996,6 +445990,38 @@ Transform:
   m_Children:
   - {fileID: 799116337}
   m_Father: {fileID: 1718657990}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &1674912072
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1674912073}
+  m_Layer: 0
+  m_Name: "\uC774\uBCA4\uD2B8 \uBC30\uCE58 \uD6C4 \uD14C\uC2A4\uD2B8 \uD574\uBCF4\uACE0
+    \uC774\uB3D9 \uAE30\uB2A5 \uCD94\uAC00"
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1674912073
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1674912072}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: -31.671438, y: 15.291563, z: 164.57506}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1001 &1675438836
 PrefabInstance:
@@ -653372,7 +653398,7 @@ Transform:
   m_GameObject: {fileID: 428599207483052898}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -31.4971, y: 15.553109, z: 161.04051}
+  m_LocalPosition: {x: -1.9372482, y: -0.6710024, z: -3.7759247}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 1
   m_Children:
@@ -653387,7 +653413,7 @@ Transform:
   - {fileID: 1765897484466618280}
   - {fileID: 4918491387054717364}
   - {fileID: 3074202818149227982}
-  m_Father: {fileID: 0}
+  m_Father: {fileID: 624077125}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!4 &5629290720868124171
 Transform:
@@ -682630,7 +682656,7 @@ Animator:
   m_GameObject: {fileID: 428599207483052898}
   m_Enabled: 1
   m_Avatar: {fileID: 9000000, guid: 800cb12389f02684c8089abf6ad26414, type: 3}
-  m_Controller: {fileID: 9100000, guid: 18660b7678af2d942852c7af2fc65d1e, type: 2}
+  m_Controller: {fileID: 9100000, guid: c5df40acd2a66114aac676d92a65e28d, type: 2}
   m_CullingMode: 1
   m_UpdateMode: 0
   m_ApplyRootMotion: 0
@@ -682856,7 +682882,6 @@ SceneRoots:
   - {fileID: 469945007}
   - {fileID: 1025667003}
   - {fileID: 802148071}
-  - {fileID: 1168132901}
-  - {fileID: 606228790}
-  - {fileID: 5591791682897044735}
-  - {fileID: 1333909758}
+  - {fileID: 624077125}
+  - {fileID: 1673699133}
+  - {fileID: 1674912073}

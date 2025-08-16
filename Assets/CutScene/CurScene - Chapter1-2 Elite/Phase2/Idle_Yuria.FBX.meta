@@ -1,5 +1,5 @@
 fileFormatVersion: 2
-guid: 236ae8ed516da4b4482cf159a003e845
+guid: a3a0b43f95e64614f99adb7ff503690d
 ModelImporter:
   serializedVersion: 22200
   internalIDToNameTable:
@@ -539,7 +539,7 @@ ModelImporter:
     second: upperarm_twist_01_r
   - first:
       74: 7400000
-    second: Gunslinger_Step_B
+    second: Gunslinger_Equip_Idle
   - first:
       95: 9500000
     second: //RootNode
@@ -559,34 +559,14 @@ ModelImporter:
     rigImportErrors: 
     rigImportWarnings: "Copied Avatar Rig Configuration mis-match. Bone length in
       copied configuration does not match position in animation file:\n\t'thigh_l'
-      : position error = 1.536273 mm\n\t'thigh_r' : position error = 1.878685 mm\n\t'hand_l'
-      : position error = 2.394925 mm\n\t'hand_r' : position error = 2.300566 mm\n\t'middle_02_r'
-      : position error = 1.204020 mm\n\t'ring_02_r' : position error = 1.314715 mm\n"
+      : position error = 1.578528 mm\n\t'thigh_r' : position error = 1.950486 mm\n\t'hand_l'
+      : position error = 2.394940 mm\n\t'hand_r' : position error = 2.300585 mm\n\t'middle_02_r'
+      : position error = 1.204009 mm\n\t'ring_02_r' : position error = 1.314686 mm\n"
     animationImportErrors: 
     animationImportWarnings: "\nClip 'Take 001' has import animation warnings that
       might lower retargeting quality:\nNote: Activate translation DOF on avatar
-      to improve retargeting quality.\n\t'thigh_l' has translation animation that
-      will be discarded.\n\t'calf_l' has translation animation that will be discarded.\n\t'foot_l'
-      has translation animation that will be discarded.\n\t'ball_l' has translation
-      animation that will be discarded.\n\t'thigh_r' has translation animation that
-      will be discarded.\n\t'calf_r' has translation animation that will be discarded.\n\t'foot_r'
-      has translation animation that will be discarded.\n\t'ball_r' has translation
-      animation that will be discarded.\n\t'spine_01' has translation animation that
-      will be discarded.\n\t'upperarm_l' has translation animation that will be discarded.\n\t'lowerarm_l'
-      has translation animation that will be discarded.\n\t'hand_l' has translation
-      animation that will be discarded.\n\t'index_01_l' has translation animation
-      that will be discarded.\n\t'index_02_l' has translation animation that will
-      be discarded.\n\t'index_03_l' has translation animation that will be discarded.\n\t'middle_01_l'
-      has translation animation that will be discarded.\n\t'middle_02_l' has translation
-      animation that will be discarded.\n\t'middle_03_l' has translation animation
-      that will be discarded.\n\t'ring_01_l' has translation animation that will
-      be discarded.\n\t'ring_02_l' has translation animation that will be discarded.\n\t'ring_03_l'
-      has translation animation that will be discarded.\n\t'pinky_01_l' has translation
-      animation that will be discarded.\n\t'pinky_02_l' has translation animation
-      that will be discarded.\n\t'pinky_03_l' has translation animation that will
-      be discarded.\n\t'upperarm_r' has translation animation that will be discarded.\n\t'lowerarm_r'
-      has translation animation that will be discarded.\n\t'hand_r' has translation
-      animation that will be discarded.\n"
+      to improve retargeting quality.\n\t'lowerarm_l' has translation animation that
+      will be discarded.\n\t'hand_l' has translation animation that will be discarded.\n"
     animationRetargetingWarnings: 
     animationDoRetargetingWarnings: 0
     importAnimatedCustomProperties: 0
@@ -600,18 +580,18 @@ ModelImporter:
     extraUserProperties: []
     clipAnimations:
     - serializedVersion: 16
-      name: Gunslinger_Step_B
+      name: Gunslinger_Equip_Idle
       takeName: Take 001
       internalID: 0
       firstFrame: 0
-      lastFrame: 25
+      lastFrame: 300
       wrapMode: 0
       orientationOffsetY: 0
       level: 0
       cycleOffset: 0
       loop: 0
       hasAdditiveReferencePose: 0
-      loopTime: 0
+      loopTime: 1
       loopBlend: 0
       loopBlendOrientation: 0
       loopBlendPositionY: 0
