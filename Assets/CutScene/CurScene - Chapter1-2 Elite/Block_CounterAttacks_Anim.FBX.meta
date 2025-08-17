@@ -59,7 +59,23 @@ ModelImporter:
       mirror: 0
       bodyMask: 01000000010000000100000001000000010000000100000001000000010000000100000001000000010000000100000001000000
       curves: []
-      events: []
+      events:
+      - time: 0.11272728
+        functionName: VFX_Eunha
+        data: 
+        objectReferenceParameter: {fileID: 11500000, guid: cf83df854eeb96f41becd1d76248de70,
+          type: 3}
+        floatParameter: 0
+        intParameter: 2
+        messageOptions: 0
+      - time: 1
+        functionName: CounterOver
+        data: 
+        objectReferenceParameter: {fileID: 11500000, guid: cf83df854eeb96f41becd1d76248de70,
+          type: 3}
+        floatParameter: 0
+        intParameter: 2
+        messageOptions: 0
       transformMask: []
       maskType: 3
       maskSource: {instanceID: 0}

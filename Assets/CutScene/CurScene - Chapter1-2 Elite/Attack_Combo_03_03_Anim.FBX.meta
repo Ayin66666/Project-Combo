@@ -60,6 +60,14 @@ ModelImporter:
       bodyMask: 01000000010000000100000001000000010000000100000001000000010000000100000001000000010000000100000001000000
       curves: []
       events:
+      - time: 0.33090907
+        functionName: VFX_Eunha
+        data: 
+        objectReferenceParameter: {fileID: 11500000, guid: cf83df854eeb96f41becd1d76248de70,
+          type: 3}
+        floatParameter: 0
+        intParameter: 0
+        messageOptions: 0
       - time: 0.40544218
         functionName: Shoot_Eunha
         data: 
@@ -68,6 +76,22 @@ ModelImporter:
         floatParameter: 0
         intParameter: 0
         messageOptions: 0
+      - time: 0.43636364
+        functionName: MovementCall
+        data: 
+        objectReferenceParameter: {fileID: 11500000, guid: cf83df854eeb96f41becd1d76248de70,
+          type: 3}
+        floatParameter: 0
+        intParameter: 0
+        messageOptions: 0
+      - time: 0.7890909
+        functionName: VFX_Eunha
+        data: 
+        objectReferenceParameter: {fileID: 11500000, guid: cf83df854eeb96f41becd1d76248de70,
+          type: 3}
+        floatParameter: 0
+        intParameter: 1
+        messageOptions: 0
       - time: 0.8217687
         functionName: Shoot_Eunha
         data: 
@@ -75,6 +99,14 @@ ModelImporter:
           type: 3}
         floatParameter: 0
         intParameter: 0
+        messageOptions: 0
+      - time: 0.83988696
+        functionName: MovementCall
+        data: 
+        objectReferenceParameter: {fileID: 11500000, guid: cf83df854eeb96f41becd1d76248de70,
+          type: 3}
+        floatParameter: 0
+        intParameter: 1
         messageOptions: 0
       - time: 1
         functionName: ActionOver

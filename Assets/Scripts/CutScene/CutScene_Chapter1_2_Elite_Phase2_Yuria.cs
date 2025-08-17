@@ -25,6 +25,7 @@ public class CutScene_Chapter1_2_Elite_Phase2_Yuria : MonoBehaviour
     [SerializeField] private Transform shootPos_Yuria;
     [SerializeField] private GameObject bulliet_VFX;
     [SerializeField] private GameObject smoke_VFX;
+    [SerializeField] private Transform[] movePos_Yuria;
 
 
     [Header("---Setting / Eunha---")]
@@ -32,8 +33,11 @@ public class CutScene_Chapter1_2_Elite_Phase2_Yuria : MonoBehaviour
     [SerializeField] private Animator anim_Eunha;
     [SerializeField] private GameObject swordAura_VFX;
     [SerializeField] private Transform shootPos_Eunha;
+    [SerializeField] private Transform movePos_Eunha;
+    [SerializeField] private GameObject[] vfx_EunHa;
+    private Coroutine movementCoroutine;
 
-
+    
     private void Update()
     {
         if (Input.GetKeyDown(KeyCode.F))
@@ -48,30 +52,68 @@ public class CutScene_Chapter1_2_Elite_Phase2_Yuria : MonoBehaviour
         // 1. 은하 검기 - 유리아 좌우 회피
         anim_Eunha.SetTrigger("Action");
         anim_Eunha.SetBool("isAction", true);
-        yield return new WaitWhile(() => anim_Yuria.GetBool("isAction")); // 검기 종료 대기
+        yield return new WaitWhile(() => anim_Eunha.GetBool("isAction")); // 검기 종료 대기
 
 
-        // 2. 은하 백스탭 & 가드
+        // 2. 은하 백스탭
         anim_Eunha.SetTrigger("Action");
         anim_Eunha.SetBool("isAction", true);
-        anim_Eunha.SetBool("isCounter", true);
-        yield return new WaitWhile(() => anim_Yuria.GetBool("isAction")); // 백스탭 종료 대기
+        Vector3 startPos = body_Eunha.transform.position;
+        Vector3 endPos = movePos_Eunha.transform.position;
+        float timer = 0;
+        while (timer < 1)
+        {
+            timer += Time.deltaTime / 0.5f;
+            anim_Eunha.SetFloat("AnimValue", timer);
+            body_Eunha.transform.position = Vector3.Lerp(startPos, endPos, timer);
+            yield return null;
+        }
+        body_Eunha.transform.position = endPos;
 
 
-        // 3. 유리아 사격
+        // 3. 은하 가드
         anim_Eunha.SetTrigger("Action");
-        yield return new WaitWhile(() => anim_Yuria.GetBool("isCounte")); // 카운터 종료 대기
+        yield return new WaitWhile(() => !anim_Yuria.GetBool("isCounter")); // 가드 다 올릴때까지 대기
 
 
-        // 4. 은하 카운터 공격 - & 유리아 Off
-        anim_Eunha.SetTrigger("Action");
-        anim_Eunha.SetBool("isAction", true);
-        yield return new WaitWhile(() => anim_Yuria.GetBool("isAction")); // 검기 종료 대기
+        // 4. 유리아 사격
+        yield return new WaitForSeconds(0.25f);
+        anim_Yuria.SetTrigger("Action");
 
 
-        // 4. 유리아 대사
+        // 5. 은하 피격 & 안개 생성 & 유리아 Off - 이벤트 호출
 
-        // 5. 안개 제거 & 컷신 종료
+
+        // 6. 카운터 공격 
+
+
+        // 6. 안개 제거 & 컷신 종료
+    }
+
+
+    #region
+    public void Movement_Yuria(int index)
+    {
+        if(movementCoroutine != null) 
+            StopCoroutine(movementCoroutine);
+
+        movementCoroutine = StartCoroutine(MovementYuria(transform.position, movePos_Yuria[index].position));
+    }
+
+    private IEnumerator MovementYuria(Vector3 startPos, Vector3 endPos)
+    {
+        anim_Yuria.SetTrigger("Action");
+        anim_Yuria.SetFloat("AnimValue", 0);
+        float timer = 0;
+        while (timer < 1)
+        {
+            timer += Time.deltaTime / 0.45f;
+            body_Yuria.transform.position = Vector3.Lerp(startPos, endPos, timer);
+            anim_Yuria.SetFloat("AnimValue", timer);
+            yield return null;
+        }
+        anim_Yuria.SetFloat("AnimValue", 1);
+        body_Yuria.transform.position = endPos;
     }
 
     /// <summary>
@@ -88,7 +130,7 @@ public class CutScene_Chapter1_2_Elite_Phase2_Yuria : MonoBehaviour
     public void Shoot_Yuria()
     {
         GameObject obj = Instantiate(bulliet_VFX, shootPos_Yuria.transform.position, Quaternion.identity);
-        Vector3 moveDir = (body_Yuria.transform.position - body_Eunha.transform.position).normalized;
+        Vector3 moveDir = (shootPos_Eunha.transform.position - shootPos_Yuria.transform.position).normalized;
         obj.GetComponent<CutScene_Shooting>().Movement_Setting(moveDir, 10, 30f);
     }
 
@@ -99,6 +141,7 @@ public class CutScene_Chapter1_2_Elite_Phase2_Yuria : MonoBehaviour
     {
         smoke_VFX.SetActive(isOn);
     }
+    #endregion
 
 
     /// <summary>
@@ -110,4 +153,26 @@ public class CutScene_Chapter1_2_Elite_Phase2_Yuria : MonoBehaviour
     }
 
 
+    #region
+    /// <summary>
+    /// 공격 이펙트 활성화
+    /// </summary>
+    /// <param name="index"></param>
+    public void VFX_Eunha(int index)
+    {
+        //vfx_EunHa[index].SetActive(true);
+    }
+
+    /// <summary>
+    /// 은하 검기 발사
+    /// </summary>
+    public void Shoot_Eunha()
+    {
+        
+        GameObject obj = Instantiate(swordAura_VFX, shootPos_Yuria.transform.position, Quaternion.identity);
+        Vector3 moveDir = (shootPos_Yuria.transform.position - shootPos_Eunha.transform.position).normalized;
+        obj.GetComponent<CutScene_Shooting>().Movement_Setting(moveDir, 10, 30f);
+        
+    }
+    #endregion
 }
