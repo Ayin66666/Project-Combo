@@ -5,19 +5,20 @@ using UnityEngine;
 public class CutScene_Shooting : MonoBehaviour
 {
     [Header("--- Movement Setting ---")]
-    [SerializeField] private bool isDestoryByGround;
-    [SerializeField] private bool isDestoryByHit;
+    [SerializeField] private CutScene_ElitePhase2End end;
     [SerializeField] private Vector3 moveDir;
     [SerializeField] private float speed;
     [SerializeField] private float lifeTimer;
     private Coroutine hitCoroutine;
 
+
     [Header("---VFX---")]
     public GameObject hitVFX;
 
 
-    public void Movement_Setting(Vector3 moveDir, float moveSpeed, float lifeTime)
+    public void Movement_Setting(Vector3 moveDir, float moveSpeed, float lifeTime, CutScene_ElitePhase2End end)
     {
+        this.end = end;
         this.moveDir = moveDir;
         speed = moveSpeed;
         lifeTimer = lifeTime;
@@ -39,8 +40,7 @@ public class CutScene_Shooting : MonoBehaviour
 
     private void Hit()
     {
-        hitVFX.transform.parent = null;
-        hitVFX.SetActive(true);
+        end.BulletHit();
         Destroy(gameObject);
     }
 

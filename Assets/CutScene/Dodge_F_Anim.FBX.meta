@@ -1,11 +1,11 @@
 fileFormatVersion: 2
-guid: 3ef6eac4ee13e83439cbe70d2deeedc2
+guid: 5d92ec73a5043324097d04a33f5dc948
 ModelImporter:
   serializedVersion: 22200
   internalIDToNameTable:
   - first:
       74: 1827226128182048838
-    second: Block_In_Anim
+    second: Dodge_F_Anim
   externalObjects: {}
   materials:
     materialImportMode: 2
@@ -36,11 +36,11 @@ ModelImporter:
     extraUserProperties: []
     clipAnimations:
     - serializedVersion: 16
-      name: Block_In_Anim
+      name: Dodge_F_Anim
       takeName: Take 001
       internalID: 0
       firstFrame: 0
-      lastFrame: 20
+      lastFrame: 15
       wrapMode: 0
       orientationOffsetY: 0
       level: 0
@@ -51,7 +51,7 @@ ModelImporter:
       loopBlend: 0
       loopBlendOrientation: 1
       loopBlendPositionY: 1
-      loopBlendPositionXZ: 1
+      loopBlendPositionXZ: 0
       keepOriginalOrientation: 1
       keepOriginalPositionY: 1
       keepOriginalPositionXZ: 0
@@ -59,7 +59,31 @@ ModelImporter:
       mirror: 0
       bodyMask: 01000000010000000100000001000000010000000100000001000000010000000100000001000000010000000100000001000000
       curves: []
-      events: []
+      events:
+      - time: 0
+        functionName: WeaponPosChange
+        data: 
+        objectReferenceParameter: {fileID: 11500000, guid: 70bb0f668b8460d4da7a5cb8b5a5ba41,
+          type: 3}
+        floatParameter: 0
+        intParameter: 0
+        messageOptions: 0
+      - time: 0
+        functionName: DashReset
+        data: 
+        objectReferenceParameter: {fileID: 11500000, guid: 70bb0f668b8460d4da7a5cb8b5a5ba41,
+          type: 3}
+        floatParameter: 0
+        intParameter: 0
+        messageOptions: 0
+      - time: 1
+        functionName: DashOver
+        data: 
+        objectReferenceParameter: {fileID: 11500000, guid: 70bb0f668b8460d4da7a5cb8b5a5ba41,
+          type: 3}
+        floatParameter: 0
+        intParameter: 0
+        messageOptions: 0
       transformMask: []
       maskType: 3
       maskSource: {instanceID: 0}
