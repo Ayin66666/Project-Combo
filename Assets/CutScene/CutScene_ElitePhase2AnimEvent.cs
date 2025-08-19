@@ -12,6 +12,10 @@ public class CutScene_ElitePhase2AnimEvent : MonoBehaviour
         anim = GetComponent<Animator>();
     }
 
+    public void AttackOver()
+    {
+        anim.SetBool("isAttack", false);
+    }
 
     public void Shooting()
     {
@@ -21,5 +25,10 @@ public class CutScene_ElitePhase2AnimEvent : MonoBehaviour
     public void AttackVFXE()
     {
         elite.AttackVFXE();
+    }
+
+    public void Cams(int index)
+    {
+        elite.Cam(index);
     }
 }

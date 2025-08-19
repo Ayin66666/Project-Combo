@@ -1,9 +1,14 @@
+using Cinemachine;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Rendering.PostProcessing;
 
 public class CutScene_ElitePhase2End : MonoBehaviour
 {
+    [SerializeField] private CinemachineBrain brain;
+    [SerializeField] private GameObject[] cams;
+
     [Header("---Setting---")]
     [SerializeField] private float moveSpeed;
     [SerializeField] private float smokeTime;
@@ -43,13 +48,21 @@ public class CutScene_ElitePhase2End : MonoBehaviour
         isBulletHit = false;
 
         // 은하 돌진
+
+        var blend = brain.m_DefaultBlend;
+        blend = brain.m_DefaultBlend;
+        blend.m_Time = 0.25f; // 시간 0
+        blend.m_Style = CinemachineBlendDefinition.Style.EaseInOut; // 완전 즉시 전환
+        brain.m_DefaultBlend = blend;
+
+        Cam(0);
         animE.SetTrigger("Action");
         Vector3 startPos = bodyE.transform.position;
         Vector3 endPos = movePosE.position;
         float timer = 0;
         while (timer < 1)
         {
-            if(timer > 0.5f && !isBackStepUse)
+            if(timer > 0.35f && !isBackStepUse)
             {
                 // 유리아 백스텝
                 StartCoroutine(Backstep());
@@ -60,18 +73,17 @@ public class CutScene_ElitePhase2End : MonoBehaviour
             yield return null;
         }
 
+
         // 은하 공격
+        Cam(1);
         animE.SetTrigger("Action");
+        animE.SetBool("isAttack", true);
+        yield return new WaitWhile(() => animE.GetBool("isAttack"));
 
-        // 유리아 백스텝 대기
-        yield return new WaitWhile(() => isBackStep);
 
-        // 사격
-        anim.SetTrigger("Action");
-
-        yield return new WaitForSeconds(0.15f);
-
-        // 은하 검 들기
+        // 은하 가드
+        blend.m_Time = 0f;
+        blend.m_Style = CinemachineBlendDefinition.Style.Cut; // 완전 즉시 전환
         animE.SetTrigger("Action");
 
 
@@ -80,12 +92,16 @@ public class CutScene_ElitePhase2End : MonoBehaviour
 
 
         // 안개 지속
+        Cam(2);
         smoke[0].SetActive(true);
         body.SetActive(false);
         yield return new WaitForSeconds(smokeTime);
 
 
         // 은하 검 내리기
+        blend.m_Time = 2.5f;
+        blend.m_Style = CinemachineBlendDefinition.Style.EaseInOut;
+        Cam(3);
         animE.SetTrigger("Action");
 
 
@@ -118,6 +134,10 @@ public class CutScene_ElitePhase2End : MonoBehaviour
         anim.SetFloat("AnimValue", 1);
 
         isBackStep = false;
+
+
+        // 사격
+        anim.SetTrigger("Action");
     }
 
     public void BulletHit()
@@ -135,5 +155,14 @@ public class CutScene_ElitePhase2End : MonoBehaviour
         GameObject obj = Instantiate(bulliet, shootPos.position, Quaternion.identity);
         Vector3 moveDir = (bodyE.transform.position - body.transform.position).normalized;
         obj.GetComponent<CutScene_Shooting>().Movement_Setting(moveDir, 15, 15, this);
+    }
+
+    public void Cam(int index)
+    {
+        foreach(GameObject obj in cams)
+        {
+            obj.SetActive(false);
+        }
+        cams[index].SetActive(true);
     }
 }
