@@ -2,13 +2,14 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Video;
+using static Enemy_Container;
 
 
 public class Enemy_Elite_Phase1 : Enemy_Base
 {
     [Header("---Component---")]
     [SerializeField] private VideoClip[] clips;
-    private VideoPlayer video;
+    [SerializeField] private VideoPlayer video;
 
 
     public enum SoundKey 
@@ -112,6 +113,7 @@ public class Enemy_Elite_Phase1 : Enemy_Base
         }
 
         curState = State.Idle;
+        // enemyUI.UI_OnOff(true);
 
         // 플레이어 동작 제어
         Player_Manager.instance.Player_Action_Setting(true);

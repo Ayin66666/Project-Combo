@@ -137,12 +137,12 @@ public class Enemy_Melee_Axe : Enemy_Base
 
     public override void Die()
     {
-        Hit_Reset();
         StartCoroutine(DieCall());
     }
 
     private IEnumerator DieCall()
     {
+        Hit_Reset();
         curState = State.Die;
         enemyUI.UI_OnOff(false);
 

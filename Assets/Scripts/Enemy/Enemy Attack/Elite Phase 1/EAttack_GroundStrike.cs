@@ -1,5 +1,4 @@
 using System.Collections;
-using System.ComponentModel;
 using UnityEngine;
 
 
@@ -58,7 +57,7 @@ public class EAttack_GroundStrike : Attack_Base
     public override void DamageCal(int index)
     {
         (bool isCritical, int damage) = enemy.DamageCalculation(value_Normal[index]);
-        Skill_Value_SO.Value_Data skillData = value_Normal[5].levelValue.GetData(skillLevel);
+        Skill_Value_SO.Value_Data skillData = value_Normal[index].levelValue.GetData(skillLevel);
         value_Normal[index].attackCollider.Damage_Setting(skillData.type, skillData.attackEffect, isCritical, skillData.hitCount, damage, AttackCollider_Controller.Owner.Enemy);
     }
 
