@@ -11,14 +11,14 @@ public class Field_Normal : Field_Base
 
     [Header("---Enemy Check---")]
     [SerializeField] private List<Enemy_Base> enemyList;
+    private Coroutine stageCoroutine;
     private Coroutine checkCoroutine;
     private readonly WaitForSeconds checkInterval = new WaitForSeconds(1f);
 
 
     public override void Field_Start()
     {
-        if (checkCoroutine != null) StopCoroutine(checkCoroutine);
-        checkCoroutine = StartCoroutine(StartCall());
+        stageCoroutine = StartCoroutine(StartCall());
     }
 
     private IEnumerator StartCall()
@@ -59,7 +59,7 @@ public class Field_Normal : Field_Base
         }
 
         // 체크 동작
-        StartCoroutine(CheckCall());
+        checkCoroutine = StartCoroutine(CheckCall());
     }
 
     private IEnumerator CheckCall()
@@ -126,9 +126,10 @@ public class Field_Normal : Field_Base
 
         // 체크 중단
         if (checkCoroutine != null) StopCoroutine(checkCoroutine);
+        if (stageCoroutine != null) StopCoroutine(stageCoroutine);
 
         // 문 개방
-        foreach(GameObject door in door)
+        foreach (GameObject door in door)
         {
             door.SetActive(false);
         }

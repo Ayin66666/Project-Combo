@@ -2,14 +2,12 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Video;
-using static Enemy_Container;
 
 
 public class Enemy_Elite_Phase1 : Enemy_Base
 {
     [Header("---Component---")]
     [SerializeField] private VideoClip[] clips;
-    [SerializeField] private VideoPlayer video;
 
 
     public enum SoundKey 
@@ -33,7 +31,6 @@ public class Enemy_Elite_Phase1 : Enemy_Base
 
     private void Start()
     {
-        video = GetComponent<VideoPlayer>();
         Spawn();
     }
 
@@ -104,16 +101,12 @@ public class Enemy_Elite_Phase1 : Enemy_Base
         Player_Manager.instance.Player_Action_Setting(false);
 
         // 컷신
-        video.clip = clips[0];
-        video.Play();
-        yield return new WaitForSeconds(0.1f);
-        while (video.isPlaying)
-        {
-            yield return null;
-        }
+        enemyUI.CutScene(clips[0]);
+        yield return new WaitWhile(() => enemyUI.isCutScene);
 
+        enemyUI.UI_Setting();
+        enemyUI.UI_OnOff(true);
         curState = State.Idle;
-        // enemyUI.UI_OnOff(true);
 
         // 플레이어 동작 제어
         Player_Manager.instance.Player_Action_Setting(true);
@@ -142,13 +135,8 @@ public class Enemy_Elite_Phase1 : Enemy_Base
         }
 
         // 컷신
-        video.clip = clips[1];
-        video.Play();
-        yield return new WaitForSeconds(0.1f);
-        while (video.isPlaying)
-        {
-            yield return null;
-        }
+        enemyUI.CutScene(clips[1]);
+        yield return new WaitWhile(() => enemyUI.isCutScene);
 
         // 2페이즈 전환
         Destroy(gameObject);

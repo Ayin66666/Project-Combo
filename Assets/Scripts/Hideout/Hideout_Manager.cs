@@ -87,7 +87,7 @@ public class Hideout_Manager : MonoBehaviour
     public void Hideout_Setting(bool isOn)
     {
         // 플레이어 UI
-        UI_Manager.instance.UI_Setting(isOn);
+        UI_Manager.instance.UI_Setting(!isOn);
 
         // 플레이어 동작
         Player_Manager.instance.action.canAction = !isOn;
@@ -270,6 +270,9 @@ public class Hideout_Manager : MonoBehaviour
 
     public void Player_Setting()
     {
+        // 쇼트컷 비활성화
+        Player_Manager.instance.shortCut.ShortCutUseSetting(false);
+
         // 스테이터스 조절
         Player_Manager.instance.status.curhp = Player_Manager.instance.status.maxHp;
         Player_Manager.instance.status.curStamina = Player_Manager.instance.status.maxStamina;

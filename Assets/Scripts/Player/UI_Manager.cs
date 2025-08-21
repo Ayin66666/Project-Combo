@@ -817,7 +817,7 @@ public class UI_Manager : MonoBehaviour
     {
         if (data != null)
         {
-            skillDescriptionText.text = data.SkillDescription[index];
+            skillDescriptionText.text = data.SkillDescription[index]; // -> 일정 레벨 이상 올리면 에러 발생?
             
             skillVideoPlayer.clip = data.SkillClip;
             skillVideoPlayer.Play();

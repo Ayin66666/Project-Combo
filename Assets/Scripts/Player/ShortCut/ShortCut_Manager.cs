@@ -8,6 +8,7 @@ public class ShortCut_Manager : MonoBehaviour
     [Header("---Setting---")]
     [SerializeField] private List<ShortCut_Slot> slots;
     [SerializeField] private List<ShortCut_InGame_Slot> slots_Ingame;
+    public bool canUseShortcut;
     private KeyCode[] key;
 
 
@@ -24,6 +25,14 @@ public class ShortCut_Manager : MonoBehaviour
         };
     }
 
+    /// <summary>
+    /// 쇼트컷의 사용가능 유무 설정
+    /// </summary>
+    /// <param name="canUse"></param>
+    public void ShortCutUseSetting(bool canUse)
+    {
+        canUseShortcut = canUse;
+    }
 
     #region 세이브 & 로드
     /// <summary>
@@ -39,6 +48,7 @@ public class ShortCut_Manager : MonoBehaviour
                 {
                     // 여기 슬롯 데이터 반환하는 함수나 변수 자체를 public으로 변경 필요
                     slots[i].Slot_Setting(Player_Manager.instance.inventory.item_Slot[data.shortcut[i]]);
+                    slots_Ingame[i].Slot_Setting(slots[i].item);
                 }
             }
         }

@@ -119,11 +119,12 @@ public class Field_Boss : Field_Base
         isClear = false;
 
         // 스테이지 체크 종료
-        if (stageCoroutine != null) 
+        if (stageCoroutine != null)
             StopCoroutine(stageCoroutine);
 
         // 몬스터 파괴
-        Destroy(curEnemy.gameObject);
+        if (curEnemy != null)
+            Destroy(curEnemy.gameObject);
 
         // 문 개방
         Door_Setting(false);

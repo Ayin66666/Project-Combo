@@ -808,11 +808,11 @@ public class SaveLoad_Manager : MonoBehaviour
             // 데이터 적용 - 인벤토리
             pManager.inventory.Inventory_Setting(data);
 
-            // 데이터 적용 - 장비
-            pManager.equipment.Equipment_Setting(data);
-
             // 데이터 적용 - 쇼트컷
             pManager.shortCut.LoadData(data);
+
+            // 데이터 적용 - 장비
+            pManager.equipment.Equipment_Setting(data);
 
             // 선택 UI Off
             SaveLoadUI(false);

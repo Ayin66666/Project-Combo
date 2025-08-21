@@ -34,6 +34,7 @@ public class ShortCut_Slot : MonoBehaviour, IPointerClickHandler
         {
             // 소비 아이템이라면 - UI 셋팅
             haveItem = true;
+            item = item_Slot.item;
             itemSlot = item_Slot;
             icon.sprite = itemSlot.item.Icon;
             countText.text = itemSlot.itemCount.ToString();
@@ -64,6 +65,11 @@ public class ShortCut_Slot : MonoBehaviour, IPointerClickHandler
     /// </summary>
     public void Use()
     {
+        if(!Player_Manager.instance.shortCut.canUseShortcut)
+        {
+            return;
+        }
+
         if (itemSlot != null)
         {
             // 아이템 사용

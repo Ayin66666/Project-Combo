@@ -51,13 +51,11 @@ public class Enemy_Elite_Phase2 : Enemy_Base
 
 
     [Header("---Compoment---")]
-    private VideoPlayer video;
     [SerializeField] private VideoClip dieClip;
 
 
     private void Start()
     {
-        video = GetComponent<VideoPlayer>();
         Spawn();
     }
 
@@ -205,9 +203,7 @@ public class Enemy_Elite_Phase2 : Enemy_Base
             anim.SetFloat("Movement Z", z);
             yield return null;
         }
-        Debug.Log("종료");
 
-        // 
         Think();
     }
 
@@ -242,7 +238,10 @@ public class Enemy_Elite_Phase2 : Enemy_Base
 
     protected override IEnumerator Spawn_CutScene()
     {
-        // 2페이즈는 스폰 컷신 X
+        // 2페이즈는 스폰 컷신 X -> 혹시 몰라서 CutScene으로 잡음
+        enemyUI.UI_Setting();
+        enemyUI.UI_OnOff(true);
+
         curState = State.Idle;
         yield return null;
     }
@@ -266,12 +265,8 @@ public class Enemy_Elite_Phase2 : Enemy_Base
         body.SetActive(false);
 
         // 사망 컷신
-        video.clip = dieClip;
-        yield return new WaitForSeconds(0.1f);
-        while (video.isPlaying)
-        {
-            yield return null;
-        }
+        enemyUI.CutScene(dieClip);
+        yield return new WaitWhile(() => enemyUI.isCutScene);
 
         // 아이템 드랍
         Item_Drop();

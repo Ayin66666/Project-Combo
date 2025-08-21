@@ -58,6 +58,7 @@ public class Player_Manager : MonoBehaviour
 
     public void PlayerPos_Setting(Vector3 pos)
     {
+        Debug.Log($"스테이지 시작 이동 호출 / 이동 위치 : {pos}");
         playerMovement.transform.position = pos;
     }
 

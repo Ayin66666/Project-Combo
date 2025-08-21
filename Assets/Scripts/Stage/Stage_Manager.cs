@@ -42,12 +42,12 @@ public class Stage_Manager : MonoBehaviour
     [SerializeField] private AudioSource bgmAudio;
     [SerializeField] private AudioClip[] bgmClips;
     [SerializeField] private Waypoint_Manager wayPointManager;
+    [SerializeField] private Transform startSpawnPos;
 
 
     [Header("---Check Point---")]
-    [SerializeField] private Transform startSpawnPos;
-    public Vector3 spawnPos;
     public Quaternion spawnRotation;
+    public Vector3 spawnPos;
 
 
     private void Awake()
@@ -71,7 +71,7 @@ public class Stage_Manager : MonoBehaviour
     public IEnumerator Stage_Start()
     {
         // 플레이어 이동
-        Player_Manager.instance.PlayerPos_Setting(spawnPos);
+        Player_Manager.instance.PlayerPos_Setting(startSpawnPos.position);
 
         // 페이드 종료
         UI_Manager.instance.Fade(false, 1.5f);
@@ -83,6 +83,8 @@ public class Stage_Manager : MonoBehaviour
         // 플레이어 활성화
         Player_Manager.instance.Player_Action_Setting(true);
         Player_Manager.instance.PlayerOnOff_Setting(true);
+        UI_Manager.instance.UI_Setting(true);
+        Player_Manager.instance.shortCut.ShortCutUseSetting(true);
 
         // 시작 체크포인트 셋팅
         CheckPoint_Seting(startSpawnPos);
