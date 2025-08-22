@@ -160,12 +160,13 @@ public class EAttack_MissileCall : Attack_Base
         mechSpawnVFX.SetActive(false);
 
         // 메카 종료
-        mechObj.GetComponent<Enemy_MisslieCall_Mech>().Groggy();
+        if (mechObj != null)
+            mechObj.GetComponent<Enemy_MisslieCall_Mech>().Groggy();
 
         // 리스트 리셋
         for (int i = 0; i < value_Normal.Count; i++)
         {
-            if (!value_Normal[i].attackCollider)
+            if (value_Normal[i].attackCollider != null)
                 value_Normal[i].attackCollider.ListReset();
         }
     }

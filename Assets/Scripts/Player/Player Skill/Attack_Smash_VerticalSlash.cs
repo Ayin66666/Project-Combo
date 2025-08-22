@@ -61,7 +61,7 @@ public class Attack_Smash_VerticalSlash : Attack_Base
             timer += Time.deltaTime;
 
             // 추가타
-            if (PlayerAction_Manager.instance.isAwakning && Input_Manager.instance.inputDatas[1].isInput)
+            if (PlayerAction_Manager.instance.isAwankning && Input_Manager.instance.inputDatas[1].isInput)
             {
                 PlayerAction_Manager.instance.RushSlash_Setting(false);
                 AdditionalAttack();
@@ -182,7 +182,7 @@ public class Attack_Smash_VerticalSlash : Attack_Base
         auraObj.transform.rotation = Quaternion.LookRotation(ppp);
 
         // 투명 투사체 데미지
-        Value val = PlayerAction_Manager.instance.isAwakning ? value_Normal[index] : value_Normal[index];
+        Value val = PlayerAction_Manager.instance.isAwankning ? value_Normal[index] : value_Normal[index];
         (bool isCritical, int damage) = PlayerAction_Manager.instance.DamageCalculation(val, skillLevel);
 
         Skill_Value_SO.Value_Data skillData = val.levelValue.GetData(skillLevel);
@@ -193,7 +193,7 @@ public class Attack_Smash_VerticalSlash : Attack_Base
     public override void DamageCal(int index)
     {
         Skill_Value_SO.Value_Data skillData;
-        if (PlayerAction_Manager.instance.isAwakning)
+        if (PlayerAction_Manager.instance.isAwankning)
         {
             (bool isCritical, int damage) = PlayerAction_Manager.instance.DamageCalculation(value_Awakening[index], skillLevel);
             skillData = value_Awakening[index].levelValue.GetData(skillLevel);

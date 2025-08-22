@@ -124,6 +124,9 @@ public class Field_Normal : Field_Base
     {
         isClear = false;
 
+        // 체커 콜라이더 활성화
+        checker.Reset_Checker();
+
         // 체크 중단
         if (checkCoroutine != null) StopCoroutine(checkCoroutine);
         if (stageCoroutine != null) StopCoroutine(stageCoroutine);

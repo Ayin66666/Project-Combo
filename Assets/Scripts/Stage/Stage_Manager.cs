@@ -125,6 +125,9 @@ public class Stage_Manager : MonoBehaviour
         // 플레이어 동작 비활성화
         Player_Manager.instance.Player_Action_Setting(false);
 
+        // 플레이어 공격 초기화
+        Player_Manager.instance.action.Attack_Reset();
+
         // 클리어 경험치
         Player_Manager.instance.status.ExpAdd(stageData.ClearExp);
 
@@ -140,9 +143,6 @@ public class Stage_Manager : MonoBehaviour
 
         // 플레이어 비활성화
         Player_Manager.instance.PlayerOnOff_Setting(false);
-
-        // 플레이어 공격 & 이펙트 비활성화
-        Player_Manager.instance.action.Attack_Reset();
 
         // 씬 이동
         SceneLoad_Manager.LoadScene(nextScene);

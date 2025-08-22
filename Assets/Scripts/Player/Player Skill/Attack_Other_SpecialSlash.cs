@@ -203,6 +203,11 @@ public class Attack_Other_SpecialSlash : Attack_Base
 
     public override void Attack_Reset()
     {
-        // 무적이라 필요없음!!!
+        // 무적이라 필요없음!!! -> 무적이라도 스테이지 종료 시 필요하더라...
+
+        for (int i = 0; i < effectCams.Length; i++)
+        {
+            effectCams[i].SetActive(false);
+        }
     }
 }

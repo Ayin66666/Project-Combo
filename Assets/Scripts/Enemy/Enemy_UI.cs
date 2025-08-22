@@ -33,6 +33,11 @@ public class Enemy_UI : MonoBehaviour
     [SerializeField] private TextMeshProUGUI nameText;
     [SerializeField] private TextMeshProUGUI styleText;
 
+
+    [Header("---Boss Spawn Efect---")]
+    [SerializeField] private TextMeshProUGUI nameText_Spawn;
+
+
     [Header("---Component---")]
     [SerializeField] private Enemy_Base enemy;
     [SerializeField] private VideoPlayer video;
@@ -120,15 +125,15 @@ public class Enemy_UI : MonoBehaviour
     }
 
 
-    public void EnemyName()
+    public void Boss_SpawnNameEffect()
     {
-        StartCoroutine(EnemyNameCall());
+        StartCoroutine(BossSpawnNameEffect());
     }
 
-    private IEnumerator EnemyNameCall()
+    private IEnumerator BossSpawnNameEffect()
     {
         nameSet.SetActive(true);
-        nameText.text = enemy.statusData.ObjectName;
+        nameText_Spawn.text = enemy.statusData.ObjectName;
 
         // 가장자리 페이드 인
         Tween fadeTween = nameFadeImage.DOFade(1, 1f);
@@ -138,13 +143,13 @@ public class Enemy_UI : MonoBehaviour
         yield return new WaitForSeconds(0.15f);
 
         // 이름 페이드 인
-        Tween nameFadeTween = nameText.DOFade(1, 1f);
+        Tween nameFadeTween = nameText_Spawn.DOFade(1, 1f);
         yield return nameFadeTween.WaitForCompletion();
 
         // 가장자리 & 이름 페이드 아웃
         yield return DOTween.Sequence()
             .Join(nameFadeImage.DOFade(0, 1f))
-            .Join(nameText.DOFade(0, 1f))
+            .Join(nameText_Spawn.DOFade(0, 1f))
             .WaitForCompletion();
     }
     #endregion

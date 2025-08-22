@@ -469,8 +469,8 @@ public class SaveLoad_Manager : MonoBehaviour
             physicalDefence = 15,
             magicalDefence = 15,
 
-            physicalDamage = 60,
-            magicalDamage = 60,
+            physicalDamage = 50,
+            magicalDamage = 50,
             attackSpeed = 1f,
             criticalhit = 0,
             critical_multiplier = 1.5f,
@@ -480,7 +480,7 @@ public class SaveLoad_Manager : MonoBehaviour
             maxAwakening = 200,
             curStamina = 200,
             maxStamina = 200,
-            staminaRecovery = 5f,
+            staminaRecovery = 15f,
 
             // æ∆¿Ã≈€
             itemData = new List<ItemData>(),

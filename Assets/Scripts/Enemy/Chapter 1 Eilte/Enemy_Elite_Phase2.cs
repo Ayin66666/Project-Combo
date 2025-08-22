@@ -243,6 +243,7 @@ public class Enemy_Elite_Phase2 : Enemy_Base
         enemyUI.UI_OnOff(true);
 
         curState = State.Idle;
+        isCutScene = false;
         yield return null;
     }
 
@@ -253,6 +254,8 @@ public class Enemy_Elite_Phase2 : Enemy_Base
 
     private IEnumerator DieCall()
     {
+        enemyUI.UI_OnOff(false);
+
         // 애니메이션
         anim.SetTrigger("Action");
         anim.SetBool("isDie", true);

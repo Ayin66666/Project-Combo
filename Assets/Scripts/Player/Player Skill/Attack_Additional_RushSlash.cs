@@ -95,7 +95,7 @@ public class Attack_Additional_RushSlash : Attack_Base
     public override void DamageCal(int index)
     {
         Skill_Value_SO.Value_Data skillData;
-        if (PlayerAction_Manager.instance.isAwakning)
+        if (PlayerAction_Manager.instance.isAwankning)
         {
             (bool isCritical, int damage) = PlayerAction_Manager.instance.DamageCalculation(value_Awakening[0], skillLevel);
             skillData = value_Awakening[0].levelValue.GetData(skillLevel);

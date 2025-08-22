@@ -51,10 +51,6 @@ public class Field_Boss : Field_Base
         UI_Manager.instance.MiniMap_SizeSetting(false);
         Door_Setting(true);
 
-        // 시작 다이얼로그
-        if (haveStartDialog)
-            UI_Manager.instance.Dialog_Fight(startDialog.dialog);
-
         // 소환 로직 - 가지고 있는 몬스터 수만큼 소환
         for (int i = 0; i < enemyData.Length; i++)
         {
@@ -64,7 +60,8 @@ public class Field_Boss : Field_Base
             curEnemy.Spawn();
 
             // 스폰 컷신 대기
-            while (curEnemy.isCutScene)
+            yield return new WaitForSeconds(0.1f); // -> 아무래도 바로 체크하니까 안되는듯?
+            while (curEnemy.enemyUI.isCutScene)
             {
                 yield return null;
             }
@@ -117,6 +114,9 @@ public class Field_Boss : Field_Base
     public override void Field_Reset()
     {
         isClear = false;
+
+        // 체커 콜라이더 활성화
+        checker.Reset_Checker();
 
         // 스테이지 체크 종료
         if (stageCoroutine != null)

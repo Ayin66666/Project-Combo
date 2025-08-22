@@ -1,6 +1,5 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
+
 
 public class Field_Checker : MonoBehaviour
 {
@@ -14,9 +13,14 @@ public class Field_Checker : MonoBehaviour
         checkCollider = GetComponent<Collider>();
     }
 
+    public void Reset_Checker()
+    {
+        checkCollider.enabled = true;
+    }
+
     private void OnTriggerEnter(Collider other)
     {
-        if(other.CompareTag("Player"))
+        if (other.CompareTag("Player"))
         {
             field.Field_Start();
             checkCollider.enabled = false;

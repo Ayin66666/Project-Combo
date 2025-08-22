@@ -1,5 +1,4 @@
 using System.Collections.Generic;
-using System.Collections;
 using UnityEngine;
 
 
@@ -26,6 +25,7 @@ public abstract class Field_Base : MonoBehaviour
     [Header("---Setting---")]
     [SerializeField] protected FieldType fieldType;
     public bool isClear;
+    [SerializeField] protected Field_Checker checker;
     [SerializeField] protected GameObject[] door;
     protected enum FieldType { Normal, Rush, Guard, Puzzle, Boss }
     public enum UseType { Stage_Start, Stage_End, EnemyCount, Hp }

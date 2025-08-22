@@ -128,7 +128,7 @@ public class Player_Animation : MonoBehaviour
         int attackIndex = index / 10;
         int colliderIndex = index % 10;
 
-        if (PlayerAction_Manager.instance.isAwakning && comboAttacks[attackIndex].haveAwakningValue)
+        if (PlayerAction_Manager.instance.isAwankning && comboAttacks[attackIndex].haveAwakningValue)
         {
             comboAttacks[attackIndex].value_Awakening[0].attackCollider.AttackColliderOn(colliderIndex);
         }
@@ -162,7 +162,7 @@ public class Player_Animation : MonoBehaviour
         int countIndex = (index % 10) / 10;
         int colliderIndex = index % 10;
 
-        if (PlayerAction_Manager.instance.isAwakning && smashAttacks[typeIndex].haveAwakningValue)
+        if (PlayerAction_Manager.instance.isAwankning && smashAttacks[typeIndex].haveAwakningValue)
         {
             smashAttacks[typeIndex].value_Awakening[countIndex].attackCollider.AttackColliderOn(colliderIndex);
         }
@@ -178,7 +178,7 @@ public class Player_Animation : MonoBehaviour
         int count = ((Attack_Smash_ChargeSlash)smashAttacks[3]).chargeCount < 0.5f ? 0 : ((Attack_Smash_ChargeSlash)smashAttacks[3]).chargeCount < 1 ? 1 : 2;
         ((Attack_Smash_ChargeSlash)smashAttacks[3]).DamageCal(count);
 
-        if (PlayerAction_Manager.instance.isAwakning)
+        if (PlayerAction_Manager.instance.isAwankning)
         {
             smashAttacks[3].value_Awakening[count].attackCollider.AttackColliderOn(0);
         }
@@ -206,7 +206,7 @@ public class Player_Animation : MonoBehaviour
 
     public void DoubleAuraVFX()
     {
-        if (PlayerAction_Manager.instance.isAwakning)
+        if (PlayerAction_Manager.instance.isAwankning)
         {
             ((Attack_Samsh_DoubleSlash)smashAttacks[1]).Smash2_Aura();
         }
@@ -244,7 +244,7 @@ public class Player_Animation : MonoBehaviour
         int countIndex = (index % 100) / 10;
         int colliderIndex = index % 10;
 
-        if (PlayerAction_Manager.instance.isAwakning && otherAttacks[typeIndex].haveAwakningValue)
+        if (PlayerAction_Manager.instance.isAwankning && otherAttacks[typeIndex].haveAwakningValue)
         {
             otherAttacks[typeIndex].value_Awakening[countIndex].attackCollider.AttackColliderOn(colliderIndex);
         }

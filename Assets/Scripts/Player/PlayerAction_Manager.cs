@@ -27,7 +27,7 @@ public class PlayerAction_Manager : MonoBehaviour, IDamageSysteam
     public bool isAttack;
     public bool isSmash;
     public bool isCounter;
-    public bool isAwakning;
+    public bool isAwankning;
     public bool isInvincibility;
     public bool isDie;
 
@@ -72,7 +72,7 @@ public class PlayerAction_Manager : MonoBehaviour, IDamageSysteam
     [SerializeField] private LayerMask enemyLayer;
     [SerializeField] private List<GameObject> lockOnEnemyList;
     [SerializeField] private GameObject lockOnEnemy;
-    [SerializeField] private GameObject lockOnFront; 
+    [SerializeField] private GameObject lockOnFront;
     private int curLookIndex;
     public bool isLockOn;
 
@@ -164,7 +164,7 @@ public class PlayerAction_Manager : MonoBehaviour, IDamageSysteam
         Quaternion boxRotation = lockOnFront.transform.rotation;
         Vector3 boxSize = lockOnFront.transform.lossyScale * 0.5f;
         Collider[] hitColliders = Physics.OverlapBox(boxCenter, boxSize, boxRotation, enemyLayer);
-        if(hitColliders.Length > 0 )
+        if (hitColliders.Length > 0)
         {
             float minDistance = int.MaxValue;
             for (int i = 0; i < hitColliders.Length; i++)
@@ -302,7 +302,7 @@ public class PlayerAction_Manager : MonoBehaviour, IDamageSysteam
         {
             x = Mathf.Clamp(x, 335f, 361f);
         }
-        
+
         camHolder.rotation = Quaternion.Euler(x, camAngle.y + mouseDelta.x, camAngle.z);
     }
 
@@ -441,7 +441,7 @@ public class PlayerAction_Manager : MonoBehaviour, IDamageSysteam
             while (anim.GetBool("isDodgeDelay"))
             {
                 // 이동 입력 감지 시 즉시 대쉬 딜레이모션 제거
-                if(Input_Manager.instance.movementInput.magnitude != 0)
+                if (Input_Manager.instance.movementInput.magnitude != 0)
                 {
                     anim.SetBool("isDodgeDelay", false);
                 }
@@ -547,7 +547,10 @@ public class PlayerAction_Manager : MonoBehaviour, IDamageSysteam
 
             // 피격 효과 - 다운 상태에서는 무효화
             if (isDie || curHitState == IDamageSysteam.HitVFX.Down)
+            {
                 return;
+            }
+
 
             switch (hitType)
             {
@@ -730,6 +733,12 @@ public class PlayerAction_Manager : MonoBehaviour, IDamageSysteam
     /// </summary>
     private void Hit_Reset()
     {
+        // bool 값 초기화
+        isAttack = false;
+        isSmash = false;
+        isDash = false;
+        isCounter = false;
+
         // 공격 기능 초기화
         for (int i = 0; i < normalAttacks.Length; i++)
         {
@@ -748,6 +757,23 @@ public class PlayerAction_Manager : MonoBehaviour, IDamageSysteam
 
         // 애니메이션 초기화
         Animation_Reset();
+    }
+
+    public void Animation_Reset()
+    {
+        anim.SetInteger("AttackCount", 0);
+
+        // 트리거
+        for (int i = 0; i < animTrigger.Length; i++)
+        {
+            anim.ResetTrigger(animTrigger[i]);
+        }
+
+        // Bool
+        for (int i = 0; i < animBool.Length; i++)
+        {
+            anim.SetBool(animBool[i], false);
+        }
     }
 
     public IEnumerator Hit_KnockBack(GameObject attackObj)
@@ -772,20 +798,20 @@ public class PlayerAction_Manager : MonoBehaviour, IDamageSysteam
         float timer = 0;
         while (timer < 1)
         {
-            timer += Time.deltaTime * 10f;
+            timer += Time.deltaTime / 0.25f;
             transform.position = Vector3.Lerp(startPos, endPos, EasingFunctions.OutExpo(timer));
             yield return null;
         }
+        Debug.Log("Hit Anim Over - Type : KnockBack");
 
         // 넉백 애니메이션 대기
-        while (anim.GetBool("isKnockBack"))
-        {
-            yield return null;
-        }
+        yield return new WaitWhile(() => anim.GetBool("isKnockBack"));
 
         // 재동작
+        Debug.Log("Hit Over - Type : KnockBack");
         curHitState = IDamageSysteam.HitVFX.None;
         canAction = true;
+        canMovement = true;
     }
 
     public IEnumerator Hit_Down(GameObject attackObj)
@@ -813,38 +839,21 @@ public class PlayerAction_Manager : MonoBehaviour, IDamageSysteam
             transform.position = Vector3.Lerp(startPos, endPos, EasingFunctions.OutExpo(timer));
             yield return null;
         }
-        //anim.SetFloat("DownMotion", 1);
+        // anim.SetFloat("DownMotion", 1);
+        Debug.Log("Hit Anim Over - Type : Down");
 
         // 다운 대기 -> 다운 관련 시간 필요
         yield return new WaitForSeconds(2f);
 
         // 기상 애니메이션
         anim.SetBool("isDownLoop", false);
-        while (anim.GetBool("isDown"))
-        {
-            yield return null;
-        }
+        yield return new WaitWhile(() => anim.GetBool("isDown"));
 
         // 재동작
+        Debug.Log("Hit Over - Type : Down");
         curHitState = IDamageSysteam.HitVFX.None;
         canAction = true;
-    }
-
-    public void Animation_Reset()
-    {
-        // 트리거
-        for (int i = 0; i < animTrigger.Length; i++)
-        {
-            anim.ResetTrigger(animTrigger[i]);
-        }
-
-        // Bool
-        for (int i = 0; i < animBool.Length; i++)
-        {
-            anim.SetBool(animBool[i], false);
-        }
-
-        anim.SetInteger("AttackCount", 0);
+        canMovement = true;
     }
     #endregion
 
@@ -985,7 +994,7 @@ public class PlayerAction_Manager : MonoBehaviour, IDamageSysteam
 
     private void Attack_Counter()
     {
-        if (!canAction || !canAttack  || isAttack || isSmash || isCounter)
+        if (!canAction || !canAttack || isAttack || isSmash || isCounter)
         {
             return;
         }
@@ -1000,7 +1009,7 @@ public class PlayerAction_Manager : MonoBehaviour, IDamageSysteam
             return;
         }
 
-        if (canAwakning && !isAwakning)
+        if (canAwakning && !isAwankning)
         {
             otherAttakcs[2].Use();
         }
@@ -1013,7 +1022,7 @@ public class PlayerAction_Manager : MonoBehaviour, IDamageSysteam
 
     private void Attack_Speical()
     {
-        if (!canAction || !canAttack || !canSpecial || !isAwakning || isAttack || isSmash || isCounter)
+        if (!canAction || !canAttack || !canSpecial || !isAwankning || isAttack || isSmash || isCounter)
         {
             return;
         }
@@ -1061,7 +1070,20 @@ public class PlayerAction_Manager : MonoBehaviour, IDamageSysteam
     /// </summary>
     public void Attack_Reset()
     {
-        otherAttakcs[2].Attack_Reset();
+        for (int i = 0; i < normalAttacks.Length; i++)
+        {
+            normalAttacks[i].Attack_Reset();
+        }
+
+        for (int i = 0; i < smashAttacks.Length; i++)
+        {
+            smashAttacks[i].Attack_Reset();
+        }
+
+        for (int i = 0; i < otherAttakcs.Length; i++)
+        {
+            otherAttakcs[i].Attack_Reset();
+        }
     }
     #endregion
 

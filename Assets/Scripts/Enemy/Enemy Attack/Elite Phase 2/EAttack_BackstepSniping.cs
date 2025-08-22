@@ -45,12 +45,13 @@ public class EAttack_BackstepSniping : Attack_Base
         float timer = 0;
         while (timer < 1)
         {
-            timer += Time.deltaTime * 1.5f;
+            timer += Time.deltaTime / 0.75f;
             enemy.transform.position = Vector3.Lerp(startPos, endPos, EasingFunctions.OutExpo(timer));
             anim.SetFloat("AnimValue", EasingFunctions.OutExpo(timer));
             yield return null;
         }
         anim.SetFloat("AnimValue", 1);
+        enemy.transform.position = endPos;
         anim.SetBool("isBackstep", false);
 
         // 사운드
@@ -144,7 +145,7 @@ public class EAttack_BackstepSniping : Attack_Base
         // 리스트 리셋
         for (int i = 0; i < value_Normal.Count; i++)
         {
-            if (!value_Normal[i].attackCollider)
+            if (value_Normal[i].attackCollider != null)
                 value_Normal[i].attackCollider.ListReset();
         }
     }

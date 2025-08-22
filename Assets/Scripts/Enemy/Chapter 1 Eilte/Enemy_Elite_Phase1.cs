@@ -97,19 +97,22 @@ public class Enemy_Elite_Phase1 : Enemy_Base
 
     protected override IEnumerator Spawn_CutScene()
     {
+        isCutScene = true;
+
         // 플레이어 동작 제어
         Player_Manager.instance.Player_Action_Setting(false);
-
         // 컷신
         enemyUI.CutScene(clips[0]);
         yield return new WaitWhile(() => enemyUI.isCutScene);
 
         enemyUI.UI_Setting();
         enemyUI.UI_OnOff(true);
+        enemyUI.Boss_SpawnNameEffect();
         curState = State.Idle;
 
         // 플레이어 동작 제어
         Player_Manager.instance.Player_Action_Setting(true);
+        isCutScene = false;
     }
 
     public override void Die()
@@ -121,7 +124,7 @@ public class Enemy_Elite_Phase1 : Enemy_Base
     private IEnumerator DieCall()
     {
         curState = State.Die;
-        enemyUI.gameObject.SetActive(false);
+        enemyUI.UI_OnOff(false);
 
         // 사운드
         sound.Sound(Enemy_Sound.SoundKey.Die.ToString());
@@ -136,6 +139,9 @@ public class Enemy_Elite_Phase1 : Enemy_Base
 
         // 컷신
         enemyUI.CutScene(clips[1]);
+        Debug.Log(isCutScene);
+        yield return new WaitForSeconds(0.2f); // -> 컷신 나오기도 전에 파괴되는 이슈 발생
+        Debug.Log(isCutScene);
         yield return new WaitWhile(() => enemyUI.isCutScene);
 
         // 2페이즈 전환

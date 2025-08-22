@@ -9,6 +9,7 @@ public class Attack_Other_Awankning : Attack_Base
     private int add_PhysicalDam;
     private int add_magcalDam;
 
+
     [System.Serializable]
     public struct BuffStatus
     {
@@ -41,7 +42,7 @@ public class Attack_Other_Awankning : Attack_Base
     private IEnumerator UseCall()
     {
         PlayerAction_Manager.instance.MovementLock(cancelType, true);
-        PlayerAction_Manager.instance.isAwakning = true;
+        PlayerAction_Manager.instance.isAwankning = true;
         PlayerAction_Manager.instance.Special_Setting(true);
 
         // 사용 가능 UI Off
@@ -67,12 +68,18 @@ public class Attack_Other_Awankning : Attack_Base
         }
         PlayerAction_Manager.instance.MovementLock(cancelType, false);
 
+
         // 타이머
+        float cur = 200;
+        float timer = 0;
         while (Player_Manager.instance.status.curAwakening > 0)
         {
-            Player_Manager.instance.status.curAwakening -= Time.deltaTime * 5f;
+            timer += Time.deltaTime / 15f;
+            cur = Mathf.Lerp(200, 0, timer);
+            Player_Manager.instance.status.curAwakening = cur;
             yield return null;
         }
+
 
         // 능력치 초기화
         Status_Setting(false);
@@ -82,7 +89,7 @@ public class Attack_Other_Awankning : Attack_Base
         awankningVFX.SetActive(false);
         swordVFX.SetActive(false);
 
-        PlayerAction_Manager.instance.isAwakning = false;
+        PlayerAction_Manager.instance.isAwankning = false;
         PlayerAction_Manager.instance.canAwakning = false;
     }
 
@@ -106,6 +113,7 @@ public class Attack_Other_Awankning : Attack_Base
         }
         else
         {
+            Player_Manager.instance.action.isAwankning = false;
             Player_Manager.instance.status.physicalDamage -= add_PhysicalDam;
             Player_Manager.instance.status.magicalDamage -= add_magcalDam;
             Player_Manager.instance.status.criticalhit -= buffStatus[skillLevel].criticalChance;
@@ -117,7 +125,7 @@ public class Attack_Other_Awankning : Attack_Base
     public override void DamageCal(int index)
     {
         Skill_Value_SO.Value_Data skillData;
-        if (PlayerAction_Manager.instance.isAwakning)
+        if (PlayerAction_Manager.instance.isAwankning)
         {
             (bool isCritical, int damage) = PlayerAction_Manager.instance.DamageCalculation(value_Awakening[index], skillLevel);
             skillData = value_Awakening[index].levelValue.GetData(skillLevel);
@@ -137,11 +145,14 @@ public class Attack_Other_Awankning : Attack_Base
         if (useCoroutine != null)
             StopCoroutine(useCoroutine);
 
+        Player_Manager.instance.action.isAwankning = false;
+
         // 이펙트 종료
         awankningVFX.SetActive(false);
         swordVFX.SetActive(false);
 
-        // 스테이터스 정상화
-        Status_Setting(false);
+        // 스테이터스 정상화 -> 어웨이크닝 상태일때만 1회 호출되도록 (아마 중복호출 이슈 있는듯?)
+        if (Player_Manager.instance.action.isAwankning)
+            Status_Setting(false);
     }
 }

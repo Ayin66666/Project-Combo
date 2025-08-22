@@ -61,7 +61,7 @@ public class Attack_Smash_ChargeSlash : Attack_Base
                     Player_Sound.instance.Sound_Smash(Player_Sound.Smash.Smash4_Charge);
                 }
 
-                chargeCount += Time.deltaTime * (PlayerAction_Manager.instance.isAwakning ? 1f : 0.5f);
+                chargeCount += Time.deltaTime * (PlayerAction_Manager.instance.isAwankning ? 1f : 0.5f);
             }
 
             // 2´Ü°è
@@ -151,7 +151,7 @@ public class Attack_Smash_ChargeSlash : Attack_Base
     public override void DamageCal(int index)
     {
         Skill_Value_SO.Value_Data skillData;
-        if (PlayerAction_Manager.instance.isAwakning)
+        if (PlayerAction_Manager.instance.isAwankning)
         {
             (bool isCritical, int damage) = PlayerAction_Manager.instance.DamageCalculation(value_Awakening[index], skillLevel);
             skillData = value_Awakening[index].levelValue.GetData(skillLevel);

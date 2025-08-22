@@ -582,7 +582,6 @@ public class UI_Manager : MonoBehaviour
     /// <summary>
     /// ÀüÅõ ½Â¸® UI
     /// </summary>
-
     public void FieldClearUI(ClearType type)
     {
         StartCoroutine(FieldClaerUIlCall(type));

@@ -78,6 +78,9 @@ public class Player_Manager : MonoBehaviour
             anim.SetBool("isMove", false);
             anim.SetBool("isStop", true);
         }
+
+        // 공격 비활성화
+        action.Attack_Reset();
     }
 
     /// <summary>

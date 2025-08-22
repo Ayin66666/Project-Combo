@@ -55,8 +55,11 @@ public class Item_Consumable : Item_Base
         obj.transform.parent = Player_Manager.instance.Player.transform;
 
         // 회복
-        if (healing > 0) 
+        if (healing > 0)
+        {
+            UI_Manager.instance.Hp();
             Player_Manager.instance.status.Recovery(Player_Status.RecoveryType.Hp, healing);
+        }
 
         if (stamina > 0)
             Player_Manager.instance.status.Recovery(Player_Status.RecoveryType.Stamina, stamina);
@@ -89,9 +92,17 @@ public class Item_Consumable : Item_Base
                 obj.transform.parent = Player_Manager.instance.Player.transform;
 
                 // 틱마다 회복
-                Player_Manager.instance.status.Recovery(Player_Status.RecoveryType.Hp, healing);
-                Player_Manager.instance.status.Recovery(Player_Status.RecoveryType.Stamina, stamina);
-                Player_Manager.instance.status.Recovery(Player_Status.RecoveryType.Awakening, awakening);
+                if (healing > 0)
+                {
+                    UI_Manager.instance.Hp();
+                    Player_Manager.instance.status.Recovery(Player_Status.RecoveryType.Hp, healing);
+                }
+
+                if (awakening > 0)
+                    Player_Manager.instance.status.Recovery(Player_Status.RecoveryType.Awakening, awakening);
+                
+                if (stamina > 0)
+                    Player_Manager.instance.status.Recovery(Player_Status.RecoveryType.Stamina, stamina);
             }
 
             yield return null;

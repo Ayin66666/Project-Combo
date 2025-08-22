@@ -60,7 +60,7 @@ public class Attack_Samsh_DoubleSlash : Attack_Base
             timer += Time.deltaTime;
 
             // Ãß°¡Å¸
-            if (PlayerAction_Manager.instance.isAwakning && Input_Manager.instance.inputDatas[1].isInput)
+            if (PlayerAction_Manager.instance.isAwankning && Input_Manager.instance.inputDatas[1].isInput)
             {
                 PlayerAction_Manager.instance.RushSlash_Setting(false);
                 AdditionalAttack();
@@ -193,7 +193,7 @@ public class Attack_Samsh_DoubleSlash : Attack_Base
     public override void DamageCal(int index)
     {
         Skill_Value_SO.Value_Data skillData;
-        if (PlayerAction_Manager.instance.isAwakning)
+        if (PlayerAction_Manager.instance.isAwankning)
         {
             (bool isCritical, int damage) = PlayerAction_Manager.instance.DamageCalculation(value_Awakening[index], skillLevel);
             skillData = value_Awakening[index].levelValue.GetData(skillLevel);
