@@ -40,6 +40,8 @@ public class PlayerAction_Manager : MonoBehaviour, IDamageSysteam
 
 
     [Header("---Dash Setting---")]
+    [SerializeField] private int dashCount;
+    private float dashTimer;
     [SerializeField] private Transform dashPos;
     [SerializeField] private float dashPower;
     [SerializeField] private float dashTime;
@@ -47,6 +49,7 @@ public class PlayerAction_Manager : MonoBehaviour, IDamageSysteam
     private Coroutine dashCoroutine;
     private Vector3 dashDir;
     private bool isDash;
+    private bool isJustDash;
 
 
     [Header("--- Attack State ---")]
@@ -129,6 +132,8 @@ public class PlayerAction_Manager : MonoBehaviour, IDamageSysteam
             Collider_Ignore(true);
             Movement();
         }
+
+        DashCount();
 
         if (Input.GetKeyDown(KeyCode.C))
         {
@@ -399,54 +404,79 @@ public class PlayerAction_Manager : MonoBehaviour, IDamageSysteam
 
     private IEnumerator DashCallNew()
     {
-        if (!canAction || !canDash || pManager.status.curStamina < dashStamina)
+        if (!canAction || !canDash || pManager.status.curStamina < dashStamina || dashCount <= 0)
         {
             yield break;
         }
-        else
+
+        canDash = false;
+        isDash = true;
+        isJustDash = false;
+        isInvincibility = true;
+        dashCount--;
+        pManager.status.curStamina -= dashStamina;
+
+        // 애니메이션 리셋
+        anim.ResetTrigger("Action");
+        Animation_Reset();
+
+        // 애니메이션 호출
+        anim.SetTrigger("Action");
+        anim.SetBool("isDodge", true);
+        anim.SetBool("isDodgeDelay", true);
+        anim.SetFloat("DashMotion", 0);
+
+        // 사운드
+        Player_Sound.instance.Sound_Movement(Player_Sound.Movement.Dash);
+
+        // 대쉬
+        Vector3 dir = dashDir;
+        float timer = 0;
+        while (timer < 1)
         {
-            canDash = false;
-            isDash = true;
-            pManager.status.curStamina -= dashStamina;
+            timer += Time.deltaTime / dashTime;
+            controller.Move(dashPower * EasingFunctions.OutExpo(timer) * Time.deltaTime * dir);
+            anim.SetFloat("DashMotion", timer);
+            yield return null;
+        }
+        anim.SetBool("isDodge", false);
+        anim.SetFloat("DashMotion", 0);
+        canDash = true;
+        isDash = false;
+        isJustDash = false;
+        isInvincibility = false;
+        dashTimer = 1;
 
-            // 애니메이션 리셋
-            anim.ResetTrigger("Action");
-            Animation_Reset();
-
-            // 애니메이션 호출
-            anim.SetTrigger("Action");
-            anim.SetBool("isDodge", true);
-            anim.SetBool("isDodgeDelay", true);
-            anim.SetFloat("DashMotion", 0);
-
-            // 사운드
-            Player_Sound.instance.Sound_Movement(Player_Sound.Movement.Dash);
-
-            // 대쉬
-            Vector3 dir = dashDir;
-            float timer = 0;
-            while (timer < 1)
+        // 대쉬 종료 후 애니메이션
+        while (anim.GetBool("isDodgeDelay"))
+        {
+            // 이동 입력 감지 시 즉시 대쉬 딜레이모션 제거
+            if (Input_Manager.instance.movementInput.magnitude != 0)
             {
-                timer += Time.deltaTime / dashTime;
-                controller.Move(dashPower * EasingFunctions.OutExpo(timer) * Time.deltaTime * dir);
-                anim.SetFloat("DashMotion", timer);
-                yield return null;
+                anim.SetBool("isDodgeDelay", false);
             }
-            anim.SetBool("isDodge", false);
-            anim.SetFloat("DashMotion", 0);
-            canDash = true;
-            isDash = false;
 
-            // 대쉬 종료 후 애니메이션
-            while (anim.GetBool("isDodgeDelay"))
+            yield return null;
+        }
+    }
+
+    private void DashCount()
+    {
+        // 대쉬 시전 시 대쉬 카운트 감소
+        // 대쉬는 최대 2회 연속 사용 가능
+        // 대쉬 카운트가 0이라면 0.5~1초 딜레이 적용
+        // 대쉬 카운트가 1인 상태에서 0.5~1초가 지났다면 회복
+
+        if (dashTimer > 0)
+        {
+            // 타이머 동작
+            dashTimer -= Time.deltaTime;
+
+            // 횟수 회복
+            if (dashTimer <= 0)
             {
-                // 이동 입력 감지 시 즉시 대쉬 딜레이모션 제거
-                if (Input_Manager.instance.movementInput.magnitude != 0)
-                {
-                    anim.SetBool("isDodgeDelay", false);
-                }
-
-                yield return null;
+                dashTimer = 0;
+                dashCount = 2;
             }
         }
     }
@@ -506,6 +536,13 @@ public class PlayerAction_Manager : MonoBehaviour, IDamageSysteam
 
         // 피격 액션 - 카운터
         hitAction?.Invoke();
+
+        // 대쉬 상태에서 피격당할 경우 - 대쉬 카운트 증가
+        if (isDash && !isJustDash)
+        {
+            dashCount++;
+            isJustDash = true;
+        }
 
         // 무적 상태 체크
         if (isInvincibility)
@@ -1084,6 +1121,8 @@ public class PlayerAction_Manager : MonoBehaviour, IDamageSysteam
         {
             otherAttakcs[i].Attack_Reset();
         }
+
+        specialAttack.Attack_Reset();
     }
     #endregion
 

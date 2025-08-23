@@ -174,6 +174,7 @@ public class Hideout_Manager : MonoBehaviour
     protected IEnumerator IconOn()
     {
         if (isUIOn) yield break;
+        isPlayerIn = true;
         isUIOn = true;
 
         // 아이콘 활성화
@@ -190,6 +191,7 @@ public class Hideout_Manager : MonoBehaviour
     protected IEnumerator IconOff()
     {
         if (!isUIOn) yield break;
+        isPlayerIn = false;
         isUIOn = false;
 
         // 아이콘 비활성화
@@ -219,26 +221,15 @@ public class Hideout_Manager : MonoBehaviour
 
     protected void LookAt()
     {
-
+        // 카메라 - 아이콘 방향
         Vector3 lookDir = iconSet.transform.position - PlayerAction_Manager.instance.cam.transform.position;
-        lookDir.y = 0;
-        iconSet.transform.rotation = Quaternion.LookRotation(lookDir.normalized);
+        lookDir.y = 0; // 상하는 무시하고 수평만 고려
 
+        // 카메라 방향을 그대로 바라보게
+        Quaternion targetRot = Quaternion.LookRotation(lookDir.normalized);
 
-        Quaternion targetRot = Quaternion.LookRotation(lookDir.normalized); // 카메라 바라보는 방향
-        float deltaY = Quaternion.Angle(originalRot, targetRot);            // 두 회전 사이의 전체 각도 차이
-
-        // 회전 방향을 자기 기준으로 얻기 위해 Vector3.Angle 대신 SignedAngle 사용
-        Vector3 originalForward = originalRot * Vector3.forward;
-        Vector3 targetForward = targetRot * Vector3.forward;
-        float signedAngle = Vector3.SignedAngle(originalForward, targetForward, Vector3.up);
-
-        float clampedAngle = Mathf.Clamp(signedAngle, -45f, 45f); // ±30도 제한
-
-        // 제한된 회전 각도만큼 회전한 새로운 방향 계산
-        Quaternion limitedRot = Quaternion.AngleAxis(clampedAngle, Vector3.up) * originalRot;
-
-        iconSet.transform.rotation = limitedRot;
+        // 바로 적용
+        iconSet.transform.rotation = targetRot;
     }
     #endregion
 

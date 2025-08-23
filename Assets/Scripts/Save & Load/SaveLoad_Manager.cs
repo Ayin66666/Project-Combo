@@ -480,7 +480,7 @@ public class SaveLoad_Manager : MonoBehaviour
             maxAwakening = 200,
             curStamina = 200,
             maxStamina = 200,
-            staminaRecovery = 15f,
+            staminaRecovery = 30f,
 
             // æ∆¿Ã≈€
             itemData = new List<ItemData>(),
