@@ -1,9 +1,6 @@
 using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using Easing.Tweening;
-using System.Linq;
-using static IDamageSysteam;
 
 
 public class AlterEgo_SwordAura : MonoBehaviour

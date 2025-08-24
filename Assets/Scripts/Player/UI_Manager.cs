@@ -52,6 +52,11 @@ public class UI_Manager : MonoBehaviour
     private Coroutine hpCoroutine;
 
 
+    [Header("---Dash---")]
+    [SerializeField] private GameObject dashSet;
+    [SerializeField] private Image dashFill;
+
+
     [Header("---Recovery---")]
     [SerializeField] private GameObject recoveryTextObject;
     [SerializeField] private Collider damagePosCollider;
@@ -195,10 +200,11 @@ public class UI_Manager : MonoBehaviour
         Input_Manager.instance.Action_Setting(8, PlayerUI_Setting);
     }
 
-    private void Update()
+    private void FixedUpdate()
     {
         if (isUIOn)
         {
+            Dash();
             Stamina();
             Awakening();
         }
@@ -307,6 +313,12 @@ public class UI_Manager : MonoBehaviour
         GameObject obj = Instantiate(recoveryTextObject, HitVFXPos(), Quaternion.identity);
         DamageUI d = obj.GetComponent<DamageUI>();
         d.RecoveryUI_Setting(type, value);
+    }
+
+    public void Dash()
+    {
+        float value = Player_Manager.instance.action.dashCount == 0 ? 0 : Player_Manager.instance.action.dashCount == 1 ? 0.5f : 2f;
+        dashFill.fillAmount = value;
     }
 
     private Vector3 HitVFXPos()

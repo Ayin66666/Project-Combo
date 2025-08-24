@@ -69,11 +69,12 @@ public class Enemy_Boss_Arie : Enemy_Base
         { 0,4,1,7 },{ 1,3,4,8 },{ 0,3,2,5 },{ 3,6,4,7 }
     };
 
-    // 원거리 패턴
+    /* 원거리 패턴
     // 1. 대쉬어퍼 - 얼터에고 - 차지오브 - 스트라이크
     // 2. 러쉬 - 콤보 - 잡기 - 차지슬래쉬
     // 3. 스트라이크 - 대쉬어퍼 - 차지오브 - 얼터에고
     // 4. 러쉬 - 콤보어퍼 - 대쉬어퍼 - 차지슬래쉬
+    */
     private int[,] pattens_Range = new int[4, 4]
     {
         { 2,3,6,7 },{ 4,0,8,5 },{ 7,2,6,3 },{ 4,1,2,5 }
@@ -87,7 +88,7 @@ public class Enemy_Boss_Arie : Enemy_Base
         { 4,3,2,6,9 },{ 2,7,4,5,9 },
     };
 
-    // 공격 패턴
+    /* 공격 패턴
     // 1. 콤보 슬래쉬 - 3회 공격
     // 2. 콤보어퍼 - 2회 어퍼
     // 3. 대쉬어퍼 - 플레이어 방향 돌진 후 어퍼
@@ -98,7 +99,7 @@ public class Enemy_Boss_Arie : Enemy_Base
     // 8. 스트라이크 - 돌진 내려찍기 후 제자리 내려찍기
     // 9. 잡기 - 돌진 후 잡기 공격
     // 필살기 - 플라잉 레이저 - 공중 선회 비행 - 소형 드론 소환 - (컷씬 : 대형 레이져) - 중앙 폭발
-
+    */
 
     [Header("---Skin Objects---")]
     [SerializeField] private SkinnedMeshRenderer bosster;
@@ -197,24 +198,8 @@ public class Enemy_Boss_Arie : Enemy_Base
     #region Attack
     protected override void Think()
     {
+        Debug.Log("Think Call");
         Check_Target();
-        /*
-        // 일반 공격
-        int ran = Random.Range(0, 4);
-        if (targetRange <= 5)
-        {
-            // 근거리
-            attackCount++;
-            movementCoroutine = StartCoroutine(Patten_Use(pattens_Melee, ran));
-        }
-        else
-        {
-            // 추격 - 공격 로직
-            attackCount++;
-            movementCoroutine = StartCoroutine(ChaseMovement(ran));
-        }
-        */
-        
         if (attackCount <= 5)
         {
             // 강화 공격
@@ -224,18 +209,18 @@ public class Enemy_Boss_Arie : Enemy_Base
         }
         else
         {
+            attackCount++;
+
             // 일반 공격
             int ran = Random.Range(0, 4);
             if (targetRange <= 5)
             {
                 // 근거리
-                attackCount++;
                 movementCoroutine = StartCoroutine(Patten_Use(pattens_Melee, ran));
             }
             else
             {
                 // 추격 - 공격 로직
-                attackCount++;
                 movementCoroutine = StartCoroutine(ChaseMovement(ran));
             }
         }
@@ -254,7 +239,6 @@ public class Enemy_Boss_Arie : Enemy_Base
                 // 패턴 동작
                 isPatten = true;
                 attackDatas[pattens[type, i]].Use();
-
                 while (isPatten)
                 {
                     yield return null;
@@ -369,18 +353,21 @@ public class Enemy_Boss_Arie : Enemy_Base
     protected override IEnumerator Spawn_CutScene()
     {
         curState = State.Spawn;
-        LookAt(target, 0);
+        isCutScene = true;
+
+        // 플레이어 동작 제어
+        Player_Manager.instance.Player_Action_Setting(false);
 
         // 스폰 컷신
         enemyUI.CutScene(clips[0]);
-        while (enemyUI.isCutScene)
-        {
-            yield return null;
-        }
+        yield return new WaitWhile(() => enemyUI.isCutScene);
 
-        // 2 페이즈 시작 대사
-        UI_Manager.instance.Dialog_Fight(phase2Dialog);
+        // UI 셋팅
+        enemyUI.UI_OnOff(true);
+        enemyUI.Boss_SpawnNameEffect();
 
+        // 플레이어 동작 제어
+        Player_Manager.instance.Player_Action_Setting(true);
 
         // 애니메이션
         anim.SetTrigger("Action");
@@ -391,6 +378,7 @@ public class Enemy_Boss_Arie : Enemy_Base
         }
 
         curState = State.Idle;
+        isCutScene = false;
         Think();
     }
 
@@ -416,10 +404,7 @@ public class Enemy_Boss_Arie : Enemy_Base
 
         // 2페이즈 컷씬
         enemyUI.CutScene(clips[1]);
-        while (enemyUI.isCutScene)
-        {
-            yield return null;
-        }
+        yield return new WaitWhile(() => enemyUI.isCutScene);
 
         // 페이즈 전환 애니메이션
         anim.SetTrigger("Action");

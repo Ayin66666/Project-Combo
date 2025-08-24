@@ -40,7 +40,7 @@ public class PlayerAction_Manager : MonoBehaviour, IDamageSysteam
 
 
     [Header("---Dash Setting---")]
-    [SerializeField] private int dashCount;
+    public int dashCount;
     private float dashTimer;
     [SerializeField] private Transform dashPos;
     [SerializeField] private float dashPower;
@@ -356,50 +356,6 @@ public class PlayerAction_Manager : MonoBehaviour, IDamageSysteam
             StopCoroutine(dashCoroutine);
 
         dashCoroutine = StartCoroutine(DashCallNew());
-    }
-
-    private IEnumerator DashCall()
-    {
-        if (!canAction || !canDash || pManager.status.curStamina < 30)
-        {
-            yield break;
-        }
-        else
-        {
-            canDash = false;
-            isDash = true;
-
-            // 스테미너 소모
-            pManager.status.curStamina -= 30f;
-
-            // 애니메이션 리셋
-            Animation_Reset();
-
-            anim.ResetTrigger("Action");
-            anim.SetTrigger("Action");
-            anim.SetBool("isDodge", true);
-            anim.SetFloat("DashMotion", 0);
-
-            // 대쉬
-            Vector3 dir = dashDir;
-            float timer = 0;
-            float dashTime;
-            while (timer < 0.25f)
-            {
-                timer += Time.deltaTime;
-                dashTime = Mathf.Clamp01(timer / 0.25f);
-
-                controller.Move(EasingFunctions.OutExpo(dashTime) * 30f * Time.deltaTime * dir);
-                anim.SetFloat("DashMotion", timer);
-                yield return null;
-            }
-
-            anim.SetBool("isDodge", false);
-            anim.SetFloat("DashMotion", 0);
-
-            canDash = true;
-            isDash = false;
-        }
     }
 
     private IEnumerator DashCallNew()

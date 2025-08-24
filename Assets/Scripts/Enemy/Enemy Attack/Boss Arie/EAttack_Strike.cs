@@ -32,7 +32,7 @@ public class EAttack_Strike : Attack_Base
         enemy.curState = Enemy_Base.State.Attack;
 
         // 데미지 셋팅
-        for (int i = 0; i < 3; i++)
+        for (int i = 0; i < 2; i++)
         {
             (bool isCritical, int damage) = enemy.DamageCalculation(value_Normal[i]);
             Skill_Value_SO.Value_Data skillData = value_Normal[i].levelValue.GetData(skillLevel);
@@ -282,7 +282,7 @@ public class EAttack_Strike : Attack_Base
         // 리스트 리셋
         for (int i = 0; i < value_Normal.Count; i++)
         {
-            if (!value_Normal[i].attackCollider)
+            if (value_Normal[i].attackCollider)
                 value_Normal[i].attackCollider.ListReset();
         }
     }

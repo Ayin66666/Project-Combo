@@ -1,5 +1,4 @@
 using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 
@@ -81,7 +80,7 @@ public class EAttack_ComboSlash : Attack_Base
         // 리스트 리셋
         for (int i = 0; i < value_Normal.Count; i++)
         {
-            if (!value_Normal[i].attackCollider)
+            if (value_Normal[i].attackCollider)
                 value_Normal[i].attackCollider.ListReset();
         }
     }

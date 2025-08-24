@@ -41,6 +41,9 @@ public class Hideout_StageSlot : MonoBehaviour, IPointerEnterHandler, IPointerEx
         {
             // 진입 가능 시 - 설명 UI
             Hideout_Manager.instance.DescriptionUI_Setting(stageIndex);
+
+            // 진입 가능 시 - 클리어 랭크 UI
+            Hideout_Manager.instance.ClearUI_Setting(stageIndex);
         }
         else
         {

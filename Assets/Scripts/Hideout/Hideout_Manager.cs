@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
+using static StageData;
 
 
 public class Hideout_Manager : MonoBehaviour
@@ -38,6 +39,12 @@ public class Hideout_Manager : MonoBehaviour
     [Header("---Detailed description UI---")]
     [SerializeField] private GameObject detailedDescriptionSet;
     [SerializeField] private TextMeshProUGUI ddText;
+
+
+    [Header("---ClearRank UI---")]
+    [SerializeField] private GameObject clearRankSet;
+    [SerializeField] private TextMeshProUGUI clearRankText;
+    [SerializeField] private StageData_SO[] clearRankData;
 
 
     [Header("---do not enter UI---")]
@@ -108,18 +115,33 @@ public class Hideout_Manager : MonoBehaviour
 
         // 스테이지 기본 데이터
         stageImage.sprite = null;
-        stageTypeText.text = uiData.stageData[stageIndex].stageType.ToString(); // 에러발생 - 인덱스 오버?
+        stageTypeText.text = uiData.stageData[stageIndex].stageType.ToString();
         levelText.text = uiData.stageData[stageIndex].stageLevel.ToString();
         stageNameText.text = uiData.stageData[stageIndex].stageName;
         descriptionText.text = uiData.stageData[stageIndex].stageSummation;
         ddText.text = uiData.stageData[stageIndex].stageDescription;
 
         // 클리어 데이터
-        clearTimeText.text = ChapterData_Manager.instance.claerData.claerData.chapterList[curChapter].stageList[stageIndex].clearTime.ToString();
+        clearTimeText.text = $"클리어 타임 : {ChapterData_Manager.instance.claerData.claerData.chapterList[curChapter].stageList[stageIndex].clearTime.ToString("F2")}초";
         rankText.text = ChapterData_Manager.instance.claerData.claerData.chapterList[curChapter].stageList[stageIndex].clearRank.ToString();
 
         // 진입 데이터 셋팅
         curSelectStage = uiData.stageData[stageIndex].sceneName;
+    }
+
+    /// <summary>
+    /// 클리어랭크 버튼 클릭 시 상세 UI 표기
+    /// </summary>
+    /// <param name="stageIndex"></param>
+    public void ClearUI_Setting(int stageIndex)
+    {
+        clearRankText.text = null;
+
+        for (int i = 0; i < clearRankData[stageIndex].Data.Count; i++)
+        {
+            clearRankText.text += $"{clearRankData[stageIndex].Data[i].rank} 랭크 : {clearRankData[stageIndex].Data[i].time}초 이내 클리어\n\n";
+        }
+        clearRankText.text += $"클리어 경험치 : {clearRankData[stageIndex].ClearExp} Exp";
     }
 
     /// <summary>
@@ -257,6 +279,7 @@ public class Hideout_Manager : MonoBehaviour
 
         // 설명 UI 설정 - 최초 실행 시 무조건 0번 설명이 나오도록?
         DescriptionUI_Setting(0);
+        ClearUI_Setting(0);
     }
 
     public void Player_Setting()
@@ -285,6 +308,14 @@ public class Hideout_Manager : MonoBehaviour
     public void Click_DetailedDescription(bool isOn)
     {
         detailedDescriptionSet.SetActive(isOn);
+    }
+
+    /// <summary>
+    /// 클리어 랭크 조건 설명 UI
+    /// </summary>
+    public void Click_ClearRank(bool isOn)
+    {
+        clearRankSet.SetActive(isOn);
     }
 
     /// <summary>
