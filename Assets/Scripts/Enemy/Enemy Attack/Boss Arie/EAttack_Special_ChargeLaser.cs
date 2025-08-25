@@ -56,7 +56,13 @@ public class EAttack_Special_ChargeLaser : Attack_Base
         anim.SetBool("isSpecialLanding", true);
         anim.SetBool("isSpecial", true);
 
+        // Â÷Â¡ ÄÆ¾À
+        enemy.enemyUI.CutScene(clip);
+        while (enemy.enemyUI.isCutScene)
+        {
+            yield return null;
 
+        }
         // ³¯°³ & ¹«±â
         ((Enemy_Boss_Arie)enemy).Bosster_Setting(true);
         ((Enemy_Boss_Arie)enemy).Weapon_Setting(true);
@@ -74,7 +80,6 @@ public class EAttack_Special_ChargeLaser : Attack_Base
         }
         chargeVFX.SetActive(false);
         anim.SetBool("isSpecialCharge", false);
-
 
         // radius ¹æÇâ °è»ê
         Vector3 radiusDir = (enemy.transform.position - centerPos.transform.position).normalized;
@@ -139,14 +144,6 @@ public class EAttack_Special_ChargeLaser : Attack_Base
             enemy.transform.DORotateQuaternion(Quaternion.LookRotation(tangentDir, Vector3.up), 0.3f)
                 .SetEase(Ease.OutSine);
         });
-
-
-        // Áß¾Ó Â÷Â¡ ÄÆ¾À
-        enemy.enemyUI.CutScene(clip);
-        while (enemy.enemyUI.isCutScene)
-        {
-            yield return null;
-        }
         
         anim.SetBool("isSpecialCharge", true);
         anim.SetBool("isSpecialFlying", false);

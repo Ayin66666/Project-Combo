@@ -85,11 +85,13 @@ public abstract class Enemy_Base : MonoBehaviour, IDamageSysteam
     [SerializeField] protected Animator anim;
     [SerializeField] protected GameObject body;
     [SerializeField] private GameObject[] hitVFX;
+    [SerializeField] private GameObject groggyVFX;
     [SerializeField] private Transform[] knockBackPos;
     [SerializeField] private Transform downPos;
     [SerializeField] protected Transform[] spawnMovePos;
     protected Coroutine movementCoroutine;
     protected Coroutine hitCoroutine;
+    protected Coroutine groggyTimerCoroutine;
     private Coroutine attackMovementCoroutine;
     private List<System.Func<IEnumerator>> spawnList;
 
@@ -305,9 +307,12 @@ public abstract class Enemy_Base : MonoBehaviour, IDamageSysteam
             int calDamage = damage - (type == IDamageSysteam.DamageType.Physical ? physicalDefence : magicalDefence);
             if (calDamage > 0)
             {
-                // 데미지 & 그로기
+                // 데미지
                 curHp -= calDamage;
-                curGroggy -= (calDamage / 10);
+
+                // 그로기 데미지 (그로기 상태가 아니라면)
+                if (!isGroggy)
+                    curGroggy -= (calDamage / 2);
 
                 // 카메라 흔들림
                 CameraEffect_Manager.instance.Camera_Shack(1, 0.1f);
@@ -320,6 +325,7 @@ public abstract class Enemy_Base : MonoBehaviour, IDamageSysteam
                 if (curHp <= 0)
                 {
                     curHp = 0;
+                    curGroggy = 0;
                     Hit_Reset();
                     Die();
 
@@ -335,36 +341,50 @@ public abstract class Enemy_Base : MonoBehaviour, IDamageSysteam
             }
         }
 
-        // 상태이상 체크 - 일반 몬스터는 즉시 / 엘리트 & 보스 몬스터는 게이지 소모 시
-        if (enemyType == EnemyType.Normal)
+
+        // 상태이상 체크 그로기 게이지가 0 이라면
+        if (curGroggy <= 0)
         {
-            // 일반 동작 체크
-            switch (hit)
+            // 그로기 타이머 호출
+            if (!isGroggy)
             {
-                case IDamageSysteam.HitVFX.None:
-                    CameraEffect_Manager.instance.Camera_Shack(1.5f, 0.05f);
-                    break;
+                if (groggyTimerCoroutine != null)
+                    StopCoroutine(groggyTimerCoroutine);
 
-                case IDamageSysteam.HitVFX.KnockBack:
-                    if (isGroggy) return;
-                    CameraEffect_Manager.instance.Camera_Shack(3, 0.05f);
-                    if (hitCoroutine != null) StopCoroutine(hitCoroutine);
-                    hitCoroutine = StartCoroutine(Hit_KnockBack(attackObj));
-                    break;
-
-                case IDamageSysteam.HitVFX.Down:
-                    CameraEffect_Manager.instance.Camera_Shack(5, 0.05f);
-                    if (hitCoroutine != null) StopCoroutine(hitCoroutine);
-                    hitCoroutine = StartCoroutine(Hit_Down(attackObj));
-                    break;
+                groggyTimerCoroutine = StartCoroutine(GroggyTimer());
             }
-        }
-        else
-        {
-            // 엘리트 & 보스 동작 체크
-            if (curGroggy <= 0 && !isGroggy)
+
+            // 피격 효과에 따른 동작 호출
+            // 1. 일반 몬스터 - 피격효과가 있는 공격을 받으면 넉백 & 다운
+            // 2. 엘리트 & 보스 몬스터 - 그로기 시간동안 해당 위치에 고정
+            if (enemyType == EnemyType.Normal)
             {
-                StartCoroutine(Hit_Groggy());
+                switch (hit)
+                {
+                    case IDamageSysteam.HitVFX.None:
+                        CameraEffect_Manager.instance.Camera_Shack(1.5f, 0.05f);
+                        break;
+
+                    case IDamageSysteam.HitVFX.KnockBack:
+                        if (isGroggy) return;
+                        CameraEffect_Manager.instance.Camera_Shack(3, 0.05f);
+                        if (hitCoroutine != null) StopCoroutine(hitCoroutine);
+                        hitCoroutine = StartCoroutine(Hit_KnockBack(attackObj));
+                        break;
+
+                    case IDamageSysteam.HitVFX.Down:
+                        CameraEffect_Manager.instance.Camera_Shack(5, 0.05f);
+                        if (hitCoroutine != null) StopCoroutine(hitCoroutine);
+                        hitCoroutine = StartCoroutine(Hit_Down(attackObj));
+                        break;
+                }
+            }
+            else
+            {
+                if (curGroggy <= 0 && !isGroggy)
+                {
+                    hitCoroutine = StartCoroutine(Hit_Groggy());
+                }
             }
         }
     }
@@ -427,6 +447,18 @@ public abstract class Enemy_Base : MonoBehaviour, IDamageSysteam
         }
     }
 
+    private IEnumerator GroggyTimer()
+    {
+        isGroggy = true;
+        curGroggy = 0;
+        groggyVFX.SetActive(true);
+
+        yield return new WaitForSeconds(groggyTime);
+
+        isGroggy = false;
+        curGroggy = maxGroggy;
+    }
+
     public IEnumerator Hit_KnockBack(GameObject attackObj)
     {
         curState = State.Groggy;
@@ -449,7 +481,7 @@ public abstract class Enemy_Base : MonoBehaviour, IDamageSysteam
         float moveTime = 0;
         while (timer < 1)
         {
-            timer += Time.deltaTime / groggyTime;
+            timer += Time.deltaTime / 0.25f;
             anim.SetFloat("AnimValue", timer);
 
             moveTime = moveTime < 1 ? moveTime += Time.deltaTime * 2f : 1;
@@ -468,7 +500,6 @@ public abstract class Enemy_Base : MonoBehaviour, IDamageSysteam
     public IEnumerator Hit_Down(GameObject attackObj)
     {
         curState = State.Groggy;
-        isGroggy = true;
 
         // 행동 강제 종료 -> 코루틴을 종료시키는 무언가
         Hit_Reset();
@@ -491,7 +522,7 @@ public abstract class Enemy_Base : MonoBehaviour, IDamageSysteam
         }
 
         // 다운 대기 -> 다운 관련 시간 필요 -> 스테이터스에 추가
-        yield return new WaitForSeconds(statusData.GroggyTime);
+        yield return new WaitForSeconds(0.5f);
 
         // 기상 애니메이션
         anim.SetTrigger("Action");
@@ -510,6 +541,8 @@ public abstract class Enemy_Base : MonoBehaviour, IDamageSysteam
     {
         curState = State.Groggy;
         isGroggy = true;
+
+        Debug.Log("Boss Groggy On");
 
         // 행동 강제 종료 -> 코루틴을 종료시키는 무언가
         Hit_Reset();

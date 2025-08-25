@@ -110,6 +110,7 @@ public class Enemy_Boss_Arie : Enemy_Base
     private Coroutine weaponCoroutine;
 
 
+    /*
     private void Update()
     {
         if (curState == State.Die)
@@ -127,16 +128,8 @@ public class Enemy_Boss_Arie : Enemy_Base
         {
             //Bosster_Setting(false);
         }
-
-        // 페이즈 전환
-        if (curHp <= 1000 && curPhase == Phase.Phase1)
-        {
-            if (movementCoroutine != null)
-                StopCoroutine(movementCoroutine);
-
-            movementCoroutine = StartCoroutine(Phase_Change());
-        }
     }
+    */
 
 
     #region Wepaon & Booster Effect
@@ -198,9 +191,8 @@ public class Enemy_Boss_Arie : Enemy_Base
     #region Attack
     protected override void Think()
     {
-        Debug.Log("Think Call");
         Check_Target();
-        if (attackCount <= 5)
+        if (attackCount >= 5)
         {
             // 강화 공격
             attackCount = 0;
@@ -239,6 +231,7 @@ public class Enemy_Boss_Arie : Enemy_Base
                 // 패턴 동작
                 isPatten = true;
                 attackDatas[pattens[type, i]].Use();
+                Debug.Log($"패턴 사용 : {attackDatas[pattens[type, i]]}");
                 while (isPatten)
                 {
                     yield return null;
@@ -345,6 +338,7 @@ public class Enemy_Boss_Arie : Enemy_Base
         }
 
         curState = State.Idle;
+        Think();
     }
     #endregion
 
@@ -363,6 +357,7 @@ public class Enemy_Boss_Arie : Enemy_Base
         yield return new WaitWhile(() => enemyUI.isCutScene);
 
         // UI 셋팅
+        enemyUI.UI_Setting();
         enemyUI.UI_OnOff(true);
         enemyUI.Boss_SpawnNameEffect();
 
@@ -420,8 +415,18 @@ public class Enemy_Boss_Arie : Enemy_Base
 
     public override void Die()
     {
-        base.Die();
-        StartCoroutine(DieCall());
+        if(curPhase == Phase.Phase2)
+        {
+            base.Die();
+            StartCoroutine(DieCall());
+        }
+        else
+        {
+            if (movementCoroutine != null)
+                StopCoroutine(movementCoroutine);
+
+            movementCoroutine = StartCoroutine(Phase_Change());
+        }
     }
 
     private IEnumerator DieCall()
@@ -435,14 +440,9 @@ public class Enemy_Boss_Arie : Enemy_Base
             yield return null;
         }
 
-        yield return new WaitForSeconds(0.25f);
-
         // 종료 컷씬
         enemyUI.CutScene(clips[1]);
-        while (enemyUI.isCutScene)
-        {
-            yield return null;
-        }
+        yield return new WaitWhile(() => enemyUI.isCutScene);
 
         Destroy(gameObject);
     }
