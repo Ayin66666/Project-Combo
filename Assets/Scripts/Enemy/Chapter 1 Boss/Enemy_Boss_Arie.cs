@@ -7,14 +7,14 @@ using Easing.Tweening;
 public class Enemy_Boss_Arie : Enemy_Base
 {
     [Header("---Setting---")]
-    [SerializeField] private Phase curPhase;
+    public Phase curPhase;
     [SerializeField] private Character_Status_SO phase2_Status;
     [SerializeField] private int chargePattenCount;
     [SerializeField] private float chaseTime;
     [SerializeField] private float pattenDelaytime;
     [SerializeField] private Vector2 delayTime;
     [SerializeField] private int attackUse;
-    private enum Phase { Phase1, Phase2 };
+    public enum Phase { Phase1, Phase2 };
     public enum SoundKey
     {
         // 이동
@@ -191,12 +191,19 @@ public class Enemy_Boss_Arie : Enemy_Base
     #region Attack
     protected override void Think()
     {
+        if (Player_Manager.instance.action.isDie)
+        {
+            curState = State.Idle;
+            return;
+        }
+
         Check_Target();
         if (attackCount >= 5)
         {
             // 강화 공격
             attackCount = 0;
             int ran = Random.Range(0, 2);
+            if (movementCoroutine != null) StopCoroutine(movementCoroutine);
             movementCoroutine = StartCoroutine(Patten_Use(pattens_Special, ran));
         }
         else
@@ -208,11 +215,13 @@ public class Enemy_Boss_Arie : Enemy_Base
             if (targetRange <= 5)
             {
                 // 근거리
+                if (movementCoroutine != null) StopCoroutine(movementCoroutine);
                 movementCoroutine = StartCoroutine(Patten_Use(pattens_Melee, ran));
             }
             else
             {
                 // 추격 - 공격 로직
+                if (movementCoroutine != null) StopCoroutine(movementCoroutine);
                 movementCoroutine = StartCoroutine(ChaseMovement(ran));
             }
         }
@@ -242,9 +251,7 @@ public class Enemy_Boss_Arie : Enemy_Base
         }
 
         // 딜레이 행동
-        float ran = Random.Range(2.35f, 3.1f);
         movementCoroutine = StartCoroutine(DelayMovement());
-
     }
 
     private IEnumerator ChaseMovement(int ran)
@@ -255,6 +262,7 @@ public class Enemy_Boss_Arie : Enemy_Base
         nav.enabled = true;
         while (targetRange <= 5 && tiemr < chaseTime)
         {
+            Check_Target();
             nav.SetDestination(target.transform.position);
             yield return null;
         }
@@ -276,6 +284,13 @@ public class Enemy_Boss_Arie : Enemy_Base
         float time = Random.Range(delayTime.x, delayTime.y);
         while (timer < time)
         {
+            // 플레이어 사망 시 딜레이 이동 종료
+            if(Player_Manager.instance.action.isDie)
+            {
+                curState = State.Idle;
+                yield break;
+            }
+
             Check_Target();
             if (targetRange > 5)
             {
@@ -415,7 +430,7 @@ public class Enemy_Boss_Arie : Enemy_Base
 
     public override void Die()
     {
-        if(curPhase == Phase.Phase2)
+        if (curPhase == Phase.Phase2)
         {
             base.Die();
             StartCoroutine(DieCall());

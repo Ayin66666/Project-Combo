@@ -69,6 +69,8 @@ public class PlayerAction_Manager : MonoBehaviour, IDamageSysteam
     [SerializeField] private string[] animTrigger;
     [SerializeField] private string[] animBool;
     private Coroutine hitEffectCoroutine;
+    private Coroutine hitWaitCoroutine;
+    private WaitForSeconds waitSec = new WaitForSeconds(0.05f);
 
 
     [Header("---Lock On---")]
@@ -474,7 +476,6 @@ public class PlayerAction_Manager : MonoBehaviour, IDamageSysteam
 
 
     #region Hit
-
     /// <summary>
     /// 피격 시 데미지 계산 / hitCount 만큼 데미지를 나눠서 표기함!
     /// </summary>
@@ -511,6 +512,7 @@ public class PlayerAction_Manager : MonoBehaviour, IDamageSysteam
 
         // 데미지 계산
         int calDamage = damage - (type == IDamageSysteam.DamageType.Physical ? pManager.status.physicalDefence : pManager.status.magicalDefence);
+        Debug.Log($"플레이어 피격 데미지 : {calDamage} / {damage}");
         if (calDamage > 0)
         {
             // 타격 횟수만큼 동작
@@ -539,11 +541,7 @@ public class PlayerAction_Manager : MonoBehaviour, IDamageSysteam
             }
 
             // 피격 효과 - 다운 상태에서는 무효화
-            if (isDie || curHitState == IDamageSysteam.HitVFX.Down)
-            {
-                return;
-            }
-
+            if (isDie || curHitState == IDamageSysteam.HitVFX.Down) return;
 
             switch (hitType)
             {
@@ -553,23 +551,31 @@ public class PlayerAction_Manager : MonoBehaviour, IDamageSysteam
 
                 case IDamageSysteam.HitVFX.KnockBack:
                     CameraEffect_Manager.instance.Camera_Shack(8, 0.075f);
-
-                    if (hitEffectCoroutine != null)
-                        StopCoroutine(hitEffectCoroutine);
-
+                    if (hitEffectCoroutine != null) StopCoroutine(hitEffectCoroutine);
                     hitEffectCoroutine = StartCoroutine(Hit_KnockBack(attackObj));
                     break;
 
                 case IDamageSysteam.HitVFX.Down:
                     CameraEffect_Manager.instance.Camera_Shack(10, 0.1f);
-
-                    if (hitEffectCoroutine != null)
-                        StopCoroutine(hitEffectCoroutine);
-
+                    if (hitEffectCoroutine != null) StopCoroutine(hitEffectCoroutine);
                     hitEffectCoroutine = StartCoroutine(Hit_Down(attackObj));
                     break;
             }
+
+
+            // 피격 무적 - 0.05초
+            if (hitWaitCoroutine != null)
+                StopCoroutine(hitWaitCoroutine);
+
+            hitWaitCoroutine = StartCoroutine(Hit_Invincibility());
         }
+    }
+
+    private IEnumerator Hit_Invincibility()
+    {
+        isInvincibility = true;
+        yield return waitSec;
+        isInvincibility = false;
     }
 
     private void Die()
@@ -591,6 +597,12 @@ public class PlayerAction_Manager : MonoBehaviour, IDamageSysteam
         // 이동 초기화
         if (attackMovementCoroutine != null)
             StopCoroutine(attackMovementCoroutine);
+
+        // 카메라 초기화
+        foreach (GameObject obj in cinemachineCam)
+        {
+            obj.SetActive(false);
+        }
 
         // 일반공격 리셋
         foreach (Attack_Base attack in normalAttacks)
@@ -703,6 +715,12 @@ public class PlayerAction_Manager : MonoBehaviour, IDamageSysteam
     {
         cinemachineCam[0].SetActive(!isOn);
         cinemachineCam[1].SetActive(isOn);
+
+        if(!isOn)
+        {
+            cinemachineCam[0].SetActive(false);
+            cinemachineCam[1].SetActive(false);
+        }
     }
 
     public Vector3 HitVFXPos()

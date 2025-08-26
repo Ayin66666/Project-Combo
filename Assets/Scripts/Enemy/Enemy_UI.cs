@@ -4,6 +4,7 @@ using UnityEngine.UI;
 using UnityEngine.Video;
 using TMPro;
 using DG.Tweening;
+using static Enemy_Container;
 
 
 public class Enemy_UI : MonoBehaviour
@@ -114,9 +115,16 @@ public class Enemy_UI : MonoBehaviour
         video.clip = clip;
         video.Play();
 
-        yield return new WaitForSeconds(1f);
+        yield return new WaitForSeconds(0.15f);
         while (video.isPlaying)
         {
+            // ÄÆ½Å ½ºÅµ
+            if (Input.GetKeyDown(KeyCode.Escape))
+            {
+                video.Pause();
+                break;
+            }
+
             yield return null;
         }
 

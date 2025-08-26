@@ -44,6 +44,15 @@ public class Attack_Collider_AOE : MonoBehaviour
     }
 
     /// <summary>
+    /// 콜라이더 리셋 기능 - 보스 러쉬 변경하면서 추가
+    /// </summary>
+    public void ResetCollider()
+    {
+        isDelay = false;
+        attackCollider.enabled = true;
+    }
+
+    /// <summary>
     /// 콜라이더 재활성화 딜레이
     /// </summary>
     /// <returns></returns>
