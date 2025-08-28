@@ -7,6 +7,7 @@ using UnityEngine;
 public class EAttack_Strike : Attack_Base
 {
     [Header("---Setting---")]
+    [SerializeField] private Attack_Collider_AOE rushCollider;
     [SerializeField] private GameObject[] attackVFX;
     [SerializeField] private GameObject explosionVFX;
     [SerializeField] private GameObject chargeVFX;
@@ -32,7 +33,7 @@ public class EAttack_Strike : Attack_Base
         enemy.curState = Enemy_Base.State.Attack;
 
         // 데미지 셋팅
-        for (int i = 0; i < 2; i++)
+        for (int i = 0; i < 3; i += 2)
         {
             (bool isCritical, int damage) = enemy.DamageCalculation(value_Normal[i]);
             Skill_Value_SO.Value_Data skillData = value_Normal[i].levelValue.GetData(skillLevel);
@@ -49,9 +50,10 @@ public class EAttack_Strike : Attack_Base
         chargeVFX.SetActive(true);
         targetPos = Vector3.zero;
         float timer = 0;
+        float chargeSpeed = ((Enemy_Boss_Arie)enemy).curPhase == Enemy_Boss_Arie.Phase.Phase1 ? 0.75f : 0.55f;
         while (timer < 1)
         {
-            timer += Time.deltaTime;
+            timer += Time.deltaTime / chargeSpeed;
             enemy.LookAt(enemy.target, 0);
             targetPos = enemy.target.transform.position;
             yield return null;
@@ -60,7 +62,7 @@ public class EAttack_Strike : Attack_Base
         chargeVFX.SetActive(false);
 
         Vector3 dirToTarget = (enemy.target.transform.position - enemy.transform.position).normalized;
-        float offsetDistance = 1.5f; // 플레이어로부터 1.5유닛 앞에 착지
+        float offsetDistance = 3f; // 플레이어로부터 3유닛 앞에 착지
         targetPos = enemy.target.transform.position - dirToTarget * offsetDistance;
 
 
@@ -85,36 +87,48 @@ public class EAttack_Strike : Attack_Base
             rushMovePos[0].transform.position = enemy.target.transform.position;
             enemy.transform.position = rushMovePos[i + 1].transform.position;
             Instantiate(teleportVFX, enemy.transform.position, Quaternion.identity);
-            Debug.Log("Call Rush");
+
+
+            // 콜라이더 데미지 셋팅
+            rushCollider.ResetCollider();
+            (bool isCri, int dam) = enemy.DamageCalculation(value_Normal[1]);
+            Skill_Value_SO.Value_Data data = value_Normal[1].levelValue.GetData(skillLevel);
+            rushCollider.Damage_Setting(data.type, data.attackEffect, Attack_Collider_AOE.AttackType.SingleHit, isCri, data.hitCount, dam, 15f);
+
 
             // 주시 딜레이
             timer = 0;
-            while (timer < 0.15f)
+            chargeSpeed = ((Enemy_Boss_Arie)enemy).curPhase == Enemy_Boss_Arie.Phase.Phase1 ? 0.15f : 0.13f;
+            while (timer < chargeSpeed)
             {
                 enemy.LookAt(enemy.target, 0);
                 timer += Time.deltaTime;
                 yield return null;
             }
 
+
             // 돌진
             anim.SetTrigger("Action");
             anim.SetFloat("AnimValue", 0);
 
-            // 이동
+            rushCollider.gameObject.SetActive(true);
             startPos = enemy.transform.position;
             endPos = moveDatas[0].movePos.position;
             timer = 0;
+            float speed = ((Enemy_Boss_Arie)enemy).curPhase == Enemy_Boss_Arie.Phase.Phase1 ? 0.85f : 0.75f;
             while (timer < 1)
             {
-                timer += Time.deltaTime * 1.5f;
+                timer += Time.deltaTime / speed;
                 anim.SetFloat("AnimValue", timer);
                 enemy.transform.position = Vector3.Lerp(startPos, endPos, EasingFunctions.OutExpo(timer));
                 yield return null;
             }
             anim.SetFloat("AnimValue", 1);
+            rushCollider.gameObject.SetActive(false);
+
 
             // 딜레이
-            if(i < 2)
+            if (i < 2)
             {
                 // 주시 딜레이
                 timer = 0;
@@ -138,23 +152,27 @@ public class EAttack_Strike : Attack_Base
         startPos = enemy.transform.position;
         endPos = targetPos;
         timer = 0;
+        float moveSpeed = ((Enemy_Boss_Arie)enemy).curPhase == Enemy_Boss_Arie.Phase.Phase1 ? 0.75f : 0.65f;
         while (timer < 1)
         {
-            timer += Time.deltaTime * 1.5f;
-            anim.SetFloat("AnimValue", timer);
+            timer += Time.deltaTime / moveSpeed;
             enemy.transform.position = Vector3.Lerp(startPos, endPos, EasingFunctions.OutExpo(timer));
+            anim.SetFloat("AnimValue", timer);
             yield return null;
         }
+        anim.SetFloat("AnimValue", 1);
 
-        while(anim.GetBool("isStrike"))
+        while (anim.GetBool("isStrike"))
         {
             yield return null;
         }
 
         // 리스트 초기화
+        rushCollider.ResetCollider();
         for (int i = 0; i < 3; i++)
         {
-            value_Normal[i].attackCollider.ListReset();
+            if (value_Normal[i].attackCollider != null)
+                value_Normal[i].attackCollider.ListReset();
         }
 
         enemy.isPatten = false;
