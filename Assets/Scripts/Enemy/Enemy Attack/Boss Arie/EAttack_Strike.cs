@@ -178,6 +178,7 @@ public class EAttack_Strike : Attack_Base
         enemy.isPatten = false;
     }
 
+
     public void StrikeMovement()
     {
         StartCoroutine(StrikeMovementCall());

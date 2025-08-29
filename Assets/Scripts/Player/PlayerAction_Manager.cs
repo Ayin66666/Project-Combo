@@ -70,7 +70,7 @@ public class PlayerAction_Manager : MonoBehaviour, IDamageSysteam
     [SerializeField] private string[] animBool;
     private Coroutine hitEffectCoroutine;
     private Coroutine hitWaitCoroutine;
-    private WaitForSeconds waitSec = new WaitForSeconds(0.05f);
+    private WaitForSeconds waitSec = new WaitForSeconds(0.1f);
 
 
     [Header("---Lock On---")]
@@ -123,32 +123,30 @@ public class PlayerAction_Manager : MonoBehaviour, IDamageSysteam
 
     private void Update()
     {
+        // 카메라 제어
+        if (!isLockOn)
+        {
+            Look();
+        }
+
         if (canAction)
         {
-            if (!isLockOn)
-            {
-                // 카메라 제어
-                Look();
-            }
-
-            Collider_Ignore(true);
+            // Collider_Ignore(true); -> 이거 왜 있지?
             Movement();
+
+            if (Input.GetKeyDown(KeyCode.C))
+            {
+                LockOn_EnemySearch();
+            }
         }
 
         DashCount();
-
-        if (Input.GetKeyDown(KeyCode.C))
-        {
-            LockOn_EnemySearch();
-        }
+        Gravity();
 
         if (Input.GetKeyDown(KeyCode.Tab))
         {
             Player_Manager.instance.Cursor_Setting(Cursor.lockState != CursorLockMode.Locked);
         }
-
-
-        Gravity();
     }
 
 
@@ -458,7 +456,6 @@ public class PlayerAction_Manager : MonoBehaviour, IDamageSysteam
         if (!isGoround)
         {
             Vector3 dir = new Vector3(0, (isDash ? -20f : -9.81f), 0);
-            Debug.Log($"{isGoround} / {dir}");
             controller.Move(dir * Time.deltaTime);
         }
     }
@@ -468,9 +465,6 @@ public class PlayerAction_Manager : MonoBehaviour, IDamageSysteam
         controller.enabled = false;
         transform.SetPositionAndRotation(pos, rotation);
         controller.enabled = true;
-
-        Debug.Log($"인풋 값 : {pos} / {rotation}");
-        Debug.Log($"플레이어 값 : {transform.position} / {transform.rotation}");
     }
     #endregion
 
@@ -512,7 +506,6 @@ public class PlayerAction_Manager : MonoBehaviour, IDamageSysteam
 
         // 데미지 계산
         int calDamage = damage - (type == IDamageSysteam.DamageType.Physical ? pManager.status.physicalDefence : pManager.status.magicalDefence);
-        Debug.Log($"플레이어 피격 데미지 : {calDamage} / {damage}");
         if (calDamage > 0)
         {
             // 타격 횟수만큼 동작
@@ -589,10 +582,13 @@ public class PlayerAction_Manager : MonoBehaviour, IDamageSysteam
     private IEnumerator DieCall()
     {
         canAction = false;
-        isDie = true;
+        canMovement = false;
+        canAttack = false;
+        canDash = false;
+        canRushSlash = false;
+        canSpecial = false;
 
-        // 애니메이션 초기화
-        Animation_Reset();
+        isDie = true;
 
         // 이동 초기화
         if (attackMovementCoroutine != null)
@@ -622,8 +618,8 @@ public class PlayerAction_Manager : MonoBehaviour, IDamageSysteam
             attack.Attack_Reset();
         }
 
-        // 기능 초기화
-        AttackOver();
+        // 애니메이션 초기화
+        Animation_Reset();
 
         // 애니메이션
         anim.SetTrigger("Hit");
@@ -646,14 +642,11 @@ public class PlayerAction_Manager : MonoBehaviour, IDamageSysteam
             yield return null;
         }
 
-
         // UI 종료
         UI_Manager.instance.DieUI(false);
 
         // 체크포인트로 회귀
         Stage_Manager.instance.CheckPoint_Call();
-
-        // 공격 초기화
 
         // 리스폰 애니메이션 
         anim.SetTrigger("Action");
@@ -662,6 +655,9 @@ public class PlayerAction_Manager : MonoBehaviour, IDamageSysteam
         {
             yield return null;
         }
+
+        // 기능 초기화
+        AttackOver();
 
         canAction = true;
         isDie = false;
@@ -672,7 +668,7 @@ public class PlayerAction_Manager : MonoBehaviour, IDamageSysteam
         switch (isOn)
         {
             case true:
-
+                if (isDie) return;
                 canAction = false;
                 Hit_Reset();
 
@@ -813,13 +809,11 @@ public class PlayerAction_Manager : MonoBehaviour, IDamageSysteam
             transform.position = Vector3.Lerp(startPos, endPos, EasingFunctions.OutExpo(timer));
             yield return null;
         }
-        Debug.Log("Hit Anim Over - Type : KnockBack");
 
         // 넉백 애니메이션 대기
         yield return new WaitWhile(() => anim.GetBool("isKnockBack"));
 
         // 재동작
-        Debug.Log("Hit Over - Type : KnockBack");
         curHitState = IDamageSysteam.HitVFX.None;
         canAction = true;
         canMovement = true;
@@ -850,18 +844,15 @@ public class PlayerAction_Manager : MonoBehaviour, IDamageSysteam
             transform.position = Vector3.Lerp(startPos, endPos, EasingFunctions.OutExpo(timer));
             yield return null;
         }
-        // anim.SetFloat("DownMotion", 1);
-        Debug.Log("Hit Anim Over - Type : Down");
 
         // 다운 대기 -> 다운 관련 시간 필요
-        yield return new WaitForSeconds(2f);
+        yield return new WaitForSeconds(1.5f);
 
         // 기상 애니메이션
         anim.SetBool("isDownLoop", false);
         yield return new WaitWhile(() => anim.GetBool("isDown"));
 
         // 재동작
-        Debug.Log("Hit Over - Type : Down");
         curHitState = IDamageSysteam.HitVFX.None;
         canAction = true;
         canMovement = true;

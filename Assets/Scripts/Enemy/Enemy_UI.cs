@@ -4,7 +4,6 @@ using UnityEngine.UI;
 using UnityEngine.Video;
 using TMPro;
 using DG.Tweening;
-using static Enemy_Container;
 
 
 public class Enemy_UI : MonoBehaviour
@@ -73,11 +72,11 @@ public class Enemy_UI : MonoBehaviour
         hpSlider[1].maxValue = enemy.curHp;
         hpSlider[1].value = enemy.maxHp;
 
-        groggySlider[0].maxValue = enemy.maxHp;
-        groggySlider[0].value = enemy.maxHp;
+        groggySlider[0].maxValue = enemy.maxGroggy;
+        groggySlider[0].value = enemy.maxGroggy;
 
-        groggySlider[1].maxValue = enemy.curGroggy;
-        groggySlider[1].value = enemy.curGroggy;
+        groggySlider[1].maxValue = enemy.maxGroggy;
+        groggySlider[1].value = enemy.maxGroggy;
     }
 
     private IEnumerator LookAt()
@@ -119,7 +118,7 @@ public class Enemy_UI : MonoBehaviour
         while (video.isPlaying)
         {
             // ÄÆ½Å ½ºÅµ
-            if (Input.GetKeyDown(KeyCode.Escape))
+            if (Input.GetKeyDown(KeyCode.X))
             {
                 video.Pause();
                 break;

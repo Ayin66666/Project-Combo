@@ -285,7 +285,7 @@ public class Enemy_Boss_Arie : Enemy_Base
         while (timer < time)
         {
             // 플레이어 사망 시 딜레이 이동 종료
-            if(Player_Manager.instance.action.isDie)
+            if (Player_Manager.instance.action.isDie)
             {
                 curState = State.Idle;
                 yield break;
@@ -389,6 +389,7 @@ public class Enemy_Boss_Arie : Enemy_Base
 
         curState = State.Idle;
         isCutScene = false;
+        
         Think();
     }
 
@@ -416,6 +417,7 @@ public class Enemy_Boss_Arie : Enemy_Base
         enemyUI.CutScene(clips[1]);
         yield return new WaitWhile(() => enemyUI.isCutScene);
 
+        /*
         // 페이즈 전환 애니메이션
         anim.SetTrigger("Action");
         anim.SetBool("isPhaseAnim", true);
@@ -423,6 +425,7 @@ public class Enemy_Boss_Arie : Enemy_Base
         {
             yield return null;
         }
+        */
 
         curState = State.Idle;
         Think();
@@ -437,6 +440,11 @@ public class Enemy_Boss_Arie : Enemy_Base
         }
         else
         {
+            Hit_Reset();
+
+            if (hitCoroutine != null)
+                StopCoroutine(hitCoroutine);
+
             if (movementCoroutine != null)
                 StopCoroutine(movementCoroutine);
 
@@ -447,6 +455,7 @@ public class Enemy_Boss_Arie : Enemy_Base
     private IEnumerator DieCall()
     {
         curState = State.Die;
+        Debug.Log("Boss Die CutScene");
 
         anim.SetTrigger("Hit");
         anim.SetBool("isDie", true);

@@ -261,6 +261,11 @@ public class Enemy_Boss_Arie_Animation : MonoBehaviour
 
 
     // 스트라이크
+    public void StrikeCollider(int index)
+    {
+        enemy.attackDatas[7].value_Normal[index].attackCollider.AttackColliderOn(0);
+    }
+
     public void StrikeVFX(int index)
     {
         enemy.attackDatas[7].AttackVFX(index);

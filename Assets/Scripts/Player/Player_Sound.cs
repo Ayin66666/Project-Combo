@@ -123,25 +123,21 @@ public class Player_Sound : MonoBehaviour
     #region 플레이어 전투 사운드
     public void Sound_Normal(Normal type)
     {
-        Debug.Log($"Sound Call {type}");
         audioSource_Player.PlayOneShot(normalSound[type]);
     }
 
     public void Sound_Smash(Smash type)
     {
-        Debug.Log($"Sound Call {type}");
         audioSource_Player.PlayOneShot(smashSound[type]);
     }
 
     public void Sound_Skill(Skill type)
     {
-        Debug.Log($"Sound Call {type}");
         audioSource_Player.PlayOneShot(skillSound[type]);
     }
 
     public void Sound_Speical(Special type)
     {
-        Debug.Log($"Sound Call {type}");
         //audioSource_Player.PlayOneShot(specialSound[type]);
     }
 
@@ -159,12 +155,10 @@ public class Player_Sound : MonoBehaviour
     {
         if (isOn && !audioSource_Player.isPlaying)
         {
-            Debug.Log("Call Sound On");
             audioSource_Player.Play();
         }
         else if(!isOn && audioSource_Player.isPlaying)
         {
-            Debug.Log("Call Sound off");
             audioSource_Player.Pause();
         }
     }
@@ -174,13 +168,11 @@ public class Player_Sound : MonoBehaviour
     #region 플레이어 UI 사운드
     public void Sound_Ingame(IngameSystem type)
     {
-        Debug.Log($"Sound Call {type}");
         audioSource_UI.PlayOneShot(inGameSystemSound[type]);
     }
 
     public void Sound_System(SystemSound type)
     {
-        Debug.Log($"Sound Call {type}");
         audioSource_UI.PlayOneShot(systemSound[type]);
     }
     #endregion

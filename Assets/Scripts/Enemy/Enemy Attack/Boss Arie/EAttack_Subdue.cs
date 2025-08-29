@@ -97,7 +97,8 @@ public class EAttack_Subdue : Attack_Base
             anim.SetBool("isSubdueAttack", true);
 
             // 플레이어 잡힘 애니메이션 호출
-            PlayerAction_Manager.instance.Subdue(true, subduePos, this.transform);
+            if (!Player_Manager.instance.action.isDie)
+                PlayerAction_Manager.instance.Subdue(true, subduePos, this.transform);
 
             //애니메이션 대기
             while (anim.GetBool("isSubdueAttack"))

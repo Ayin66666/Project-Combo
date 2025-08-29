@@ -72,14 +72,6 @@ ModelImporter:
         floatParameter: 0
         intParameter: 0
         messageOptions: 0
-      - time: 0.5
-        functionName: RushCollider
-        data: 
-        objectReferenceParameter: {fileID: 11500000, guid: 42ff082e0bbd4464f9e72039ce01da4c,
-          type: 3}
-        floatParameter: 0
-        intParameter: 0
-        messageOptions: 0
       transformMask: []
       maskType: 3
       maskSource: {instanceID: 0}

@@ -71,8 +71,16 @@ ModelImporter:
         floatParameter: 0
         intParameter: 0
         messageOptions: 0
-      - time: 0.8872727
+      - time: 0.85768694
         functionName: StrikeVFX
+        data: 
+        objectReferenceParameter: {fileID: 11500000, guid: 42ff082e0bbd4464f9e72039ce01da4c,
+          type: 3}
+        floatParameter: 0
+        intParameter: 0
+        messageOptions: 0
+      - time: 0.8700441
+        functionName: StrikeCollider
         data: 
         objectReferenceParameter: {fileID: 11500000, guid: 42ff082e0bbd4464f9e72039ce01da4c,
           type: 3}

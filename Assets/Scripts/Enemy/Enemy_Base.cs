@@ -312,7 +312,7 @@ public abstract class Enemy_Base : MonoBehaviour, IDamageSysteam
 
                 // 그로기 데미지 (그로기 상태가 아니라면)
                 if (!isGroggy)
-                    curGroggy -= (calDamage / 2);
+                    curGroggy -= calDamage;
 
                 // 카메라 흔들림
                 CameraEffect_Manager.instance.Camera_Shack(1, 0.1f);
@@ -345,20 +345,21 @@ public abstract class Enemy_Base : MonoBehaviour, IDamageSysteam
         // 상태이상 체크 그로기 게이지가 0 이라면
         if (curGroggy <= 0)
         {
-            // 그로기 타이머 호출
-            if (!isGroggy)
-            {
-                if (groggyTimerCoroutine != null)
-                    StopCoroutine(groggyTimerCoroutine);
-
-                groggyTimerCoroutine = StartCoroutine(GroggyTimer());
-            }
-
             // 피격 효과에 따른 동작 호출
             // 1. 일반 몬스터 - 피격효과가 있는 공격을 받으면 넉백 & 다운
             // 2. 엘리트 & 보스 몬스터 - 그로기 시간동안 해당 위치에 고정
             if (enemyType == EnemyType.Normal)
             {
+                // 일반 몬스터
+                if (!isGroggy)
+                {
+                    if (groggyTimerCoroutine != null)
+                        StopCoroutine(groggyTimerCoroutine);
+
+                    groggyTimerCoroutine = StartCoroutine(GroggyTimer());
+                }
+
+                // 피격 이펙트 동작
                 switch (hit)
                 {
                     case IDamageSysteam.HitVFX.None:
@@ -366,7 +367,6 @@ public abstract class Enemy_Base : MonoBehaviour, IDamageSysteam
                         break;
 
                     case IDamageSysteam.HitVFX.KnockBack:
-                        if (isGroggy) return;
                         CameraEffect_Manager.instance.Camera_Shack(3, 0.05f);
                         if (hitCoroutine != null) StopCoroutine(hitCoroutine);
                         hitCoroutine = StartCoroutine(Hit_KnockBack(attackObj));
@@ -379,10 +379,13 @@ public abstract class Enemy_Base : MonoBehaviour, IDamageSysteam
                         break;
                 }
             }
-            else
+            else // 엘리트 & 보스 몬스터
             {
+                Debug.Log($"Groggy {isGroggy}");
                 if (curGroggy <= 0 && !isGroggy)
                 {
+                    Debug.Log($"Groggy On");
+                    if (hitCoroutine != null) StopCoroutine(hitCoroutine);
                     hitCoroutine = StartCoroutine(Hit_Groggy());
                 }
             }
@@ -455,6 +458,8 @@ public abstract class Enemy_Base : MonoBehaviour, IDamageSysteam
 
         yield return new WaitForSeconds(groggyTime);
 
+        enemyUI.Groggy();
+
         isGroggy = false;
         curGroggy = maxGroggy;
     }
@@ -467,10 +472,10 @@ public abstract class Enemy_Base : MonoBehaviour, IDamageSysteam
         Hit_Reset();
 
         // 넉백 애니메이션
+        int ran = Random.Range(0, knockBackPos.Length);
         anim.SetTrigger("Hit");
         anim.SetBool("isKnockBack", true);
         anim.SetFloat("AnimValue", 0);
-        int ran = Random.Range(0, knockBackPos.Length);
         anim.SetInteger("HitType", ran);
 
         // 넉백 이동
@@ -516,13 +521,13 @@ public abstract class Enemy_Base : MonoBehaviour, IDamageSysteam
 
         while (timer < 1)
         {
-            timer += Time.deltaTime / groggyTime;
+            timer += Time.deltaTime / 0.75f;
             transform.position = Vector3.Lerp(startPos, endPos, EasingFunctions.OutExpo(timer));
             yield return null;
         }
 
         // 다운 대기 -> 다운 관련 시간 필요 -> 스테이터스에 추가
-        yield return new WaitForSeconds(0.5f);
+        yield return new WaitForSeconds(groggyTime);
 
         // 기상 애니메이션
         anim.SetTrigger("Action");
@@ -532,7 +537,6 @@ public abstract class Enemy_Base : MonoBehaviour, IDamageSysteam
         }
 
         // 재동작
-        isGroggy = false;
         curState = State.Idle;
         Think();
     }
@@ -542,13 +546,11 @@ public abstract class Enemy_Base : MonoBehaviour, IDamageSysteam
         curState = State.Groggy;
         isGroggy = true;
 
-        Debug.Log("Boss Groggy On");
-
         // 행동 강제 종료 -> 코루틴을 종료시키는 무언가
         Hit_Reset();
 
         // 다운 애니메이션
-        anim.SetTrigger("Action");
+        anim.SetTrigger("Hit");
         anim.SetBool("isDown", true);
 
         // 다운 대기 -> 다운 관련 시간 필요 -> 스테이터스에 추가
@@ -560,6 +562,9 @@ public abstract class Enemy_Base : MonoBehaviour, IDamageSysteam
         {
             yield return null;
         }
+
+        // UI 초기화
+        enemyUI.Groggy();
 
         // 재동작
         isGroggy = false;

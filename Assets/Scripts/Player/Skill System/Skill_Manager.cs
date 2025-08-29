@@ -113,7 +113,6 @@ public class Skill_Manager : MonoBehaviour
     /// <param name="add"></param>
     public void Skill_PointAdd(int add)
     {
-        Debug.Log("Call SkillPointAdd");
         // 포인트 증감
         skillPoint += add;
 

@@ -118,7 +118,6 @@ public class EAttack_EnergyOrb : Attack_Base
         // 구체 소환
         energyOrbVFX.transform.position = enemy.transform.position;
         energyOrbVFX.SetActive(true);
-        Debug.Log(energyOrbVFX.activeSelf);
 
         // 구체 이동
         Vector3 startPos = enemy.transform.position;
@@ -132,7 +131,6 @@ public class EAttack_EnergyOrb : Attack_Base
         }
         energyOrbVFX.transform.position = endPos;
         isSpawn = false;
-        Debug.Log(energyOrbVFX.activeSelf);
     }
 
     public void Shoot()

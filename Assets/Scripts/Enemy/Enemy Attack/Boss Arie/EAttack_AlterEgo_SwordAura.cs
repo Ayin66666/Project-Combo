@@ -17,6 +17,7 @@ public class EAttack_AlterEgo_SwordAura : Attack_Base
     private Coroutine spawnCoroutine;
     private Coroutine explosionCoroutine;
 
+
     public override void Use()
     {
         if (useCoroutine != null)

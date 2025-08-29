@@ -47,9 +47,9 @@ public class Attack_Other_Counter : Attack_Base
         anim.SetBool("isCounterReady", true);
         anim.SetBool("isCounter", true);
 
-
         // 사운드
         Player_Sound.instance.Sound_Skill(Player_Sound.Skill.Counter_Start);
+        PlayerAction_Manager.instance.isInvincibility = true;
 
         // 카운터 대기
         float timer = 0;
@@ -94,6 +94,7 @@ public class Attack_Other_Counter : Attack_Base
 
     private IEnumerator Attack_HorizontalSalsh()
     {
+        PlayerAction_Manager.instance.isInvincibility = true;
         PlayerAction_Manager.instance.isAttack = true;
         PlayerAction_Manager.instance.LookAt();
 
@@ -113,7 +114,6 @@ public class Attack_Other_Counter : Attack_Base
             yield return null;
         }
 
-        PlayerAction_Manager.instance.isInvincibility = false;
         PlayerAction_Manager.instance.isAttack = false;
 
         // 추가타 입력 대기
@@ -138,6 +138,7 @@ public class Attack_Other_Counter : Attack_Base
         Attack_ColliderReset();
 
         PlayerAction_Manager.instance.MovementLock(cancelType, false);
+        PlayerAction_Manager.instance.isInvincibility = false;
         PlayerAction_Manager.instance.isCounter = false;
         PlayerAction_Manager.instance.AttackOver();
     }
@@ -174,6 +175,7 @@ public class Attack_Other_Counter : Attack_Base
         }
 
         PlayerAction_Manager.instance.isAttack = false;
+
         float timer = 0;
         while (anim.GetBool("isCounter"))
         {
@@ -195,6 +197,7 @@ public class Attack_Other_Counter : Attack_Base
 
         // 공격 종료
         PlayerAction_Manager.instance.MovementLock(cancelType, false);
+        PlayerAction_Manager.instance.isInvincibility = false;
         PlayerAction_Manager.instance.isCounter = false;
         PlayerAction_Manager.instance.AttackOver();
     }

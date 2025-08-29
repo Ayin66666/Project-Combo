@@ -111,8 +111,6 @@ public class Hideout_Manager : MonoBehaviour
     /// </summary>
     public void DescriptionUI_Setting(int stageIndex)
     {
-        Debug.Log(stageIndex);
-
         // 스테이지 기본 데이터
         stageImage.sprite = null;
         stageTypeText.text = uiData.stageData[stageIndex].stageType.ToString();

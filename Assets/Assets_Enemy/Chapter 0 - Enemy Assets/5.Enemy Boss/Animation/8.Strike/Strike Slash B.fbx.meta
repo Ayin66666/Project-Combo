@@ -63,6 +63,22 @@ ModelImporter:
       bodyMask: 01000000010000000100000001000000010000000100000001000000010000000100000001000000010000000100000001000000
       curves: []
       events:
+      - time: 0
+        functionName: WingVFX
+        data: 
+        objectReferenceParameter: {fileID: 11500000, guid: 42ff082e0bbd4464f9e72039ce01da4c,
+          type: 3}
+        floatParameter: 0
+        intParameter: 0
+        messageOptions: 0
+      - time: 0.5324475
+        functionName: StrikeExplosion
+        data: 
+        objectReferenceParameter: {fileID: 11500000, guid: 42ff082e0bbd4464f9e72039ce01da4c,
+          type: 3}
+        floatParameter: 0
+        intParameter: 1
+        messageOptions: 0
       - time: 0.5418182
         functionName: StrikeVFX
         data: 
@@ -71,21 +87,13 @@ ModelImporter:
         floatParameter: 0
         intParameter: 2
         messageOptions: 0
-      - time: 0.5709091
-        functionName: StrikeExplosion
+      - time: 0.5418502
+        functionName: StrikeCollider
         data: 
         objectReferenceParameter: {fileID: 11500000, guid: 42ff082e0bbd4464f9e72039ce01da4c,
           type: 3}
         floatParameter: 0
-        intParameter: 1
-        messageOptions: 0
-      - time: 0
-        functionName: WingVFX
-        data: 
-        objectReferenceParameter: {fileID: 11500000, guid: 42ff082e0bbd4464f9e72039ce01da4c,
-          type: 3}
-        floatParameter: 0
-        intParameter: 0
+        intParameter: 2
         messageOptions: 0
       transformMask: []
       maskType: 3
