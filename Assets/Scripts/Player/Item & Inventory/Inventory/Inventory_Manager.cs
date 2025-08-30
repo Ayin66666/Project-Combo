@@ -41,19 +41,19 @@ public class Inventory_Manager : MonoBehaviour
     /// <returns></returns>
     public void Inventory_Setting(Data data)
     {
-        Debug.Log($"인벤토리 데이터 로드 데이터 체크 - {data}");
-        Debug.Log($"인벤토리 데이터 로드 슬롯 체크 - {item_Slot.Count}");
+        //Debug.Log($"인벤토리 데이터 로드 데이터 체크 - {data}");
+        //Debug.Log($"인벤토리 데이터 로드 슬롯 체크 - {item_Slot.Count}");
         for (int i = 0; i < item_Slot.Count; i++)
         {
-            Debug.Log("for문 호출");
+            //Debug.Log("for문 호출");
             if (data.itemData[i].itemCode != -1)
             {
-                Debug.Log("if문 호출");
-                Debug.Log(ItemData_Container.instance);
+                //Debug.Log("if문 호출");
+                //Debug.Log(ItemData_Container.instance);
                 Item_Base item = ItemData_Container.instance.FindItem(data.itemData[i].itemCode);
 
-                Debug.Log(item);
-                Debug.Log($"슬롯 null 체크 {i}번째 = {item_Slot[i]}");
+                //Debug.Log(item);
+                //Debug.Log($"슬롯 null 체크 {i}번째 = {item_Slot[i]}");
                 if (item != null)
                 {
                     item_Slot[i].Slot_Setting(item, data.itemData[i].itemCount);

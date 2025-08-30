@@ -81,8 +81,8 @@ public class Stage_Manager : MonoBehaviour
         }
 
         // 플레이어 활성화
-        Player_Manager.instance.Player_Action_Setting(true);
         Player_Manager.instance.PlayerOnOff_Setting(true);
+        Player_Manager.instance.Player_Action_Setting(true);
         UI_Manager.instance.UI_Setting(true);
         Player_Manager.instance.shortCut.ShortCutUseSetting(true);
 
@@ -165,7 +165,10 @@ public class Stage_Manager : MonoBehaviour
         for (int i = 0; i < stageData.Data.Count; i++)
         {
             if (clearData.clearTime < stageData.Data[i].time)
+            {
                 clearData.clearRank = stageData.Data[i].rank;
+                break;
+            }
         }
 
         // 데이터 전달

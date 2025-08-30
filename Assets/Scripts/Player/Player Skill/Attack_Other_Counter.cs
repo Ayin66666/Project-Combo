@@ -245,7 +245,8 @@ public class Attack_Other_Counter : Attack_Base
         if (useCoroutine != null)
             StopCoroutine(useCoroutine);
 
-        PlayerAction_Manager.instance.isCounter = false;
+        Player_Manager.instance.action.isInvincibility = false;
+        Player_Manager.instance.action.isCounter = false;
         isHit = false;
 
         // ¿Ã∆Â∆Æ ¡æ∑·

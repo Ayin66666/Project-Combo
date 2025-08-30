@@ -413,19 +413,12 @@ public class Enemy_Boss_Arie : Enemy_Base
         magicalDefence = phase2_Status.Magical_Defence;
         anim.SetFloat("AttackSpeed", 1.15f);
 
+        // UI 초기화
+        enemyUI.UI_Setting();
+
         // 2페이즈 컷씬
         enemyUI.CutScene(clips[1]);
         yield return new WaitWhile(() => enemyUI.isCutScene);
-
-        /*
-        // 페이즈 전환 애니메이션
-        anim.SetTrigger("Action");
-        anim.SetBool("isPhaseAnim", true);
-        while (anim.GetBool("isPhaseAnim"))
-        {
-            yield return null;
-        }
-        */
 
         curState = State.Idle;
         Think();
@@ -435,11 +428,13 @@ public class Enemy_Boss_Arie : Enemy_Base
     {
         if (curPhase == Phase.Phase2)
         {
+            Debug.Log("사망 호출");
             base.Die();
             StartCoroutine(DieCall());
         }
         else
         {
+            Debug.Log("페이즈 전환 호출");
             Hit_Reset();
 
             if (hitCoroutine != null)
@@ -455,7 +450,6 @@ public class Enemy_Boss_Arie : Enemy_Base
     private IEnumerator DieCall()
     {
         curState = State.Die;
-        Debug.Log("Boss Die CutScene");
 
         anim.SetTrigger("Hit");
         anim.SetBool("isDie", true);
@@ -465,7 +459,7 @@ public class Enemy_Boss_Arie : Enemy_Base
         }
 
         // 종료 컷씬
-        enemyUI.CutScene(clips[1]);
+        enemyUI.CutScene(clips[2]);
         yield return new WaitWhile(() => enemyUI.isCutScene);
 
         Destroy(gameObject);

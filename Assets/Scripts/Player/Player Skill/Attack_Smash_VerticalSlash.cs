@@ -217,9 +217,7 @@ public class Attack_Smash_VerticalSlash : Attack_Base
         if (useCoroutine != null)
             StopCoroutine(useCoroutine);
 
-        // 위치 정상화 -> 아마 이게 2번으로 잡혀서 리셋할때 움직인듯?
         PlayerAction_Manager.instance.bodyObject.transform.position = moveDatas[3].movePos.position;
-
 
         // 이펙트 종료
         foreach (GameObject vfx in verticalSlashVFX)

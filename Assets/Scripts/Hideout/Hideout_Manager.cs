@@ -123,6 +123,8 @@ public class Hideout_Manager : MonoBehaviour
         clearTimeText.text = $"클리어 타임 : {ChapterData_Manager.instance.claerData.claerData.chapterList[curChapter].stageList[stageIndex].clearTime.ToString("F2")}초";
         rankText.text = ChapterData_Manager.instance.claerData.claerData.chapterList[curChapter].stageList[stageIndex].clearRank.ToString();
 
+        Debug.Log(ChapterData_Manager.instance.claerData.claerData.chapterList[curChapter].stageList[stageIndex].clearTime);
+        Debug.Log(ChapterData_Manager.instance.claerData.claerData.chapterList[curChapter].stageList[stageIndex].clearRank);
         // 진입 데이터 셋팅
         curSelectStage = uiData.stageData[stageIndex].sceneName;
     }
