@@ -2,6 +2,7 @@ using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 using UnityEngine.Audio;
+using UnityEngine.Rendering;
 using UnityEngine.UI;
 
 
@@ -30,7 +31,6 @@ public class Option_Manager : MonoBehaviour
 
 
     [Header("---Component---")]
-    [SerializeField] private AudioSource uiAudio;
     [SerializeField] private AudioMixer mixer;
 
 
@@ -41,6 +41,12 @@ public class Option_Manager : MonoBehaviour
         {
             frameDic.Add(i, flame[i]);
         }
+
+        soundSlider_Master.onValueChanged.AddListener(Setting_Master);
+        soundSlider_BGM.onValueChanged.AddListener(Setting_BGM);
+        soundSlider_SFX.onValueChanged.AddListener(Setting_SFX);
+
+        dropdown_Framerate.value = 1;
     }
 
 
@@ -49,19 +55,19 @@ public class Option_Manager : MonoBehaviour
     public void Setting_Master(float value)
     {
         Master_Volume = Mathf.Log10(value) * 20;
-        mixer.SetFloat("Master", isMasterOn ? Master_Volume : 0);
+        mixer.SetFloat("Master", Mathf.Log10(isMasterOn ? value : 0.0001f) * 20);
     }
 
     public void Setting_BGM(float value)
     {
         BGM_Volume = Mathf.Log10(value) * 20;
-        mixer.SetFloat("BGM", isBGMOn ? BGM_Volume : 0);
+        mixer.SetFloat("BGM", Mathf.Log10(isMasterOn ? value : 0.0001f) * 20);
     }
 
     public void Setting_SFX(float value)
     {
         SFX_Volume = Mathf.Log10(value) * 20;
-        mixer.SetFloat("SFX", isSFXOn ? SFX_Volume : 0);
+        mixer.SetFloat("SFX", Mathf.Log10(isMasterOn ? value : 0.0001f) * 20);
     }
 
 
@@ -69,21 +75,20 @@ public class Option_Manager : MonoBehaviour
     public void OnOff_Master(bool isOn)
     {
         isMasterOn = isOn;
-        mixer.SetFloat("Master", isMasterOn ? Master_Volume : 0);
+        mixer.SetFloat("Master", Mathf.Log10(isMasterOn ? Master_Volume : 0.0001f) * 20);
     }
 
     public void OnOff_BGM(bool isOn)
     {
         isBGMOn = isOn;
-        mixer.SetFloat("BGM", isBGMOn ? BGM_Volume : 0);
+        mixer.SetFloat("BGM", Mathf.Log10(isBGMOn ? BGM_Volume : 0.0001f) * 20);
     }
 
     public void OnOff_SFX(bool isOn)
     {
         isSFXOn = isOn;
-        mixer.SetFloat("SFX", isSFXOn ? SFX_Volume : 0);
+        mixer.SetFloat("SFX", Mathf.Log10(isSFXOn ? SFX_Volume : 0.0001f) * 20);
     }
-
     #endregion
 
 
@@ -94,8 +99,9 @@ public class Option_Manager : MonoBehaviour
     /// <param name="value"></param>
     public void Setting_FPS(int value)
     {
+        Debug.Log($"{value}, {frameDic[value]}, {isVsync}");
         flameIndex = value;
-        Application.targetFrameRate = isVsync ? -1 : frameDic[value];
+        Application.targetFrameRate = isVsync ? -1 : frameDic[flameIndex];
     }
 
     /// <summary>
@@ -106,8 +112,7 @@ public class Option_Manager : MonoBehaviour
     {
         isVsync = value == 1 ? true : false;
         QualitySettings.vSyncCount = value;
-
-        Application.targetFrameRate = isVsync ? -1 : frameDic[flameIndex];
+        Debug.Log(QualitySettings.vSyncCount);
     }
     #endregion
 }

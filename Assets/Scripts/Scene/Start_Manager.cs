@@ -69,9 +69,9 @@ public class Start_Manager : MonoBehaviour
     /// </summary>
     public void Click_Option()
     {
-        Debug.Log("Call option");
         curUI = UI.Option;
         UI_Manager.instance.PlayerUI_Setting(4);
+        UI_Manager.instance.PlayerUI_Setting();
     }
 
     /// <summary>
