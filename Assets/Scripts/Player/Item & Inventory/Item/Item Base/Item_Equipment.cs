@@ -16,14 +16,13 @@ public class Item_Equipment : Item_Base
 
 
     [Header("---Epuipment UI---")]
-    [TextArea] public string statusText;
-    [TextArea] public string damageText;
+    // [TextArea] public string statusText;
+    // [TextArea] public string damageText;
 
     [HideInInspector] public string[] typeText = new string[] 
     { 
         "무기", "머리", "상의", "하의", "신발", "코어" 
     };
-
     [HideInInspector] public string[] effectText = new string[]
     {
         "물리 공격력", "마법 공격력", "치명타 확률", "치명타 피해",
