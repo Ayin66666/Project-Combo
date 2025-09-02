@@ -28,20 +28,33 @@ public class Inventory_Slot_Equipment : MonoBehaviour, IPointerClickHandler, IPo
             this.item = item;
             haveItem = true;
 
+            // 스테이터스 증가
+            Player_Manager.instance.status.Equipment_Status_Setting(true, item.equipment_Status);
+
             // 장비 효과 추가
             if (item.haveEffect)
                 Player_Manager.instance.equipment.Add_ItemEffect(item.Effect);
         }
         else
         {
+            // 장비 효과 제거
+            Debug.Log(item);
+            if(item != null)
+            {
+                // 스테이터스 감소
+                Player_Manager.instance.status.Equipment_Status_Setting(true, item.equipment_Status);
+
+                if (item.haveEffect)
+                {
+                    Debug.Log(item.haveEffect);
+                    Player_Manager.instance.equipment.Remove_ItemEffect(item.Effect);
+                }
+            }
+
             // 장비 해제
             icon.sprite = null;
             this.item = null;
             haveItem = false;
-
-            // 장비 효과 제거
-            if (item.haveEffect)
-                Player_Manager.instance.equipment.Remove_ItemEffect(item.Effect);
         }
     }
 

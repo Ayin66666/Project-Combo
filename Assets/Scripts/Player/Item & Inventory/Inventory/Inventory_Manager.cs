@@ -188,12 +188,14 @@ public class Inventory_Manager : MonoBehaviour
     /// <param name="itme"></param>
     public void Item_Change(Inventory_Slot slot, Item_Base item)
     {
+        Debug.Log($"장비 교체! {slot} / {item}");
+
         // 아이템 추가
         slot.Slot_Setting(item, 1);
     }
 
     /// <summary>
-    /// 아이템 습득 전 인벤토리 상태 체크
+    /// 아이템 습득 전 인벤토리 상태 체크 - 소모품 & 기타
     /// </summary>
     /// <param name="addItem"></param>
     /// <returns></returns>
@@ -211,6 +213,21 @@ public class Inventory_Manager : MonoBehaviour
         }
 
         // 빈 슬롯도 없고, 최대 스택 초과 가능한 슬롯도 없으니 꽉 찬 상태
+        return true;
+    }
+
+    /// <summary>
+    /// 아이템 슬롯 체크 - 장비
+    /// </summary>
+    /// <returns></returns>
+    public bool IsFull()
+    {
+        foreach(var slot in item_Slot)
+        {
+            if (slot.item == null)
+                return false;
+        }
+
         return true;
     }
     #endregion

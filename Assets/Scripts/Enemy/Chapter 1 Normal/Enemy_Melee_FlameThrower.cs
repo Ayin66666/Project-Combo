@@ -140,6 +140,10 @@ public class Enemy_Melee_FlameThrower : Enemy_Base
     public override void Die()
     {
         Hit_Reset();
+
+        if (movementCoroutine != null)
+            StopCoroutine(movementCoroutine);
+
         movementCoroutine = StartCoroutine(DieCall());
     }
 
@@ -164,7 +168,7 @@ public class Enemy_Melee_FlameThrower : Enemy_Base
         }
 
         // ∫π±Õ µÙ∑π¿Ã
-        yield return new WaitForSeconds(1f);
+        yield return new WaitForSeconds(0.5f);
 
         // «Æ∏µ ∫π±Õ
         if (Stage_Manager.instance != null)

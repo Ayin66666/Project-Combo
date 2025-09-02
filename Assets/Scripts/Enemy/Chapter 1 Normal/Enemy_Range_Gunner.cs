@@ -98,13 +98,18 @@ public class Enemy_Range_Gunner : Enemy_Base
     public override void Die()
     {
         Hit_Reset();
-        StartCoroutine(DieCall());
+
+        if (movementCoroutine != null)
+            StopCoroutine(movementCoroutine);
+
+        movementCoroutine = StartCoroutine(DieCall());
     }
 
     private IEnumerator DieCall()
     {
         curState = State.Die;
         enemyUI.UI_OnOff(false);
+        nav.enabled = false;
 
         // æ∆¿Ã≈€ µÂ∂¯
         base.Die();
@@ -117,7 +122,7 @@ public class Enemy_Range_Gunner : Enemy_Base
         yield return new WaitWhile(() => anim.GetBool("isDie"));
 
         // ∫π±Õ µÙ∑π¿Ã
-        yield return new WaitForSeconds(1f);
+        yield return new WaitForSeconds(0.5f);
 
         // «Æ∏µ ∫π±Õ
         if (Stage_Manager.instance != null)

@@ -33,7 +33,7 @@ public class Enemy_Melee_Axe : Enemy_Base
         Check_Target();
 
         // 일반 공격
-        if(targetRange <= 2)
+        if (targetRange <= 2)
         {
             attackDatas[0].Use();
         }
@@ -90,14 +90,14 @@ public class Enemy_Melee_Axe : Enemy_Base
         Vector3 startPos = transform.position;
         Vector3 endPos = transform.position + moveDir * 2f;
         float timer = 0;
-        while(timer < 1)
+        while (timer < 1)
         {
             timer += Time.deltaTime * 2.5f;
             transform.position = Vector3.Lerp(startPos, endPos, EasingFunctions.OutExpo(timer));
             yield return null;
         }
 
-        while(anim.GetBool("isDash"))
+        while (anim.GetBool("isDash"))
         {
             yield return null;
         }
@@ -137,14 +137,19 @@ public class Enemy_Melee_Axe : Enemy_Base
 
     public override void Die()
     {
-        StartCoroutine(DieCall());
+        Hit_Reset();
+
+        if (movementCoroutine != null)
+            StopCoroutine(movementCoroutine);
+
+        movementCoroutine = StartCoroutine(DieCall());
     }
 
     private IEnumerator DieCall()
     {
-        Hit_Reset();
         curState = State.Die;
         enemyUI.UI_OnOff(false);
+        nav.enabled = false;
 
         // 사운드
         sound.Sound(Enemy_Sound.SoundKey.Die.ToString());
@@ -154,14 +159,14 @@ public class Enemy_Melee_Axe : Enemy_Base
 
         // 사망 애니메이션
         anim.SetTrigger("Hit");
-        anim.SetBool("isDie",true);
-        while(anim.GetBool("isDie"))
+        anim.SetBool("isDie", true);
+        while (anim.GetBool("isDie"))
         {
             yield return null;
         }
 
         // 복귀 딜레이
-        yield return new WaitForSeconds(1f);
+        yield return new WaitForSeconds(0.5f);
 
         // 풀링 복귀
         if (Stage_Manager.instance != null)
