@@ -222,13 +222,66 @@ public class Inventory_Manager : MonoBehaviour
     /// <returns></returns>
     public bool IsFull()
     {
-        foreach(var slot in item_Slot)
+        foreach (var slot in item_Slot)
         {
             if (slot.item == null)
                 return false;
         }
 
         return true;
+    }
+
+    /// <summary>
+    /// 인벤토리 내 아이템 정리
+    /// 정리 조건 : (장비 - 소모품 - 기타) / (고티어 - 저티어) / (무기, 코어, 머리, 몸통, 하의, 신발)
+    /// </summary>
+    public void Inventory_Organize()
+    {
+        // 아이템 데이터 저장
+        List<(Item_Base item, int count)> itemData = new List<(Item_Base item, int count)>();
+        for (int i = 0; i < item_Slot.Count; i++)
+        {
+            if (item_Slot[i].haveItem)
+            {
+                itemData.Add((item_Slot[i].item, item_Slot[i].itemCount));
+            }
+        }
+
+        // 데이터 정렬
+        itemData.Sort((a, b) =>
+        {
+            // 타입 체크
+            int typeCompare = ((int)a.item.itemType) - ((int)b.item.itemType);
+            if (typeCompare != 0) return typeCompare;
+
+            // 등급 체크
+            int ratingCompare = ((int)a.item.itemRating) - ((int)b.item.itemRating);
+            if (ratingCompare != 0) return ratingCompare;
+
+            // 장비 타입의 경우 순서 체크 (무기 - 코어 - 머리 - 몸통 - 하의 - 신발 순서)
+            if(a.item.itemType == Item_Base.Item_Type.Equipment && b.item.itemType == Item_Base.Item_Type.Equipment)
+            {
+                Item_Equipment eqA = a.item as Item_Equipment;
+                Item_Equipment eqB = b.item as Item_Equipment;
+
+                if(eqA != null && eqB != null)
+                    return ((int)eqB.equipmentType - (int)eqA.equipmentType);
+            }
+
+            return 0;
+        });
+
+        // 슬롯 초기화
+        foreach (Inventory_Slot slot in item_Slot)
+        {
+            slot.Slot_Reset();
+        }
+
+        // 데이터 입력
+        for (int i = 0; i < itemData.Count; i++)
+        {
+            item_Slot[i].Slot_Setting(itemData[i].item, itemData[i].count);
+        }
     }
     #endregion
 }

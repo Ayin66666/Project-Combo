@@ -166,6 +166,9 @@ public class Equipment_Manager : MonoBehaviour
 
                     // 스테이터스 UI 최신화
                     UI_Manager.instance.Status_Setting();
+
+                    // 원래 인벤토리 슬롯 비우기
+                    slot.Slot_Reset();
                     return;
                 }
             }
@@ -185,22 +188,22 @@ public class Equipment_Manager : MonoBehaviour
 
             // 스테이터스 UI 최신화
             UI_Manager.instance.Status_Setting();
-
         }
         else
         {
-            Debug.Log("장비 장착 (코어) 호출");
+            Debug.Log("장비 장착 (장비) 호출");
 
             // 장비 착용 시 아이템 체크
             if (itemSlot[item.equipmentType].haveItem)
             {
                 // 착용 장비 O - 복귀 -> 장착
-                Debug.Log("장비 교체 호출");
                 Item_Base oldItem = itemSlot[item.equipmentType].Item;
-                Debug.Log($"기존 아이템 {oldItem}");
 
                 // 스테이터스 감소
                 Player_Manager.instance.status.Equipment_Status_Setting(false, itemSlot[item.equipmentType].Item.equipment_Status);
+
+                // 원래 인벤토리 슬롯 비우기
+                slot.Slot_Reset();
 
                 // 기존 장착 장비 인벤토리로 복귀
                 slot.Slot_Setting(oldItem, 1);
@@ -221,6 +224,9 @@ public class Equipment_Manager : MonoBehaviour
 
                 // 스테이터스 UI 최신화
                 UI_Manager.instance.Status_Setting();
+
+                // 원래 인벤토리 슬롯 비우기
+                slot.Slot_Reset();
             }
         }
     }

@@ -248,15 +248,15 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 0.14150941, g: 0.14150941, b: 0.14150941, a: 1}
+  m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_RaycastTarget: 1
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 10907, guid: 0000000000000000f000000000000000, type: 0}
-  m_Type: 1
+  m_Sprite: {fileID: 21300000, guid: 5288633c797d6d144ac915192415349a, type: 3}
+  m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1
   m_FillMethod: 4
@@ -437,7 +437,7 @@ RectTransform:
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 0}
   m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 0, y: 30}
+  m_SizeDelta: {x: -30, y: 30}
   m_Pivot: {x: 0.5, y: 0}
 --- !u!114 &583387225
 MonoBehaviour:
@@ -540,15 +540,15 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 0.5896226, g: 1, b: 0.9356271, a: 1}
+  m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_RaycastTarget: 1
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 10905, guid: 0000000000000000f000000000000000, type: 0}
-  m_Type: 1
+  m_Sprite: {fileID: 21300000, guid: e5a2d5cdc38f750429b3cc3f55f8ba45, type: 3}
+  m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1
   m_FillMethod: 4
@@ -599,8 +599,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 1, y: 0}
   m_AnchorMax: {x: 1, y: 0}
-  m_AnchoredPosition: {x: -15, y: 30}
-  m_SizeDelta: {x: 100, y: 30}
+  m_AnchoredPosition: {x: -15, y: 50}
+  m_SizeDelta: {x: 200, y: 50}
   m_Pivot: {x: 1, y: 0}
 --- !u!114 &615139178
 MonoBehaviour:
@@ -649,8 +649,8 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 20
-  m_fontSizeBase: 20
+  m_fontSize: 35
+  m_fontSizeBase: 35
   m_fontWeight: 400
   m_enableAutoSizing: 0
   m_fontSizeMin: 18
@@ -957,10 +957,13 @@ MonoBehaviour:
   loadText: {fileID: 615139178}
   tipText: {fileID: 1817670947}
   texts:
-  - "Tip : \uC8FC\uBA39\uC73C\uB85C \uB9DE\uC73C\uBA74 \uC544\uD515\uB2C8\uB2E4!"
-  - "Tip : \uAC80\uC73C\uB85C \uB9DE\uC73C\uBA74 \uB354 \uC544\uD515\uB2C8\uB2E4!"
-  - "Tip : \uC8FC\uBA39\uACFC \uAC80\uC73C\uB85C \uB9DE\uC73C\uBA74 \uB9E4\uC6B0
-    \uC544\uD515\uB2C8\uB2E4!"
+  - "Tip : \uC2A4\uBA54\uC26C \uACF5\uACA9 \uC774\uD6C4 \uCD94\uAC00\uD0C0 \uD639\uC740
+    \uB3CC\uC9C4\uC5F0\uCC38\uC73C\uB85C \uC5F0\uACC4 \uAC00\uB2A5\uD569\uB2C8\uB2E4!"
+  - "Tip : \uAC00\uB4DC \uC131\uACF5 \uC2DC \uB2E4\uC74C \uD589\uB3D9\uC744 \uC9C4\uD589\uD558\uAE30
+    \uC804\uAE4C\uC9C0 \uBB34\uC801\uC774 \uC720\uC9C0\uB429\uB2C8\uB2E4!"
+  - "Tip : \uC7A5\uBE44\uB294 1~5\uD2F0\uC5B4 \uAE4C\uC9C0 \uC874\uC7AC\uD558\uBA70,
+    \uAC01 3\uD2F0\uC5B4 \uC774\uC0C1\uC758 \uC7A5\uBE44\uC5D0\uB294 \uACE0\uC720
+    \uD6A8\uACFC\uAC00 \uC874\uC7AC\uD569\uB2C8\uB2E4!"
 --- !u!1 &1553835920
 GameObject:
   m_ObjectHideFlags: 0

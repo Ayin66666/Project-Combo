@@ -30,7 +30,7 @@ public class Item_Equipment : Item_Base
         "이동 속도", "스테미너 회복력"
     };
 
-    public enum EquipmentType { Weapon, Head, Body, Pants, Shoes, Core }
+    public enum EquipmentType { Weapon, Core, Head, Body, Pants, Shoes }
     public enum StatusType 
     { 
         PDamage, MDamage, Criticalhit, Critical_multiplier, 

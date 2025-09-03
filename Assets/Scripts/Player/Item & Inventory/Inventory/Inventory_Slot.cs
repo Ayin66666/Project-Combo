@@ -23,7 +23,7 @@ public class Inventory_Slot : MonoBehaviour, IPointerClickHandler, IPointerEnter
 
     [Header("---Menu UI---")]
     [SerializeField] private GameObject menuSet;
-
+    [SerializeField] private GameObject shortcutButton;
 
 
     #region 기능 동작
@@ -66,6 +66,7 @@ public class Inventory_Slot : MonoBehaviour, IPointerClickHandler, IPointerEnter
         countText.text = "";
     }
 
+
     /// <summary>
     /// 아이템 사용
     /// </summary>
@@ -100,9 +101,6 @@ public class Inventory_Slot : MonoBehaviour, IPointerClickHandler, IPointerEnter
 
         // UI Off
         UI_Manager.instance.ItemEquipment_DescriptionUI(false, null);
-
-        // 슬롯 초기화
-        Slot_Reset();
     }
 
     private void Use_Consumable()
@@ -148,7 +146,11 @@ public class Inventory_Slot : MonoBehaviour, IPointerClickHandler, IPointerEnter
     public void Meun()
     {
         if (haveItem)
+        {
+            bool isOn = item.itemType == Item_Base.Item_Type.Consumable ? true : false;
+            shortcutButton.SetActive(isOn);
             menuSet.SetActive(true);
+        }
     }
 
     /// <summary>
@@ -174,6 +176,21 @@ public class Inventory_Slot : MonoBehaviour, IPointerClickHandler, IPointerEnter
         // 쇼트컷 등록 기능 호출 - 함수 제작 필요
         Player_Manager.instance.shortCut.Shortcut_Setting(this);
     }
+
+    /// <summary>
+    /// 아이템 버리기
+    /// </summary>
+    public void Click_Remove()
+    {
+        // 메뉴 UI 종료
+        menuSet.SetActive(false);
+        
+        // 설명 UI 종료
+        UI_Manager.instance.Item_DescriptionUI(false, null);
+
+        // 아이템 제거
+        Slot_Reset();
+    }
     #endregion
 
 
@@ -192,16 +209,7 @@ public class Inventory_Slot : MonoBehaviour, IPointerClickHandler, IPointerEnter
         // 마우스 오른쪽 클릭만 체크
         if (eventData.button == PointerEventData.InputButton.Right)
         {
-            if (item.itemType == Item_Base.Item_Type.Consumable)
-            {
-                // 소비 아이템이라면 메뉴 UI 표기
-                Meun();
-            }
-            else
-            {
-                // 이외 아이템은 즉시 사용
-                Slot_Use();
-            }
+            Meun();
         }
     }
 
