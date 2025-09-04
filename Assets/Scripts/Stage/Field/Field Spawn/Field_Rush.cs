@@ -21,10 +21,7 @@ public class Field_Rush : Field_Base
     private IEnumerator StartCall()
     {
         // 문 동작
-        foreach (GameObject obj in door)
-        {
-            obj.SetActive(true);
-        }
+        Door_Setting(true);
 
         // 시작 다이얼로그 체크
         if (haveStartDialog)
@@ -84,10 +81,7 @@ public class Field_Rush : Field_Base
             UI_Manager.instance.Dialog_Fight(endDialog.dialog);
 
         // 문 개방
-        foreach (GameObject obj in door)
-        {
-            obj.SetActive(false);
-        }
+        Door_Setting(false);
 
         // 맵 UI 최대화
         UI_Manager.instance.MiniMap_SizeSetting(true);
@@ -104,10 +98,7 @@ public class Field_Rush : Field_Base
         if (checkCoroutine != null) StopCoroutine(checkCoroutine);
 
         // 문 개방
-        foreach (GameObject door in door)
-        {
-            door.SetActive(false);
-        }
+        Door_Setting(false);
 
         // 몬스터 제거
         foreach (GameObject e in enemyList)

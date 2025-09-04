@@ -2298,7 +2298,7 @@ Transform:
   m_GameObject: {fileID: 274511680}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalPosition: {x: 0, y: -12.6, z: -20.5}
   m_LocalScale: {x: 30, y: 10, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -8076,8 +8076,8 @@ MonoBehaviour:
   - {fileID: 8300000, guid: 6ae7712f6823745d99d03a43d48fa7e7, type: 3}
   wayPointManager: {fileID: 864558473}
   startSpawnPos: {fileID: 1071848851}
-  spawnPos: {x: 0, y: 0, z: 0}
   spawnRotation: {x: 0, y: 0, z: 0, w: 0}
+  spawnPos: {x: 0, y: 0, z: 0}
 --- !u!82 &811790861
 AudioSource:
   m_ObjectHideFlags: 0
@@ -20626,5 +20626,5 @@ SceneRoots:
   - {fileID: 822182714}
   - {fileID: 759159271}
   - {fileID: 319570389}
-  - {fileID: 811790862}
   - {fileID: 1341823932}
+  - {fileID: 811790862}

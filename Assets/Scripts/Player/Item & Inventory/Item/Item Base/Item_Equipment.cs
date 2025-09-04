@@ -16,12 +16,9 @@ public class Item_Equipment : Item_Base
 
 
     [Header("---Epuipment UI---")]
-    // [TextArea] public string statusText;
-    // [TextArea] public string damageText;
-
     [HideInInspector] public string[] typeText = new string[] 
     { 
-        "무기", "머리", "상의", "하의", "신발", "코어" 
+        "무기", "코어", "머리", "상의", "하의", "신발"
     };
     [HideInInspector] public string[] effectText = new string[]
     {

@@ -24,13 +24,7 @@ public class Field_Normal : Field_Base
     private IEnumerator StartCall()
     {
         // 문 동작
-        if(door != null)
-        {
-            foreach (GameObject obj in door)
-            {
-                obj.SetActive(true);
-            }
-        }
+        Door_Setting(true);
 
         // 시작 다이얼로그 체크
         if (haveStartDialog)
@@ -114,10 +108,7 @@ public class Field_Normal : Field_Base
         UI_Manager.instance.MiniMap_SizeSetting(true);
 
         // 문 개방
-        foreach (GameObject obj in door)
-        {
-            obj.SetActive(false);
-        }
+        Door_Setting(false);
     }
 
     public override void Field_Reset()
@@ -132,13 +123,10 @@ public class Field_Normal : Field_Base
         if (stageCoroutine != null) StopCoroutine(stageCoroutine);
 
         // 문 개방
-        foreach (GameObject door in door)
-        {
-            door.SetActive(false);
-        }
+        Door_Setting(false);
 
         // 몬스터 제거
-        foreach(Enemy_Base e in enemyList)
+        foreach (Enemy_Base e in enemyList)
         {
             e.Reset_Enemy();
         }

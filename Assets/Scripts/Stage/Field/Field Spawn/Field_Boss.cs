@@ -55,7 +55,7 @@ public class Field_Boss : Field_Base
         for (int i = 0; i < enemyData.Length; i++)
         {
             // 몬스터 소환
-            GameObject enemy = Instantiate(enemyData[i].enemy, enemyData[i].spawnPos.position, Quaternion.identity);
+            GameObject enemy = Instantiate(enemyData[i].enemy, enemyData[i].spawnPos.position, enemyData[i].spawnPos.rotation);
             curEnemy = enemy.GetComponent<Enemy_Base>();
             curEnemy.Spawn();
 

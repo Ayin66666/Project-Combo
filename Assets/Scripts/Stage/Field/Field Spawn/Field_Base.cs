@@ -26,7 +26,8 @@ public abstract class Field_Base : MonoBehaviour
     [SerializeField] protected FieldType fieldType;
     public bool isClear;
     [SerializeField] protected Field_Checker checker;
-    [SerializeField] protected GameObject[] door;
+    [SerializeField] protected GameObject doorSet;
+    [SerializeField] protected Door[] door;
     protected enum FieldType { Normal, Rush, Guard, Puzzle, Boss }
     public enum UseType { Stage_Start, Stage_End, EnemyCount, Hp }
 
@@ -123,10 +124,16 @@ public abstract class Field_Base : MonoBehaviour
     /// <param name="isOn"></param>
     public void Door_Setting(bool isOn)
     {
+        if (isOn)
+            doorSet.SetActive(true);
+
         // ¹® °³¹æ
-        foreach (GameObject obj in door)
+        foreach (Door obj in door)
         {
-            obj.SetActive(isOn);
+            obj.Use(isOn);
         }
+
+        if (!isOn)
+            doorSet.SetActive(false);
     }
 }

@@ -218,26 +218,24 @@ public class UI_Manager : MonoBehaviour
 
     private IEnumerator FadeCall(bool isOn, float speed)
     {
+        isFade = true;
+
         float start = isOn ? 0 : 1;
         float end = isOn ? 1 : 0;
         float timer = 0;
-        isFade = true;
 
         fadeSet.SetActive(true);
         fadeCanvasGroup.alpha = start;
         while (timer < 1)
         {
-            timer += Time.deltaTime;
-            float t = Mathf.Clamp01(timer / speed);
-            fadeCanvasGroup.alpha = Mathf.Lerp(start, end, EasingFunctions.OutExpo(t));
+            timer += Time.deltaTime / speed;
+            fadeCanvasGroup.alpha = Mathf.Lerp(start, end, EasingFunctions.OutExpo(timer));
             yield return null;
         }
         fadeCanvasGroup.alpha = end;
 
         if (!isOn)
-        {
             fadeSet.SetActive(false);
-        }
 
         isFade = false;
     }
