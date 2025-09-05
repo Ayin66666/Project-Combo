@@ -1019,6 +1019,7 @@ public class UI_Manager : MonoBehaviour
     /// <param name="isOn"></param>
     public void Shortcut_SelectUI(bool isOn)
     {
+        // UI On Off
         shortcutSet.SetActive(isOn);
     }
 

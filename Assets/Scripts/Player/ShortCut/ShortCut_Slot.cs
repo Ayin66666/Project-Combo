@@ -1,15 +1,15 @@
 using TMPro;
-using UnityEngine.EventSystems;
 using UnityEngine;
+using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
 
 public class ShortCut_Slot : MonoBehaviour, IPointerClickHandler
 {
     [Header("---Setting---")]
-    public Inventory_Slot itemSlot;
     public Item_Base item;
     public bool haveItem;
+    public int slotCount;
 
 
     [Header("---UI---")]
@@ -20,24 +20,23 @@ public class ShortCut_Slot : MonoBehaviour, IPointerClickHandler
     /// <summary>
     /// 슬롯에 아이템 입력
     /// </summary>
-    /// <param name="item_Slot"></param>
+    /// <param name="item"></param>
     /// <param name="item"></param>
     /// <param name="count"></param>
-    public void Slot_Setting(Inventory_Slot item_Slot)
+    public void Slot_Setting(Item_Base item)
     {
         // 이미 슬롯에 아이템이 있다면 - 기존 아이템 비우기
         if (haveItem)
             Slot_Reset();
 
         // 아이템 타입 검사
-        if (item_Slot.item.itemType == Item_Base.Item_Type.Consumable)
+        if (item.itemType == Item_Base.Item_Type.Consumable)
         {
             // 소비 아이템이라면 - UI 셋팅
             haveItem = true;
-            item = item_Slot.item;
-            itemSlot = item_Slot;
-            icon.sprite = itemSlot.item.Icon;
-            countText.text = itemSlot.itemCount.ToString();
+            this.item = item;
+            icon.sprite = item.Icon;
+            countText.text = Player_Manager.instance.inventory.GetItemCount(item.itemCode).ToString();
         }
         else
         {
@@ -53,7 +52,7 @@ public class ShortCut_Slot : MonoBehaviour, IPointerClickHandler
     {
         // Status Reset
         haveItem = false;
-        itemSlot = null;
+        item = null;
 
         // UI Reset
         icon.sprite = null;
@@ -65,24 +64,48 @@ public class ShortCut_Slot : MonoBehaviour, IPointerClickHandler
     /// </summary>
     public void Use()
     {
-        if(!Player_Manager.instance.shortCut.canUseShortcut)
-        {
+        // 쇼트컷 사용 불가 상태라면 리턴
+        if (!Player_Manager.instance.shortCut.canUseShortcut)
             return;
-        }
 
-        if (itemSlot != null)
+        // 쇼트컷 내에 아이템이 업다면 리턴
+        if (!haveItem)
+            return;
+
+        // 아이템 체크
+        Debug.Log($"아이템 체크 : {item} / {item.itemCode}");
+        int count = Player_Manager.instance.inventory.GetItemCount(item.itemCode);
+        if (count > 0)
         {
             // 아이템 사용
-            itemSlot.Slot_Use();
-
-            // 쿨타임 호출
-            Player_Manager.instance.shortCut.IngameSlotCooldown(this);
-
-            // 아이템 잔량 확인
-            if (!itemSlot.haveItem)
+            (bool isCooldown, float remainingTime) = Player_Manager.instance.cooldown.Cooldown_Check(((Item_Consumable)item).Key);
+            if (isCooldown == false)
             {
-                Slot_Reset();
+                // 기능 동작
+                item.Use();
+
+                // 쿨타임 호출
+                Player_Manager.instance.shortCut.IngameSlotCooldown(this);
+
+                // 아이템 갯수 감소 & 0개라면 초기화
+                bool isEmpty = Player_Manager.instance.inventory.RemoveItemCount(item.itemCode);
+                if (isEmpty)
+                {
+                    Player_Manager.instance.shortCut.Shortcut_Remove(slotCount);
+                    Slot_Reset();
+                }
             }
+            else
+            {
+                // 사용 불가 UI
+                UI_Manager.instance.ItemCooldownUI(remainingTime);
+            }
+        }
+        else
+        {
+            // 모종의 이유로 아이템이 없다면 - 슬롯 초기화
+            Player_Manager.instance.shortCut.Shortcut_Remove(slotCount);
+            Slot_Reset();
         }
     }
 

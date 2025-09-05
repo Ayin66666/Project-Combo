@@ -505,7 +505,7 @@ public class SaveLoad_Manager : MonoBehaviour
         }
 
         // 아이템 코드 초기화
-        for (int i = 0; i < 40; i++)
+        for (int i = 0; i < Player_Manager.instance.inventory.slotCount; i++)
         {
             data.itemData.Add(new ItemData { itemCode = -1, itemCount = 0});
         }
@@ -640,7 +640,7 @@ public class SaveLoad_Manager : MonoBehaviour
 
             // 인벤토리 데이터 셋팅
             List<Vector2Int> items = Player_Manager.instance.inventory.GetItemData();
-            for (int i = 0; i < 40; i++)
+            for (int i = 0; i < Player_Manager.instance.inventory.slotCount; i++)
             {
                 playerData.itemData.Add(new ItemData
                 {
@@ -805,14 +805,14 @@ public class SaveLoad_Manager : MonoBehaviour
             // 데이터 적용 - 스킬트리
             pManager.skill.Skill_Setting(data);
 
-            // 데이터 적용 - 인벤토리
+            // 데이터 적용 - 인벤토리 & 쇼트컷
             pManager.inventory.Inventory_Setting(data);
-
-            // 데이터 적용 - 쇼트컷
-            pManager.shortCut.LoadData(data);
 
             // 데이터 적용 - 장비
             pManager.equipment.Equipment_Setting(data);
+
+            // 데이터 적용 - 쇼트컷
+            Player_Manager.instance.shortCut.LoadData(data);
 
             // 선택 UI Off
             SaveLoadUI(false);

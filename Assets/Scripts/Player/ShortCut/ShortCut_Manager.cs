@@ -46,9 +46,8 @@ public class ShortCut_Manager : MonoBehaviour
             {
                 if (data.shortcut[i] != -1)
                 {
-                    // 여기 슬롯 데이터 반환하는 함수나 변수 자체를 public으로 변경 필요
-                    slots[i].Slot_Setting(Player_Manager.instance.inventory.item_Slot[data.shortcut[i]]);
-                    slots_Ingame[i].Slot_Setting(slots[i].item);
+                    slots[i].Slot_Setting(ItemData_Container.instance.FindItem(data.shortcut[i]));
+                    slots_Ingame[i].Slot_Setting(ItemData_Container.instance.FindItem(data.shortcut[i]));
                 }
             }
         }
@@ -60,11 +59,11 @@ public class ShortCut_Manager : MonoBehaviour
     /// <returns></returns>
     public List<int> GetShortcutData()
     {
-        // 해당 쇼트컷에 연결된 슬롯 인덱스를 저장
+        // 해당 쇼트컷의 아이템 코드 제공
         List<int> data = new List<int>();
         for (int i = 0; i < slots.Count; i++)
         {
-            data.Add(slots[i].haveItem ? slots[i].itemSlot.slotIndex : -1);
+            data.Add(slots[i].haveItem ? slots[i].item.itemCode : -1);
         }
 
         return data;
@@ -99,6 +98,7 @@ public class ShortCut_Manager : MonoBehaviour
         }
     }
 
+    /* -> 미사용 코드?
     /// <summary>
     /// 쇼트컷 슬롯 데이터 셋팅 - 로드 시 호출
     /// </summary>
@@ -118,6 +118,7 @@ public class ShortCut_Manager : MonoBehaviour
             slots_Ingame[slot_Index].Slot_Reset();
         }
     }
+    */
 
     /// <summary>
     /// 제작 필요 / 쇼트컷 선택 UI 표기 / 키보드 1234 입력 받아서 해당 값 입력
@@ -129,6 +130,9 @@ public class ShortCut_Manager : MonoBehaviour
 
     private IEnumerator ShortcutSettingCall(Inventory_Slot slot)
     {
+        // 쇼트컷 비활성화
+        ShortCutUseSetting(false);
+
         // 쇼트컷 선택 UI On
         UI_Manager.instance.Shortcut_SelectUI(true);
 
@@ -167,11 +171,25 @@ public class ShortCut_Manager : MonoBehaviour
         }
 
         // 아이템 셋팅
-        slots[selectIndex].Slot_Setting(slot);
+        slots[selectIndex].Slot_Setting(slot.item);
         slots_Ingame[selectIndex].Slot_Setting(slot.item);
 
         // UI 종료
         UI_Manager.instance.Shortcut_SelectUI(false);
+
+        // 쇼트컷 활성화
+        ShortCutUseSetting(true);
+    }
+    #endregion
+
+    #region 쇼트컷 관리
+    /// <summary>
+    /// 인게임 쇼트컷 슬롯 초기화 기능
+    /// </summary>
+    /// <param name="index"></param>
+    public void Shortcut_Remove(int index)
+    {
+        slots_Ingame[index].Slot_Reset();
     }
     #endregion
 }

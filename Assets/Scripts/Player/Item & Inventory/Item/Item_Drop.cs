@@ -13,6 +13,7 @@ public class Item_Drop : MonoBehaviour
     [SerializeField] private int count;
     [SerializeField] private GameObject pickupVFX;
     [SerializeField] private GameObject[] ratingVFX;
+    [SerializeField] private LayerMask ground;
     private bool isSpawnDelay;
 
 
@@ -48,8 +49,18 @@ public class Item_Drop : MonoBehaviour
         Vector3 moveDir = new Vector3(Random.Range(-1f, 1f), Random.Range(0.5f, 1f), Random.Range(-1f, 1f)).normalized;
         rigid.AddForce(moveDir * Random.Range(1f, 3.5f), ForceMode.Impulse);
 
-        yield return new WaitForSeconds(1f);
-        isSpawnDelay = false;
+        yield return null;
+        /*
+        bool isGround = Physics.Raycast(transform.position, Vector3.down, 0.5f, ground);
+        while(!isGround)
+        {
+            isGround = Physics.Raycast(transform.position, Vector3.down, 0.5f, ground);
+            yield return null;
+        }
+
+        rigid.velocity = Vector3.zero;
+        rigid.useGravity = false;
+        */
     }
 
     /// <summary>

@@ -603,7 +603,9 @@ public abstract class Enemy_Base : MonoBehaviour, IDamageSysteam
                 if (ran < drop[i2])
                 {
                     // 아이템 생성
-                    GameObject obj = Instantiate(dropObject, transform.position, Quaternion.identity);
+                    Vector3 pos = transform.position;
+                    pos.y += 1;
+                    GameObject obj = Instantiate(dropObject, pos, Quaternion.identity);
 
                     // 수량 셋팅
                     int dropAmount = Random.Range(itemList[i2].drop_Count.x, itemList[i2].drop_Count.y + 1);

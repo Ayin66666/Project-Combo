@@ -1,13 +1,19 @@
 using System;
-using UnityEngine;
 using System.Collections.Generic;
+using UnityEngine;
 
 
 public class Inventory_Manager : MonoBehaviour
 {
     [Header("--- Setting ---")]
+    public int slotCount;
     public List<Inventory_Slot> item_Slot;
 
+
+    private void Awake()
+    {
+        slotCount = item_Slot.Count;
+    }
 
     #region 세이브 & 로드
     /// <summary>
@@ -41,23 +47,22 @@ public class Inventory_Manager : MonoBehaviour
     /// <returns></returns>
     public void Inventory_Setting(Data data)
     {
-        //Debug.Log($"인벤토리 데이터 로드 데이터 체크 - {data}");
-        //Debug.Log($"인벤토리 데이터 로드 슬롯 체크 - {item_Slot.Count}");
+        int dataSlotCount = data.itemData.Count;
         for (int i = 0; i < item_Slot.Count; i++)
         {
-            //Debug.Log("for문 호출");
-            if (data.itemData[i].itemCode != -1)
+            if(i < dataSlotCount)
             {
-                //Debug.Log("if문 호출");
-                //Debug.Log(ItemData_Container.instance);
-                Item_Base item = ItemData_Container.instance.FindItem(data.itemData[i].itemCode);
-
-                //Debug.Log(item);
-                //Debug.Log($"슬롯 null 체크 {i}번째 = {item_Slot[i]}");
-                if (item != null)
+                if (data.itemData[i].itemCode != -1)
                 {
-                    item_Slot[i].Slot_Setting(item, data.itemData[i].itemCount);
+                    Item_Base item = ItemData_Container.instance.FindItem(data.itemData[i].itemCode);
+
+                    if (item != null)
+                        item_Slot[i].Slot_Setting(item, data.itemData[i].itemCount);
                 }
+            }
+            else
+            {
+                item_Slot[i].Slot_Reset();
             }
         }
     }
@@ -282,6 +287,54 @@ public class Inventory_Manager : MonoBehaviour
         {
             item_Slot[i].Slot_Setting(itemData[i].item, itemData[i].count);
         }
+    }
+    #endregion
+
+
+    #region 쇼트컷 아이템 소모 & 체크
+    /// <summary>
+    /// 해당 코드의 아이템이 몇개 있는지 체크
+    /// </summary>
+    /// <param name="itemCode"></param>
+    public int GetItemCount(int itemCode)
+    {
+        int itemCount = 0;
+        foreach (Inventory_Slot slot in item_Slot)
+        {
+            if (slot.haveItem && slot.item.itemCode == itemCode)
+            {
+                itemCount += slot.itemCount;
+            }
+        }
+
+        return itemCount;
+    }
+
+    /// <summary>
+    /// 해당 코드의 소비 아이템 소모
+    /// </summary>
+    /// <param name="itemCode"></param>
+    public bool RemoveItemCount(int itemCode)
+    {
+        foreach (Inventory_Slot slot in item_Slot)
+        {
+            // 아이템 코드가 동일하다면 소모
+            if (slot.haveItem && slot.item.itemCode == itemCode)
+            {
+                // 아이템 소모
+                slot.itemCount--;
+
+                // 만약 해당 슬롯에서 아이템을 모두 소비했다면 비우기
+                if(slot.itemCount <= 0)
+                    slot.Slot_Reset();
+
+                // 남은 아이템 갯수에 따른 리턴값 변화
+                return GetItemCount(itemCode) > 0;
+            }
+        }
+
+        // 아이템이 없다면 - 없음 반환
+        return false;
     }
     #endregion
 }
