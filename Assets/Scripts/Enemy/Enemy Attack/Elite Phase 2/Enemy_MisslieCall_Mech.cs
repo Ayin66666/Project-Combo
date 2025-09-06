@@ -159,7 +159,7 @@ public class Enemy_MisslieCall_Mech : MonoBehaviour
 
             // Åº ÀÌµ¿ ¼ÂÆÃ
             Vector3 movePos = Bullet_PosSetting(misslieTargetCollider) - obj.transform.position;
-            obj.GetComponent<Attack_Collider_Shooting>().Movement_Target(Bullet_PosSetting(misslieTargetCollider), 3f, Random.Range(0.35f, 0.45f));
+            obj.GetComponent<Attack_Collider_Shooting>().Movement_Setting(movePos, 3f, Random.Range(0.35f, 0.45f));
 
             yield return null;
         }

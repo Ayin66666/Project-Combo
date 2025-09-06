@@ -7,6 +7,8 @@ public class EAttack_Messile : Attack_Base
     [Header("---Setting---")]
     [SerializeField] private Enemy_Elite_Phase1 elite;
     [SerializeField] private GameObject shootVFX;
+    [SerializeField] private GameObject flyVFX;
+    [SerializeField] private GameObject flameVFX;
     [SerializeField] private GameObject[] bullet_Messile;
     [SerializeField] private Transform[] shotPos;
 
@@ -38,6 +40,8 @@ public class EAttack_Messile : Attack_Base
         elite.sound.Sound(Enemy_Elite_Phase1.SoundKey.MisslieCharge.ToString());
 
         // 애니메이션 - 비행 시작
+        flameVFX.SetActive(true);
+        flyVFX.SetActive(true);
         anim.SetTrigger("Action");
         anim.SetBool("isMisslieReady", true);
         anim.SetBool("isMessile", true);
@@ -71,6 +75,7 @@ public class EAttack_Messile : Attack_Base
         {
             yield return null;
         }
+        flameVFX.SetActive(false);
 
 
         enemy.Delay();
@@ -169,7 +174,7 @@ public class EAttack_Messile : Attack_Base
 
         // 이펙트 종료
         missliePosSet.SetActive(false);
-
+        flameVFX.SetActive(false);
         isOn = false;
 
         // 리스트 리셋

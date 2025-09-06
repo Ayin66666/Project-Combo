@@ -92,7 +92,7 @@ public class EAttack_GunSlash : Attack_Base
             yield return null;
         }
         anim.SetFloat("AnimValue", 1);
-        anim.SetBool("isGunSlashbackstep", false);
+        // anim.SetBool("isGunSlashbackstep", false);
     }
 
     public void ChargeVFX(int index)

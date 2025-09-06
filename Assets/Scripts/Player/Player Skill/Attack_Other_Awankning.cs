@@ -22,7 +22,7 @@ public class Attack_Other_Awankning : Attack_Base
 
 
     [Header("--- Awankning VFX ---")]
-    [SerializeField] private GameObject awankningVFX;
+    [SerializeField] private GameObject[] awakeningVFX;
     [SerializeField] private GameObject swordVFX;
 
 
@@ -44,35 +44,50 @@ public class Attack_Other_Awankning : Attack_Base
         PlayerAction_Manager.instance.MovementLock(cancelType, true);
         PlayerAction_Manager.instance.isAwankning = true;
         PlayerAction_Manager.instance.Special_Setting(true);
+        Player_Manager.instance.action.isInvincibility = true;
 
         // 사용 가능 UI Off
         UI_Manager.instance.Awakening_Setting(false);
 
-        // 이펙트 On
-        awankningVFX.SetActive(true);
-        swordVFX.SetActive(true);
-
         // 사운드
         Player_Sound.instance.Sound_Skill(Player_Sound.Skill.Awakening);
+
+        // 차징 애니메이션
+        awakeningVFX[0].SetActive(true);
+        anim.SetTrigger("Action");
+        anim.SetBool("isAwakning", true);
+        anim.SetBool("isAwakningCharge", true);
+
+
+        // 차징 대기
+        CameraEffect_Manager.instance.Camera_Shack(5f, 0.5f);
+        yield return new WaitForSeconds(0.5f);
+
+        // 이펙트 On
+        CameraEffect_Manager.instance.Camera_Shack(30f, 0.1f);
+        awakeningVFX[0].SetActive(false);
+        awakeningVFX[1].SetActive(true);
+        awakeningVFX[2].SetActive(true);
+        swordVFX.SetActive(true);
+
+        // 애니메이션 종료 대기
+        anim.SetBool("isAwakningCharge", false);
+        while (anim.GetBool("isAwakning"))
+        {
+            yield return null;
+        }
+
+        PlayerAction_Manager.instance.MovementLock(cancelType, false);
+        Player_Manager.instance.action.isInvincibility = false;
 
         // 능력치 강화
         Buff_Setting();
         Status_Setting(true);
 
-        // 애니메이션
-        anim.SetTrigger("Action");
-        anim.SetBool("isAwakning", true);
-        while (anim.GetBool("isAwakning"))
-        {
-            yield return null;
-        }
-        PlayerAction_Manager.instance.MovementLock(cancelType, false);
-
-
         // 타이머
         float cur = 200;
         float timer = 0;
-        while (Player_Manager.instance.status.curAwakening > 0)
+        while (timer < 1)
         {
             timer += Time.deltaTime / 15f;
             cur = Mathf.Lerp(200, 0, timer);
@@ -80,15 +95,13 @@ public class Attack_Other_Awankning : Attack_Base
             yield return null;
         }
 
+        // 이펙트 Off
+        awakeningVFX[2].SetActive(false);
+        swordVFX.SetActive(false);
 
         // 능력치 초기화
         Status_Setting(false);
         PlayerAction_Manager.instance.Special_Setting(false);
-
-        // 이펙트 Off
-        awankningVFX.SetActive(false);
-        swordVFX.SetActive(false);
-
         PlayerAction_Manager.instance.isAwankning = false;
         PlayerAction_Manager.instance.canAwakning = false;
     }
@@ -146,9 +159,13 @@ public class Attack_Other_Awankning : Attack_Base
             StopCoroutine(useCoroutine);
 
         Player_Manager.instance.action.isAwankning = false;
+        Player_Manager.instance.action.isInvincibility = false;
 
         // 이펙트 종료
-        awankningVFX.SetActive(false);
+        foreach (GameObject obj in awakeningVFX)
+        {
+            obj.SetActive(false);
+        }
         swordVFX.SetActive(false);
 
         // 스테이터스 정상화 -> 어웨이크닝 상태일때만 1회 호출되도록 (아마 중복호출 이슈 있는듯?)

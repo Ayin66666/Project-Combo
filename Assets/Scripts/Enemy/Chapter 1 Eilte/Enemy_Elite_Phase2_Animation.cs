@@ -1,8 +1,6 @@
-using System;
 using System.Collections;
-using System.Collections.Generic;
-using System.Threading;
 using UnityEngine;
+
 
 public class Enemy_Elite_Phase2_Animation : MonoBehaviour
 {
@@ -27,10 +25,10 @@ public class Enemy_Elite_Phase2_Animation : MonoBehaviour
     private IEnumerator LookAtCall(float speed)
     {
         float timer = 0;
-        while (timer < speed)
+        while (timer < 1)
         {
-            enemy.LookAt(enemy.target, 0.1f);
-            timer += Time.deltaTime;
+            timer += Time.deltaTime / speed;
+            enemy.LookAt(enemy.target, 0);
             yield return null;
         }
     }
@@ -138,7 +136,7 @@ public class Enemy_Elite_Phase2_Animation : MonoBehaviour
 
     public void GunSlashMove(int index)
     {
-        if(index == 0)
+        if (index == 0)
         {
             ((EAttack_GunSlash)enemy.attackDatas[0]).Movement();
         }
