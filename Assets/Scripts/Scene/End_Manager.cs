@@ -120,7 +120,7 @@ public class End_Manager : MonoBehaviour
 
     private void Start()
     {
-        UI_Manager.instance.Fade(false, 1f);
+        UI_Manager.instance.Fade(false, 2f);
         isScrolling = true;
         scrollingEnd = false;
 

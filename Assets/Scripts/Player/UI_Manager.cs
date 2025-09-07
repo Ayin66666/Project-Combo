@@ -667,13 +667,12 @@ public class UI_Manager : MonoBehaviour
             yield return null;
         }
 
-        yield return new WaitForSeconds(1.5f);
         // 딜레이
-        Fade(true, 1.5f);
-        while(isFade)
-        {
-            yield return null;
-        }
+        yield return new WaitForSeconds(1.5f);
+
+        Fade(true, 2f);
+        yield return new WaitWhile(() => isFade);
+
         stageClearUICanvasGroup.alpha = 0;
         stageClearSet.SetActive(false);
 
@@ -782,6 +781,25 @@ public class UI_Manager : MonoBehaviour
         {
             button.SetActive(isOn);
         }
+    }
+
+    /// <summary>
+    /// 메인화면으로 돌아가기 - 버튼 이벤트
+    /// </summary>
+    public void Click_ReturnMain()
+    {
+        StartCoroutine(ReturnMain());
+    }
+
+    private IEnumerator ReturnMain()
+    {
+        // 페이드
+        Fade(true, 2f);
+        yield return new WaitWhile(() => isFade);
+        yield return new WaitForSeconds(0.15f);
+
+        // 씬 이동
+        SceneLoad_Manager.LoadScene("Start_Scene");
     }
     #endregion
 

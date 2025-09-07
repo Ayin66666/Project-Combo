@@ -397,30 +397,38 @@ public class Enemy_Boss_Arie : Enemy_Base
     {
         curPhase = Phase.Phase2;
         curState = State.Spawn;
+        isInvincibility = true;
 
         // 보스 강화
+        physcialDamage = phase2_Status.PhyScial_Damage;
+        magicalDamage = phase2_Status.Magical_Damage;
+        criticalhit = phase2_Status.Critical_hit;
+        critical_multiplier = phase2_Status.Critical_multiplier;
+        anim.SetFloat("AttackSpeed", 1.15f);
+
+        curHp = phase2_Status.Hp;
+        maxHp = phase2_Status.Hp;
+        curGroggy = phase2_Status.Groggy;
+        maxGroggy = phase2_Status.Groggy;
+        physicalDefence = phase2_Status.Physical_Defence;
+        magicalDefence = phase2_Status.Magical_Defence;
+
         enemyName = phase2_Status.ObjectName;
         moveSpeed = phase2_Status.MoveSpeed;
         nav.speed = moveSpeed;
         pattenDelaytime = 0.1f;
 
-        physcialDamage = phase2_Status.PhyScial_Damage;
-        magicalDamage = phase2_Status.Magical_Damage;
-        criticalhit = phase2_Status.Critical_hit;
-        critical_multiplier = phase2_Status.Critical_multiplier;
-
-        physicalDefence = phase2_Status.Physical_Defence;
-        magicalDefence = phase2_Status.Magical_Defence;
-        anim.SetFloat("AttackSpeed", 1.15f);
-
         // UI 초기화
         enemyUI.UI_Setting();
+        enemyUI.Hp();
+        enemyUI.Groggy();
 
         // 2페이즈 컷씬
         enemyUI.CutScene(clips[1]);
         yield return new WaitWhile(() => enemyUI.isCutScene);
 
         curState = State.Idle;
+        isInvincibility = false;
         Think();
     }
 

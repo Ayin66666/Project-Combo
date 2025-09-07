@@ -411,7 +411,7 @@ public class SaveLoad_Manager : MonoBehaviour
                 isNew = false;
 
                 // 페이드
-                UI_Manager.instance.Fade(true, 1.5f);
+                UI_Manager.instance.Fade(true, 2f);
                 while (UI_Manager.instance.isFade)
                 {
                     yield return null;
@@ -787,7 +787,7 @@ public class SaveLoad_Manager : MonoBehaviour
             }
 
             // 페이드 인
-            UI_Manager.instance.Fade(true, 1.5f);
+            UI_Manager.instance.Fade(true, 2f);
             while (UI_Manager.instance.isFade)
             {
                 yield return null;

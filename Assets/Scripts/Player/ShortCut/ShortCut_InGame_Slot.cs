@@ -19,6 +19,7 @@ public class ShortCut_InGame_Slot : MonoBehaviour
     {
         this.item = item;
         icon.sprite = item.Icon;
+        icon.gameObject.SetActive(true);
     }
 
     /// <summary>
@@ -30,6 +31,7 @@ public class ShortCut_InGame_Slot : MonoBehaviour
 
         item = null;
         icon.sprite = null;
+        icon.gameObject.SetActive(false);
         cooldown.fillAmount = 0;
     }
 

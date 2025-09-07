@@ -18,6 +18,7 @@ public abstract class Enemy_Base : MonoBehaviour, IDamageSysteam
     public bool isPatten;
     public bool isGroggy;
     public bool isCutScene;
+    public bool isInvincibility;
     private enum EnemyType { Normal, Elite, Boss }
     protected enum SpawnType { None, Movement, CutScene }
     public enum State { None, Spawn, Idle, Think, Chase, Attack, Delay, Groggy, Die }
@@ -296,7 +297,11 @@ public abstract class Enemy_Base : MonoBehaviour, IDamageSysteam
     #region Hit
     public void Take_Damage(GameObject attackObj, IDamageSysteam.DamageType type, IDamageSysteam.HitVFX hit, bool isCirtical, int hitCount, int damage)
     {
+        // 사망 체크
         if (curState == State.Die) return;
+
+        // 무적 체크
+        if (isInvincibility) return;
 
         // 사운드
         sound.Sound(Enemy_Sound.SoundKey.Hit.ToString());
