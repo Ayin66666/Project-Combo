@@ -28,7 +28,7 @@ public class Enemy_Elite_Phase2 : Enemy_Base
         { 3,4,0 },{ 4,0,1 },{ 2,3,4 }
     };
 
-    public enum SoundKey 
+    public enum SoundKey
     {
         // 이동
         Backstep_Move, Forward_Move,
@@ -54,40 +54,27 @@ public class Enemy_Elite_Phase2 : Enemy_Base
     [SerializeField] private VideoClip dieClip;
 
 
-    private void Start()
-    {
-        Spawn();
-    }
-
-    private void Update()
-    {
-        if(curState == State.Die)
-        {
-            return;
-        }
-
-        if (curState == State.Idle)
-        {
-            Think();
-        }
-    }
-
-
     protected override void Think()
     {
+        if (curState == State.Die) return;
+
         curState = State.Think;
 
         Check_Target();
         int ran = Random.Range(0, targetRange <= 5 ? pattens_Melee.GetLength(0) : pattens_Range.GetLength(0));
+
+        if (movementCoroutine != null)
+            StopCoroutine(movementCoroutine);
+
         if (targetRange <= 5)
         {
             // 근접 패턴
-            StartCoroutine(Patten_Use(pattens_Melee, ran));
+            movementCoroutine = StartCoroutine(Patten_Use(pattens_Melee, ran));
         }
         else
         {
             // 원거리 패턴
-            StartCoroutine(Patten_Use(pattens_Range, ran));
+            movementCoroutine = StartCoroutine(Patten_Use(pattens_Range, ran));
         }
     }
 
@@ -121,14 +108,21 @@ public class Enemy_Elite_Phase2 : Enemy_Base
         }
 
         // 딜레이 행동
+        ChaseDelay();
+    }
+
+    private void ChaseDelay()
+    {
+        if (movementCoroutine != null)
+            StopCoroutine(movementCoroutine);
+
         float ran = Random.Range(2.35f, 3.1f);
-        StartCoroutine(Chase_Delay(ran));
+        movementCoroutine = StartCoroutine(Chase_Delay(ran));
     }
 
     private IEnumerator Chase_Delay(float chaseTime)
     {
         curState = State.Chase;
-        Debug.Log("Delay Movement Call");
 
         nav.enabled = true;
         Vector3 moveDir = Vector3.zero;
@@ -234,6 +228,7 @@ public class Enemy_Elite_Phase2 : Enemy_Base
         anim.SetFloat("Movement", 0);
 
         curState = State.Idle;
+        Think();
     }
 
     protected override IEnumerator Spawn_CutScene()
@@ -242,14 +237,23 @@ public class Enemy_Elite_Phase2 : Enemy_Base
         enemyUI.UI_Setting();
         enemyUI.UI_OnOff(true);
 
+        yield return null;
+
         curState = State.Idle;
         isCutScene = false;
-        yield return null;
+        Think();
     }
 
     public override void Die()
     {
-        StartCoroutine(DieCall());
+        if (movementCoroutine != null)
+            StopCoroutine(movementCoroutine);
+
+        if (hitCoroutine != null)
+            StopCoroutine(hitCoroutine);
+
+        StopAllCoroutines();
+        movementCoroutine = StartCoroutine(DieCall());
     }
 
     private IEnumerator DieCall()
@@ -259,7 +263,7 @@ public class Enemy_Elite_Phase2 : Enemy_Base
         // 애니메이션
         anim.SetTrigger("Action");
         anim.SetBool("isDie", true);
-        while(anim.GetBool("isDie"))
+        while (anim.GetBool("isDie"))
         {
             yield return null;
         }

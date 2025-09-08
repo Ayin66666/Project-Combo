@@ -42,9 +42,10 @@ public class Attack_Other_Awankning : Attack_Base
     private IEnumerator UseCall()
     {
         PlayerAction_Manager.instance.MovementLock(cancelType, true);
-        PlayerAction_Manager.instance.isAwankning = true;
+        PlayerAction_Manager.instance.Armor_Setting(PlayerAction_Manager.instance.isAwankning ? value_Awakening[0].levelValue.value_List[skillLevel].armor : value_Normal[0].levelValue.value_List[skillLevel].armor);
         PlayerAction_Manager.instance.Special_Setting(true);
         Player_Manager.instance.action.isInvincibility = true;
+        PlayerAction_Manager.instance.isAwankning = true;
 
         // 사용 가능 UI Off
         UI_Manager.instance.Awakening_Setting(false);
@@ -60,11 +61,11 @@ public class Attack_Other_Awankning : Attack_Base
 
 
         // 차징 대기
-        CameraEffect_Manager.instance.Camera_Shack(5f, 0.5f);
+        Effect_Manager.instance.Camera_Shack(5f, 0.5f);
         yield return new WaitForSeconds(0.5f);
 
         // 이펙트 On
-        CameraEffect_Manager.instance.Camera_Shack(30f, 0.1f);
+        Effect_Manager.instance.Camera_Shack(30f, 0.1f);
         awakeningVFX[0].SetActive(false);
         awakeningVFX[1].SetActive(true);
         awakeningVFX[2].SetActive(true);
@@ -77,6 +78,7 @@ public class Attack_Other_Awankning : Attack_Base
             yield return null;
         }
 
+        PlayerAction_Manager.instance.Armor_Setting(IDamageSysteam.ArmorType.None);
         PlayerAction_Manager.instance.MovementLock(cancelType, false);
         Player_Manager.instance.action.isInvincibility = false;
 
@@ -171,5 +173,7 @@ public class Attack_Other_Awankning : Attack_Base
         // 스테이터스 정상화 -> 어웨이크닝 상태일때만 1회 호출되도록 (아마 중복호출 이슈 있는듯?)
         if (Player_Manager.instance.action.isAwankning)
             Status_Setting(false);
+
+        PlayerAction_Manager.instance.Armor_Setting(IDamageSysteam.ArmorType.None);
     }
 }

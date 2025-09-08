@@ -164,8 +164,11 @@ public class Equipment_Manager : MonoBehaviour
                     Debug.Log("Equipment - Core / New");
                     coreSlot[i].slot.Item_Setting(true, item);
 
-                    // 스테이터스 UI 최신화
+                    // 내부 스테이터스 UI 최신화
                     UI_Manager.instance.Status_Setting();
+
+                    // 외부 스테이터스 UI 최신화
+                    UI_Manager.instance.Ingame_StatusUpdata();
 
                     // 원래 인벤토리 슬롯 비우기
                     slot.Slot_Reset();
@@ -178,6 +181,9 @@ public class Equipment_Manager : MonoBehaviour
 
             // 스테이터스 감소
             Player_Manager.instance.status.Equipment_Status_Setting(false, coreSlot[0].slot.Item.equipment_Status);
+            
+            // 외부 스테이터스 UI 최신화
+            UI_Manager.instance.Ingame_StatusUpdata();
 
             // 기존 장착 장비 인벤토리로 복귀
             Player_Manager.instance.inventory.Item_Change(slot, coreSlot[0].slot.Item);

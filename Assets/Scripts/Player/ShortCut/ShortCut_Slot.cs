@@ -36,6 +36,7 @@ public class ShortCut_Slot : MonoBehaviour, IPointerClickHandler
             haveItem = true;
             this.item = item;
             icon.sprite = item.Icon;
+            icon.gameObject.SetActive(true);
             countText.text = Player_Manager.instance.inventory.GetItemCount(item.itemCode).ToString();
         }
         else
@@ -57,6 +58,7 @@ public class ShortCut_Slot : MonoBehaviour, IPointerClickHandler
         // UI Reset
         icon.sprite = null;
         countText.text = "";
+        icon.gameObject.SetActive(false);
     }
 
     /// <summary>

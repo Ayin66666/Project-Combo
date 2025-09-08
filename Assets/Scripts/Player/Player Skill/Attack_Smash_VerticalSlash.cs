@@ -27,10 +27,12 @@ public class Attack_Smash_VerticalSlash : Attack_Base
     /// <returns></returns>
     private IEnumerator UseCall()
     {
-        PlayerAction_Manager.instance.isAttack = true;
-        PlayerAction_Manager.instance.isSmash = true;
         PlayerAction_Manager.instance.MovementLock(cancelType, true);
+        PlayerAction_Manager.instance.Armor_Setting(PlayerAction_Manager.instance.isAwankning ? value_Awakening[0].levelValue.value_List[skillLevel].armor : value_Normal[0].levelValue.value_List[skillLevel].armor);
         PlayerAction_Manager.instance.LookAt();
+        PlayerAction_Manager.instance.isSmash = true;
+        PlayerAction_Manager.instance.isAttack = true;
+
         TeleportPos_Setting();
 
         // 다음 공격 UI 호출
@@ -78,6 +80,7 @@ public class Attack_Smash_VerticalSlash : Attack_Base
             yield return null;
         }
 
+        PlayerAction_Manager.instance.Armor_Setting(IDamageSysteam.ArmorType.None);
         PlayerAction_Manager.instance.MovementLock(cancelType, false);
         PlayerAction_Manager.instance.RushSlash_Setting(false);
         PlayerAction_Manager.instance.AttackOver();
@@ -120,6 +123,8 @@ public class Attack_Smash_VerticalSlash : Attack_Base
 
             yield return null;
         }
+
+        PlayerAction_Manager.instance.Armor_Setting(IDamageSysteam.ArmorType.None);
         PlayerAction_Manager.instance.MovementLock(cancelType, false);
         PlayerAction_Manager.instance.AttackOver();
     }
@@ -227,5 +232,7 @@ public class Attack_Smash_VerticalSlash : Attack_Base
 
         // 리스트 리셋
         Attack_ColliderReset();
+
+        PlayerAction_Manager.instance.Armor_Setting(IDamageSysteam.ArmorType.None);
     }
 }

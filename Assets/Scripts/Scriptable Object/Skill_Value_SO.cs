@@ -13,6 +13,7 @@ public class Skill_Value_SO : ScriptableObject
     {
         [SerializeField] private string name;
         public IDamageSysteam.DamageType type;
+        public IDamageSysteam.ArmorType armor;
         public IDamageSysteam.HitVFX attackEffect;
         public Vector2 motionValue;
         public int hitCount;

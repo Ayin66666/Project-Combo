@@ -320,7 +320,7 @@ public abstract class Enemy_Base : MonoBehaviour, IDamageSysteam
                     curGroggy -= calDamage;
 
                 // 카메라 흔들림
-                CameraEffect_Manager.instance.Camera_Shack(1, 0.1f);
+                Effect_Manager.instance.Camera_Shack(1, 0.1f);
 
                 // 플레이어 각성 게이지
                 if (!Player_Manager.instance.action.isAwankning)
@@ -368,17 +368,17 @@ public abstract class Enemy_Base : MonoBehaviour, IDamageSysteam
                 switch (hit)
                 {
                     case IDamageSysteam.HitVFX.None:
-                        CameraEffect_Manager.instance.Camera_Shack(1.5f, 0.05f);
+                        Effect_Manager.instance.Camera_Shack(1.5f, 0.05f);
                         break;
 
                     case IDamageSysteam.HitVFX.KnockBack:
-                        CameraEffect_Manager.instance.Camera_Shack(3, 0.05f);
+                        Effect_Manager.instance.Camera_Shack(3, 0.05f);
                         if (hitCoroutine != null) StopCoroutine(hitCoroutine);
                         hitCoroutine = StartCoroutine(Hit_KnockBack(attackObj));
                         break;
 
                     case IDamageSysteam.HitVFX.Down:
-                        CameraEffect_Manager.instance.Camera_Shack(5, 0.05f);
+                        Effect_Manager.instance.Camera_Shack(5, 0.05f);
                         if (hitCoroutine != null) StopCoroutine(hitCoroutine);
                         hitCoroutine = StartCoroutine(Hit_Down(attackObj));
                         break;

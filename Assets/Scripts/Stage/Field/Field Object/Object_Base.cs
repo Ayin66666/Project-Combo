@@ -21,6 +21,7 @@ public abstract class Object_Base : MonoBehaviour
     [SerializeField] private CanvasGroup iconCanvasGroup;
     [SerializeField] protected TextMeshProUGUI text;
     [SerializeField] protected Collider coll;
+    [SerializeField] protected GameObject effect;
 
 
     private void Start()

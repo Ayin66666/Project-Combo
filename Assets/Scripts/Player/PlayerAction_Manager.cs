@@ -3,6 +3,7 @@ using UnityEngine;
 using DG.Tweening;
 using Easing.Tweening;
 using System.Collections.Generic;
+using UnityEngine.SocialPlatforms;
 
 
 public class PlayerAction_Manager : MonoBehaviour, IDamageSysteam
@@ -13,6 +14,7 @@ public class PlayerAction_Manager : MonoBehaviour, IDamageSysteam
     // 아머 타입 추가해야함! - 그리고 아머타입에 따른 피격효과 셋팅도!
     [Header("---State---")]
     [SerializeField] private IDamageSysteam.HitVFX curHitState;
+    [SerializeField] private IDamageSysteam.ArmorType armorType;
     public bool canAction;
     public bool canAttack;
     public bool useGravity;
@@ -493,6 +495,9 @@ public class PlayerAction_Manager : MonoBehaviour, IDamageSysteam
         {
             dashCount++;
             isJustDash = true;
+
+            // 타임 슬로우 이펙트
+            Effect_Manager.instance.TimeStop(0.65f, 0.1f);
         }
 
         // 무적 상태 체크
@@ -539,19 +544,28 @@ public class PlayerAction_Manager : MonoBehaviour, IDamageSysteam
             switch (hitType)
             {
                 case IDamageSysteam.HitVFX.None:
-                    CameraEffect_Manager.instance.Camera_Shack(3, 0.05f);
+                    Effect_Manager.instance.Camera_Shack(3, 0.05f);
                     break;
 
                 case IDamageSysteam.HitVFX.KnockBack:
-                    CameraEffect_Manager.instance.Camera_Shack(8, 0.075f);
-                    if (hitEffectCoroutine != null) StopCoroutine(hitEffectCoroutine);
-                    hitEffectCoroutine = StartCoroutine(Hit_KnockBack(attackObj));
+                    
+                    Effect_Manager.instance.Camera_Shack(8, 0.075f);
+
+                    if((int)armorType < 1)
+                    {
+                        if (hitEffectCoroutine != null) StopCoroutine(hitEffectCoroutine);
+                        hitEffectCoroutine = StartCoroutine(Hit_KnockBack(attackObj));
+                    }
+
                     break;
 
                 case IDamageSysteam.HitVFX.Down:
-                    CameraEffect_Manager.instance.Camera_Shack(10, 0.1f);
-                    if (hitEffectCoroutine != null) StopCoroutine(hitEffectCoroutine);
-                    hitEffectCoroutine = StartCoroutine(Hit_Down(attackObj));
+                    Effect_Manager.instance.Camera_Shack(10, 0.1f);
+                    if((int)armorType < 2)
+                    {
+                        if (hitEffectCoroutine != null) StopCoroutine(hitEffectCoroutine);
+                        hitEffectCoroutine = StartCoroutine(Hit_Down(attackObj));
+                    }
                     break;
             }
 
@@ -569,6 +583,15 @@ public class PlayerAction_Manager : MonoBehaviour, IDamageSysteam
         isInvincibility = true;
         yield return waitSec;
         isInvincibility = false;
+    }
+
+    /// <summary>
+    /// 아머 타입 셋팅
+    /// </summary>
+    /// <param name="type"></param>
+    public void Armor_Setting(IDamageSysteam.ArmorType type)
+    {
+        armorType = type;
     }
 
     private void Die()
@@ -1100,6 +1123,7 @@ public class PlayerAction_Manager : MonoBehaviour, IDamageSysteam
         {
             pManager.status.curhp = pManager.status.maxHp;
         }
+        UI_Manager.instance.Hp();
     }
     #endregion
 }

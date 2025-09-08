@@ -1,6 +1,6 @@
 using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
+
 
 public class Object_Healing : Object_Base
 {
@@ -25,6 +25,7 @@ public class Object_Healing : Object_Base
         isUsed = true;
 
         // ¿Ã∆Â∆Æ
+        effect.SetActive(false);
         GameObject obj = Instantiate(healVFX, PlayerAction_Manager.instance.transform.position, Quaternion.identity);
         obj.transform.parent = PlayerAction_Manager.instance.transform;
         Vector3 pos = obj.transform.position;

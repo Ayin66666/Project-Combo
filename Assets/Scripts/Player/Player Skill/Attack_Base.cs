@@ -1,6 +1,6 @@
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+
 
 public abstract class Attack_Base : MonoBehaviour
 {
@@ -8,7 +8,6 @@ public abstract class Attack_Base : MonoBehaviour
     public string skillName;
     public Owner attackOwner;
     public SkillType skillType;
-    public ArmorType armorType;
     public CancelType cancelType;
     public bool haveAwakningValue;
     public int skillLevel;
@@ -26,12 +25,11 @@ public abstract class Attack_Base : MonoBehaviour
     public struct Value
     {
         [SerializeField] private string name;
-        public Skill_Value_SO levelValue; // 스킬레벨 별 데미지
+        public Skill_Value_SO levelValue;
         public AttackCollider_Controller attackCollider;
     }
     
     public enum SkillType { None, Attack, Buff, Other }
-    public enum ArmorType { None, Knockback, Super }
     public enum CancelType { Free, Lock }
     public enum Owner { Player, Enemy }
 

@@ -1,12 +1,13 @@
 using System.Collections;
-using System.Collections.Generic;
-using Unity.VisualScripting;
 using UnityEngine;
+
 
 public interface IDamageSysteam
 {
     public enum DamageType { Physical, Magical }
+    public enum ArmorType { None, KnockBack, Down }
     public enum HitVFX { None, KnockBack, Down }
+
 
     public void Take_Damage(GameObject attackObj, DamageType type, HitVFX hitType, bool isCirtical, int hitCount, int damage);
 

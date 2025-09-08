@@ -31,6 +31,8 @@ public class Attack_Other_SpecialSlash : Attack_Base
         PlayerAction_Manager.instance.MovementLock(cancelType, true);
         PlayerAction_Manager.instance.Collider_Ignore(true);
         PlayerAction_Manager.instance.Animation_Reset();
+        PlayerAction_Manager.instance.Armor_Setting(PlayerAction_Manager.instance.isAwankning ? value_Awakening[0].levelValue.value_List[skillLevel].armor : value_Normal[0].levelValue.value_List[skillLevel].armor);
+        PlayerAction_Manager.instance.isInvincibility = true;
         PlayerAction_Manager.instance.isAttack = true;
 
         // 데미지 셋팅
@@ -102,7 +104,9 @@ public class Attack_Other_SpecialSlash : Attack_Base
 
         // 공격 종료
         PlayerAction_Manager.instance.MovementLock(cancelType, false);
+        PlayerAction_Manager.instance.Armor_Setting(IDamageSysteam.ArmorType.None);
         PlayerAction_Manager.instance.AttackOver();
+        PlayerAction_Manager.instance.isInvincibility = false;
     }
 
 
@@ -209,5 +213,7 @@ public class Attack_Other_SpecialSlash : Attack_Base
         {
             effectCams[i].SetActive(false);
         }
+
+        PlayerAction_Manager.instance.Armor_Setting(IDamageSysteam.ArmorType.None);
     }
 }

@@ -128,7 +128,8 @@ public class EAttack_Subdue : Attack_Base
 
     private void Hit()
     {
-        isSubdue = true;
+        if (!Player_Manager.instance.action.isInvincibility)
+            isSubdue = true;
     }
 
     public override void AttackVFX(int index)

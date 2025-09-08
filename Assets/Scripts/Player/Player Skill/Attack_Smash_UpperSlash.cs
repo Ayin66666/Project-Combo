@@ -32,6 +32,7 @@ public class Attack_Smash_UpperSlash : Attack_Base
     private IEnumerator UseCall()
     {
         PlayerAction_Manager.instance.MovementLock(cancelType, true);
+        PlayerAction_Manager.instance.Armor_Setting(PlayerAction_Manager.instance.isAwankning ? value_Awakening[0].levelValue.value_List[skillLevel].armor : value_Normal[0].levelValue.value_List[skillLevel].armor);
         PlayerAction_Manager.instance.isAttack = true;
         PlayerAction_Manager.instance.isSmash = true;
 
@@ -85,6 +86,7 @@ public class Attack_Smash_UpperSlash : Attack_Base
         Attack_ColliderReset();
 
         PlayerAction_Manager.instance.MovementLock(cancelType, false);
+        PlayerAction_Manager.instance.Armor_Setting(IDamageSysteam.ArmorType.None);
         PlayerAction_Manager.instance.RushSlash_Setting(false);
         PlayerAction_Manager.instance.AttackOver();
     }
@@ -139,6 +141,8 @@ public class Attack_Smash_UpperSlash : Attack_Base
         // 데미지 리셋
         Attack_ColliderReset();
         PlayerAction_Manager.instance.AttackOver();
+
+        PlayerAction_Manager.instance.Armor_Setting(IDamageSysteam.ArmorType.None);
     }
 
 
@@ -230,5 +234,7 @@ public class Attack_Smash_UpperSlash : Attack_Base
 
         // 리스트 리셋
         Attack_ColliderReset();
+
+        PlayerAction_Manager.instance.Armor_Setting(IDamageSysteam.ArmorType.None);
     }
 }

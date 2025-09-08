@@ -20,8 +20,9 @@ public class Attack_Normal_Fourth : Attack_Base
     private IEnumerator UseCall()
     {
         PlayerAction_Manager.instance.MovementLock(cancelType, true);
-        PlayerAction_Manager.instance.isAttack = true;
+        PlayerAction_Manager.instance.Armor_Setting(PlayerAction_Manager.instance.isAwankning ? value_Awakening[0].levelValue.value_List[skillLevel].armor : value_Normal[0].levelValue.value_List[skillLevel].armor);
         PlayerAction_Manager.instance.LookAt();
+        PlayerAction_Manager.instance.isAttack = true;
 
         // 다음 공격 UI 호출
         UI_Manager.instance.AttackGuide(nextAttackData);

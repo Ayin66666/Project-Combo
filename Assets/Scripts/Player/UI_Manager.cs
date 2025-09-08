@@ -264,6 +264,16 @@ public class UI_Manager : MonoBehaviour
         awakeningSlider.value = pManager.status.curAwakening;
     }
 
+    /// <summary>
+    /// 장비 착용 & 해제로 인한 인게임 스테이터스 조절
+    /// </summary>
+    public void Ingame_StatusUpdata()
+    {
+        // 체력
+        hpFSlider.value = Player_Manager.instance.status.maxHp;
+        hpBSlider.value = Player_Manager.instance.status.maxHp;
+    }
+
     public void Hp()
     {
         if (hpCoroutine != null)
@@ -882,7 +892,7 @@ public class UI_Manager : MonoBehaviour
         attackStatusText[0].text = $"물리 공격력 : {status.physicalDamage}";
         attackStatusText[1].text = $"마법 공격력 : {status.magicalDamage}";
         attackStatusText[2].text = $"치명타 확률 : {status.criticalhit}%";
-        attackStatusText[3].text = $"치명타 배율 : {status.critical_multiplier}%";
+        attackStatusText[3].text = $"치명타 배율 : {status.critical_multiplier}";
         attackStatusText[4].text = $"공격 속도 : {status.attackSpeed}";
 
         defenceStatusText[0].text = $"체력 : {status.curhp} / {status.maxHp}";

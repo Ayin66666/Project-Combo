@@ -27,6 +27,7 @@ public class Attack_Other_Counter : Attack_Base
     private IEnumerator UseCall()
     {
         PlayerAction_Manager.instance.MovementLock(cancelType, true);
+        PlayerAction_Manager.instance.Armor_Setting(PlayerAction_Manager.instance.isAwankning ? value_Awakening[0].levelValue.value_List[skillLevel].armor : value_Normal[0].levelValue.value_List[skillLevel].armor);
         PlayerAction_Manager.instance.isCounter = true;
         PlayerAction_Manager.instance.isAttack = true;
         isHit = false;
@@ -64,6 +65,7 @@ public class Attack_Other_Counter : Attack_Base
         }
 
         // 카운터 실패 - 애니메이션 대기
+        PlayerAction_Manager.instance.Armor_Setting(IDamageSysteam.ArmorType.None);
         anim.SetBool("isCounterReady", false);
         while (anim.GetBool("isCounter"))
         {
@@ -72,7 +74,6 @@ public class Attack_Other_Counter : Attack_Base
 
         // 공격 콜라이더 리셋
         Attack_ColliderReset();
-
         PlayerAction_Manager.instance.isCounter = false;
         PlayerAction_Manager.instance.MovementLock(cancelType, false);
         PlayerAction_Manager.instance.AttackOver();
@@ -136,7 +137,7 @@ public class Attack_Other_Counter : Attack_Base
 
         // 공격 콜라이더 리셋
         Attack_ColliderReset();
-
+        PlayerAction_Manager.instance.Armor_Setting(IDamageSysteam.ArmorType.None);
         PlayerAction_Manager.instance.MovementLock(cancelType, false);
         PlayerAction_Manager.instance.isInvincibility = false;
         PlayerAction_Manager.instance.isCounter = false;
@@ -196,6 +197,7 @@ public class Attack_Other_Counter : Attack_Base
         Attack_ColliderReset();
 
         // 공격 종료
+        PlayerAction_Manager.instance.Armor_Setting(IDamageSysteam.ArmorType.None);
         PlayerAction_Manager.instance.MovementLock(cancelType, false);
         PlayerAction_Manager.instance.isInvincibility = false;
         PlayerAction_Manager.instance.isCounter = false;
@@ -257,5 +259,7 @@ public class Attack_Other_Counter : Attack_Base
 
         // 리스트 리셋
         Attack_ColliderReset();
+
+        PlayerAction_Manager.instance.Armor_Setting(IDamageSysteam.ArmorType.None);
     }
 }

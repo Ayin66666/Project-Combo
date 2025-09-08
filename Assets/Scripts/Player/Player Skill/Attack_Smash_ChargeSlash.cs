@@ -26,6 +26,7 @@ public class Attack_Smash_ChargeSlash : Attack_Base
     private IEnumerator UseCall()
     {
         PlayerAction_Manager.instance.MovementLock(cancelType, true);
+        PlayerAction_Manager.instance.Armor_Setting(PlayerAction_Manager.instance.isAwankning ? value_Awakening[0].levelValue.value_List[skillLevel].armor : value_Normal[0].levelValue.value_List[skillLevel].armor);
         PlayerAction_Manager.instance.isAttack = true;
 
         // 다음 공격 UI 호출
@@ -125,6 +126,7 @@ public class Attack_Smash_ChargeSlash : Attack_Base
         PlayerAction_Manager.instance.MovementLock(cancelType, false);
         PlayerAction_Manager.instance.RushSlash_Setting(false);
         PlayerAction_Manager.instance.AttackOver();
+        PlayerAction_Manager.instance.Armor_Setting(IDamageSysteam.ArmorType.None);
     }
 
 

@@ -19,11 +19,17 @@ public class Inventory_Slot_Equipment : MonoBehaviour, IPointerClickHandler, IPo
     #endregion
 
 
+    /// <summary>
+    /// 장비 장착 & 해제 로직
+    /// </summary>
+    /// <param name="equipment"></param>
+    /// <param name="item"></param>
     public void Item_Setting(bool equipment, Item_Equipment item)
     {
         if (equipment)
         {
             // 장비 착용
+            icon.gameObject.SetActive(true);
             icon.sprite = item.Icon;
             this.item = item;
             haveItem = true;
@@ -38,20 +44,20 @@ public class Inventory_Slot_Equipment : MonoBehaviour, IPointerClickHandler, IPo
         else
         {
             // 장비 효과 제거
-            Debug.Log(item);
             if(item != null)
             {
                 // 스테이터스 감소
                 Player_Manager.instance.status.Equipment_Status_Setting(true, item.equipment_Status);
 
+                // 이펙트 추가
                 if (item.haveEffect)
                 {
-                    Debug.Log(item.haveEffect);
                     Player_Manager.instance.equipment.Remove_ItemEffect(item.Effect);
                 }
             }
 
             // 장비 해제
+            icon.gameObject.SetActive(false);
             icon.sprite = null;
             this.item = null;
             haveItem = false;

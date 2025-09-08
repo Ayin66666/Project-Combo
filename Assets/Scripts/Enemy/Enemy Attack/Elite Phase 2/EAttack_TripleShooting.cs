@@ -65,8 +65,9 @@ public class EAttack_TripleShooting : Attack_Base
 
     public override void AttackVFX(int index)
     {
-        // 공격이펙트
+        // 공격 이펙트
         GameObject obj = Instantiate(attackVFX, shootPos.position, Quaternion.identity);
+        obj.SetActive(true);
 
         // 사운드
         string key = index <= 1 ? Enemy_Elite_Phase2.SoundKey.TripeShooting_Shoot12.ToString() : Enemy_Elite_Phase2.SoundKey.TripeShooting_Shoot3.ToString();

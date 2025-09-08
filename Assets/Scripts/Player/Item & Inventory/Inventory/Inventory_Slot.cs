@@ -41,12 +41,11 @@ public class Inventory_Slot : MonoBehaviour, IPointerClickHandler, IPointerEnter
     /// </summary>
     public void Slot_Setting(Item_Base data, int addCount)
     {
-        Debug.Log($"Call slot item Setting{data} {addCount}");
-
         // 아이템 추가
         haveItem = true;
         item = data;
         itemCount = addCount;
+        icon.gameObject.SetActive(true);
 
         // UI 셋팅
         icon.sprite = item.Icon;
@@ -64,6 +63,7 @@ public class Inventory_Slot : MonoBehaviour, IPointerClickHandler, IPointerEnter
 
         icon.sprite = null;
         countText.text = "";
+        icon.gameObject.SetActive(false);
     }
 
 
@@ -184,7 +184,7 @@ public class Inventory_Slot : MonoBehaviour, IPointerClickHandler, IPointerEnter
     {
         // 메뉴 UI 종료
         menuSet.SetActive(false);
-        
+
         // 설명 UI 종료
         UI_Manager.instance.Item_DescriptionUI(false, null);
 
