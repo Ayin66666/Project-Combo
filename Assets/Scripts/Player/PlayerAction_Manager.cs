@@ -511,6 +511,7 @@ public class PlayerAction_Manager : MonoBehaviour, IDamageSysteam
 
         // 데미지 계산
         int calDamage = damage - (type == IDamageSysteam.DamageType.Physical ? pManager.status.physicalDefence : pManager.status.magicalDefence);
+        Debug.Log($"피격 데미지 : {calDamage}");
         if (calDamage > 0)
         {
             // 타격 횟수만큼 동작
@@ -548,15 +549,12 @@ public class PlayerAction_Manager : MonoBehaviour, IDamageSysteam
                     break;
 
                 case IDamageSysteam.HitVFX.KnockBack:
-                    
                     Effect_Manager.instance.Camera_Shack(8, 0.075f);
-
                     if((int)armorType < 1)
                     {
                         if (hitEffectCoroutine != null) StopCoroutine(hitEffectCoroutine);
                         hitEffectCoroutine = StartCoroutine(Hit_KnockBack(attackObj));
                     }
-
                     break;
 
                 case IDamageSysteam.HitVFX.Down:

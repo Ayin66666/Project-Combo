@@ -680,7 +680,7 @@ public class UI_Manager : MonoBehaviour
         // 딜레이
         yield return new WaitForSeconds(1.5f);
 
-        Fade(true, 2f);
+        Fade(true, 1f);
         yield return new WaitWhile(() => isFade);
 
         stageClearUICanvasGroup.alpha = 0;
@@ -798,15 +798,25 @@ public class UI_Manager : MonoBehaviour
     /// </summary>
     public void Click_ReturnMain()
     {
+        Debug.Log("Call ReturnMain");
         StartCoroutine(ReturnMain());
     }
 
     private IEnumerator ReturnMain()
     {
+        // 플레이어 동작 정지
+        Player_Manager.instance.Player_Action_Setting(false);
+
+        // UI Off
+        PlayerUI_Setting();
+
+        // 타임 스케일 정상화
+        Time.timeScale = 1;
+
         // 페이드
-        Fade(true, 2f);
+        Fade(true, 1f);
         yield return new WaitWhile(() => isFade);
-        yield return new WaitForSeconds(0.15f);
+        Player_Manager.instance.PlayerOnOff_Setting(false);
 
         // 씬 이동
         SceneLoad_Manager.LoadScene("Start_Scene");
@@ -857,14 +867,14 @@ public class UI_Manager : MonoBehaviour
         if (data != null)
         {
             skillDescriptionText.text = data.SkillDescription[index]; // -> 일정 레벨 이상 올리면 에러 발생?
-            
+
             skillVideoPlayer.clip = data.SkillClip;
             skillVideoPlayer.Play();
         }
         else
         {
             skillDescriptionText.text = "";
-            
+
             skillVideoPlayer.Pause();
             skillVideoPlayer.clip = null;
         }

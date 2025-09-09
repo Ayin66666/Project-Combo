@@ -6,6 +6,7 @@ public class Attack_Other_Counter : Attack_Base
     [Header("--- Counter Setting ---")]
     [SerializeField] private float counterTime;
     [SerializeField] private GameObject[] counterVFX;
+    [SerializeField] private Transform vfxPos;
     [SerializeField] private Transform impactPos;
     private bool isHit;
 
@@ -27,7 +28,6 @@ public class Attack_Other_Counter : Attack_Base
     private IEnumerator UseCall()
     {
         PlayerAction_Manager.instance.MovementLock(cancelType, true);
-        PlayerAction_Manager.instance.Armor_Setting(PlayerAction_Manager.instance.isAwankning ? value_Awakening[0].levelValue.value_List[skillLevel].armor : value_Normal[0].levelValue.value_List[skillLevel].armor);
         PlayerAction_Manager.instance.isCounter = true;
         PlayerAction_Manager.instance.isAttack = true;
         isHit = false;
@@ -49,6 +49,7 @@ public class Attack_Other_Counter : Attack_Base
         anim.SetBool("isCounter", true);
 
         // 사운드
+        PlayerAction_Manager.instance.Armor_Setting(value_Normal[0].levelValue.value_List[skillLevel].armor);
         Player_Sound.instance.Sound_Skill(Player_Sound.Skill.Counter_Start);
         PlayerAction_Manager.instance.isInvincibility = true;
 
@@ -213,20 +214,20 @@ public class Attack_Other_Counter : Attack_Base
 
     public override void AttackVFX(int index)
     {
-        // 사운드
+        // 사운드 & 이펙트
         switch (index)
         {
             case 0:
                 Player_Sound.instance.Sound_Skill(Player_Sound.Skill.Counter_Success);
+                GameObject obj = Instantiate(counterVFX[0], vfxPos.position, vfxPos.rotation);
+                obj.SetActive(true);
                 break;
 
             case 1:
                 Player_Sound.instance.Sound_Skill(Player_Sound.Skill.Counter_Add);
+                counterVFX[index].SetActive(true);
                 break;
         }
-
-        // 이펙트
-        counterVFX[index].SetActive(true);
     }
 
     public void ImpactVFX()

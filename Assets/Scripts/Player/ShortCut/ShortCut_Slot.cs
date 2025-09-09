@@ -90,8 +90,8 @@ public class ShortCut_Slot : MonoBehaviour, IPointerClickHandler
                 Player_Manager.instance.shortCut.IngameSlotCooldown(this);
 
                 // 아이템 갯수 감소 & 0개라면 초기화
-                bool isEmpty = Player_Manager.instance.inventory.RemoveItemCount(item.itemCode);
-                if (isEmpty)
+                bool haveItem = Player_Manager.instance.inventory.RemoveItemCount(item.itemCode);
+                if (!haveItem)
                 {
                     Player_Manager.instance.shortCut.Shortcut_Remove(slotCount);
                     Slot_Reset();

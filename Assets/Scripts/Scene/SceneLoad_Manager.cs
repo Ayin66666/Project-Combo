@@ -98,7 +98,7 @@ public class SceneLoad_Manager : MonoBehaviour
         isLoading = true;
 
         // 페이드 종료
-        UI_Manager.instance.Fade(false, 2f);
+        UI_Manager.instance.Fade(false, 1f);
 
         // 마우스 커서 설정
         Player_Manager.instance.Cursor_Setting(false);
@@ -135,7 +135,7 @@ public class SceneLoad_Manager : MonoBehaviour
                 Player_Manager.instance.Cursor_Setting(true);
 
                 // 페이드
-                UI_Manager.instance.Fade(true, 2f);
+                UI_Manager.instance.Fade(true, 1f);
                 yield return new WaitWhile(() => UI_Manager.instance.isFade);
                 yield return new WaitForSeconds(0.15f);
 

@@ -106,7 +106,8 @@ public class Attack_Collider_Shooting : MonoBehaviour
     private void Hit()
     {
         // 이펙트
-        Instantiate(hitVFX, transform.position, Quaternion.identity);
+        if (hitVFX != null)
+            Instantiate(hitVFX, transform.position, Quaternion.identity);
     }
 
     private void OnTriggerEnter(Collider other)
@@ -119,7 +120,7 @@ public class Attack_Collider_Shooting : MonoBehaviour
             // 장비 효과 동작
             Player_Manager.instance.equipment.Use_ItemEffect();
 
-            if(isDestoryByHit)
+            if (isDestoryByHit)
                 Destroy(gameObject);
         }
 

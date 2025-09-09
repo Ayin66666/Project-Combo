@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -9,6 +10,8 @@ public class Attack_Smash_ChargeSlash : Attack_Base
     [SerializeField] private GameObject[] chargeVFX;
     [SerializeField] private GameObject[] slashVFX;
     [SerializeField] private GameObject[] slashExplosionVFX;
+    [SerializeField] private GameObject swordAuraVFX;
+    [SerializeField] private Transform shootPos;
 
 
     public override void Use()
@@ -62,7 +65,7 @@ public class Attack_Smash_ChargeSlash : Attack_Base
                     Player_Sound.instance.Sound_Smash(Player_Sound.Smash.Smash4_Charge);
                 }
 
-                chargeCount += Time.deltaTime * (PlayerAction_Manager.instance.isAwankning ? 1f : 0.5f);
+                chargeCount += Time.deltaTime / (PlayerAction_Manager.instance.isAwankning ? 0.5f : 0.75f);
             }
 
             // 2´Ü°è
@@ -145,9 +148,23 @@ public class Attack_Smash_ChargeSlash : Attack_Base
         }
         else
         {
-            Player_Sound.instance.Sound_Smash(Player_Sound.Smash.Smash4_Slash);
             slashExplosionVFX[a].SetActive(true);
         }
+    }
+
+    public void Shooting()
+    {
+        GameObject obj = Instantiate(swordAuraVFX, shootPos.position, shootPos.rotation);
+        Attack_Collider_Shooting shoot = obj.GetComponent<Attack_Collider_Shooting>();
+
+
+        int index = chargeCount < 0.5f ? 3 : (chargeCount < 1f ? 4 : 5);
+        (bool isCritical, int damage) = PlayerAction_Manager.instance.DamageCalculation(PlayerAction_Manager.instance.isAwankning ? value_Awakening[index] : value_Normal[index], skillLevel);
+        Skill_Value_SO.Value_Data skillData = value_Normal[index].levelValue.GetData(skillLevel);
+
+        Vector3 moveDir = shootPos.forward;
+        shoot.Damage_Setting(skillData.type, skillData.attackEffect, isCritical, skillData.hitCount, damage);
+        shoot.Movement_Setting(moveDir, 20f, 20f);
     }
 
     public override void DamageCal(int index)

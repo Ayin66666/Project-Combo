@@ -42,7 +42,7 @@ public class Attack_Other_Awankning : Attack_Base
     private IEnumerator UseCall()
     {
         PlayerAction_Manager.instance.MovementLock(cancelType, true);
-        PlayerAction_Manager.instance.Armor_Setting(PlayerAction_Manager.instance.isAwankning ? value_Awakening[0].levelValue.value_List[skillLevel].armor : value_Normal[0].levelValue.value_List[skillLevel].armor);
+        PlayerAction_Manager.instance.Armor_Setting(IDamageSysteam.ArmorType.Down);
         PlayerAction_Manager.instance.Special_Setting(true);
         Player_Manager.instance.action.isInvincibility = true;
         PlayerAction_Manager.instance.isAwankning = true;

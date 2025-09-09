@@ -74,7 +74,7 @@ public class Stage_Manager : MonoBehaviour
         Player_Manager.instance.PlayerPos_Setting(startSpawnPos.position);
 
         // 페이드 종료
-        UI_Manager.instance.Fade(false, 2f);
+        UI_Manager.instance.Fade(false, 1f);
         while(UI_Manager.instance.isFade)
         {
             yield return null;

@@ -94,7 +94,6 @@ public class Attack_Normal_First : Attack_Base
 
         // 리스트 리셋
         Attack_ColliderReset();
-
-        PlayerAction_Manager.instance.Armor_Setting(IDamageSysteam.ArmorType.None);
+        Player_Manager.instance.action.Armor_Setting(IDamageSysteam.ArmorType.None);
     }
 }

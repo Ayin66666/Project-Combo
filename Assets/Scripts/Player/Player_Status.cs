@@ -206,7 +206,7 @@ public class Player_Status : MonoBehaviour
                     break;
 
                 case StatusType.StaminaRecovery:
-                    staminaRecovery += Mathf.RoundToInt(value);
+                    staminaRecovery += value;
                     break;
             }
         }

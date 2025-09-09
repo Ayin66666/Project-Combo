@@ -81,7 +81,7 @@ public class Hideout_Manager : MonoBehaviour
         Data_Setting();
 
         // 페이드 종료
-        UI_Manager.instance.Fade(false, 2f);
+        UI_Manager.instance.Fade(false, 1f);
         
         Player_Setting();
     }
@@ -341,7 +341,7 @@ public class Hideout_Manager : MonoBehaviour
         Player_Manager.instance.Player_Action_Setting(false);
 
         // 페이드
-        UI_Manager.instance.Fade(true, 2f);
+        UI_Manager.instance.Fade(true, 1f);
         yield return new WaitWhile(() => UI_Manager.instance.isFade);
 
         // 플레이어 비활성화

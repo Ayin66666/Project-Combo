@@ -227,8 +227,8 @@ public class Player_Animation : MonoBehaviour
     public void ChargeVFX(int index)
     {
         smashAttacks[3].AttackVFX(index);
+        ((Attack_Smash_ChargeSlash)smashAttacks[3]).Shooting();
     }
-
 
     #region Attack - Other
     public void OtherMovement(int index)
