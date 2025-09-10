@@ -42,6 +42,7 @@ public class Enemy_UI : MonoBehaviour
     [SerializeField] private Enemy_Base enemy;
     [SerializeField] private VideoPlayer video;
     [SerializeField] private GameObject damageUI;
+    [SerializeField] private GameObject[] hitVFX;
     [SerializeField] private Collider damagePosCollider;
 
     [Header("---LockOn---")]
@@ -219,6 +220,11 @@ public class Enemy_UI : MonoBehaviour
     {
         GameObject obj = Instantiate(damageUI, HitVFXPos(), Quaternion.identity);
         obj.GetComponent<DamageUI>().DamageUI_Setting(type, isCritical, damage);
+    }
+
+    public void HitVFX(int index)
+    {
+        GameObject obj = Instantiate(hitVFX[index], HitVFXPos(), Quaternion.identity);
     }
 
     private Vector3 HitVFXPos()

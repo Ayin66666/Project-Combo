@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AI;
 using Easing.Tweening;
+using MagicaCloth2;
 
 
 public abstract class Enemy_Base : MonoBehaviour, IDamageSysteam
@@ -306,14 +307,17 @@ public abstract class Enemy_Base : MonoBehaviour, IDamageSysteam
         // 사운드
         sound.Sound(Enemy_Sound.SoundKey.Hit.ToString());
 
-        // 데미지 계산
-        for (int i = 0; i < hitCount; i++)
+        int calDamage = damage - (type == IDamageSysteam.DamageType.Physical ? physicalDefence : magicalDefence);
+        if (calDamage <= 0) calDamage = 1;
+        if (calDamage > 0)
         {
-            int calDamage = damage - (type == IDamageSysteam.DamageType.Physical ? physicalDefence : magicalDefence);
-            if (calDamage > 0)
+            // 데미지 계산
+            for (int i = 0; i < hitCount; i++)
             {
                 // 데미지
-                curHp -= calDamage;
+                int calendDamage = calDamage / hitCount;
+                if (calendDamage <= 0) calendDamage = 1;
+                curHp -= calendDamage;
 
                 // 그로기 데미지 (그로기 상태가 아니라면)
                 if (!isGroggy)
@@ -400,18 +404,19 @@ public abstract class Enemy_Base : MonoBehaviour, IDamageSysteam
     private void HitEffect(IDamageSysteam.DamageType type, bool isCirtial, int damage)
     {
         // 피격 이펙트
-        // Instantiate((type == IDamageSysteam.DamageType.Physical ? hitVFX[0] : hitVFX[1]), transform.position, Quaternion.identity);
+        enemyUI.HitVFX(type == IDamageSysteam.DamageType.Physical ? 0 : 1);
 
         // 피격 시 바디 진동
         ShakeEffect(0.1f, isCirtial ? 0.3f : 0.15f);
 
         // 카메라 쉐이킹
+        Effect_Manager.instance.Camera_Shack(5, 0.05f);
 
         // UI 최신화
         enemyUI.Hp();
         enemyUI.Groggy();
 
-        // 데미지 UI - 예정
+        // 데미지 UI
         // 몬헌의 치명타 표기처럼 데미지 표기
         // 물리 : 흰색 + 붉은색 아웃라인 / 마법 : 흰색 + 파란색 아웃라인
         // 치명타 : 위 색상조합 + (볼드체 & 테두리)

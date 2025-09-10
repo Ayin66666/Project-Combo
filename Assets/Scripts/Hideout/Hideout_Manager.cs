@@ -96,6 +96,9 @@ public class Hideout_Manager : MonoBehaviour
         // 플레이어 UI
         UI_Manager.instance.UI_Setting(!isOn);
 
+        // 카메라 제어
+        Player_Manager.instance.action.CameraLock_Setting(isOn);
+
         // 플레이어 동작
         Player_Manager.instance.action.canAction = !isOn;
 
@@ -112,7 +115,7 @@ public class Hideout_Manager : MonoBehaviour
     public void DescriptionUI_Setting(int stageIndex)
     {
         // 스테이지 기본 데이터
-        stageImage.sprite = null;
+        stageImage.sprite = uiData.stageData[stageIndex].stageImage;
         stageTypeText.text = uiData.stageData[stageIndex].stageType.ToString();
         levelText.text = uiData.stageData[stageIndex].stageLevel.ToString();
         stageNameText.text = uiData.stageData[stageIndex].stageName;

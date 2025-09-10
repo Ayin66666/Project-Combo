@@ -72,6 +72,7 @@ public class Stage_Manager : MonoBehaviour
     {
         // 플레이어 이동
         Player_Manager.instance.PlayerPos_Setting(startSpawnPos.position);
+        Player_Manager.instance.action.CameraLock_Setting(false);
 
         // 페이드 종료
         UI_Manager.instance.Fade(false, 1f);

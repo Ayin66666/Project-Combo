@@ -84,6 +84,14 @@ ModelImporter:
         floatParameter: 0
         intParameter: 0
         messageOptions: 0
+      - time: 0.13580245
+        functionName: SwordAuraVFX
+        data: 
+        objectReferenceParameter: {fileID: 11500000, guid: 70bb0f668b8460d4da7a5cb8b5a5ba41,
+          type: 3}
+        floatParameter: 0
+        intParameter: 0
+        messageOptions: 0
       - time: 0.3147661
         functionName: SpecialCamChange
         data: 
@@ -99,6 +107,14 @@ ModelImporter:
           type: 3}
         floatParameter: 0
         intParameter: 4
+        messageOptions: 0
+      - time: 0.45243078
+        functionName: SwordAuraVFX
+        data: 
+        objectReferenceParameter: {fileID: 11500000, guid: 70bb0f668b8460d4da7a5cb8b5a5ba41,
+          type: 3}
+        floatParameter: 0
+        intParameter: 0
         messageOptions: 0
       - time: 0.49576345
         functionName: SpecialCollider
@@ -123,6 +139,14 @@ ModelImporter:
           type: 3}
         floatParameter: 0
         intParameter: 5
+        messageOptions: 0
+      - time: 0.8703704
+        functionName: SwordAuraVFX
+        data: 
+        objectReferenceParameter: {fileID: 11500000, guid: 70bb0f668b8460d4da7a5cb8b5a5ba41,
+          type: 3}
+        floatParameter: 0
+        intParameter: 1
         messageOptions: 0
       - time: 0.9337635
         functionName: SpecialCollider

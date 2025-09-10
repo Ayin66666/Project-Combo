@@ -11,11 +11,12 @@ public class Attack_Other_SpecialSlash : Attack_Base
     [SerializeField] private CinemachineBrain brain;
     [SerializeField] private GameObject mCam;
     [SerializeField] private GameObject[] effectCams;
+    [SerializeField] private Transform shootPos;
 
 
     [Header("---Attack VFX---")]
     [SerializeField] private GameObject[] attackVFX;
-    [SerializeField] private GameObject[] auraVFX;
+    [SerializeField] private GameObject swordAuraVFX;
 
 
     public override void Use()
@@ -31,7 +32,7 @@ public class Attack_Other_SpecialSlash : Attack_Base
         PlayerAction_Manager.instance.MovementLock(cancelType, true);
         PlayerAction_Manager.instance.Collider_Ignore(true);
         PlayerAction_Manager.instance.Animation_Reset();
-        PlayerAction_Manager.instance.Armor_Setting(PlayerAction_Manager.instance.isAwankning ? value_Awakening[0].levelValue.value_List[skillLevel].armor : value_Normal[0].levelValue.value_List[skillLevel].armor);
+        PlayerAction_Manager.instance.Armor_Setting(IDamageSysteam.ArmorType.Down);
         PlayerAction_Manager.instance.isInvincibility = true;
         PlayerAction_Manager.instance.isAttack = true;
 
@@ -153,7 +154,6 @@ public class Attack_Other_SpecialSlash : Attack_Base
     }
     #endregion
 
-
     public override void AttackVFX(int index)
     {
         // 사운드
@@ -185,7 +185,7 @@ public class Attack_Other_SpecialSlash : Attack_Base
     public void SwordAuraVFX(int index)
     {
         // 검기 소환
-        GameObject obj = Instantiate(auraVFX[index], shotPos.position, Quaternion.identity);
+        GameObject obj = Instantiate(swordAuraVFX, shotPos.position, Quaternion.identity);
         Attack_Collider_Shooting shoot = obj.GetComponent<Attack_Collider_Shooting>();
 
         // 데미지 셋팅

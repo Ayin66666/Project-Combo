@@ -25,6 +25,7 @@ public class PlayerAction_Manager : MonoBehaviour, IDamageSysteam
     [SerializeField] private bool canRushSlash;
     [SerializeField] private bool canSpecial;
 
+    public bool isCamLock;
     public bool isCursorLock;
     public bool isAttack;
     public bool isSmash;
@@ -126,14 +127,13 @@ public class PlayerAction_Manager : MonoBehaviour, IDamageSysteam
     private void Update()
     {
         // 카메라 제어
-        if (!isLockOn)
+        if (!isLockOn && !isCamLock)
         {
             Look();
         }
 
         if (canAction)
         {
-            // Collider_Ignore(true); -> 이거 왜 있지?
             Movement();
 
             if (Input.GetKeyDown(KeyCode.C))
@@ -152,6 +152,18 @@ public class PlayerAction_Manager : MonoBehaviour, IDamageSysteam
     }
 
 
+    /// <summary>
+    /// 카메라 고정 & 해제
+    /// </summary>
+    /// <param name="isLock"></param>
+    public void CameraLock_Setting(bool isLock)
+    {
+        isCamLock = isLock;
+    }
+
+    /// <summary>
+    /// 락온용 타겟 에너미 서치
+    /// </summary>
     private void LockOn_EnemySearch()
     {
         // On 상태일때 - Off로 전환
@@ -252,6 +264,10 @@ public class PlayerAction_Manager : MonoBehaviour, IDamageSysteam
         }
     }
 
+    /// <summary>
+    /// 콜라이더 무시 & 무시 해제
+    /// </summary>
+    /// <param name="isOn"></param>
     public void Collider_Ignore(bool isOn)
     {
         // 충돌 무시 시작
@@ -512,6 +528,8 @@ public class PlayerAction_Manager : MonoBehaviour, IDamageSysteam
         // 데미지 계산
         int calDamage = damage - (type == IDamageSysteam.DamageType.Physical ? pManager.status.physicalDefence : pManager.status.magicalDefence);
         Debug.Log($"피격 데미지 : {calDamage}");
+        if (calDamage <= 0) calDamage = 1;
+
         if (calDamage > 0)
         {
             // 타격 횟수만큼 동작
@@ -519,6 +537,7 @@ public class PlayerAction_Manager : MonoBehaviour, IDamageSysteam
             {
                 // 체력 감소
                 int calendDamage = calDamage / hitCount;
+                if (calendDamage <= 0) calendDamage = 1;
                 pManager.status.curhp -= calendDamage;
 
                 // 사망 체크
@@ -536,7 +555,7 @@ public class PlayerAction_Manager : MonoBehaviour, IDamageSysteam
                 obj.GetComponent<DamageUI>().DamageUI_Setting(type, isCritical, calendDamage);
 
                 // 피격 이펙트
-                // Instantiate((type == IDamageSysteam.DamageType.Physical ? hitVFX[0] : hitVFX[1]), transform.position, Quaternion.identity);
+                Instantiate((type == IDamageSysteam.DamageType.Physical ? hitVFX[0] : hitVFX[1]), HitVFXPos(), Quaternion.identity);
             }
 
             // 피격 효과 - 다운 상태에서는 무효화

@@ -89,8 +89,9 @@ public class Stage_Tutorial : MonoBehaviour
     /// <param name="index"></param>
     public void Tutorial_Big(int index)
     {
-        PlayerAction_Manager.instance.canAction = false;
+        Player_Manager.instance.action.CameraLock_Setting(true);
         Player_Manager.instance.Cursor_Setting(false);
+        PlayerAction_Manager.instance.canAction = false;
         istutorialOn = true;
 
         Time.timeScale = 0f;
@@ -117,8 +118,9 @@ public class Stage_Tutorial : MonoBehaviour
             obj.SetActive(false);
         }
 
-        PlayerAction_Manager.instance.canAction = true;
+        Player_Manager.instance.action.CameraLock_Setting(false);
         Player_Manager.instance.Cursor_Setting(true);
+        PlayerAction_Manager.instance.canAction = true;
         istutorialOn = false;
     }
 

@@ -398,6 +398,9 @@ public class Enemy_Boss_Arie : Enemy_Base
         curPhase = Phase.Phase2;
         curState = State.Spawn;
         isInvincibility = true;
+        isGroggy = false;
+        isAttack = false;
+        isPatten = false;
 
         // 보스 강화
         physcialDamage = phase2_Status.PhyScial_Damage;
