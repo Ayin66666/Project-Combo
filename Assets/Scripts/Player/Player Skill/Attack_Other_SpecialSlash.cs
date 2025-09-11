@@ -148,7 +148,6 @@ public class Attack_Other_SpecialSlash : Attack_Base
     #region Body Movement
     public void Body_Movement(int index)
     {
-        Debug.Log($"호출 인덱스 (필살기 몸 오브젝트 이동) : {index}");
         PlayerAction_Manager.instance.bodyObject.transform.DOKill();
         PlayerAction_Manager.instance.bodyObject.transform.DOMove(moveDatas[index].movePos.position, moveDatas[index].moveSpeed);
     }

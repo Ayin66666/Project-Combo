@@ -139,9 +139,7 @@ public class Enemy_Elite_Phase1 : Enemy_Base
 
         // 컷신
         enemyUI.CutScene(clips[1]);
-        Debug.Log(isCutScene);
         yield return new WaitForSeconds(0.2f); // -> 컷신 나오기도 전에 파괴되는 이슈 발생
-        Debug.Log(isCutScene);
         yield return new WaitWhile(() => enemyUI.isCutScene);
 
         // 2페이즈 전환

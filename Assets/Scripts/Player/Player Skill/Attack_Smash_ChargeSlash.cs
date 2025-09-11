@@ -164,7 +164,7 @@ public class Attack_Smash_ChargeSlash : Attack_Base
 
         Vector3 moveDir = shootPos.forward;
         shoot.Damage_Setting(skillData.type, skillData.attackEffect, isCritical, skillData.hitCount, damage);
-        shoot.Movement_Setting(moveDir, 20f, 20f);
+        shoot.Movement_Setting(moveDir, 30f, 10f);
     }
 
     public override void DamageCal(int index)

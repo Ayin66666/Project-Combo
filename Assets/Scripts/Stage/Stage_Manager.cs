@@ -71,7 +71,7 @@ public class Stage_Manager : MonoBehaviour
     public IEnumerator Stage_Start()
     {
         // 플레이어 이동
-        Player_Manager.instance.PlayerPos_Setting(startSpawnPos.position);
+        Player_Manager.instance.PlayerPos_Setting(startSpawnPos);
         Player_Manager.instance.action.CameraLock_Setting(false);
 
         // 페이드 종료
@@ -259,6 +259,7 @@ public class Stage_Manager : MonoBehaviour
         // UI 리셋
         UI_Manager.instance.Hp();
         UI_Manager.instance.Awakening();
+
 
         // 플레이어 위치 이동
         PlayerAction_Manager.instance.Pos_Setting(spawnPos, spawnRotation);

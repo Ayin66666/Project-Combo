@@ -1,8 +1,7 @@
 using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
-using Easing.Tweening;
 using DG.Tweening;
+using System.Collections.Generic;
 
 
 public class Attack_Collider_Shooting : MonoBehaviour
@@ -18,6 +17,7 @@ public class Attack_Collider_Shooting : MonoBehaviour
     [SerializeField] private int damage;
     [SerializeField] private int attackCount;
     [SerializeField] private bool isCritical;
+    private HashSet<GameObject> hitObjects = new HashSet<GameObject>();
 
 
     [Header("--- Movement Setting ---")]
@@ -27,6 +27,7 @@ public class Attack_Collider_Shooting : MonoBehaviour
     [SerializeField] private float speed;
     [SerializeField] private float lifeTimer;
     private Coroutine movementCoroutine;
+
 
     [Header("---VFX---")]
     public GameObject hitVFX;
@@ -52,7 +53,8 @@ public class Attack_Collider_Shooting : MonoBehaviour
 
     public void Movement_Target(Vector3 endPos, float speed, float delayTime)
     {
-        StartCoroutine(TargetMovement(endPos, speed, delayTime));
+        if (movementCoroutine != null) StopCoroutine(movementCoroutine);
+        movementCoroutine = StartCoroutine(TargetMovement(endPos, speed, delayTime));
     }
 
     private IEnumerator TargetMovement(Vector3 endPos, float speed, float delayTime)
@@ -86,6 +88,7 @@ public class Attack_Collider_Shooting : MonoBehaviour
         speed = moveSpeed;
         lifeTimer = lifeTime;
 
+        if (movementCoroutine != null) StopCoroutine(movementCoroutine);
         movementCoroutine = StartCoroutine(Movement());
     }
 
@@ -110,27 +113,33 @@ public class Attack_Collider_Shooting : MonoBehaviour
             Instantiate(hitVFX, transform.position, Quaternion.identity);
     }
 
+
     private void OnTriggerEnter(Collider other)
     {
         if (attackOwner == AttackOwner.Player && other.CompareTag("Enemy"))
         {
-            other.GetComponent<IDamageSysteam>().Take_Damage(gameObject, damageType, hitType, isCritical, attackCount, damage);
-            Hit();
+            if(!hitObjects.Contains(other.gameObject))
+            {
+                hitObjects.Add(other.gameObject);
+                other.GetComponent<IDamageSysteam>().Take_Damage(gameObject, damageType, hitType, isCritical, attackCount, damage);
+                Hit();
 
-            // 장비 효과 동작
-            Player_Manager.instance.equipment.Use_ItemEffect();
-
-            if (isDestoryByHit)
-                Destroy(gameObject);
+                // 장비 효과 동작
+                Player_Manager.instance.equipment.Use_ItemEffect();
+                if (isDestoryByHit) Destroy(gameObject);
+            }
         }
 
         if (attackOwner == AttackOwner.Enemy && other.CompareTag("Player"))
         {
-            other.GetComponent<IDamageSysteam>().Take_Damage(gameObject, damageType, hitType, isCritical, attackCount, damage);
-            Hit();
+            if(!hitObjects.Contains(other.gameObject))
+            {
+                hitObjects.Add(other.gameObject);
+                other.GetComponent<IDamageSysteam>().Take_Damage(gameObject, damageType, hitType, isCritical, attackCount, damage);
+                Hit();
+                if (isDestoryByHit) Destroy(gameObject);
+            }
 
-            if (isDestoryByHit)
-                Destroy(gameObject);
         }
 
         if (other.CompareTag("Ground") && isDestoryByGround)

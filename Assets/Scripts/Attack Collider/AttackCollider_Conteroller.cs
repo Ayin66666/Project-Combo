@@ -47,16 +47,10 @@ public class AttackCollider_Controller : MonoBehaviour
     public void TargetCheck(GameObject obj)
     {
         // 타겟 체크
-        foreach (GameObject hit in hitObjects)
-        {
-            // 이미 데미지를 받았다면?
-            if(obj == hit)
-            {
-                return;
-            }
-        }
+        if (hitObjects.Contains(obj)) return;
 
-        if(obj.GetComponent<IDamageSysteam>() != null)
+        IDamageSysteam dam = obj.GetComponent<IDamageSysteam>();
+        if (dam != null)
         {
             // 장비 효과 호출
             if(owner == Owner.Player)
@@ -64,7 +58,7 @@ public class AttackCollider_Controller : MonoBehaviour
 
             // 데미지
             hitObjects.Add(obj);
-            obj.GetComponent<IDamageSysteam>().Take_Damage(gameObject, damageType, hitType, isCritical, attackCount, damage);
+            dam.Take_Damage(gameObject, damageType, hitType, isCritical, attackCount, damage);
         }
         else
         {

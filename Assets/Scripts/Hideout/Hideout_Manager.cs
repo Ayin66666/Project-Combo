@@ -126,8 +126,6 @@ public class Hideout_Manager : MonoBehaviour
         clearTimeText.text = $"클리어 타임 : {ChapterData_Manager.instance.claerData.claerData.chapterList[curChapter].stageList[stageIndex].clearTime.ToString("F2")}초";
         rankText.text = ChapterData_Manager.instance.claerData.claerData.chapterList[curChapter].stageList[stageIndex].clearRank.ToString();
 
-        Debug.Log(ChapterData_Manager.instance.claerData.claerData.chapterList[curChapter].stageList[stageIndex].clearTime);
-        Debug.Log(ChapterData_Manager.instance.claerData.claerData.chapterList[curChapter].stageList[stageIndex].clearRank);
         // 진입 데이터 셋팅
         curSelectStage = uiData.stageData[stageIndex].sceneName;
     }
@@ -297,7 +295,7 @@ public class Hideout_Manager : MonoBehaviour
 
         // 플레이어 활성화
         Player_Manager.instance.Player_Hideout_Setting();
-        Player_Manager.instance.PlayerPos_Setting(startPos.position);
+        Player_Manager.instance.PlayerPos_Setting(startPos);
         Player_Manager.instance.PlayerOnOff_Setting(true);
     }
     #endregion

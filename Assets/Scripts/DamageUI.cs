@@ -4,6 +4,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using DG.Tweening;
 
+
 public class DamageUI : MonoBehaviour
 {
     [Header("--- UI ---")]
@@ -19,6 +20,7 @@ public class DamageUI : MonoBehaviour
 
 
     [Header("--- Recovery UI Setting ---")]
+    [SerializeField] private Sprite recoverySprite;
     [SerializeField] private Color[] recoveryColor;
 
 
@@ -36,6 +38,7 @@ public class DamageUI : MonoBehaviour
         borderImage.gameObject.SetActive(true);
         
         // 텍스트 셋팅
+        valueText.color = type == IDamageSysteam.DamageType.Physical ? damageColor[0] : damageColor[1];
         valueText.text = damage.ToString();
 
         // UI 동작
@@ -54,6 +57,8 @@ public class DamageUI : MonoBehaviour
         borderImage.gameObject.SetActive(false);
 
         // 텍스트 셋팅
+        borderImage.sprite = recoverySprite;
+        borderImage.color = recoveryColor[(int)type];
         valueText.color = recoveryColor[(int)type];
         valueText.text = value.ToString();
 
@@ -67,11 +72,11 @@ public class DamageUI : MonoBehaviour
     private IEnumerator Movement()
     {
         // 대기
-        yield return new WaitForSeconds(1f);
+        yield return new WaitForSeconds(0.5f);
 
         // 위로 올라가며 사라지기
-        transform.DOMove(movePos.position, 1f).SetEase(Ease.OutQuad);
-        canvasGroup.DOFade(0, 1f).SetEase(Ease.OutQuad).OnComplete(() => Destroy(gameObject));
+        transform.DOMove(movePos.position, 0.75f).SetEase(Ease.OutQuad);
+        canvasGroup.DOFade(0, 0.5f).SetEase(Ease.OutQuad).OnComplete(() => Destroy(gameObject));
     }
 
     private IEnumerator LookAk()

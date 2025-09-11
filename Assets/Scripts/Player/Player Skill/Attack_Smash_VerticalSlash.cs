@@ -110,6 +110,7 @@ public class Attack_Smash_VerticalSlash : Attack_Base
         }
 
         PlayerAction_Manager.instance.isAttack = false;
+        PlayerAction_Manager.instance.RushSlash_Setting(true);
 
         float timer = 0;
         while (anim.GetBool("isAdditionalSmash"))
@@ -124,6 +125,7 @@ public class Attack_Smash_VerticalSlash : Attack_Base
             yield return null;
         }
 
+        PlayerAction_Manager.instance.RushSlash_Setting(false);
         PlayerAction_Manager.instance.Armor_Setting(IDamageSysteam.ArmorType.None);
         PlayerAction_Manager.instance.MovementLock(cancelType, false);
         PlayerAction_Manager.instance.AttackOver();

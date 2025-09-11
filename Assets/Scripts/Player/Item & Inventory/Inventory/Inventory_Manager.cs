@@ -98,7 +98,6 @@ public class Inventory_Manager : MonoBehaviour
                 // 1. 중첩 가능한 슬롯에 먼저 넣기
                 while (itemCount > 0)
                 {
-                    Debug.Log("중첩가능 - 아이템 체크중");
                     Inventory_Slot stackSlot = Slot_Find(slot =>
                         slot.item != null &&
                         slot.item.itemCode == addItem.itemCode &&
@@ -242,6 +241,9 @@ public class Inventory_Manager : MonoBehaviour
     /// </summary>
     public void Inventory_Organize()
     {
+        // 설명 UI Off
+        UI_Manager.instance.Item_DescriptionUI(false, null);
+
         // 아이템 데이터 저장
         List<(Item_Base item, int count)> itemData = new List<(Item_Base item, int count)>();
         for (int i = 0; i < item_Slot.Count; i++)

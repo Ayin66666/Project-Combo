@@ -57,11 +57,9 @@ public class ItemData_Container : MonoBehaviour
     /// <returns></returns>
     public Item_Base FindItem(int itemCode)
     {
-        Debug.Log("Call ItemFind");
         // ºó ½½·Ô Ã¼Å©
         if(itemCode == -1)
         {
-            Debug.Log("ItemFind = Empty");
             return null;
         }
 
@@ -70,7 +68,6 @@ public class ItemData_Container : MonoBehaviour
         {
             if(item.itemCode == itemCode)
             {
-                Debug.Log($"ItemFind = {item}");
                 return item;
             }
         }

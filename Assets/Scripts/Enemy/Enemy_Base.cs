@@ -4,7 +4,6 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AI;
 using Easing.Tweening;
-using MagicaCloth2;
 
 
 public abstract class Enemy_Base : MonoBehaviour, IDamageSysteam
@@ -324,7 +323,7 @@ public abstract class Enemy_Base : MonoBehaviour, IDamageSysteam
                     curGroggy -= calDamage;
 
                 // 카메라 흔들림
-                Effect_Manager.instance.Camera_Shack(1, 0.1f);
+                Effect_Manager.instance.Camera_Shack(0.5f, 0.1f);
 
                 // 플레이어 각성 게이지
                 if (!Player_Manager.instance.action.isAwankning)
@@ -372,17 +371,17 @@ public abstract class Enemy_Base : MonoBehaviour, IDamageSysteam
                 switch (hit)
                 {
                     case IDamageSysteam.HitVFX.None:
-                        Effect_Manager.instance.Camera_Shack(1.5f, 0.05f);
+                        Effect_Manager.instance.Camera_Shack(0.15f, 0.05f);
                         break;
 
                     case IDamageSysteam.HitVFX.KnockBack:
-                        Effect_Manager.instance.Camera_Shack(3, 0.05f);
+                        Effect_Manager.instance.Camera_Shack(0.25f, 0.05f);
                         if (hitCoroutine != null) StopCoroutine(hitCoroutine);
                         hitCoroutine = StartCoroutine(Hit_KnockBack(attackObj));
                         break;
 
                     case IDamageSysteam.HitVFX.Down:
-                        Effect_Manager.instance.Camera_Shack(5, 0.05f);
+                        Effect_Manager.instance.Camera_Shack(0.3f, 0.05f);
                         if (hitCoroutine != null) StopCoroutine(hitCoroutine);
                         hitCoroutine = StartCoroutine(Hit_Down(attackObj));
                         break;
@@ -390,10 +389,8 @@ public abstract class Enemy_Base : MonoBehaviour, IDamageSysteam
             }
             else // 엘리트 & 보스 몬스터
             {
-                Debug.Log($"Groggy {isGroggy}");
                 if (curGroggy <= 0 && !isGroggy)
                 {
-                    Debug.Log($"Groggy On");
                     if (hitCoroutine != null) StopCoroutine(hitCoroutine);
                     hitCoroutine = StartCoroutine(Hit_Groggy());
                 }
@@ -409,17 +406,11 @@ public abstract class Enemy_Base : MonoBehaviour, IDamageSysteam
         // 피격 시 바디 진동
         ShakeEffect(0.1f, isCirtial ? 0.3f : 0.15f);
 
-        // 카메라 쉐이킹
-        Effect_Manager.instance.Camera_Shack(5, 0.05f);
-
         // UI 최신화
         enemyUI.Hp();
         enemyUI.Groggy();
 
         // 데미지 UI
-        // 몬헌의 치명타 표기처럼 데미지 표기
-        // 물리 : 흰색 + 붉은색 아웃라인 / 마법 : 흰색 + 파란색 아웃라인
-        // 치명타 : 위 색상조합 + (볼드체 & 테두리)
         enemyUI.DamageUI(type, isCirtial, damage);
     }
 

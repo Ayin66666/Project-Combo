@@ -66,7 +66,6 @@ public class Item_Equipment : Item_Base
                 (bool isCooldown, float remainingTime) = Player_Manager.instance.cooldown.Cooldown_Check(effectList[i].Key);
                 if (isCooldown == false)
                 {
-                    Debug.Log($"이펙트 호출 {i}번째!");
                     effectList[i].Effect();
                 }
             }

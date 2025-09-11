@@ -51,14 +51,15 @@ public class Attack_Additional_RushSlash : Attack_Base
 
         // 이동 대기
         float timer = 0;
-        while(anim.GetBool("isAdditonalRush"))
+        while (anim.GetBool("isAdditonalRush"))
         {
             timer += Time.deltaTime;
-            if(timer > time && Input_Manager.instance.movementInput.magnitude > 0)
+            if (timer > time && Input_Manager.instance.movementInput.magnitude > 0)
             {
                 anim.SetBool("isAdditonalRush", false);
                 break;
             }
+
             yield return null;
         }
 
@@ -69,8 +70,8 @@ public class Attack_Additional_RushSlash : Attack_Base
         // 공격 콜라이더 리셋
         Attack_ColliderReset();
 
-        PlayerAction_Manager.instance.MovementLock(cancelType, false);
         PlayerAction_Manager.instance.Armor_Setting(IDamageSysteam.ArmorType.None);
+        PlayerAction_Manager.instance.MovementLock(cancelType, false);
         PlayerAction_Manager.instance.AttackOver();
     }
 
@@ -81,7 +82,7 @@ public class Attack_Additional_RushSlash : Attack_Base
         (bool isCritical, int damage) = PlayerAction_Manager.instance.DamageCalculation(value_Normal[0], skillLevel);
         Skill_Value_SO.Value_Data skillData = value_Normal[0].levelValue.GetData(skillLevel);
         aoe.Damage_Setting(skillData.type, skillData.attackEffect, Attack_Collider_AOE.AttackType.multipleHit, isCritical, skillData.hitCount, damage, 5f);
-        
+
         rushSlashCollider.SetActive(isOn);
     }
 
@@ -122,7 +123,7 @@ public class Attack_Additional_RushSlash : Attack_Base
             StopCoroutine(useCoroutine);
 
         // 이펙트 종료
-        foreach(GameObject vfx in attackVFX)
+        foreach (GameObject vfx in attackVFX)
         {
             vfx.SetActive(false);
         }

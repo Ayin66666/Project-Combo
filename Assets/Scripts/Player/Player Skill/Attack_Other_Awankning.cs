@@ -61,11 +61,11 @@ public class Attack_Other_Awankning : Attack_Base
 
 
         // Â÷Â¡ ´ë±â
-        Effect_Manager.instance.Camera_Shack(5f, 0.5f);
+        Effect_Manager.instance.Camera_Shack(1f, 0.5f);
         yield return new WaitForSeconds(0.5f);
 
         // ÀÌÆåÆ® On
-        Effect_Manager.instance.Camera_Shack(30f, 0.1f);
+        Effect_Manager.instance.Camera_Shack(5f, 0.05f);
         awakeningVFX[0].SetActive(false);
         awakeningVFX[1].SetActive(true);
         awakeningVFX[2].SetActive(true);

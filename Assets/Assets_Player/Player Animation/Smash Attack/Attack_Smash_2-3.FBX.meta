@@ -84,38 +84,6 @@ ModelImporter:
         floatParameter: 0
         intParameter: 2
         messageOptions: 0
-      - time: 0.17494142
-        functionName: SmashCollider
-        data: 
-        objectReferenceParameter: {fileID: 11500000, guid: 70bb0f668b8460d4da7a5cb8b5a5ba41,
-          type: 3}
-        floatParameter: 0
-        intParameter: 121
-        messageOptions: 0
-      - time: 0.18177079
-        functionName: SmashCollider
-        data: 
-        objectReferenceParameter: {fileID: 11500000, guid: 70bb0f668b8460d4da7a5cb8b5a5ba41,
-          type: 3}
-        floatParameter: 0
-        intParameter: 122
-        messageOptions: 0
-      - time: 0.18659292
-        functionName: SmashCollider
-        data: 
-        objectReferenceParameter: {fileID: 11500000, guid: 70bb0f668b8460d4da7a5cb8b5a5ba41,
-          type: 3}
-        floatParameter: 0
-        intParameter: 123
-        messageOptions: 0
-      - time: 0.19060743
-        functionName: SmashCollider
-        data: 
-        objectReferenceParameter: {fileID: 11500000, guid: 70bb0f668b8460d4da7a5cb8b5a5ba41,
-          type: 3}
-        floatParameter: 0
-        intParameter: 124
-        messageOptions: 0
       - time: 0.29438135
         functionName: DoubleAuraVFX
         data: 
@@ -130,7 +98,7 @@ ModelImporter:
         objectReferenceParameter: {fileID: 11500000, guid: 70bb0f668b8460d4da7a5cb8b5a5ba41,
           type: 3}
         floatParameter: 0
-        intParameter: 130
+        intParameter: 120
         messageOptions: 0
       - time: 0.41442782
         functionName: AttackOver

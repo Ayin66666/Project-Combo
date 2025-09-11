@@ -15,7 +15,6 @@ public class Player_SearchAera : MonoBehaviour
                 if (Player_Manager.instance.inventory.IsFull(item) == false)
                 {
                     // 아이템 추가
-                    Debug.Log($"아이템 추가 {item} / {count}");
                     drop.Item_Add();
                 }
                 else

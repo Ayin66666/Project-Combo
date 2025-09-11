@@ -57,6 +57,7 @@ public class PlayerAction_Manager : MonoBehaviour, IDamageSysteam
 
     [Header("--- Attack State ---")]
     public int attackCount = 0;
+    public int rushSlachCount = 0;
     [SerializeField] private Attack_Base[] normalAttacks;
     [SerializeField] private Attack_Base[] smashAttacks;
     [SerializeField] private Attack_Base[] otherAttakcs;
@@ -288,6 +289,20 @@ public class PlayerAction_Manager : MonoBehaviour, IDamageSysteam
         Input_Manager.instance.Action_Setting(6, Attack_Speical);
     }
 
+    public void Respwan()
+    {
+        canAction = true;
+        canMovement = true;
+        canAttack = true;
+        canDash = true;
+        isAttack = false;
+        canRushSlash = false;
+        canSpecial = false;
+
+        isCamLock = false;
+        isDie = false;
+        isAwankning = false;
+    }
 
     #region Movement
     /// <summary>
@@ -527,7 +542,6 @@ public class PlayerAction_Manager : MonoBehaviour, IDamageSysteam
 
         // 데미지 계산
         int calDamage = damage - (type == IDamageSysteam.DamageType.Physical ? pManager.status.physicalDefence : pManager.status.magicalDefence);
-        Debug.Log($"피격 데미지 : {calDamage}");
         if (calDamage <= 0) calDamage = 1;
 
         if (calDamage > 0)
@@ -564,11 +578,11 @@ public class PlayerAction_Manager : MonoBehaviour, IDamageSysteam
             switch (hitType)
             {
                 case IDamageSysteam.HitVFX.None:
-                    Effect_Manager.instance.Camera_Shack(3, 0.05f);
+                    Effect_Manager.instance.Camera_Shack(3, 0.1f);
                     break;
 
                 case IDamageSysteam.HitVFX.KnockBack:
-                    Effect_Manager.instance.Camera_Shack(8, 0.075f);
+                    Effect_Manager.instance.Camera_Shack(8, 0.25f);
                     if((int)armorType < 1)
                     {
                         if (hitEffectCoroutine != null) StopCoroutine(hitEffectCoroutine);
@@ -577,7 +591,7 @@ public class PlayerAction_Manager : MonoBehaviour, IDamageSysteam
                     break;
 
                 case IDamageSysteam.HitVFX.Down:
-                    Effect_Manager.instance.Camera_Shack(10, 0.1f);
+                    Effect_Manager.instance.Camera_Shack(10, 0.3f);
                     if((int)armorType < 2)
                     {
                         if (hitEffectCoroutine != null) StopCoroutine(hitEffectCoroutine);
@@ -698,9 +712,7 @@ public class PlayerAction_Manager : MonoBehaviour, IDamageSysteam
 
         // 기능 초기화
         AttackOver();
-
-        canAction = true;
-        isDie = false;
+        Respwan();
     }
 
     public void Subdue(bool isOn, Transform movePos, Transform enemy)
@@ -1008,11 +1020,33 @@ public class PlayerAction_Manager : MonoBehaviour, IDamageSysteam
 
     public void RushSlash_Setting(bool isOn)
     {
+        rushSlachCount = isOn ? (isAwankning ? 2 : 1) : 0;
         canRushSlash = isOn;
     }
 
     private void Attack_RushSalsh()
     {
+        if(canRushSlash && rushSlachCount > 0)
+        {
+            rushSlachCount--;
+
+            // 일반공격 리셋
+            foreach (Attack_Base attack in normalAttacks)
+            {
+                attack.Attack_Reset();
+            }
+
+            // 스메쉬 리셋
+            foreach (Attack_Base attack in smashAttacks)
+            {
+                attack.Attack_Reset();
+            }
+
+            // 공격 동작
+            otherAttakcs[0].Use();
+        }
+
+        /*
         if (canRushSlash)
         {
             canRushSlash = false;
@@ -1032,6 +1066,7 @@ public class PlayerAction_Manager : MonoBehaviour, IDamageSysteam
             // 공격 동작
             otherAttakcs[0].Use();
         }
+        */
     }
 
     private void Attack_Counter()

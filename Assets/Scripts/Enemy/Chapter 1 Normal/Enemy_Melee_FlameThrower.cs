@@ -46,7 +46,7 @@ public class Enemy_Melee_FlameThrower : Enemy_Base
 
         }
         // 추적
-        else if(targetRange > attackRange)
+        else if (targetRange > attackRange)
         {
             movementCoroutine = StartCoroutine(Chase());
         }
@@ -69,7 +69,9 @@ public class Enemy_Melee_FlameThrower : Enemy_Base
             }
 
             Check_Target();
-            nav.SetDestination(PlayerAction_Manager.instance.gameObject.transform.position);
+            if (nav != null)
+                nav.SetDestination(PlayerAction_Manager.instance.gameObject.transform.position);
+
             yield return null;
         }
         nav.enabled = false;
@@ -162,7 +164,7 @@ public class Enemy_Melee_FlameThrower : Enemy_Base
         // 애니메이션
         anim.SetTrigger("Hit");
         anim.SetBool("isDie", true);
-        while(anim.GetBool("isDie"))
+        while (anim.GetBool("isDie"))
         {
             yield return null;
         }

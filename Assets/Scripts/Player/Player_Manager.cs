@@ -56,10 +56,10 @@ public class Player_Manager : MonoBehaviour
         playerSet.SetActive(isOn);
     }
 
-    public void PlayerPos_Setting(Vector3 pos)
+    public void PlayerPos_Setting(Transform pos)
     {
-        Debug.Log($"스테이지 시작 이동 호출 / 이동 위치 : {pos}");
-        playerMovement.transform.position = pos;
+        playerMovement.transform.position = pos.position;
+        playerMovement.transform.rotation = pos.rotation;
     }
 
     /// <summary>

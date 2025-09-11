@@ -80,19 +80,16 @@ public class Save_Slot : MonoBehaviour
 
     public void Click_Save()
     {
-        Debug.Log("isClick - Save");
         SaveLoad_Manager.instance.Click_Save(slotIndex);
     }
 
     public void Click_Load()
     {
-        Debug.Log("isClick - Load");
         SaveLoad_Manager.instance.Click_Load(slotIndex);
     }
 
     public void Click_Remove()
     {
-        Debug.Log("isClick - Remove");
         SaveLoad_Manager.instance.Click_Remvoe(slotIndex);
     }
     #endregion

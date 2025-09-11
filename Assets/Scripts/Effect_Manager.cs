@@ -83,7 +83,7 @@ public class Effect_Manager : MonoBehaviour
         float timer = 0;
         while (timer < 1)
         {
-            timer += timer += Time.deltaTime;
+            timer += Time.deltaTime / 2f;
             Time.timeScale = Mathf.Lerp(speed, 1, timer);
             yield return null;
         }

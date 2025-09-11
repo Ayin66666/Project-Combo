@@ -134,8 +134,6 @@ public class Enemy_Elite_Phase2 : Enemy_Base
             Check_Target();
             if (targetRange > 5)
             {
-                Debug.Log("추적");
-
                 // 너무 멀때 - 추적
                 z = Mathf.MoveTowards(z, 1f, Time.deltaTime * 2f);
                 x = Mathf.MoveTowards(x, 0f, Time.deltaTime * 2f);
@@ -148,8 +146,6 @@ public class Enemy_Elite_Phase2 : Enemy_Base
             }
             else if (targetRange >= 3 && targetRange <= 5)
             {
-                Debug.Log("주시 이동");
-
                 // 적당한 거리일때 - 주시 & 우측 이동
                 z = Mathf.MoveTowards(z, 0f, Time.deltaTime * 2f);
                 x = Mathf.MoveTowards(x, 1f, Time.deltaTime * 2f);
@@ -162,8 +158,6 @@ public class Enemy_Elite_Phase2 : Enemy_Base
             }
             else if (targetRange < 3)
             {
-                Debug.Log("후퇴");
-
                 // 너무 가까울 때 - 후퇴 & 좌측 이동
                 z = Mathf.MoveTowards(z, -1f, Time.deltaTime * 2f);
                 x = Mathf.MoveTowards(x, -1f, Time.deltaTime * 2f);
@@ -258,6 +252,8 @@ public class Enemy_Elite_Phase2 : Enemy_Base
 
     private IEnumerator DieCall()
     {
+        curState = State.Die;
+        isInvincibility = true;
         enemyUI.UI_OnOff(false);
 
         // 애니메이션

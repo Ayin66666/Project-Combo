@@ -121,6 +121,7 @@ public class Attack_Samsh_DoubleSlash : Attack_Base
         }
 
         PlayerAction_Manager.instance.isAttack = false;
+        PlayerAction_Manager.instance.RushSlash_Setting(true);
 
         float timer = 0;
         while (anim.GetBool("isAdditionalSmash"))
@@ -142,8 +143,10 @@ public class Attack_Samsh_DoubleSlash : Attack_Base
 
         // 데미지 리셋
         Attack_ColliderReset();
-        PlayerAction_Manager.instance.AttackOver();
         PlayerAction_Manager.instance.Armor_Setting(IDamageSysteam.ArmorType.None);
+        PlayerAction_Manager.instance.RushSlash_Setting(false);
+        PlayerAction_Manager.instance.AttackOver();
+
     }
 
 
@@ -174,7 +177,7 @@ public class Attack_Samsh_DoubleSlash : Attack_Base
     /// </summary>
     public void Samsh2_GourndVFX()
     {
-        Instantiate(groundVFX, goundPos.position, goundPos.transform.localRotation);
+        Instantiate(groundVFX, goundPos.position, PlayerAction_Manager.instance.bodyObject.transform.localRotation);
     }
 
     /// <summary>

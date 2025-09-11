@@ -191,12 +191,19 @@ public class Enemy_Boss_Arie : Enemy_Base
     #region Attack
     protected override void Think()
     {
+        // 페이즈 변경 도중 Think 가 호출될 경우를 대비
+        if (curState == State.Spawn) return;
+
+        // 플레이어 사망 시 동작 정지
         if (Player_Manager.instance.action.isDie)
         {
             curState = State.Idle;
             return;
         }
 
+        Debug.Log($"Boss Think Call / AttackCount : {attackCount}");
+
+        curState = State.Think;
         Check_Target();
         if (attackCount >= 5)
         {
@@ -352,7 +359,6 @@ public class Enemy_Boss_Arie : Enemy_Base
             yield return null;
         }
 
-        curState = State.Idle;
         Think();
     }
     #endregion
@@ -401,24 +407,29 @@ public class Enemy_Boss_Arie : Enemy_Base
         isGroggy = false;
         isAttack = false;
         isPatten = false;
+        canAction = false;
 
         // 보스 강화
-        physcialDamage = phase2_Status.PhyScial_Damage;
-        magicalDamage = phase2_Status.Magical_Damage;
-        criticalhit = phase2_Status.Critical_hit;
-        critical_multiplier = phase2_Status.Critical_multiplier;
-        anim.SetFloat("AttackSpeed", 1.15f);
-
-        curHp = phase2_Status.Hp;
-        maxHp = phase2_Status.Hp;
-        curGroggy = phase2_Status.Groggy;
-        maxGroggy = phase2_Status.Groggy;
-        physicalDefence = phase2_Status.Physical_Defence;
-        magicalDefence = phase2_Status.Magical_Defence;
-
-        enemyName = phase2_Status.ObjectName;
-        moveSpeed = phase2_Status.MoveSpeed;
+        statusData = phase2_Status;
+        enemyName = statusData.ObjectName;
+        moveSpeed = statusData.MoveSpeed;
         nav.speed = moveSpeed;
+
+        physcialDamage = statusData.PhyScial_Damage;
+        magicalDamage = statusData.Magical_Damage;
+        criticalhit = statusData.Critical_hit;
+        critical_multiplier = statusData.Critical_multiplier;
+        attackSpeed = statusData.AttackSpeed;
+        anim.SetFloat("AttackSpeed", attackSpeed);
+
+        curHp = statusData.Hp;
+        maxHp = statusData.Hp;
+        physicalDefence = statusData.Physical_Defence;
+        magicalDefence = statusData.Magical_Defence;
+        curGroggy = statusData.Groggy;
+        maxGroggy = statusData.Groggy;
+        groggyTime = statusData.GroggyTime;
+        exp = statusData.Exp;
         pattenDelaytime = 0.1f;
 
         // UI 초기화
@@ -431,7 +442,9 @@ public class Enemy_Boss_Arie : Enemy_Base
         yield return new WaitWhile(() => enemyUI.isCutScene);
 
         curState = State.Idle;
+        enemyUI.Boss_SpawnNameEffect();
         isInvincibility = false;
+        canAction = true;
         Think();
     }
 
@@ -439,21 +452,15 @@ public class Enemy_Boss_Arie : Enemy_Base
     {
         if (curPhase == Phase.Phase2)
         {
-            Debug.Log("사망 호출");
             base.Die();
             StartCoroutine(DieCall());
         }
         else
         {
-            Debug.Log("페이즈 전환 호출");
             Hit_Reset();
-
-            if (hitCoroutine != null)
-                StopCoroutine(hitCoroutine);
-
-            if (movementCoroutine != null)
-                StopCoroutine(movementCoroutine);
-
+            if (hitCoroutine != null) StopCoroutine(hitCoroutine);
+            if (movementCoroutine != null) StopCoroutine(movementCoroutine);
+            
             movementCoroutine = StartCoroutine(Phase_Change());
         }
     }
