@@ -1,6 +1,7 @@
 using System.Collections;
 using UnityEngine;
 
+
 public class Enemy_Range_GrenadeLauncher : Enemy_Base
 {
     public enum SoundKey { Shoot }

@@ -1,6 +1,6 @@
 using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
+
 
 public class Attack_Normal_Fourth : Attack_Base
 {

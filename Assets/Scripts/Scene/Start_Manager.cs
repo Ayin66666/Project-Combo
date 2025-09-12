@@ -35,10 +35,17 @@ public class Start_Manager : MonoBehaviour
     {
         // 시작 씬 알리기
         SaveLoad_Manager.instance.isStartScene = true;
+        Cursor.lockState = CursorLockMode.None;
 
         // OnOff 용 리스트 추가
         uiList.Add(extraSet);
         uiList.Add(exitSet);
+
+        // 만약 페이드 상태라면 - 페이드 해제
+        if(UI_Manager.instance.fadeSet.activeSelf)
+        {
+            UI_Manager.instance.Fade(false, 1f);
+        }
     }
 
 

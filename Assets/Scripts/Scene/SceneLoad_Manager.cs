@@ -3,7 +3,6 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
-using Easing.Tweening;
 
 
 public class SceneLoad_Manager : MonoBehaviour

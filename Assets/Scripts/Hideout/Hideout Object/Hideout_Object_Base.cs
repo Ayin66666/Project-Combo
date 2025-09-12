@@ -1,6 +1,5 @@
 using System.Collections;
 using UnityEngine;
-using Easing.Tweening;
 
 
 public abstract class Hideout_Object_Base : MonoBehaviour

@@ -1,6 +1,7 @@
 using System.Collections;
 using UnityEngine;
 
+
 public class EAttack_Flame : Attack_Base
 {
     [Header("---Setting---")]

@@ -1,7 +1,7 @@
-using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+
 
 public class Attack_Smash_ChargeSlash : Attack_Base
 {

@@ -1,7 +1,5 @@
 using System.Collections.Generic;
-using Unity.VisualScripting;
 using UnityEngine;
-using static Item_Equipment;
 
 
 public class Player_Status : MonoBehaviour
@@ -163,49 +161,49 @@ public class Player_Status : MonoBehaviour
     /// </summary>
     /// <param name="isOn"></param>
     /// <param name="status"></param>
-    public void Equipment_Status_Setting(bool isEquip, List<Equipment_Status> status)
+    public void Equipment_Status_Setting(bool isEquip, List<Item_Equipment.Equipment_Status> status)
     {
         int equip = isEquip ? 1 : -1;
 
         // 스테이터스 적용
-        foreach(Equipment_Status st in status)
+        foreach (Item_Equipment.Equipment_Status st in status)
         {
             float value = st.value * equip;
             switch (st.type)
             {
-                case StatusType.PDamage:
+                case Item_Equipment.StatusType.PDamage:
                     physicalDamage += Mathf.RoundToInt(value);
                     break;
 
-                case StatusType.MDamage:
+                case Item_Equipment.StatusType.MDamage:
                     magicalDamage += Mathf.RoundToInt(value);
                     break;
 
-                case StatusType.Criticalhit:
+                case Item_Equipment.StatusType.Criticalhit:
                     criticalhit += value;
                     break;
 
-                case StatusType.Critical_multiplier:
+                case Item_Equipment.StatusType.Critical_multiplier:
                     critical_multiplier += value;
                     break;
 
-                case StatusType.MaxHp:
+                case Item_Equipment.StatusType.MaxHp:
                     maxHp += Mathf.RoundToInt(value);
                     break;
 
-                case StatusType.PhysicalDefence:
+                case Item_Equipment.StatusType.PhysicalDefence:
                     physicalDefence += Mathf.RoundToInt(value);
                     break;
 
-                case StatusType.MagicalDefence:
+                case Item_Equipment.StatusType.MagicalDefence:
                     magicalDefence += Mathf.RoundToInt(value);
                     break;
 
-                case StatusType.MoveSpeed:
+                case Item_Equipment.StatusType.MoveSpeed:
                     moveSpeed += Mathf.RoundToInt(value);
                     break;
 
-                case StatusType.StaminaRecovery:
+                case Item_Equipment.StatusType.StaminaRecovery:
                     staminaRecovery += value;
                     break;
             }

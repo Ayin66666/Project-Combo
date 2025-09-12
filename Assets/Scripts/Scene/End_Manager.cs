@@ -120,6 +120,7 @@ public class End_Manager : MonoBehaviour
 
     private void Start()
     {
+        Cursor.lockState = CursorLockMode.None;
         UI_Manager.instance.Fade(false, 1f);
         isScrolling = true;
         scrollingEnd = false;

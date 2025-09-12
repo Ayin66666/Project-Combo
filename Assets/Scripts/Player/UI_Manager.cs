@@ -34,7 +34,7 @@ public class UI_Manager : MonoBehaviour
 
 
     [Header("---Fade UI---")]
-    [SerializeField] private GameObject fadeSet;
+    public GameObject fadeSet;
     [SerializeField] private CanvasGroup fadeCanvasGroup;
     #endregion
 

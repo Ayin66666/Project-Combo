@@ -3,7 +3,6 @@ using Easing.Tweening;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.Rendering.PostProcessing;
 
 public class CitScene_Boss_Special : MonoBehaviour
 {

@@ -9,14 +9,22 @@ public class Attack_Additional_RushSlash : Attack_Base
     [SerializeField] private GameObject rushSlashCollider;
 
 
+    [Header("---RushSlash Awankning---")]
+    [SerializeField] private GameObject[] awankningVFX;
+    [SerializeField] private Attack_Collider_AOE awankningCollider;
+    [SerializeField] private GameObject awankningAddColider;
+    [SerializeField] private Transform awankningAddPos;
+
+
     public override void Use()
     {
         if (useCoroutine != null)
             StopCoroutine(useCoroutine);
 
-        useCoroutine = StartCoroutine(UseCall());
+        useCoroutine = StartCoroutine(Player_Manager.instance.action.isAwankning ? AwankningUseCall() :  UseCall());
     }
 
+    #region Normal
     private IEnumerator UseCall()
     {
         PlayerAction_Manager.instance.MovementLock(cancelType, true);
@@ -94,6 +102,85 @@ public class Attack_Additional_RushSlash : Attack_Base
 
         attackVFX[index].SetActive(true);
     }
+    #endregion
+
+
+    #region Awankning
+    private IEnumerator AwankningUseCall()
+    {
+        PlayerAction_Manager.instance.MovementLock(cancelType, true);
+        PlayerAction_Manager.instance.Animation_Reset();
+        PlayerAction_Manager.instance.Armor_Setting(PlayerAction_Manager.instance.isAwankning ? value_Awakening[0].levelValue.value_List[skillLevel].armor : value_Normal[0].levelValue.value_List[skillLevel].armor);
+        PlayerAction_Manager.instance.isAttack = true;
+
+        // 데미지 계산
+        Skill_Value_SO.Value_Data skillData;
+        skillData = value_Awakening[0].levelValue.GetData(skillLevel);
+        (bool isCritical, int damage) = PlayerAction_Manager.instance.DamageCalculation(value_Awakening[0], skillLevel);
+        awankningCollider.Damage_Setting(skillData.type, skillData.attackEffect, Attack_Collider_AOE.AttackType.SingleHit, isCritical, skillData.hitCount, damage, 0.3f);
+
+        // 콜라이더 무시
+        PlayerAction_Manager.instance.Collider_Ignore(true);
+
+        // 돌진 공격
+        PlayerAction_Manager.instance.LookAt();
+        anim.SetTrigger("Action");
+        anim.SetBool("isAttack", true);
+        anim.SetBool("isAwankningRushSlash", true);
+
+        while(anim.GetBool("isAttack"))
+        {
+            yield return null;
+        }
+
+        PlayerAction_Manager.instance.isAttack = false;
+
+        // 이동 대기
+        float timer = 0;
+        while (anim.GetBool("isAwankningRushSlash"))
+        {
+            timer += Time.deltaTime;
+            if (timer > time && Input_Manager.instance.movementInput.magnitude > 0)
+            {
+                anim.SetBool("isAwankningRushSlash", false);
+                break;
+            }
+
+            yield return null;
+        }
+
+        // 콜라이더 무시
+        PlayerAction_Manager.instance.Collider_Ignore(false);
+        RushCollider(false);
+
+        // 공격 콜라이더 리셋
+        Attack_ColliderReset();
+
+        awankningCollider.ResetCollider();
+        PlayerAction_Manager.instance.Armor_Setting(IDamageSysteam.ArmorType.None);
+        PlayerAction_Manager.instance.MovementLock(cancelType, false);
+        PlayerAction_Manager.instance.AttackOver();
+    }
+
+    public void RushSlashAwankningVFX(int index)
+    {
+        awankningVFX[index].SetActive(true);
+    }
+
+    public void AwankningAddAttack()
+    {
+        // 이펙트 소환
+        GameObject obj = Instantiate(awankningAddColider, awankningAddPos.position, awankningAddPos.rotation);
+        Attack_Collider_AOE aoe = obj.GetComponent<Attack_Collider_AOE>();
+
+        // 데미지 계산
+        Skill_Value_SO.Value_Data skillData;
+        skillData = value_Awakening[1].levelValue.GetData(skillLevel);
+        (bool isCritical, int damage) = PlayerAction_Manager.instance.DamageCalculation(value_Awakening[0], skillLevel);
+        aoe.Damage_Setting(skillData.type, skillData.attackEffect, Attack_Collider_AOE.AttackType.SingleHit, isCritical, skillData.hitCount, damage, 10f);
+    }
+    #endregion
+
 
     public override void DamageCal(int index)
     {
@@ -135,6 +222,7 @@ public class Attack_Additional_RushSlash : Attack_Base
                 value_Normal[i].attackCollider.ListReset();
         }
 
+        awankningCollider.ResetCollider();
         PlayerAction_Manager.instance.Armor_Setting(IDamageSysteam.ArmorType.None);
     }
 }

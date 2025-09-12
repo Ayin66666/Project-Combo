@@ -1,6 +1,6 @@
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+
 
 public class Player_Animation : MonoBehaviour
 {
@@ -51,6 +51,7 @@ public class Player_Animation : MonoBehaviour
 
     public void RushSlashOver()
     {
+        anim.SetBool("isAwankningRushSlash", false);
         anim.SetBool("isAdditonalRush", false);
         anim.SetBool("isAttack", false);
         PlayerAction_Manager.instance.AttackOver();
@@ -259,7 +260,16 @@ public class Player_Animation : MonoBehaviour
     {
         otherAttacks[0].AttackVFX(index);
     }
+    
+    public void RushSlashAwankningVFX(int index)
+    {
+        ((Attack_Additional_RushSlash)otherAttacks[0]).RushSlashAwankningVFX(index);
+    }
 
+    public void RushSlashAwankningAddAttack()
+    {
+        ((Attack_Additional_RushSlash)otherAttacks[0]).AwankningAddAttack();
+    }
 
     // д╚©Нем
     public void CounterVFX(int intdex)

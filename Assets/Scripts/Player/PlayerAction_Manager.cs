@@ -3,7 +3,6 @@ using UnityEngine;
 using DG.Tweening;
 using Easing.Tweening;
 using System.Collections.Generic;
-using UnityEngine.SocialPlatforms;
 
 
 public class PlayerAction_Manager : MonoBehaviour, IDamageSysteam
@@ -57,7 +56,6 @@ public class PlayerAction_Manager : MonoBehaviour, IDamageSysteam
 
     [Header("--- Attack State ---")]
     public int attackCount = 0;
-    public int rushSlachCount = 0;
     [SerializeField] private Attack_Base[] normalAttacks;
     [SerializeField] private Attack_Base[] smashAttacks;
     [SerializeField] private Attack_Base[] otherAttakcs;
@@ -236,7 +234,15 @@ public class PlayerAction_Manager : MonoBehaviour, IDamageSysteam
         isLockOn = true;
 
         // 애너미 락온 UI
-        lockOnEnemy.GetComponent<Enemy_Base>().enemyUI.LockOn(true);
+        Enemy_Base enemy = lockOnEnemy.GetComponent<Enemy_Base>();
+        if(enemy != null)
+        {
+            enemy.enemyUI.LockOn(true);
+        }
+        else
+        {
+            isLockOn = false;
+        }
 
         // 카메라 회전
         float easeDuration = 1.5f;
@@ -244,7 +250,7 @@ public class PlayerAction_Manager : MonoBehaviour, IDamageSysteam
         while (isLockOn)
         {
             // 락온 대상 사망 시 해제
-            if (lockOnEnemy == null)
+            if (enemy.curState == Enemy_Base.State.Die)
             {
                 isLockOn = false;
                 break;
@@ -1020,15 +1026,14 @@ public class PlayerAction_Manager : MonoBehaviour, IDamageSysteam
 
     public void RushSlash_Setting(bool isOn)
     {
-        rushSlachCount = isOn ? (isAwankning ? 2 : 1) : 0;
         canRushSlash = isOn;
     }
 
     private void Attack_RushSalsh()
     {
-        if(canRushSlash && rushSlachCount > 0)
+        if(canRushSlash)
         {
-            rushSlachCount--;
+            RushSlash_Setting(false);
 
             // 일반공격 리셋
             foreach (Attack_Base attack in normalAttacks)

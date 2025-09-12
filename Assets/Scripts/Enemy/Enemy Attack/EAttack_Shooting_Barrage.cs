@@ -1,6 +1,7 @@
 using System.Collections;
 using UnityEngine;
 
+
 public class EAttack_Shooting_Barrage : Attack_Base
 {
     [Header("---Attack VFX---")]

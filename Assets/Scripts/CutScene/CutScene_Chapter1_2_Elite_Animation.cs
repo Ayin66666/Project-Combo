@@ -1,6 +1,5 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
+
 
 public class CutScene_Chapter1_2_Elite_Animation : MonoBehaviour
 {
