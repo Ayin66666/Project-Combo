@@ -5,8 +5,15 @@
 <br />
 게임 '명조 : 워더링웨이브', '마비노기 영웅전' 에서 모티브를 얻어 제작한 게임으로,<br />
 3-2 캡스톤 프로젝트로 제작하였던 3D 액션게임 Project : Origo의 완성형을 목표로 제작하였습니다.
+<br />
+<br />
 
-<img width="1259" height="709" alt="Image" src="https://github.com/user-attachments/assets/0887308f-4dd4-4804-9535-efceb804711f" />
+<p align="center">
+<img src = "https://github.com/user-attachments/assets/0887308f-4dd4-4804-9535-efceb804711f" width="100%" height="100%"/>
+<img src="https://github.com/user-attachments/assets/db8d9098-51f2-41b4-b46b-ae32f1f4e944" width="49%" height="49%"/>
+<img src="https://github.com/user-attachments/assets/4fbb9a64-2288-49fd-925a-3365a25f75ef" width="49%" height="49%"/>
+<img src="https://github.com/user-attachments/assets/27f1f90f-5dc8-483f-9adf-4dfc4859d1db" width="100%" height="100%"/>
+</p>
 
 ## 개요
 - 장르 : 3D 액션 게임
