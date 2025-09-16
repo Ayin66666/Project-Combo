@@ -28,6 +28,6 @@ public abstract class Item_Base : ScriptableObject
     /// </summary>
     public virtual void Use()
     {
-
+        
     }
 }

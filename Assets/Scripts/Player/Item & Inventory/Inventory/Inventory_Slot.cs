@@ -173,7 +173,7 @@ public class Inventory_Slot : MonoBehaviour, IPointerClickHandler, IPointerEnter
         // 메뉴 UI 종료
         menuSet.SetActive(false);
 
-        // 쇼트컷 등록 기능 호출 - 함수 제작 필요
+        // 쇼트컷 등록 기능 호출
         Player_Manager.instance.shortCut.Shortcut_Setting(this);
     }
 
