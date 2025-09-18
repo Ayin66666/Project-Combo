@@ -31,7 +31,6 @@ public class AttackCollider_Controller : MonoBehaviour
     /// <param name="damage"></param>
     public void Damage_Setting(IDamageSysteam.DamageType damageType, IDamageSysteam.HitVFX hitType, bool isCritical, int attackCount, int damage, Owner owner)
     {
-        // Debug.Log($"Call Damage Setting {damageType} : {hitType} : {isCritical} :{attackCount} : {damage}");
         this.owner = owner;
         this.damageType = damageType;
         this.hitType = hitType;
@@ -74,7 +73,6 @@ public class AttackCollider_Controller : MonoBehaviour
         hitObjects.Clear();
     }
 
-
     public void AttackColliderOn(int index)
     {
         Vector3 boxCenter = attackColliders[index].transform.position;
@@ -91,8 +89,9 @@ public class AttackCollider_Controller : MonoBehaviour
         }
 
         currentIndex = index;
-        Invoke(nameof(Re), 0.5f); // -> 이거 화면 확인용인데 성능이슈 있을수도 있어서 일단 비활성화
+        // Invoke(nameof(Re), 0.5f); // -> 이거 화면 확인용인데 성능이슈 있을수도 있어서 일단 비활성화
     }
+
 
     private void Re()
     {

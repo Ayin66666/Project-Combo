@@ -24,9 +24,7 @@ public class Object_EvnetPoint : MonoBehaviour
 
         // 마커 호출
         if (haveMark)
-        {
-
-        }
+            Stage_Manager.instance.WayPoint(true, markIndex);
 
     }
 

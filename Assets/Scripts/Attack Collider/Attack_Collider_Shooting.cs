@@ -50,6 +50,15 @@ public class Attack_Collider_Shooting : MonoBehaviour
         this.damage = damage;
     }
 
+    public void Movement_Setting(Vector3 moveDir, float moveSpeed, float lifeTime)
+    {
+        this.moveDir = moveDir;
+        speed = moveSpeed;
+        lifeTimer = lifeTime;
+
+        if (movementCoroutine != null) StopCoroutine(movementCoroutine);
+        movementCoroutine = StartCoroutine(Movement());
+    }
 
     public void Movement_Target(Vector3 endPos, float speed, float delayTime)
     {
@@ -79,17 +88,6 @@ public class Attack_Collider_Shooting : MonoBehaviour
         Hit();
 
         Destroy(gameObject);
-    }
-
-
-    public void Movement_Setting(Vector3 moveDir, float moveSpeed, float lifeTime)
-    {
-        this.moveDir = moveDir;
-        speed = moveSpeed;
-        lifeTimer = lifeTime;
-
-        if (movementCoroutine != null) StopCoroutine(movementCoroutine);
-        movementCoroutine = StartCoroutine(Movement());
     }
 
     private IEnumerator Movement()

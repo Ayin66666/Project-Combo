@@ -80,7 +80,7 @@ public abstract class Object_Base : MonoBehaviour
 
     protected void LookAt()
     {
-        
+        /* 회전 제한 버전
         Vector3 lookDir = iconSet.transform.position - PlayerAction_Manager.instance.cam.transform.position;
         lookDir.y = 0;
         iconSet.transform.rotation = Quaternion.LookRotation(lookDir.normalized);
@@ -99,6 +99,20 @@ public abstract class Object_Base : MonoBehaviour
         // 제한된 회전 각도만큼 회전한 새로운 방향 계산
         Quaternion limitedRot = Quaternion.AngleAxis(clampedAngle, Vector3.up) * originalRot;
 
+        iconSet.transform.rotation = limitedRot;
+        */
+
+        Vector3 lookDir = iconSet.transform.position - PlayerAction_Manager.instance.cam.transform.position;
+        lookDir.y = 0;
+
+        Quaternion targetRot = Quaternion.LookRotation(lookDir.normalized); // 카메라 바라보는 방향
+
+        // 회전 제한 없이 signedAngle 그대로 사용
+        Vector3 originalForward = originalRot * Vector3.forward;
+        Vector3 targetForward = targetRot * Vector3.forward;
+        float signedAngle = Vector3.SignedAngle(originalForward, targetForward, Vector3.up);
+
+        Quaternion limitedRot = Quaternion.AngleAxis(signedAngle, Vector3.up) * originalRot;
         iconSet.transform.rotation = limitedRot;
     }
     #endregion
