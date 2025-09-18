@@ -19,7 +19,7 @@
 - 장르 : 3D 액션 게임
 - 제작 기간 : 25.03 ~ 25.09 (약 6개월)
 - 개발 목표 : 마비노기 영웅전의 스매시 기능 구현, Json을 활용한 데이터 로컬 저장
-- 기술 문서 : 
+- 기술 문서 : https://docs.google.com/presentation/d/1TijUUmfYp6Dh7DBAQQQgyUfkHiZ0gl0DBnp1yTRpF9I/edit?usp=sharing
 - 플레이 영상 : 
 
 <br />
