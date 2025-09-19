@@ -77,7 +77,6 @@ public class Item_Consumable : Item_Base
     {
         float timer = 0f;
         float intervalTimer = 0f;
-
         while (timer < effect_duration)
         {
             timer += Time.deltaTime;

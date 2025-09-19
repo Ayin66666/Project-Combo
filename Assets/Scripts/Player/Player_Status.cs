@@ -118,7 +118,6 @@ public class Player_Status : MonoBehaviour
                 curhp += value;
                 if (curhp >= maxHp)
                 {
-                    // 스테이터스 증가
                     curhp = maxHp;
                 }
                 break;
@@ -127,7 +126,6 @@ public class Player_Status : MonoBehaviour
                 curStamina += value;
                 if (curStamina >= maxStamina)
                 {
-                    // 스테이터스 증가
                     curStamina = maxStamina;
                 }
                 break;
@@ -153,7 +151,8 @@ public class Player_Status : MonoBehaviour
         }
 
         // UI 표기
-        UI_Manager.instance.PlayerUI_Recovery(type, value);
+        if (type != RecoveryType.Awakening)
+            UI_Manager.instance.PlayerUI_Recovery(type, value);
     }
 
     /// <summary>
