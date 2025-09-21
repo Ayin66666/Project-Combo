@@ -457,10 +457,10 @@ public class Enemy_Boss_Arie : Enemy_Base
         }
         else
         {
-            Hit_Reset();
             if (hitCoroutine != null) StopCoroutine(hitCoroutine);
             if (movementCoroutine != null) StopCoroutine(movementCoroutine);
-            
+            StopAllCoroutines();
+            Hit_Reset();
             movementCoroutine = StartCoroutine(Phase_Change());
         }
     }

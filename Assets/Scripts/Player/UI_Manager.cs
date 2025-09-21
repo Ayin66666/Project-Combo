@@ -253,6 +253,8 @@ public class UI_Manager : MonoBehaviour
 
         hpFSlider.maxValue = pManager.status.maxHp;
         hpFSlider.value = pManager.status.curhp;
+        hpText.text = $"{pManager.status.curhp} / {pManager.status.maxHp}";
+
 
         hpBSlider.maxValue = pManager.status.maxHp;
         hpBSlider.value = pManager.status.curhp;
@@ -270,8 +272,12 @@ public class UI_Manager : MonoBehaviour
     public void Ingame_StatusUpdata()
     {
         // 체력
-        hpFSlider.value = Player_Manager.instance.status.maxHp;
-        hpBSlider.value = Player_Manager.instance.status.maxHp;
+        hpFSlider.maxValue = pManager.status.maxHp;
+        hpBSlider.maxValue = pManager.status.maxHp;
+        hpFSlider.value = Player_Manager.instance.status.curhp;
+        hpBSlider.value = Player_Manager.instance.status.curhp;
+        hpText.text = $"{pManager.status.curhp} / {pManager.status.maxHp}";
+        Debug.Log($"{Player_Manager.instance.status.curhp} / {Player_Manager.instance.status.maxHp}");
     }
 
     public void Hp()
@@ -285,12 +291,26 @@ public class UI_Manager : MonoBehaviour
     private IEnumerator HpCall()
     {
         // UI 최신화
+        hpFSlider.maxValue = pManager.status.maxHp;
+        hpBSlider.maxValue = pManager.status.maxHp;
         hpFSlider.value = pManager.status.curhp;
         hpText.text = $"{pManager.status.curhp} / {pManager.status.maxHp}";
 
-        // UI 감소 이펙트 딜레이
+        // 딜레이
         yield return new WaitForSeconds(0.25f);
-        hpBSlider.DOValue(pManager.status.curhp, 0.75f).SetEase(Ease.Linear);
+
+        // 체력 감소
+        float start = hpBSlider.value;
+        float end = pManager.status.curhp;
+        float timer = 0;
+        while(timer < 1)
+        {
+            timer += Time.deltaTime / 0.75f;
+            hpBSlider.value = Mathf.Lerp(start, end, EasingFunctions.OutExpo(timer));
+            yield return null;
+        }
+        hpBSlider.value = end;
+        //hpBSlider.DOValue(pManager.status.curhp, 0.75f).SetEase(Ease.Linear);
     }
 
     public void Stamina()

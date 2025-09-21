@@ -608,9 +608,7 @@ public class PlayerAction_Manager : MonoBehaviour, IDamageSysteam
 
 
             // 피격 무적 - 0.05초
-            if (hitWaitCoroutine != null)
-                StopCoroutine(hitWaitCoroutine);
-
+            if (hitWaitCoroutine != null) StopCoroutine(hitWaitCoroutine);
             hitWaitCoroutine = StartCoroutine(Hit_Invincibility());
         }
     }

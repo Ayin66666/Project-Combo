@@ -13,7 +13,7 @@ public class Field_Normal : Field_Base
     [SerializeField] private List<Enemy_Base> enemyList;
     private Coroutine stageCoroutine;
     private Coroutine checkCoroutine;
-    private readonly WaitForSeconds checkInterval = new WaitForSeconds(1f);
+    private readonly WaitForSeconds checkInterval = new WaitForSeconds(0.5f);
 
 
     public override void Field_Start()

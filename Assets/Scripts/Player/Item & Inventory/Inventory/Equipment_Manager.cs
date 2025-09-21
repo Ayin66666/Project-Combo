@@ -96,21 +96,20 @@ public class Equipment_Manager : MonoBehaviour
         for (int i = 0; i < slots.Count; i++)
         {
             data.Add(slots[i].slot.haveItem ? slots[i].slot.Item.itemCode : -1);
-            Debug.Log(slots[i].slot.haveItem ? slots[i].slot.Item.itemCode : -1);
         }
 
         // 코어
         for (int i = 0; i < coreSlot.Count; i++)
         {
             data.Add(coreSlot[i].slot.haveItem ? coreSlot[i].slot.Item.itemCode : -1);
-            Debug.Log(coreSlot[i].slot.haveItem ? coreSlot[i].slot.Item.itemCode : -1);
         }
 
-
+        /*
         for (int i = 0; i < data.Count; i++)
         {
             Debug.Log($"장비 아이템 체크 {i}번째 데이터 : {data[i]}");
         }
+        */
         return data;
     }
 
@@ -161,14 +160,12 @@ public class Equipment_Manager : MonoBehaviour
                     // 슬롯이 비어있다면 해당 슬롯에 착용
                     coreSlot[i].slot.Item_Setting(true, item);
 
-                    // 내부 스테이터스 UI 최신화
-                    UI_Manager.instance.Status_Setting();
-
-                    // 외부 스테이터스 UI 최신화
-                    UI_Manager.instance.Ingame_StatusUpdata();
-
                     // 원래 인벤토리 슬롯 비우기
                     slot.Slot_Reset();
+
+                    // 스테이터스 UI 최신화
+                    UI_Manager.instance.Status_Setting();
+                    UI_Manager.instance.Ingame_StatusUpdata();
                     return;
                 }
             }
@@ -177,9 +174,6 @@ public class Equipment_Manager : MonoBehaviour
 
             // 스테이터스 감소
             Player_Manager.instance.status.Equipment_Status_Setting(false, coreSlot[0].slot.Item.equipment_Status);
-            
-            // 외부 스테이터스 UI 최신화
-            UI_Manager.instance.Ingame_StatusUpdata();
 
             // 기존 장착 장비 인벤토리로 복귀
             Player_Manager.instance.inventory.Item_Change(slot, coreSlot[0].slot.Item);
@@ -190,6 +184,7 @@ public class Equipment_Manager : MonoBehaviour
 
             // 스테이터스 UI 최신화
             UI_Manager.instance.Status_Setting();
+            UI_Manager.instance.Ingame_StatusUpdata();
         }
         else
         {
@@ -213,6 +208,7 @@ public class Equipment_Manager : MonoBehaviour
 
                 // 스테이터스 UI 최신화
                 UI_Manager.instance.Status_Setting();
+                UI_Manager.instance.Ingame_StatusUpdata();
             }
             else
             {
@@ -223,6 +219,7 @@ public class Equipment_Manager : MonoBehaviour
 
                 // 스테이터스 UI 최신화
                 UI_Manager.instance.Status_Setting();
+                UI_Manager.instance.Ingame_StatusUpdata();
 
                 // 원래 인벤토리 슬롯 비우기
                 slot.Slot_Reset();
@@ -251,6 +248,7 @@ public class Equipment_Manager : MonoBehaviour
 
             // 스테이터스 UI 최신화
             UI_Manager.instance.Status_Setting();
+            UI_Manager.instance.Ingame_StatusUpdata();
 
             // 인벤토리에 원래 아이템 추가
             Player_Manager.instance.inventory.Item_Add(slot.Item, 1);

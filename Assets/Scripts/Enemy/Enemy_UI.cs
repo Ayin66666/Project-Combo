@@ -175,8 +175,8 @@ public class Enemy_UI : MonoBehaviour
     private IEnumerator HpCall()
     {
         // 09.16 hp 로직 이슈 수정?
-        hpSlider[0].maxValue = enemy.curHp;
-        hpSlider[1].maxValue = enemy.maxHp;
+        //hpSlider[1].maxValue = enemy.maxHp;
+        
 
         hpSlider[0].value = enemy.curHp;
         yield return new WaitForSeconds(0.25f);
@@ -186,7 +186,7 @@ public class Enemy_UI : MonoBehaviour
         float timer = 0;
         while (timer < 1)
         {
-            timer += Time.deltaTime / 3f;
+            timer += Time.deltaTime / 0.3f;
             hpSlider[1].value = Mathf.Lerp(start, end, timer);
             yield return null;
         }

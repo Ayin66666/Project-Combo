@@ -43,9 +43,16 @@ public class Start_Manager : MonoBehaviour
 
         // 만약 페이드 상태라면 - 페이드 해제
         if(UI_Manager.instance.fadeSet.activeSelf)
-        {
             UI_Manager.instance.Fade(false, 1f);
-        }
+
+        // 플레이어 UI Off
+        UI_Manager.instance.UI_Setting(false);
+
+        // 플레이어 활성화 상태라면 - 비활성화
+        if (Player_Manager.instance.Player.activeSelf)
+            Player_Manager.instance.PlayerOnOff_Setting(false);
+
+
     }
 
 

@@ -262,7 +262,7 @@ public class Inventory_Manager : MonoBehaviour
             if (typeCompare != 0) return typeCompare;
 
             // 등급 체크
-            int ratingCompare = ((int)a.item.itemRating) - ((int)b.item.itemRating);
+            int ratingCompare = ((int)b.item.itemRating) - ((int)a.item.itemRating);
             if (ratingCompare != 0) return ratingCompare;
 
             // 장비 타입의 경우 순서 체크 (무기 - 코어 - 머리 - 몸통 - 하의 - 신발 순서)
@@ -272,7 +272,7 @@ public class Inventory_Manager : MonoBehaviour
                 Item_Equipment eqB = b.item as Item_Equipment;
 
                 if(eqA != null && eqB != null)
-                    return ((int)eqB.equipmentType - (int)eqA.equipmentType);
+                    return ((int)eqA.equipmentType - (int)eqB.equipmentType);
             }
 
             return 0;

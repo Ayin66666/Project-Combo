@@ -97,7 +97,6 @@ public class Enemy_Range_Gunner : Enemy_Base
 
     public override void Die()
     {
-        Debug.Log("ªÁ∏¡ »£√‚");
         Hit_Reset();
 
         if (movementCoroutine != null)

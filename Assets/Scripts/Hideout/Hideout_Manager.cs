@@ -81,7 +81,6 @@ public class Hideout_Manager : MonoBehaviour
 
         // 페이드 종료
         UI_Manager.instance.Fade(false, 1f);
-        
         Player_Setting();
     }
 

@@ -617,6 +617,7 @@ public class SaveLoad_Manager : MonoBehaviour
                 maxAwakening = Player_Manager.instance.status.maxAwakening,
                 curStamina = Player_Manager.instance.status.curStamina,
                 maxStamina = Player_Manager.instance.status.maxStamina,
+                staminaRecovery = Player_Manager.instance.status.staminaRecovery,
 
                 // 스킬트리
                 skillPoint = Player_Manager.instance.skill.skillPoint,

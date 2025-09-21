@@ -36,7 +36,7 @@ public class Field_Boss : Field_Base
 
     private void Awake()
     {
-        delay = new WaitForSeconds(delayTime);
+        delay = new WaitForSeconds(0.5f);
     }
 
     public override void Field_Start()

@@ -162,8 +162,6 @@ public class Player_Animation : MonoBehaviour
         int typeIndex = index / 100;
         int countIndex = (index % 100) / 10;
         int colliderIndex = index % 10;
-        Debug.Log($"현재 공격 인덱스 : {typeIndex} / {countIndex} / {colliderIndex}");
-
         if (PlayerAction_Manager.instance.isAwankning && smashAttacks[typeIndex].haveAwakningValue)
         {
             smashAttacks[typeIndex].value_Awakening[countIndex].attackCollider.AttackColliderOn(colliderIndex);

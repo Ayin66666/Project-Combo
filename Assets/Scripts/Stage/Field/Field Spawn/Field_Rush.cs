@@ -7,7 +7,7 @@ public class Field_Rush : Field_Base
     [Header("---Setting---")]
     [SerializeField] private List<DialogData> datas;
     [SerializeField] private float nextRoundDelay;
-    private readonly WaitForSeconds checkInterval = new WaitForSeconds(1f);
+    private readonly WaitForSeconds checkInterval = new WaitForSeconds(0.5f);
     [SerializeField] private List<GameObject> enemyList;
     private Coroutine checkCoroutine;
 
