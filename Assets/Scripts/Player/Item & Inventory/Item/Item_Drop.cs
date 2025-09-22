@@ -1,5 +1,6 @@
 using System.Collections;
 using UnityEngine;
+using UnityEngine.Experimental.AI;
 
 
 public class Item_Drop : MonoBehaviour
@@ -44,22 +45,18 @@ public class Item_Drop : MonoBehaviour
 
     private IEnumerator SpawnCall()
     {
+        // 아이템 드랍 이동
         isSpawnDelay = true;
         Vector3 moveDir = new Vector3(Random.Range(-1f, 1f), Random.Range(0.5f, 1f), Random.Range(-1f, 1f)).normalized;
         rigid.AddForce(moveDir * Random.Range(1f, 3.5f), ForceMode.Impulse);
 
-        yield return null;
-        /*
-        bool isGround = Physics.Raycast(transform.position, Vector3.down, 0.5f, ground);
-        while(!isGround)
-        {
-            isGround = Physics.Raycast(transform.position, Vector3.down, 0.5f, ground);
-            yield return null;
-        }
+        // 대기
+        yield return new WaitForSeconds(10f);
 
-        rigid.velocity = Vector3.zero;
-        rigid.useGravity = false;
-        */
+        // 아이템 파괴
+        pickupVFX.transform.parent = null;
+        pickupVFX.SetActive(true);
+        Destroy(gameObject);
     }
 
     /// <summary>

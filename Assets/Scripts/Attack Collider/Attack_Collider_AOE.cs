@@ -91,6 +91,7 @@ public class Attack_Collider_AOE : MonoBehaviour
         {
             // 데미지
             other.GetComponent<IDamageSysteam>().Take_Damage(gameObject, damageType, hitEffect, isCritical, hitCount, damage);
+            Debug.Log($"데미지 : {damage}");
 
             // 장비 효과 동작
             if (owner == ColliderOwner.Player)

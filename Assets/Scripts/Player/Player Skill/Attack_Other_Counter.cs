@@ -96,6 +96,7 @@ public class Attack_Other_Counter : Attack_Base
 
     private IEnumerator Attack_HorizontalSalsh()
     {
+        PlayerAction_Manager.instance.MovementLock(cancelType, true);
         PlayerAction_Manager.instance.isInvincibility = true;
         PlayerAction_Manager.instance.isAttack = true;
         PlayerAction_Manager.instance.LookAt();

@@ -193,6 +193,11 @@ public class Enemy_UI : MonoBehaviour
         hpSlider[1].value = enemy.curHp;
     }
 
+    public void GroggyReset()
+    {
+        groggySlider[0].value = enemy.curGroggy;
+        groggySlider[1].value = enemy.curGroggy;
+    }
 
     public void Groggy()
     {

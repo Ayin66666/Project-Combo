@@ -120,6 +120,7 @@ public class Player_Status : MonoBehaviour
                 {
                     curhp = maxHp;
                 }
+                UI_Manager.instance.Hp();
                 break;
 
             case RecoveryType.Stamina:

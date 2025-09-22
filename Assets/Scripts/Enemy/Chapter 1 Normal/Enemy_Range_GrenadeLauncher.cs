@@ -27,6 +27,7 @@ public class Enemy_Range_GrenadeLauncher : Enemy_Base
         curState = State.Think;
         LookAt(target, 0.05f);
         Check_Target();
+        if (controller.enabled == false) controller.enabled = true;
 
         // 일반 공격
         if (targetRange <= attackRange)
@@ -98,11 +99,11 @@ public class Enemy_Range_GrenadeLauncher : Enemy_Base
 
     public override void Die()
     {
+        base.Die();
         Hit_Reset();
+        StopAllCoroutines();
 
-        if (movementCoroutine != null)
-            StopCoroutine(movementCoroutine);
-
+        if (movementCoroutine != null) StopCoroutine(movementCoroutine);
         movementCoroutine = StartCoroutine(DieCall());
     }
 
@@ -111,9 +112,6 @@ public class Enemy_Range_GrenadeLauncher : Enemy_Base
         curState = State.Die;
         enemyUI.UI_OnOff(false);
         nav.enabled = false;
-
-        // 아이템 드랍
-        base.Die();
 
         // 사운드
         sound.Sound(Enemy_Sound.SoundKey.Die.ToString());

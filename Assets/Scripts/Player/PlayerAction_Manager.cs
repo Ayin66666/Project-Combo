@@ -556,7 +556,7 @@ public class PlayerAction_Manager : MonoBehaviour, IDamageSysteam
             for (int i = 0; i < hitCount; i++)
             {
                 // 체력 감소
-                int calendDamage = calDamage / hitCount;
+                int calendDamage = calDamage;
                 if (calendDamage <= 0) calendDamage = 1;
                 pManager.status.curhp -= calendDamage;
 
@@ -584,11 +584,11 @@ public class PlayerAction_Manager : MonoBehaviour, IDamageSysteam
             switch (hitType)
             {
                 case IDamageSysteam.HitVFX.None:
-                    Effect_Manager.instance.Camera_Shack(3, 0.1f);
+                    Effect_Manager.instance.Camera_Shack(1f, 0.1f);
                     break;
 
                 case IDamageSysteam.HitVFX.KnockBack:
-                    Effect_Manager.instance.Camera_Shack(8, 0.25f);
+                    Effect_Manager.instance.Camera_Shack(2f, 0.25f);
                     if((int)armorType < 1)
                     {
                         if (hitEffectCoroutine != null) StopCoroutine(hitEffectCoroutine);
@@ -597,7 +597,7 @@ public class PlayerAction_Manager : MonoBehaviour, IDamageSysteam
                     break;
 
                 case IDamageSysteam.HitVFX.Down:
-                    Effect_Manager.instance.Camera_Shack(10, 0.3f);
+                    Effect_Manager.instance.Camera_Shack(5f, 0.3f);
                     if((int)armorType < 2)
                     {
                         if (hitEffectCoroutine != null) StopCoroutine(hitEffectCoroutine);

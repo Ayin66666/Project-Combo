@@ -51,9 +51,9 @@ public abstract class Enemy_Base : MonoBehaviour, IDamageSysteam
 
     [Header("---Chase---")]
     [SerializeField] protected float attackRange;
-    public GameObject target;
     [SerializeField] public Vector3 targetDir;
     [SerializeField] public float targetRange;
+    public GameObject target;
 
 
     [Header("---Attack---")]
@@ -93,6 +93,7 @@ public abstract class Enemy_Base : MonoBehaviour, IDamageSysteam
     protected Coroutine movementCoroutine;
     protected Coroutine hitCoroutine;
     protected Coroutine groggyTimerCoroutine;
+    protected Coroutine delayMovementCoroutine;
     private Coroutine attackMovementCoroutine;
     private List<System.Func<IEnumerator>> spawnList;
 
@@ -111,7 +112,9 @@ public abstract class Enemy_Base : MonoBehaviour, IDamageSysteam
     public void Spawn()
     {
         Status_Setting();
+
         target = PlayerAction_Manager.instance.gameObject;
+        controller.enabled = true;
 
         spawnList = new List<System.Func<IEnumerator>>()
         {
@@ -149,6 +152,7 @@ public abstract class Enemy_Base : MonoBehaviour, IDamageSysteam
         curState = State.Spawn;
         enemyUI.UI_Setting();
         enemyUI.UI_OnOff(true);
+        isInvincibility = false;
 
         // 소환 애니메이션
         anim.SetTrigger("Action");
@@ -287,7 +291,8 @@ public abstract class Enemy_Base : MonoBehaviour, IDamageSysteam
 
     public void Delay()
     {
-        StartCoroutine(DelayMovement());
+        if (delayMovementCoroutine != null) StopCoroutine(delayMovementCoroutine);
+        delayMovementCoroutine = StartCoroutine(DelayMovement());
     }
 
     protected abstract IEnumerator DelayMovement();
@@ -314,16 +319,16 @@ public abstract class Enemy_Base : MonoBehaviour, IDamageSysteam
             for (int i = 0; i < hitCount; i++)
             {
                 // 데미지
-                int calendDamage = calDamage / hitCount;
+                int calendDamage = calDamage;
                 if (calendDamage <= 0) calendDamage = 1;
                 curHp -= calendDamage;
+
+                // 데미지 UI
+                enemyUI.DamageUI(type, isCirtical, damage);
 
                 // 그로기 데미지 (그로기 상태가 아니라면)
                 if (!isGroggy)
                     curGroggy -= calDamage;
-
-                // 카메라 흔들림
-                Effect_Manager.instance.Camera_Shack(0.5f, 0.1f);
 
                 // 플레이어 각성 게이지
                 if (!Player_Manager.instance.action.isAwankning)
@@ -332,19 +337,13 @@ public abstract class Enemy_Base : MonoBehaviour, IDamageSysteam
                 // 사망 체크
                 if (curHp <= 0)
                 {
-                    curHp = 0;
-                    curGroggy = 0;
-                    Hit_Reset();
                     Die();
-
-                    // 경험치 추가
-                    Player_Manager.instance.status.ExpAdd(exp);
                     return;
                 }
                 else
                 {
                     // 피격 이펙트
-                    HitEffect(type, isCirtical, damage);
+                    HitEffect(type, isCirtical);
                 }
             }
         }
@@ -371,17 +370,17 @@ public abstract class Enemy_Base : MonoBehaviour, IDamageSysteam
                 switch (hit)
                 {
                     case IDamageSysteam.HitVFX.None:
-                        Effect_Manager.instance.Camera_Shack(0.15f, 0.05f);
+                        Effect_Manager.instance.Camera_Shack(0.1f, 0.05f);
                         break;
 
                     case IDamageSysteam.HitVFX.KnockBack:
-                        Effect_Manager.instance.Camera_Shack(0.25f, 0.05f);
+                        Effect_Manager.instance.Camera_Shack(0.15f, 0.05f);
                         if (hitCoroutine != null) StopCoroutine(hitCoroutine);
                         hitCoroutine = StartCoroutine(Hit_KnockBack(attackObj));
                         break;
 
                     case IDamageSysteam.HitVFX.Down:
-                        Effect_Manager.instance.Camera_Shack(0.3f, 0.05f);
+                        Effect_Manager.instance.Camera_Shack(0.2f, 0.05f);
                         if (hitCoroutine != null) StopCoroutine(hitCoroutine);
                         hitCoroutine = StartCoroutine(Hit_Down(attackObj));
                         break;
@@ -391,6 +390,7 @@ public abstract class Enemy_Base : MonoBehaviour, IDamageSysteam
             {
                 if (curGroggy <= 0 && !isGroggy)
                 {
+                    Hit_Reset();
                     if (hitCoroutine != null) StopCoroutine(hitCoroutine);
                     hitCoroutine = StartCoroutine(Hit_Groggy());
                 }
@@ -398,20 +398,17 @@ public abstract class Enemy_Base : MonoBehaviour, IDamageSysteam
         }
     }
 
-    private void HitEffect(IDamageSysteam.DamageType type, bool isCirtial, int damage)
+    private void HitEffect(IDamageSysteam.DamageType type, bool isCirtical)
     {
         // 피격 이펙트
         enemyUI.HitVFX(type == IDamageSysteam.DamageType.Physical ? 0 : 1);
 
         // 피격 시 바디 진동
-        ShakeEffect(0.1f, isCirtial ? 0.3f : 0.15f);
+        ShakeEffect(0.1f, isCirtical ? 0.3f : 0.15f);
 
         // UI 최신화
         enemyUI.Hp();
         enemyUI.Groggy();
-
-        // 데미지 UI
-        enemyUI.DamageUI(type, isCirtial, damage);
     }
 
     private void ShakeEffect(float duration, float strength)
@@ -424,13 +421,10 @@ public abstract class Enemy_Base : MonoBehaviour, IDamageSysteam
     {
         nav.enabled = false;
 
-        // 이동 코루틴 종료
-        if (movementCoroutine != null)
-            StopCoroutine(movementCoroutine);
-
-        // 이동 초기화
-        if (attackMovementCoroutine != null)
-            StopCoroutine(attackMovementCoroutine);
+        // 코루틴 종료
+        if (movementCoroutine != null) StopCoroutine(movementCoroutine);
+        if (delayMovementCoroutine != null) StopCoroutine(delayMovementCoroutine);
+        if (attackMovementCoroutine != null) StopCoroutine(attackMovementCoroutine);
 
         // 공격 종료
         for (int i = 0; i < attackDatas.Count; i++)
@@ -459,10 +453,9 @@ public abstract class Enemy_Base : MonoBehaviour, IDamageSysteam
 
         yield return new WaitForSeconds(groggyTime);
 
-        enemyUI.Groggy();
-
         isGroggy = false;
         curGroggy = maxGroggy;
+        enemyUI.GroggyReset();
     }
 
     public IEnumerator Hit_KnockBack(GameObject attackObj)
@@ -546,16 +539,17 @@ public abstract class Enemy_Base : MonoBehaviour, IDamageSysteam
     {
         curState = State.Groggy;
         isGroggy = true;
-
-        // 행동 강제 종료 -> 코루틴을 종료시키는 무언가
-        Hit_Reset();
+        curGroggy = 0;
+        groggyVFX.SetActive(true);
 
         // 다운 애니메이션
         anim.SetTrigger("Hit");
         anim.SetBool("isDown", true);
 
-        // 다운 대기 -> 다운 관련 시간 필요 -> 스테이터스에 추가
+        // 다운 대기
+        Debug.Log($"남은 그로기 : {statusData.GroggyTime}");
         yield return new WaitForSeconds(statusData.GroggyTime);
+        Debug.Log("보스 그로기 종료");
 
         // 기상 애니메이션
         anim.SetTrigger("Action");
@@ -565,11 +559,11 @@ public abstract class Enemy_Base : MonoBehaviour, IDamageSysteam
         }
 
         // UI 초기화
-        enemyUI.Groggy();
 
         // 재동작
         isGroggy = false;
         curGroggy = maxGroggy;
+        enemyUI.GroggyReset();
         curState = State.Idle;
         Think();
     }
@@ -621,7 +615,18 @@ public abstract class Enemy_Base : MonoBehaviour, IDamageSysteam
 
     public virtual void Die()
     {
+        curState = State.Die;
+        isInvincibility = true;
+        controller.enabled = false;
+        nav.enabled = false;
+        curHp = 0;
+        curGroggy = 0;
+
+        // 아이템 드랍
         Item_Drop();
+
+        // 경험치 추가
+        Player_Manager.instance.status.ExpAdd(exp);
     }
     #endregion
 }

@@ -123,6 +123,9 @@ public class EAttack_ComboUpper : Attack_Base
             Skill_Value_SO.Value_Data skillData = value_Normal[valueIndex].levelValue.GetData(skillLevel);
             aoe.Damage_Setting(skillData.type, skillData.attackEffect, Attack_Collider_AOE.AttackType.SingleHit, isCritical, skillData.hitCount, damage, 0.05f);
 
+            // Ä«¸Þ¶ó ÀÌÆåÆ®
+            Effect_Manager.instance.Camera_Shack(0.1f, 0.065f);
+
             // µô·¹ÀÌ
             yield return new WaitForSeconds(0.065f);
         }

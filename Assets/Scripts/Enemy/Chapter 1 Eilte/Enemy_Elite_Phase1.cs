@@ -29,41 +29,29 @@ public class Enemy_Elite_Phase1 : Enemy_Base
     }
 
 
-    private void Start()
+    protected override void Think()
     {
-        Spawn();
-    }
-
-    private void Update()
-    {
-        if (curState == State.Die)
+        if (isGroggy) return;
+        if (Player_Manager.instance.action.isDie)
         {
+            curState = State.Idle;
             return;
         }
 
-        if (curState == State.Idle)
-        {
-            Think();
-        }
-    }
-
-
-    protected override void Think()
-    {
         curState = State.Think;
-
         Check_Target();
-        if (targetRange <= 5)
+
+        if(targetRange <= 5)
         {
             int ran = Random.Range(0, attackDatas.Count);
-            attackDatas[0].Use();
+            attackDatas[ran].Use();
         }
-
-        if (targetRange > 5)
+        else
         {
             int ran = Random.Range(1, attackDatas.Count);
             attackDatas[ran].Use();
         }
+
     }
 
     protected override IEnumerator DelayMovement()
@@ -77,7 +65,7 @@ public class Enemy_Elite_Phase1 : Enemy_Base
 
         float timer = 0;
         float animValue = 0;
-        while (timer < ranDelay)
+        while (timer < ranDelay && !isGroggy)
         {
             if (animValue > -1)
             {
@@ -93,11 +81,13 @@ public class Enemy_Elite_Phase1 : Enemy_Base
         anim.SetFloat("Movement", 0);
 
         curState = State.Idle;
+        Think();
     }
 
     protected override IEnumerator Spawn_CutScene()
     {
         isCutScene = true;
+        isInvincibility = true;
 
         // 플레이어 동작 제어
         Player_Manager.instance.Player_Action_Setting(false);
@@ -113,6 +103,10 @@ public class Enemy_Elite_Phase1 : Enemy_Base
         // 플레이어 동작 제어
         Player_Manager.instance.Player_Action_Setting(true);
         isCutScene = false;
+        isInvincibility = false;
+
+        // 보스 동작
+        Think();
     }
 
     public override void Die()
@@ -129,6 +123,7 @@ public class Enemy_Elite_Phase1 : Enemy_Base
         // 사운드
         sound.Sound(Enemy_Sound.SoundKey.Die.ToString());
 
+        /*
         // 애니메이션
         anim.SetTrigger("Hit");
         anim.SetBool("isDie", true);
@@ -136,6 +131,7 @@ public class Enemy_Elite_Phase1 : Enemy_Base
         {
             yield return null;
         }
+        */
 
         // 컷신
         enemyUI.CutScene(clips[1]);

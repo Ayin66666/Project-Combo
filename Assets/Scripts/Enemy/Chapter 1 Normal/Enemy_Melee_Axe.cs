@@ -31,6 +31,7 @@ public class Enemy_Melee_Axe : Enemy_Base
         curState = State.Think;
         LookAt(target, 0.05f);
         Check_Target();
+        if (controller.enabled == false) controller.enabled = true;
 
         // 일반 공격
         if (targetRange <= 2)
@@ -116,7 +117,7 @@ public class Enemy_Melee_Axe : Enemy_Base
 
         float timer = 0;
         float animValue = 0;
-        while (timer < ranDelay)
+        while (timer < ranDelay && curState != State.Die)
         {
             if (animValue > -1)
             {
@@ -131,17 +132,18 @@ public class Enemy_Melee_Axe : Enemy_Base
         }
         anim.SetFloat("Movement", 0);
 
-        Think();
+        if (curState != State.Die)
+            Think();
     }
 
 
     public override void Die()
     {
+        base.Die();
         Hit_Reset();
+        StopAllCoroutines();
 
-        if (movementCoroutine != null)
-            StopCoroutine(movementCoroutine);
-
+        if (movementCoroutine != null) StopCoroutine(movementCoroutine);
         movementCoroutine = StartCoroutine(DieCall());
     }
 
@@ -153,9 +155,6 @@ public class Enemy_Melee_Axe : Enemy_Base
 
         // 사운드
         sound.Sound(Enemy_Sound.SoundKey.Die.ToString());
-
-        // 아이템 드랍
-        base.Die();
 
         // 사망 애니메이션
         anim.SetTrigger("Hit");

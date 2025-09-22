@@ -26,6 +26,7 @@ public class Enemy_Range_Gunner : Enemy_Base
         curState = State.Think;
         LookAt(target, 0.05f);
         Check_Target();
+        if (controller.enabled == false) controller.enabled = true;
 
         // 일반 공격
         if (targetRange <= attackRange)
@@ -48,7 +49,7 @@ public class Enemy_Range_Gunner : Enemy_Base
         anim.SetFloat("Movement", timer);
         while (targetRange > attackRange)
         {
-            if(curState == State.Die) yield break;
+            if (curState == State.Die) yield break;
             if (timer < 1)
             {
                 timer += Time.deltaTime * 2.5f;
@@ -62,7 +63,8 @@ public class Enemy_Range_Gunner : Enemy_Base
         nav.enabled = false;
         anim.SetFloat("Movement", 0);
 
-        Think();
+        if (curState != State.Die)
+            Think();
     }
 
     protected override IEnumerator DelayMovement()
@@ -97,11 +99,11 @@ public class Enemy_Range_Gunner : Enemy_Base
 
     public override void Die()
     {
+        base.Die();
         Hit_Reset();
+        StopAllCoroutines();
 
-        if (movementCoroutine != null)
-            StopCoroutine(movementCoroutine);
-
+        if (movementCoroutine != null) StopCoroutine(movementCoroutine);
         movementCoroutine = StartCoroutine(DieCall());
     }
 
@@ -110,9 +112,6 @@ public class Enemy_Range_Gunner : Enemy_Base
         curState = State.Die;
         enemyUI.UI_OnOff(false);
         nav.enabled = false;
-
-        // 아이템 드랍
-        base.Die();
 
         // 사운드
         sound.Sound(Enemy_Sound.SoundKey.Die.ToString());

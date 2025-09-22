@@ -192,7 +192,7 @@ public class Enemy_Boss_Arie : Enemy_Base
     protected override void Think()
     {
         // 페이즈 변경 도중 Think 가 호출될 경우를 대비
-        if (curState == State.Spawn) return;
+        if (curState == State.Spawn || curState == State.Die) return;
 
         // 플레이어 사망 시 동작 정지
         if (Player_Manager.instance.action.isDie)
@@ -202,10 +202,10 @@ public class Enemy_Boss_Arie : Enemy_Base
         }
 
         Debug.Log($"Boss Think Call / AttackCount : {attackCount}");
-
+        isInvincibility = false;
         curState = State.Think;
         Check_Target();
-        if (attackCount >= 5)
+        if (attackCount >= 3)
         {
             // 강화 공격
             attackCount = 0;
@@ -258,7 +258,8 @@ public class Enemy_Boss_Arie : Enemy_Base
         }
 
         // 딜레이 행동
-        movementCoroutine = StartCoroutine(DelayMovement());
+        if(delayMovementCoroutine != null) StopCoroutine (delayMovementCoroutine);
+        delayMovementCoroutine = StartCoroutine(DelayMovement());
     }
 
     private IEnumerator ChaseMovement(int ran)
@@ -435,7 +436,7 @@ public class Enemy_Boss_Arie : Enemy_Base
         // UI 초기화
         enemyUI.UI_Setting();
         enemyUI.Hp();
-        enemyUI.Groggy();
+        enemyUI.GroggyReset();
 
         // 2페이즈 컷씬
         enemyUI.CutScene(clips[1]);
