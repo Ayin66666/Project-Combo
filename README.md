@@ -12,7 +12,7 @@
 <img src = "https://github.com/user-attachments/assets/0887308f-4dd4-4804-9535-efceb804711f" width="100%" height="100%"/>
 <img src="https://github.com/user-attachments/assets/db8d9098-51f2-41b4-b46b-ae32f1f4e944" width="49%" height="49%"/>
 <img src="https://github.com/user-attachments/assets/4fbb9a64-2288-49fd-925a-3365a25f75ef" width="49%" height="49%"/>
-<img src="https://github.com/user-attachments/assets/27f1f90f-5dc8-483f-9adf-4dfc4859d1db" width="100%" height="100%"/>
+<img src="https://github.com/user-attachments/assets/64e8ebe6-4414-42ac-b925-2a50acac5ee0" width="100%" height="100%"/>
 </p>
 
 ## 개요
@@ -20,7 +20,7 @@
 - 제작 기간 : 25.03 ~ 25.09 (약 6개월)
 - 개발 목표 : 마비노기 영웅전의 스매시 기능 구현, Json을 활용한 데이터 로컬 저장
 - 기술 문서 : https://docs.google.com/presentation/d/1TijUUmfYp6Dh7DBAQQQgyUfkHiZ0gl0DBnp1yTRpF9I/edit?usp=sharing
-- 플레이 영상 : 
+- 플레이 영상 : https://www.youtube.com/watch?v=mEXa7664BfE
 
 <br />
 
@@ -33,12 +33,12 @@
 
 ## 주요 구현 기능
 **1. 플레이어**
-  - WASD 이동, 상호작용, 대쉬, 락온
+  - WASD 이동, F 상호작용, Shift 대쉬, C 락온
   - 유저 인풋을 받아오는 인풋 시스템 구현
 <br />
 
   - 일반공격 4타
-  - 스매시 4타 (스매시 1~3 타는 각성 상태에서 사용 시 추가 입력으로 추가타 발생)
+  - 스매시 4타 (스매시 1~3타는 각성 상태에서 사용 시 추가 입력으로 추가타 발생)
   - 스킬 4종 (돌진연참 - 각성 사용 시 스킬 변경, 카운터, 각성, 각성기)
   - 아머 구현 3종 (없음, 경직 면역, 다운 면역)
 <br />
