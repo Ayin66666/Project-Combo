@@ -164,7 +164,7 @@ public class Player_Animation : MonoBehaviour
         int colliderIndex = index % 10;
         if (PlayerAction_Manager.instance.isAwankning && smashAttacks[typeIndex].haveAwakningValue)
         {
-            smashAttacks[typeIndex].value_Awakening[countIndex].attackCollider.AttackColliderOn(colliderIndex);
+            smashAttacks[typeIndex].value_Awakening[countIndex].attackCollider.AttackColliderOn(colliderIndex); // 여기 에러 발생? null object?
         }
         else
         {

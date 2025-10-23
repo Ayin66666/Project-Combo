@@ -110,28 +110,6 @@ public class Enemy_Boss_Arie : Enemy_Base
     private Coroutine weaponCoroutine;
 
 
-    /*
-    private void Update()
-    {
-        if (curState == State.Die)
-        {
-            return;
-        }
-
-        if (Input.GetKeyDown(KeyCode.O))
-        {
-            attackDatas[attackUse].Use();
-            //Bosster_Setting(true);
-        }
-
-        if (Input.GetKeyDown(KeyCode.L))
-        {
-            //Bosster_Setting(false);
-        }
-    }
-    */
-
-
     #region Wepaon & Booster Effect
     public void Bosster_Setting(bool isOn)
     {
@@ -258,7 +236,7 @@ public class Enemy_Boss_Arie : Enemy_Base
         }
 
         // 딜레이 행동
-        if(delayMovementCoroutine != null) StopCoroutine (delayMovementCoroutine);
+        if (delayMovementCoroutine != null) StopCoroutine(delayMovementCoroutine);
         delayMovementCoroutine = StartCoroutine(DelayMovement());
     }
 
@@ -374,9 +352,12 @@ public class Enemy_Boss_Arie : Enemy_Base
         // 플레이어 동작 제어
         Player_Manager.instance.Player_Action_Setting(false);
 
-        // 스폰 컷신
-        enemyUI.CutScene(clips[0]);
-        yield return new WaitWhile(() => enemyUI.isCutScene);
+        // 1페이즈 스폰 컷신
+        if (curPhase == Phase.Phase1)
+        {
+            enemyUI.CutScene(clips[0]);
+            yield return new WaitWhile(() => enemyUI.isCutScene);
+        }
 
         // UI 셋팅
         enemyUI.UI_Setting();
@@ -396,10 +377,14 @@ public class Enemy_Boss_Arie : Enemy_Base
 
         curState = State.Idle;
         isCutScene = false;
-        
+
         Think();
     }
 
+    /// <summary>
+    /// 이제 미사용
+    /// </summary>
+    /// <returns></returns>
     private IEnumerator Phase_Change()
     {
         curPhase = Phase.Phase2;
@@ -451,6 +436,15 @@ public class Enemy_Boss_Arie : Enemy_Base
 
     public override void Die()
     {
+        base.Die();
+
+        if (hitCoroutine != null) StopCoroutine(hitCoroutine);
+        if (movementCoroutine != null) StopCoroutine(movementCoroutine);
+        StopAllCoroutines();
+        Hit_Reset();
+        StartCoroutine(DieCall());
+
+        /*
         if (curPhase == Phase.Phase2)
         {
             base.Die();
@@ -464,12 +458,14 @@ public class Enemy_Boss_Arie : Enemy_Base
             Hit_Reset();
             movementCoroutine = StartCoroutine(Phase_Change());
         }
+        */
     }
 
     private IEnumerator DieCall()
     {
         curState = State.Die;
 
+        // 사망 애니메이션
         anim.SetTrigger("Hit");
         anim.SetBool("isDie", true);
         while (anim.GetBool("isDie"))
@@ -477,8 +473,8 @@ public class Enemy_Boss_Arie : Enemy_Base
             yield return null;
         }
 
-        // 종료 컷씬
-        enemyUI.CutScene(clips[2]);
+        // 컷씬 ( Phase1 = 페이즈 전환 / Phase2 = 전투 종료 )
+        enemyUI.CutScene(curPhase == Phase.Phase1 ? clips[1] : clips[2]);
         yield return new WaitWhile(() => enemyUI.isCutScene);
 
         Destroy(gameObject);

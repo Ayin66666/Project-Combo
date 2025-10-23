@@ -6,13 +6,13 @@ using Easing.Tweening;
 public class EAttack_Rush : Attack_Base
 {
     [Header("---Setting---")]
+    [SerializeField] private Enemy_Boss_Arie boss;
     [SerializeField] private Attack_Collider_AOE rushCollider;
     [SerializeField] private GameObject chargeVFX;
     [SerializeField] private GameObject[] attackVFX;
     [SerializeField] private GameObject explosionBulletVFX;
     [SerializeField] private Transform shootPos;
     [SerializeField] private Transform[] explosionPos;
-
 
     public override void Use()
     {
@@ -45,7 +45,7 @@ public class EAttack_Rush : Attack_Base
         anim.SetBool("isRush", true);
 
         chargeVFX.SetActive(true);
-        float moveSpeed = ((Enemy_Boss_Arie)enemy).curPhase == Enemy_Boss_Arie.Phase.Phase1 ? 0.75f : 0.55f;
+        float moveSpeed = boss.curPhase == Enemy_Boss_Arie.Phase.Phase1 ? 0.75f : 0.55f;
         float timer = 0;
         while (timer < 1)
         {
