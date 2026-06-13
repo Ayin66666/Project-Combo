@@ -1,120 +1,30 @@
-# Unity ±âº» Ä³½Ã ¹× ºôµå ¹«½Ã
+###############################################
+# 1. ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½âº»ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
+*
+*.meta
+
+###############################################
+# 2. ï¿½ï¿½ï¿½ï¿½: Scripts ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ ï¿½ï¿½ï¿½ C# ï¿½ï¿½Å©ï¿½ï¿½Æ®ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
+
+# ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
+!Assets/
+!Assets/Scripts/
+!Assets/Scripts/**/
+!Assets/Scripts/**/*.cs
+
+###############################################
+# 3. Unity ï¿½ï¿½ï¿½Ê¿ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ä¸® ï¿½ï¿½ï¿½ï¿½ (ï¿½ï¿½ ï¿½áµµ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½)
 [Ll]ibrary/
 [Tt]emp/
 [Oo]bj/
-[Bb]uild/
-[Bb]uilds/
-[Ll]ogs/
-[Uu]ser[Ss]ettings/
-[Mm]emoryCaptures/
-[Rr]ecordings/
-*.log
-*.tmp
+[Bb]uild*/
+UserSettings/
+Logs/
 
-# Rider, VS, JetBrains µî IDE °ü·Ã ÆÄÀÏ ¹«½Ã
-.vs/
-.gradle/
-ExportedObj/
-.consulo/
+###############################################
+# 4. IDE/ï¿½ï¿½ï¿½ï¿½ ï¿½Ã½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½Ê¿ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
 *.csproj
-*.unityproj
 *.sln
-*.suo
 *.user
-*.userprefs
-*.pidb
-*.booproj
-*.svd
-*.pdb
-*.mdb
-*.opendb
-*.VC.db
-
-# Unity Ãæµ¹ °ü·Ã ÆÄÀÏ
-sysinfo.txt
-
-# ÆÐÅ°Áö, ºôµå ¾ÆÄ«ÀÌºê ¹«½Ã
-*.apk
-*.aab
-*.unitypackage
-*.app
-
-# Addressables ºôµå °á°ú¹° ¹«½Ã
-/[Aa]ssets/[Aa]ddressable[Aa]ssets[Dd]ata/*/*.bin*
-/[Aa]ssets/[Ss]treamingAssets/aa.meta
-/[Aa]ssets/[Ss]treamingAssets/aa/*
-
-<<<<<<< HEAD
-# ´ë¿ë·® ¿¡¼Â È®ÀåÀÚ ¹«½Ã (¸ðµ¨¸µ, ÅØ½ºÃ³, »ç¿îµå, ¾Ö´Ï¸ÞÀÌ¼Ç µî)
-*.fbx
-*.obj
-*.blend
-*.dae
-*.3ds
-*.max
-*.c4d
-
-*.png
-*.jpg
-*.jpeg
-*.psd
-*.tga
-*.exr
-*.hdr
-*.gif
-
-*.mp3
-*.wav
-*.ogg
-*.aiff
-
-*.mp4
-*.mov
-*.avi
-
-*.anim
-*.controller
-*.clip
-*.overrideController
-*.playable
-
-# Shader Graph µî ºñÄÚµå ¸®¼Ò½º ¹«½Ã (¼±ÅÃÀû)
-*.shadergraph
-*.vfxgraph
-*.prefab
-*.mat
-*.asset
-*.physicMaterial
-*.renderTexture
-
-# Lighting / Nav / Occlusion µ¥ÀÌÅÍ ¹«½Ã
-LightingData.asset
-NavMesh.asset
-OcclusionCullingData.asset
-ReflectionProbe-*
-
-# ±âÅ¸ »ç¿ëÀÚ Á¤ÀÇ ¸®¼Ò½º Á¦¿Ü (¿øÇÏ¸é À¯Áö °¡´É)
-#*.json
-# *.shader
-# *.xml
-
-# Æ÷ÇÔ½ÃÅ³ ÆÄÀÏ ¿¹¿Ü ¼³Á¤ (¿øÇÏ´Â °æ¿ì »ç¿ë)
-# !Assets/Scripts/
-# !Assets/Scenes/
-# !*.cs
-# !*.unity
-# !*.meta
-=======
-# Large asset files -
-*.fbx
-*.obj
-*.blend
-*.psd
-*.tga
-*.png
-*.exr
-*.hdr
-*.mp4
-*.wav
-*.avi
->>>>>>> 9ef4dbc0e947bdedc63e63de21399603810b6d7b
+*.unityproj
+.DS_Store
