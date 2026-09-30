@@ -48,13 +48,61 @@
 
 **B. 설계 방향**
 
+**1-1 공격 기능**<br />
+<br />
 플레이어의 공격 시스템은 단일책임원칙(SRP)을 기반으로 부모 클래스에 공용 함수를 두고<br />
 호출자는 공격의 세부 내용을 알 필요 없이 함수를 호출하기만 하면<br />
 공격의 세부 기능은 호출된 스크립트에서 알아서 동작할 수 있도록 작업하였습니다.<br />
 
-이를 위해 인터페이스, abstract 클래스 중 어떤 뱡향으로 작업할지 고민했고,<br />
-스킬 특성상 공통적으로 필요한 기능(공격 판정 초기화)을 고려하였을 때,<br />
-구현 강제와 더불어 내용 선언이 가능한 abstract가 적합하다 판단하여 구현을 결정하였습니다.<br />
+스킬 특성상 공통적으로 필요한 기능(초기화, 동작 호출 함수 등)을 고려하였을 때,<br />
+내용 선언이 가능한 abstract가 적합하다 판단하여 abstract class로 Attack_Base 구현하였습니다.<br />
+
+Attack_Base에는 동작을 호출하는 Use() 함수와 동작을 초기화하는 Reset() 함수가 존재하며<br />
+Attack_Base를 상속받아 구현된 세부 동작 기능에서 Use()와 Reset() 함수를 구현하는 방향으로 구현하여,<br />
+외부에서는 내부 동작을 알 필요 없이 플레이어의 입력을 받아 해당되는 Use() 함수를 호출하기만 하면<br />
+내부 동작이 모두 이루어지도록 설계하였습니다.<br />
+<br />
+
+**1-2 플레이어 입력**<br />
+<br />
+과거 Project : Origo의 문제점 중 하나로 판단한 것이 바로 플레이어의 입력 관리입니다.<br />
+과거 프로젝트를 진행할때는 각각의 동작 로직에서<br />
+Input.Getkey...() 함수로 직접 입력을 받아 동작을 구현하였습니다.<br />
+
+문제는 동작 스크립트들이 각각 입력을 받아 동작하게 구현할 경우<br />
+A 기능이 동작하는 과정에서 B 입력이 들어오면 두 기능이 모두 동작하는 문제가 발생하며,<br />
+이를 막기 위해 동작 스크립트들이 서로 필요 이상으로 결합되는 문제가 발생하는 것입니다.<br />
+<br />
+
+이를 해결하기 위해 Input_Manager를 제작하여 플레이어의 입력을 처리하는 전용 매니저를 구현하였습니다.<br />
+Input_Manager에는 입력이 들어왔을 때,<br />
+어떤 동작을 호출할 것인가에 대한 데이터를 담은 InputData 데이터 클래스가 존재합니다.<br />
+
+해당 데이터는 List<InputData> inputDatas;와<br />
+List<InputData> shortcutInputDatas; 2가지로 나눠 관리되고 있으며,<br />
+
+    public void Action_Setting(int index, Action name)
+    {
+        // 혹시 모를 함수 중복 등록 방지용
+        if(inputDatas[index].inputAction != null)
+        {
+            Debug.Log($"중복 등록 감지 {index} 번째 데이터 / {name} 함수 / {inputDatas[index].inputAction} 등록되어 있었음");
+            inputDatas[index].inputAction = null;
+        }
+
+        inputDatas[index].inputAction += name;
+    }
+
+    public void ShortCut_Setting(int index, Action name)
+    {
+        shortcutInputDatas[index].inputAction += name;
+    }
+    
+각각의 List에 데이터를 세팅하는 함수 Action_Setting(int index, Action name)와 <br />
+ShortCut_Setting(int index, Action name)로 List에 동작 데이터를 담습니다.<br />
+담겨진 데이터는 Updata() 함수에서 Shortcut_Check(), KeyDown_Check(), KeyUp_Check() 함수를 통해<br />
+입력이 있을 경우 InputData 내의 액션을 호출하여 동작합니다.<br />
+
 <br />
 <br />
 
@@ -243,22 +291,27 @@ Application.targetFrameRate = value; 를 사용하여 원하는 프레임으로 
 
 **B. 설계 방향** 
 
-// 작업중 <br />
-몬스터 구현에 있어 고려한 부분은 FSM 기반 동작 AI와 Abstract 클래스 상속을 통한 공통 기능 구현,<br />
-불필요한 중복 스크립트 제거, 관리 편의성 증가입니다.<br />
+몬스터 구현에 있어 중요하게 고려한 부분은 FSM 기반 동작 AI와<br />
+Abstract 클래스 상속을 통한 공통 기능 묶어 불필요한 중복 스크립트 제거,<br />
+공격 데이터 분리로 Prefab 할당 및 관리 편의성 증가입니다.<br />
 
-또한 과거에 제작한 "Project : Origo" 프로젝트에서 단일책임원칙을 제대로 지키기 못해<br />
+과거에 제작한 "Project : Origo" 가 단일책임원칙(SRP)을 제대로 지키기 못해<br />
 몬스터의 상태 데이터와 행동 데이터가 서로 얽혀 코드 복잡도가 증가했던 문제가 발생하지 않기 위해<br />
-Attack_Base를 기반으로 몬스터의 공격 역시 <br />
-
-
+Attack_Base를 기반으로 공격의 공용 기능을 담은 abstract class를 제작하고,<br />
+해당 스크립트 상속받아 스킬의 세부 기능을 구현하여 몬스터 FSM과 공격 세부 동작을 분리하는 방향으로 구현하였습니다.<br />
 <br />
 <br />
+
 
 ## **8. 아지트**
+
+**A. 구현 정리**
+
   - 스테이지 진입을 위한 조건 설정 기능 (이전 스테이지 클리어 등)
   - 스테이지 선택 시 스테이지 설명 & 클리어 랭크 & 클리어 타임 표기 기능
 <br />
+
+**B. 설계 방향** 
 
 
 ## **9. 스테이지 이벤트**
