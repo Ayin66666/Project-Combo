@@ -59,6 +59,7 @@
 
 Attack_Base에는 동작을 호출하는 Use() 함수와 동작을 초기화하는 Reset() 함수가 존재하며<br />
 Attack_Base를 상속받아 구현된 세부 동작 기능에서 Use()와 Reset() 함수를 구현하는 방향으로 구현하여,<br />
+
 외부에서는 내부 동작을 알 필요 없이 플레이어의 입력을 받아 해당되는 Use() 함수를 호출하기만 하면<br />
 내부 동작이 모두 이루어지도록 설계하였습니다.<br />
 <br />
@@ -66,12 +67,12 @@ Attack_Base를 상속받아 구현된 세부 동작 기능에서 Use()와 Reset(
 **1-2 플레이어 입력**<br />
 <br />
 과거 Project : Origo의 문제점 중 하나로 판단한 것이 바로 플레이어의 입력 관리입니다.<br />
-과거 프로젝트를 진행할때는 각각의 동작 로직에서<br />
-Input.Getkey...() 함수로 직접 입력을 받아 동작을 구현하였습니다.<br />
+과거 프로젝트를 진행할때는 각각의 동작 스크립트에서<br />
+Input.Getkey...()로 직접 입력을 받아 동작하도록 구현하였습니다.<br />
 
-문제는 동작 스크립트들이 각각 입력을 받아 동작하게 구현할 경우<br />
+문제는 스크립트들이 각자 입력을 받아 동작하게 구현할 경우<br />
 A 기능이 동작하는 과정에서 B 입력이 들어오면 두 기능이 모두 동작하는 문제가 발생하며,<br />
-이를 막기 위해 동작 스크립트들이 서로 필요 이상으로 결합되는 문제가 발생하는 것입니다.<br />
+이를 막기 위해 스크립트들이 서로 필요 이상으로 결합되는 문제가 발생하는 것입니다.<br />
 <br />
 
 이를 해결하기 위해 Input_Manager를 제작하여 플레이어의 입력을 처리하는 전용 매니저를 구현하였습니다.<br />
@@ -100,6 +101,7 @@ List<InputData> shortcutInputDatas; 2가지로 나눠 관리되고 있으며,<br
     
 각각의 List에 데이터를 세팅하는 함수 Action_Setting(int index, Action name)와 <br />
 ShortCut_Setting(int index, Action name)로 List에 동작 데이터를 담습니다.<br />
+
 담겨진 데이터는 Updata() 함수에서 Shortcut_Check(), KeyDown_Check(), KeyUp_Check() 함수를 통해<br />
 입력이 있을 경우 InputData 내의 액션을 호출하여 동작합니다.<br />
 
@@ -306,10 +308,12 @@ Abstract 클래스 상속을 통한 공통 기능 묶어 불필요한 중복 스
 
 이번 프로젝트에서는 Attack_Base를 기반으로 공격의 공용 기능을 담은 abstract class를 제작하고,<br />
 해당 스크립트 상속받아 스킬의 세부 기능을 구현하여 몬스터 FSM과 공격 세부 동작을 분리하는 방향으로 구현하였습니다.<br />
-또한 능력치, UI 데이터를 각각 SO로 분리하여 관리하여, 데이터 분리 및 기능과 데이터를 분리하여 복잡도 증가를 억제하였습니다.<br />
+또한 능력치, UI 데이터를 각각 SO로 분리하여 관리하여,<br />
+데이터 분리 및 기능과 데이터를 분리하여 복잡도 증가를 억제하였습니다.<br />
 
-데미지 계산 및 상태 이상(넉백, 다운) 기능을 인터페이스로 구현하여 데미지를 받을 수 있는 객체는<br />
-IDamageSysteam 인터페이스로 선언, 플레이어나 몬스터가 아닌 제3의 타입도 적용이 가능하게 설계하여 향후 확장성을 고려하였습니다.<br />
+데미지 계산 및 상태 이상(넉백, 다운) 기능을 인터페이스로 구현하여<br /> 
+데미지를 받을 수 있는 객체는 IDamageSysteam 인터페이스로 선언,<br />
+플레이어나 몬스터가 아닌 제3의 타입도 적용이 가능하게 설계하여 향후 확장성을 고려하였습니다.<br />
 
 <br />
 <br />
@@ -333,15 +337,84 @@ IDamageSysteam 인터페이스로 선언, 플레이어나 몬스터가 아닌 �
 
 아지트의 스테이지 선택 기능을 구현하기 위해서는<br />
 스테이지의 선택 조건, 입장을 위한 선행 스테이지 클리어 여부에 대한 데이터가 필요하였습니다.<br />
-이를 위해 Json 기반 로컬 데이터 세이브 기능을 구현할 때,<br />
 
-// 이하 작성중 -> Json 기반 저장 로직 설명 및 코드 예제, 플로우차트 이미지 필요
+이를 위해 런타임에서 스테이지의 입장가능 여부 및 랭크를 관리하는 매니저 Hideout_Manager를 제작,<br />
+아지트 씬에 입장할 때 Save & Load 데이터를 관리하는 SaveLoad_Manager에게 데이터를 받아와<br />
+런타임 데이터에 저장된 정보를 적용시켰습니다.<br />
+
+단, 이와 같은 방식으로 스테이지 데이터를 적용할 경우<br />
+스테이지 클리어 시 클리어 데이터를 아지트에 복귀하기 전 최신화 해줄 필요가 있었습니다.<br />
+<br />
+
+```
+[System.Serializable]
+public class StageData
+{
+    // 챕터 내에 존재하는 스테이지 데이터
+    public bool isClear;
+    public Rank clearRank;
+    public float clearTime;
+    public enum Rank { N, D, C, B, A, S }
+}
+```
+```
+[System.Serializable]
+public class ChapterData
+{
+    // 챕터 데이터 - 각 장의 데이터 묶음
+    public string chapterName;
+    public List<StageData> stageList;
+}
+```
+```
+[System.Serializable]
+public class ClearData
+{
+    // 챕터 묶음 - 최종 저장 데이터
+    public List<ChapterData> chapterList;
+}
+```
+<br />
+
+이를 해결하기 위한 데이터 클래스 3종과 플레이어를 따라다니는 ChapterData_Manager를 제작한 뒤,<br />
+스테이지를 관리하는 Stage_Manager가 스테이지 클리어 시 데이터를 넘겨받아 작성하는 역할을 부여하여<br />
+실시간 데이터 최신화가 가능하게 구현하였습니다.<br />
+
+    public void ClearData()
+    {
+        // 데이터 생성
+        StageData clearData = new StageData
+        {
+            isClear = true,
+            clearTime = Time.time - startTime,
+            clearRank = StageData.Rank.N,
+        };
+
+        // 랭크 셋팅
+        for (int i = 0; i < stageData.Data.Count; i++)
+        {
+            if (clearData.clearTime < stageData.Data[i].time)
+            {
+                clearData.clearRank = stageData.Data[i].rank;
+                break;
+            }
+        }
+
+        // 데이터 전달
+        ChapterData_Manager.instance.Data_Updata(chapter, stage, clearData);
+    }
+
+프로젝트에 구현된 챕터는 튜토리얼과 1장 뿐이나, 향후 챕터 및 스테이지 추가를 고려하여<br />
+ClearData에서 List<ChapterData> 형태로 데이터를 저장하였습니다.<br />
 
 <br />
 <br />
 
 
 ## **9. 스테이지 이벤트**
+
+**A. 구현 정리**
+
   - 스테이지 이벤트 오브젝트 구현 (이벤트 포인트, 힐링, 체크 포인트)
   - 다이얼로그 시스템 구현
   - 퀘스트 시스템 구현
@@ -349,6 +422,68 @@ IDamageSysteam 인터페이스로 선언, 플레이어나 몬스터가 아닌 �
     - 일반 : 1회 소환 후 전체 처치까지 대기
     - 러시 : 지정된 횟수만큼 몬스터 소환 후 대기
     - 보스 : 보스 소환 후 조건 만족까지 대기
+
+  **B. 설계 방향** 
+  
+스테이지 내 이벤트 설계에서 중요하게 생각한 부분은 체크 포인트 구현이었습니다.<br />
+다른 이벤트의 경우 단순히 플레이어의 스테이터스 수치 조절, <br />
+특정 구역에 도달 시 OnTrigger로 이벤트를 호출하는 것이 전부라 구현 난이도가 매우 낮았습니다.<br />
+
+하지만 체크 포인트의 경우 해당 스테이지에서 어디까지 진행했는지,<br />
+진행 상황에서 내가 보유한 능력치가 얼마였는지 등, 플레이어의 스테이터스 상태와 더불어<br />
+전투 중 패배한 구역의 전투 이벤트를 초기화가 필요하여 구현 과정에서 고민을 하였습니다.<br />
+<br />
+
+<img width="1072" height="322" alt="Image" src="https://github.com/user-attachments/assets/0274c258-444a-4264-afcd-173b818e8c80" />
+<br />
+<br />
+
+    /// <summary>
+    /// 체크포인트 저장 - 호출은 체크포인트 오브젝트에서
+    /// </summary>
+    public void CheckPoint_Seting(Transform pos)
+    {
+        // 위치 저장
+        spawnPos = pos.position;
+        spawnRotation = Player_Manager.instance.transform.rotation;
+    }
+<br />
+
+저는 이 문제를 해결하기 위해 스테이지를 관리하는 Stage_Manager에<br />
+체크 포인트 오브젝트와 상호작용 시 호출되는 함수인 CheckPoint_Seting()와<br />
+<br />
+
+    /// <summary>
+    /// 사망 시 체크포인트 호출 - 동작은 사망 후 플레이어 매니저 부분에서
+    /// </summary>
+    public void CheckPoint_Call()
+    {
+        // 스테이지 리셋
+        foreach (Field_Base field in spawn)
+        {
+            if (!field.isClear) field.Field_Reset();
+        }
+
+        // 스테이터스 변경
+        Player_Manager.instance.status.curhp = Player_Manager.instance.status.maxHp;
+        Player_Manager.instance.status.curStamina = Player_Manager.instance.status.maxStamina;
+        Player_Manager.instance.status.curAwakening = 0;
+
+        // UI 리셋
+        UI_Manager.instance.Hp();
+        UI_Manager.instance.Awakening();
+
+        // 플레이어 위치 이동
+        PlayerAction_Manager.instance.Pos_Setting(spawnPos, spawnRotation);
+    }
+<br />
+
+실제 플레이어 사망 시 호출되는 함수 CheckPoint_Call() 함수로<br />
+스테이지 내 전투 이벤트를 foreach문으로 순회하여 클리어 한 곳은 그대로 두고,<br />
+아직 클리어하지 못하거나 도전 도중 사망한 스테이지만 리셋하는 방식으로 스테이지 초기화를 구현하였습니다.<br />
+
+// 이후 작성 필요 -> 몬스터 스폰 로직 플로우차트와 관련 구현 방식 설명
+<br />
 <br />
 
 
