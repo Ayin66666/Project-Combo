@@ -304,7 +304,7 @@ Application.targetFrameRate = value; 를 사용하여 원하는 프레임으로 
 <br />
 
 
-## **6. 튜토리얼**
+## **6. 튜토리얼 & 유저 가이드**
 
 ### **A. 구현 정리**
 
@@ -314,12 +314,76 @@ Application.targetFrameRate = value; 를 사용하여 원하는 프레임으로 
 
 ### **B. 설계 방향**
 
+**1-1 튜토리얼**<br />
+
 튜토리얼 시스템은 한눈에 알아볼 수 있는 직관적인 디자인과,<br />
 튜토리얼을 놓쳤더라도 다시 확인할 수 있는 편의성을 고려하였습니다.<br />
 
 이를 위해 튜토리얼 종류를 화면 전체에서 보여주는 팝업 창과<br />
 우측 하단에 표시되는 툴팁 창 2종류로 구현하였으며,<br />
+단순 텍스트 및 이미지만 활용하면 정보 전달력이 부족하다 판단하여<br />
 전달성을 높히기 위해 중요 텍스트의 색상 변경을 통한 강조 표시 및 영상을 추가하였습니다.<br />
+<br />
+
+
+**1-2 유저 가이드**<br />
+
+제가 외부 전시회 및 학교 홍보를 다니며 느낀 점은<br />
+개발자는 자신이 개발하는 과정에서 수십, 수백번의 테스트를 통해 모두 아는 상태로 플레이하지만,<br />
+
+실제 전시 & 홍보를 통해 체험하는 유저의 경우, 처음 접하는 게임을 플레이하다 보니<br />
+게임 자체가 낮설어 튜토리얼을 통해 조작법을 안내하더라도 전부 습득하지 못하는 경우가 발생하였습니다.<br />
+
+오프라인에서 진행되는 전시회라면 직접 안내할 수 있으나<br />
+이는 게임 내에서 해결하는 것이 아니기에 궁여지책이라 생각하였습니다.<br />
+<br />
+
+
+본 프로젝트는 게임 '마비노기 영웅전'을 플레이해본 사람이라면 바로 적응이 가능하나<br />
+일반 공격 - 스매쉬 공격 시스템을 경험해보지 않았거나 익숙하지 않은 유저라면<br />
+스매쉬 사용 및 각성 스킬 사용 시 스매쉬 추가 연계와 같은 조작에 어려움을 겪을 것이라 판단하였습니다.<br />
+
+저는 조작 미숙으로 인한 플레이 경험 저하 문제를 해결하기 위해<br />
+게임 'Monster Hunter Wild'의 가이드 시스템을 차용하기 결정하였습니다.<br />
+
+공격 가이드는 플레이어가 일반, 스매쉬, 스킬 등<br />
+유저가 공격을 하면 우 상단에 UI로 다음에 연계 가능한 공격을 표시합니다.<br />
+이를 통해 연계 가능한 공격을 직관적으로 표시하여 조작 난이도를 낮췄습니다.<br />
+
+<img width="972" height="422" alt="Image" src="https://github.com/user-attachments/assets/b1869eba-491c-49f1-bd8f-b93eb2637d14" />
+<br />
+
+```
+    public void AttackGuide(string[] nextAttacks)
+    {
+        if (attackGuideCoroutine != null)
+            StopCoroutine(attackGuideCoroutine);
+        attackGuideCanvasGroup.DOKill();
+
+        attackGuideCoroutine = StartCoroutine(AttackGuideCall(nextAttacks));
+    }
+```
+```
+    private IEnumerator AttackGuideCall(string[] nextAttacks)
+    {
+        // 텍스트 초기화
+        attackGuideCanvasGroup.alpha = 1;
+
+        // 텍스트 활성화 및 설정
+        guide_nextAttackText.gameObject.SetActive(true);
+        guide_nextAttackText.text = string.Join("\n", nextAttacks);
+
+        // 페이드 딜레이
+        yield return new WaitForSeconds(0.5f);
+
+        // 페이드 아웃 (1.25초 동안 서서히 사라짐)
+        yield return attackGuideCanvasGroup.DOFade(0, 1.25f).WaitForCompletion();
+    }
+```
+
+연계 가능한 공격의 데이터는 Skill_Base의 string[] nextAttackData에 작성되어 있으며,<br />
+Attack_Base를 상속받아 구현된 공격 스크립트에서 Use() 함수 호출 시<br /> 
+UI_Manager.instance.AttackGuide(nextAttackData); 형태로 호출하여 UI에 표시합니다.<br />
 <br />
 <br />
 
