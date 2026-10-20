@@ -187,7 +187,6 @@ ShortCut_Setting(int index, Action name)로 List에 동작 데이터를 담습�
   - 레벨업 시 스킬포인트 & 스테이터스 증가 기능 (5레벨 단위로 추가 증가)
 <br />
 
-
 ### **B. 설계 방향**
 
 레벨업 시스템에서 고려하였던 부분은 레벨업을 위한 필요 경험치 데이터 자동 생성과<br />
@@ -529,6 +528,7 @@ ClearData에서 List<ChapterData> 형태로 데이터를 저장하였습니다.<
     - 일반 : 1회 소환 후 전체 처치까지 대기
     - 러시 : 지정된 횟수만큼 몬스터 소환 후 대기
     - 보스 : 보스 소환 후 조건 만족까지 대기
+<br />
 
 ### **B. 설계 방향** 
   
@@ -631,6 +631,7 @@ List에 지정된 라운드 만큼 소환을 반복하는 Rush,<br />
   - 챕터 & 스테이지 데이터는 데이터 클래스로 저장
   - 로드 기능은 각각의 매니저가 SaveLoad_Manager에서 데이터를 받아와서 로드
   - 데이터가 없을 경우 신규 데이터 생성 & 세이브
+<br />
 
 ### **B. 설계 방향** 
 
@@ -638,18 +639,185 @@ List에 지정된 라운드 만큼 소환을 반복하는 Rush,<br />
 전시 및 시연의 특성 상 데이터를 저장할 필요가 없었기 때문에 관련 문제를 고려할 필요가 없었습니다.<br />
 
 하지만 단순 시연 목적이 아니라면 아무리 간단한 게임이라도<br />
-진행사항이나 점수 등 데이터 세이브 & 로 기능이 있는 경우가 대부분입니다.<br />
+진행사항이나 점수 등 데이터 세이브 & 로드 기능이 있는 경우가 대부분입니다.<br />
+
+<img width="792" height="302" alt="Image" src="https://github.com/user-attachments/assets/84cefd91-25b1-44fa-9ea1-d238f486116c" /><br />
+<br />
 
 처음 세이브 & 로드 기능을 구현하는 프로젝트인 만큼 온라인 저장 기능을 구현을 도전하기보다는<br />
 사용자의 컴퓨터 저장공간에 데이터를 저장하는 단계부터 천천히 밟아가는 것이 좋겠다 판단하여,<br />
 Unity에서 지원하는 JsonUtility를 기반으로 로컬 세이브 기능을 구현하기로 결정하였습니다.<br />
 <br />
 
+```
+        // 데이터 저장 - SaveLoad_Manager -> Create_Data() 일부 발췌
+        try
+        {
+            string json = JsonUtility.ToJson(data);
+            File.WriteAllText(savePath + fileName[slotCount], json);
 
-구현 과정에서 고려한 부분은 바로 로컬 세이브인 만큼 데이터 수정 및 파손이 쉽다는 점이었습니다.<br />
-별도의 처리 없이 Json 파일로 저장되는 특성 상 파일 위치 수정 및 파손이 발생하기 쉬운 환경인 만큼,<br />
-파일을 읽어 전환하는 과정에서 성공 & 실패 체크가 필요하게 되었습니다.<br />
+            // 데이터 적용 - 스테이터스
+            Player_Manager.instance.status.Status_Setting(data);
+
+            // 데이터 적용 - 경험치
+            Player_Manager.instance.status.Level_Setting();
+
+            // 데이터 적용 - 챕터
+            ChapterData_Manager.instance.Data_Setting(data);
+
+            // 데이터 적용 - 스킬트리
+            Player_Manager.instance.skill.Skill_Setting(data);
+
+            // 데이터 적용 - 인벤토리 & 장비창
+
+            return (data, true);
+        }
+        catch (Exception e)
+        {
+            Debug.LogError($"저장 에러 발생! {e.Message}");
+            return (null, false);
+        }
+
+```
+프로젝트 목표가 4개의 세이브 슬롯을 지원하는 만큼, 각 세이브에 접근하기 위한 명확한 경로 작성이 필요하였습니다.<br />
+이를 해결하기 위해 기본 파일 경로를 string 로 저장하고, 파일 이름을 save1~4로 저장하여,<br />
+각 슬롯을 클릭할 경우, 경로 + 파일 이름으로 필요한 파일의 접근 경로를 제작하는 방식으로 구현하였습니다.<br />
+
+```
+[System.Serializable]
+public class Data
+{
+    [Header("---Ohter---")]
+    public string chapter;
+    public float playTime;
+    public string SceneName;
+    public Vector3 playerPos;
+
+    [Header("---Status---")]
+    public int curLevel;
+    public int curExp;
+
+    // Defence Status
+    public int curhp;
+    public int maxHp;
+    public int physicalDefence;
+    public int magicalDefence;
+
+    // Attack Status
+    public int physicalDamage;
+    public int magicalDamage;
+    public float attackSpeed;
+    public float criticalhit;
+    public float critical_multiplier;
+
+    // Other Status
+    public float moveSpeed;
+    public float curStamina;
+    public float maxStamina;
+    public float curAwakening;
+    public float maxAwakening;
+    public float staminaRecovery;
+
+    [Header("---Item---")]
+    public List<ItemData> itemData;
+    public List<int> equipment;
+    public List<int> shortcut;
+
+    [Header("---Chapter---")]
+    public ClearData claerData;
+
+    [Header("---Skill Tree---")]
+    public int skillPoint;
+    public List<int> skillLevelData;
+}
+```
+Json으로 변환되어 저장하는 데이터는 Class Data로<br />
+플레이어의 능력치, 인벤토리, 장비, 스킬, 클리어 데이터를 가지고 있습니다.<br />
+
+```
+[System.Serializable]
+public class ItemData
+{
+    public int itemCode;
+    public int itemCount;
+}
+```
+
+```
+[System.Serializable]
+public class ClearData
+{
+    // 챕터 묶음 - 최종 저장 데이터
+    public List<ChapterData> chapterList;
+}
+```
+```
+[System.Serializable]
+public class ChapterData
+{
+    // 챕터 데이터 - 각 장의 데이터 묶음
+    public string chapterName;
+    public List<StageData> stageList;
+}
+```
+```
+[System.Serializable]
+public class StageData
+{
+    // 챕터 내에 존재하는 스테이지 데이터
+    public bool isClear;
+    public Rank clearRank;
+    public float clearTime;
+    public enum Rank { N, D, C, B, A, S }
+}
+```
+
+이때 각 파트(인벤토리, 클리어 데이터 등)은 개별 데이터 클래스를 구현하여 저장하였습니다.<br />
+하나의 파일을 저장함에도 개별 클래스로 분리한 이유는 SaveLoad_Manager가<br />
+필요 이상으로 다른 매니저와 결합되는 것을 경계하기 위해서였습니다.<br />
+
+저장되는 데이터는 각자 매니저를 보유한 기능들로,<br />
+런타임 데이터 역시 해당 매니저들이 보유하고 있습니다.<br />
+
+이때 저장되는 데이터와 런타임 데이터의 구성이 다르므로<br />
+저장을 위해 런타임 데이터를 세이브용 데이터로 전환하는 과정이 필요했습니다.<br />
+<br />
 
 
+저는 이 과정에 대한 책임을 어느 스크립트에 줄지 고민하였고,<br />
+결과 SaveLoad_Manager에 런타임 -> 세이브 데이터 전환 책임까지 주는 것은<br />
+SaveLoad_Manager의 책임 영역 밖의 일이라 판단하였습니다.<br />
+
+SaveLoad_Manager가 런타임 데이터의 전환까지 책임지게 구현했을 경우<br />
+런타임 데이터가 변경되면 거기에 맞춰 전환 로직도 교체해야 하는데,<br />
+데이터 스크립트와 전환 로직이 분리되어 있다면 교체 지점이 늘어나 작업 난이도가 상승하게 됩니다.<br />
+
+또한 전환 작업을 위해 이를 위해 SaveLoad_Manager가<br />
+필요 이상으로 다른 스크립트와 결합하게 될 것으로 판단하였습니다.<br />
+
+```
+                // SvaeLoad_Manager -> Save(int index) 일부 발췌
+                // 스킬트리
+                skillPoint = Player_Manager.instance.skill.skillPoint,
+                skillLevelData = Player_Manager.instance.skill.GetSkillData(),
+
+                // 아이템
+                itemData = new List<ItemData>(),
+                equipment = Player_Manager.instance.equipment.GetEquipmentData(),
+                shortcut = Player_Manager.instance.shortCut.GetShortcutData(),
+
+                // 진행도
+                chapter = ChapterCheck(index),
+                playTime = PlayTime(),
+                SceneName = SceneManager.GetActiveScene().name,
+                playerPos = Player_Manager.instance.action.transform.position,
+
+                // 스테이지 클리어
+                claerData = ChapterData_Manager.instance.claerData.claerData,
+```
+
+최종적으로 SaveLoad_Manager는 다른 매니저의 전환 및 데이터 전달 함수 Get...()을 호출하면<br />
+요청받은 매니저가 런타임 데이터에서 세이브용 데이터로 전환한 뒤 SaveLoad_Manager에게 전달하고,<br />
+해당 데이터를 기반으로 Data class를 작성하여 사용자의 컴퓨터에 저장되는 방식으로 구현하였습니다.<br />
 <br />
 <br />
