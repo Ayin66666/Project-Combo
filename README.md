@@ -1,35 +1,36 @@
-## 개요
-개인 프로젝트로 제작한 3D 액션 Morpg "Project : Combo" 입니다.<br />
 
-게임 '명조 : 워더링웨이브', '마비노기 영웅전' 에서 모티브를 얻어 제작한 프로젝트로,<br />
-대학교 캡스톤 수업에서 팀 프로젝트로 제작하였던 3D 액션게임 Project : Origo의 완성형을 목표로 제작하였습니다.
-<br />
+## 개요
 
 <p align="center">
 <img src = "https://github.com/user-attachments/assets/0887308f-4dd4-4804-9535-efceb804711f" width="100%" height="100%"/>
-<img src="https://github.com/user-attachments/assets/db8d9098-51f2-41b4-b46b-ae32f1f4e944" width="49%" height="49%"/>
-<img src="https://github.com/user-attachments/assets/4fbb9a64-2288-49fd-925a-3365a25f75ef" width="49%" height="49%"/>
-<img src="https://github.com/user-attachments/assets/64e8ebe6-4414-42ac-b925-2a50acac5ee0" width="100%" height="100%"/>
 </p>
+
+개인 프로젝트로 제작한 3D 액션 게임 'Project : Combo' 입니다.<br />
+
+게임 '명조 : 워더링웨이브', '마비노기 영웅전' 에서 모티브를 얻어 제작한 프로젝트로,<br />
+3-2 대학 캡스톤 수업에서 팀 프로젝트로 제작하였던 3D 액션 게임<br />
+'Project : Origo' 의 아쉬운 점을 보완한 완성형을 목표로 제작하였습니다.
+<br />
 
 ## 요약
 - 게임 장르 : 3D 액션 게임
 - 제작 기간 : 25.03 ~ 25.09 (약 6개월)
-- 개발 목표 : 마비노기 영웅전의 스매시 기능 구현, Json을 활용한 데이터 로컬 저장
+- 개발 목표 : 게임 '마비노기 영웅전'의 일반공격 - 스매시 전투 시스템 구현 및 Json을 활용한 데이터 로컬 저장
 - 기술 문서 : https://docs.google.com/presentation/d/1TijUUmfYp6Dh7DBAQQQgyUfkHiZ0gl0DBnp1yTRpF9I/edit?usp=sharing
 - 동작 영상 : https://www.youtube.com/watch?v=mEXa7664BfE
-
 <br />
 
 ## 개발 환경
 - Unity 2022.03.16f1 LTS
 - C#
-- Window 11
-- PhotoShop
+- Windows 11
+- PhotoShop 2019
 <br />
 
 ## 주요 구현
 ## **1. 플레이어**
+<img src="https://github.com/user-attachments/assets/64e8ebe6-4414-42ac-b925-2a50acac5ee0"/><br />
+<br />
 
 ### **A. 구현 정리**
 
@@ -37,10 +38,11 @@
   - 유저 인풋을 받아오는 인풋 시스템 구현
   - 일반공격 4타
   - 스매시 4타 (스매시 1~3타는 각성 상태에서 사용 시 추가 입력으로 추가 공격 동작)
-  - 스킬 4종 (돌진연참 - 각성 사용 시 스킬 변경, 카운터, 각성, 각성기)
+  - 스킬 4종 및 스킬 '각성' 사용 시 공격에 추가 조작 활성화
   - 아머 구현 3종 (없음, 경직 면역, 다운 면역)
   - 미니맵 & 전투 돌입 시 미니맵 사이즈 조절 구현
   - 공격 사용 시 연계 공격 가이드 UI 구현
+  - 경험치 누적에 따른 레벨업 처리 및 레벨별 필요 경험치 계산
 <br />
 
 ### **B. 설계 방향**
@@ -48,14 +50,14 @@
   - **1-1 공격 기능**<br />
 
 플레이어의 공격 시스템은 단일책임원칙(SRP)을 기반으로 부모 클래스에 공용 함수를 두고<br />
-호출자는 공격의 세부 내용을 알 필요 없이 함수를 호출하기만 하면<br />
+호출자는 공격의 세부 기능을 알 필요 없이 구독 된 함수를 호출하기만 하면<br />
 공격의 세부 기능은 호출된 스크립트에서 알아서 동작할 수 있도록 작업하였습니다.<br />
 
 스킬 특성상 공통적으로 필요한 기능(초기화, 동작 호출 함수 등)을 고려하였을 때,<br />
 내용 선언이 가능한 abstract가 적합하다 판단하여 abstract class로 Attack_Base 구현하였습니다.<br />
 
 Attack_Base에는 동작을 호출하는 Use() 함수와 동작을 초기화하는 Reset() 함수가 존재하며<br />
-Attack_Base를 상속받아 구현된 세부 동작 기능에서 Use()와 Reset() 함수를 구현하는 방향으로 구현하여,<br />
+Attack_Base를 상속받아 구현된 세부 동작 기능에서 Use()와 Reset() 함수를 구현하여,<br />
 
 외부에서는 내부 동작을 알 필요 없이 플레이어의 입력을 받아 해당되는 Use() 함수를 호출하기만 하면<br />
 내부 동작이 모두 이루어지도록 설계하였습니다.<br />
@@ -113,7 +115,7 @@ List<InputData> shortcutInputDatas; 2종류로 나뉘어 관리되고 있으며<
 각각 List에 데이터를 세팅하는 함수 Action_Setting(int index, Action name)와 <br />
 ShortCut_Setting(int index, Action name)로 List에 동작 데이터를 담습니다.<br />
 
-담겨진 데이터는 Updata()에서 Shortcut_Check(), KeyDown_Check(), KeyUp_Check()를 통해 입력을 체크하며,<br />
+담겨진 데이터는 Update()에서 Shortcut_Check(), KeyDown_Check(), KeyUp_Check()를 통해 입력을 체크하며,<br />
 입력이 있을 경우 InputData에서 할당된 액션을 호출하여 동작합니다.<br />
 <br />
 
@@ -153,6 +155,9 @@ ShortCut_Setting(int index, Action name)로 List에 동작 데이터를 담습�
 
 ## **2. 장비 & 인벤토리**
 
+<img src="https://github.com/user-attachments/assets/4fbb9a64-2288-49fd-925a-3365a25f75ef"/><br />
+<>
+
 ### **A. 구현 정리**
 
   - 아이템은 장비, 소비, 기타 3종
@@ -178,50 +183,8 @@ ShortCut_Setting(int index, Action name)로 List에 동작 데이터를 담습�
 <br />
 <br />
 
-## **3. 레벨 업**
 
-### **A. 구현 정리**
-
-  - 경험치 및 레벨업 시스템
-  - 자동 필요 경험치 계산 기능
-  - 레벨업 시 스킬포인트 & 스테이터스 증가 기능 (5레벨 단위로 추가 증가)
-<br />
-
-### **B. 설계 방향**
-
-레벨업 시스템에서 고려하였던 부분은 레벨업을 위한 필요 경험치 데이터 자동 생성과<br />
-특정 단위(본 프로젝트에서는 5레벨)의 추가 스테이터스 증가 로직입니다.<br />
-
-필요 경험치 데이터의 경우 수동으로 작성하여 삽입할 수도 있으나,<br />
-레벨 단위가 수백, 수천을 넘어가기 시작하면 한계에 맞닥드릴수 밖에 없다 생각하였습니다.<br />
-<br />
-
-이를 해결하기 위해 조건식을 통해 자동으로 레벨업에 필요한 경험치 데이터를 생성하자 판단하였고,<br />
-거듭제곱(Polynomial) 성장식을 사용하여 요구 경험치 데이터를 생성하였습니다.<br />
-
-데모 프로젝트 특성 상 많은 레벨 데이터를 요구하는 것도,<br />
-그만한 플레이 로직이 구현되는 것도 아니기에<br />
-최대 레벨을 25로 결정하고 growth 1.5로 경험치 데이터를 작성하였습니다.<br />
-
-    public void Level_Setting()
-    {
-        // 최종 레벨
-        maxLevel = 25;
-
-        // 경험치 요구량은 지수계수 1.5로 계산
-        for (int i = 1; i < maxLevel; i++)
-        {
-            int a = (int)(baseExp * Mathf.Pow(i, growth));
-            expList.Add(a);
-        }
-
-        // 현제 경험치
-        maxExp = expList[curLevel - 1];
-    }
-<br />
-<br />
-
-## **4. 스킬 & 스킬트리**
+## **3. 스킬 & 스킬트리**
 
 ### **A. 구현 정리**
   - 스킬포인트를 소모하여 스킬 강화
@@ -250,7 +213,7 @@ Attack_Base에 데이터를 불러와 조건 확인 후 레벨업이 가능하�
 <br />
 
 
-## **5. 옵션**
+## **4. 옵션**
 
 ### **A. 구현 정리**
 
@@ -303,7 +266,9 @@ Application.targetFrameRate = value; 를 사용하여 원하는 프레임으로 
 <br />
 
 
-## **6. 튜토리얼 & 유저 가이드**
+## **5. 튜토리얼 & 유저 가이드**
+<img src="https://github.com/user-attachments/assets/db8d9098-51f2-41b4-b46b-ae32f1f4e944"/><br />
+<br />
 
 ### **A. 구현 정리**
 
@@ -320,8 +285,9 @@ Application.targetFrameRate = value; 를 사용하여 원하는 프레임으로 
 
 이를 위해 튜토리얼 종류를 화면 전체에서 보여주는 팝업 창과<br />
 우측 하단에 표시되는 툴팁 창 2종류로 구현하였으며,<br />
+
 단순 텍스트 및 이미지만 활용하면 정보 전달력이 부족하다 판단하여<br />
-전달성을 높히기 위해 중요 텍스트의 색상 변경을 통한 강조 표시 및 영상을 추가하였습니다.<br />
+전달성을 높이기 위해 중요 텍스트의 색상 변경을 통한 강조 표시 및 영상을 추가하였습니다.<br />
 <br />
 
 
@@ -331,7 +297,7 @@ Application.targetFrameRate = value; 를 사용하여 원하는 프레임으로 
 개발자는 자신이 개발하는 과정에서 수십, 수백번의 테스트를 통해 모두 아는 상태로 플레이하지만,<br />
 
 실제 전시 & 홍보를 통해 체험하는 유저의 경우, 처음 접하는 게임을 플레이하다 보니<br />
-게임 자체가 낮설어 튜토리얼을 통해 조작법을 안내하더라도 전부 습득하지 못하는 경우가 발생하였습니다.<br />
+게임이 낯설어 튜토리얼을 통해 조작법을 안내하더라도 전부 습득하지 못하는 경우가 발생하였습니다.<br />
 
 오프라인에서 진행되는 전시회라면 직접 안내할 수 있으나<br />
 이는 게임 내에서 해결하는 것이 아니기에 궁여지책이라 생각하였습니다.<br />
@@ -387,14 +353,14 @@ UI_Manager.instance.AttackGuide(nextAttackData); 형태로 호출하여 UI에 �
 <br />
 
 
-## **7. 몬스터**
+## **6. 몬스터**
 
 ### **A. 구현 정리**
 
   - Enemy_Base abstract 클래스 상속 기반 구현
   - 판단 -> 추적 -> 공격 선택 -> 공격 -> 딜레이 FSM 적용
   - 그로기 게이지를 전부 소모할 경우 피격이상(경직, 다운) 효과 적용
-  - 가중치 렌덤 아이템 & 경험치 드랍
+  - 가중치 랜덤 아이템 & 경험치 드랍
 <br />
 
 ### **B. 설계 방향** 
@@ -418,14 +384,14 @@ Abstract 클래스 상속을 통한 공통 기능 묶어 불필요한 중복 스
 데이터 분리 및 기능과 데이터를 분리하여 복잡도 증가를 억제하였습니다.<br />
 
 데미지 계산 및 상태 이상(넉백, 다운) 기능을 인터페이스로 구현하여<br /> 
-데미지를 받을 수 있는 객체는 IDamageSysteam 인터페이스로 선언,<br />
+데미지를 받을 수 있는 객체는 IDamageSystem 인터페이스로 선언,<br />
 플레이어나 몬스터가 아닌 제3의 타입도 적용이 가능하게 설계하여 향후 확장성을 고려하였습니다.<br />
 
 <br />
 <br />
 
 
-## **8. 아지트**
+## **7. 아지트**
 
 ### **A. 구현 정리**
 
@@ -517,7 +483,7 @@ ClearData에서 List<ChapterData> 형태로 데이터를 저장하였습니다.<
 <br />
 
 
-## **9. 스테이지 이벤트**
+## **8. 스테이지 이벤트**
 
 ### **A. 구현 정리**
 
@@ -621,7 +587,7 @@ List에 지정된 라운드 만큼 소환을 반복하는 Rush,<br />
 <br />
 
 
-## **10. 세이브 & 로드**
+## **9. 세이브 & 로드**
 
 ### **A. 구현 정리**
 
@@ -796,7 +762,7 @@ SaveLoad_Manager가 런타임 데이터의 전환까지 책임지게 구현했�
 필요 이상으로 다른 스크립트와 결합하게 될 것으로 판단하였습니다.<br />
 
 ```
-                // SvaeLoad_Manager -> Save(int index) 일부 발췌
+                // SaveLoad_Manager -> Save(int index) 일부 발췌
                 // 스킬트리
                 skillPoint = Player_Manager.instance.skill.skillPoint,
                 skillLevelData = Player_Manager.instance.skill.GetSkillData(),
