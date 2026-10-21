@@ -30,72 +30,69 @@
 ## 주요 구현
 ## **1. 플레이어**
 <img src="https://github.com/user-attachments/assets/64e8ebe6-4414-42ac-b925-2a50acac5ee0"/><br />
-<br />
 
 ### **A. 구현 정리**
 
+#### ▣ 플레이어 조작
   - WASD 이동, F 상호작용, Shift 대쉬, C 락온
-  - 유저 인풋을 받아오는 인풋 시스템 구현
-  - 일반공격 4타
-  - 스매시 4타 (스매시 1~3타는 각성 상태에서 사용 시 추가 입력으로 추가 공격 동작)
+  - 유저 입력 처리 시스템 구현
+
+#### ▣ 전투 & 공격
+  - 일반공격 4타 및 스매시 4타 (스매시 1~3타는 각성 상태에서 사용 시 추가 입력으로 추가 공격 동작)
   - 스킬 4종 및 스킬 '각성' 사용 시 공격에 추가 조작 활성화
   - 아머 구현 3종 (없음, 경직 면역, 다운 면역)
+
+#### ▣ UI & 성장
   - 미니맵 & 전투 돌입 시 미니맵 사이즈 조절 구현
   - 공격 사용 시 연계 공격 가이드 UI 구현
   - 경험치 누적에 따른 레벨업 처리 및 레벨별 필요 경험치 계산
 <br />
 
-### **B. 설계 방향**
-
-  - **1-1 공격 기능**<br />
-
-플레이어의 공격 시스템은 단일책임원칙(SRP)을 기반으로 부모 클래스에 공용 함수를 두고<br />
-호출자는 공격의 세부 기능을 알 필요 없이 구독 된 함수를 호출하기만 하면<br />
-공격의 세부 기능은 호출된 스크립트에서 알아서 동작할 수 있도록 작업하였습니다.<br />
-
-스킬 특성상 공통적으로 필요한 기능(초기화, 동작 호출 함수 등)을 고려하였을 때,<br />
-내용 선언이 가능한 abstract가 적합하다 판단하여 abstract class로 Attack_Base 구현하였습니다.<br />
-
-Attack_Base에는 동작을 호출하는 Use() 함수와 동작을 초기화하는 Reset() 함수가 존재하며<br />
-Attack_Base를 상속받아 구현된 세부 동작 기능에서 Use()와 Reset() 함수를 구현하여,<br />
-
-외부에서는 내부 동작을 알 필요 없이 플레이어의 입력을 받아 해당되는 Use() 함수를 호출하기만 하면<br />
-내부 동작이 모두 이루어지도록 설계하였습니다.<br />
+플레이어 기능 구현에서 중요하게 고려한 부분은 기능과 유저 입력의 분리 관리,<br />
+추상 클래스를 기반 플레이어 공격 시스템의 설계,<br />
+단일책임원칙(SRP) 기반 스크립트 분리 및 분리된 스크립트의 관리 구조 개선입니다.<br />
 <br />
 
-  - **1-2 플레이어 입력**<br />
+---
 
-과거 캡스톤 프로젝트로 진행한 Project : Origo의 문제점 중 하나가 바로 플레이어의 입력 관리입니다.<br />
-예전에는 프로젝트를 진행할 때 각각의 동작 스크립트가 Input.Getkey...()로 입력을 받아 동작하도록 구현하였습니다.<br />
+### **B. 사례**
 
-이와 같이 각자 플레이어의 입력을 받아 동작하게 구현할 경우<br />
-A 기능이 동작하는 과정에서 B 입력이 들어오면 두 기능이 모두 동작하여 의도한 동작에서 벗어나게 되며<br />
-이같은 중복 동작을 막기 위해 스크립트들이 필요 이상으로 결합되는 문제가 발생하게 되었습니다.<br />
+#### **B-1. 입력 처리와 행동 실행 구조 설계**
+
+- **문제점**<br />
+기능 & 입력의 혼재로 인한 스크립트 강결합 문제 발생
+  
+- **고민**<br />
+과거에는 프로젝트를 진행할 때 각각의 동작 스크립트가 Input.Getkey...()로 직접 입력을 처리하였습니다.<br />
+이 경우 여러 동작에 입력이 동시에 전달되어 의도한 동작이 이루어지지 않을 수 있으며,<br />
+이를 막기 위해 스크립트 간 의존성이 증가하는 문제가 발생하였습니다.<br />
+  
+- **해결책**<br />
+플레이어의 입력을 처리하는 전용 매니저 Input_Manager를 제작하여 입력 처리를 분리하고,<br />
+PlayerAction_Manager 현재 행동 가능 여부를 확인한 뒤<br />
+동작 로직이 담긴 Attack_Base를 실행하도록 설계하였습니다.<br />
 <br />
 
-
-이를 해결하기 위해 플레이어의 입력을 처리하는 전용 매니저 Input_Manager를 제작하였습니다.<br />
-Input_Manager는 플레이어의 입력을 받아 입력마다 할당된 이벤트를 호출하는 방식으로 동작합니다.<br />
-이때 입력 별 호출될 동작은 InputData 데이터 클래스로 관리하였습니다.<br />
+Input_Manager는 입력마다 호출할 동작을 데이터 클래스 InputData에 Action으로 등록하고,<br />
+매니저에서 입력을 받아 입력마다 할당된 동작을 호출합니다.<br />
 
 ```
-[Serializable]
-public class InputData
-{
-    public string keyName;
-    public KeyCode key;
-    public bool isInput;
+    [Serializable]
+    public class InputData
+    {
+        public string keyName;
+        public KeyCode key;
+        public bool isInput;
 
-    public Action inputAction;
-}
+        public Action inputAction;
+    }
 ```
 
-InputData는 List<InputData> inputDatas;와<br />
-List<InputData> shortcutInputDatas; 2종류로 나뉘어 관리되고 있으며<br />
+입력 데이터는 일반 입력과 쇼트컷 입력을 구분하여<br />
+각각 List<InputData> inputDatas와 List<InputData> shortcutInputDatas에서 관리합니다.<br />
 ```
     public void Action_Setting(int index, Action name)
     {
-        // 혹시 모를 함수 중복 등록 방지용
         if(inputDatas[index].inputAction != null)
         {
             Debug.Log($"중복 등록 감지 {index} 번째 데이터 / {name} 함수 / {inputDatas[index].inputAction} 등록되어 있었음");
@@ -105,50 +102,78 @@ List<InputData> shortcutInputDatas; 2종류로 나뉘어 관리되고 있으며<
         inputDatas[index].inputAction += name;
     }
 ```
-```
-    public void ShortCut_Setting(int index, Action name)
-    {
-        shortcutInputDatas[index].inputAction += name;
-    }
-```
- 
-각각 List에 데이터를 세팅하는 함수 Action_Setting(int index, Action name)와 <br />
+각 입력에 대응하는 동작은 Action_Setting(int index, Action name)와 <br />
 ShortCut_Setting(int index, Action name)로 List에 동작 데이터를 담습니다.<br />
 
-담겨진 데이터는 Update()에서 Shortcut_Check(), KeyDown_Check(), KeyUp_Check()를 통해 입력을 체크하며,<br />
+데이터는 Update()에서 Shortcut_Check(), KeyDown_Check(), KeyUp_Check()를 통해 입력을 체크하며<br />
 입력이 있을 경우 InputData에서 할당된 액션을 호출하여 동작합니다.<br />
+
+```
+    private void Attack_Normal()
+    {
+        if (!canAction || !canAttack || isAttack || isSmash)
+        {
+            return;
+        }
+        else
+        {
+            // 최대 공격 횟수 체크
+            if (attackCount < 4)
+            {
+                foreach (Attack_Base attack in normalAttacks)
+                {
+                    attack.Attack_Reset();
+                }
+
+                isAttack = true;
+                attackCount++;
+                anim.SetInteger("AttackCount", attackCount);
+
+                normalAttacks[attackCount - 1].Use();
+            }
+        }
+    }
+```
+<br />
+
+Input_Manager의 동작 입력은 PlayerAction_Manager의 KeyActionSetting() 함수에서 Attack_동작이름()을 등록하며,<br />
+각 행동 함수에서는 isAttack, isSmash 등 상태를 검사하여 실행 가능 여부를 결정합니다.<br />
+
+실행이 가능하면 Attack_Base를 기반으로 관리하는 개별 공격 스크립트의 Use()함수를 호출하여 동작을 실행합니다.<br />
+<br />
+
+---
+
+#### **B-2. 스크립트 분리 및 관리**
+
+- 문제점<br />
+  여러 책임이 일부 매니저에 집중되어 코드 수정 범위와 유지보수 부담 증가 
+  단일책임원칙(SRP) 기반 스크립트 분리에 따른 매니저 증가 문제
+
+- 고민<br />
+  과거 프로젝트에서는 Player_Manager와 UI_Manager만 두고<br />
+  내부에 대부분의 플레이어 & 플레이어 UI 관련 로직을 넣어 시스템을 구성하였습니다.<br />
+
+  하지만 이와 같은 방식은 단일책임원칙(SRP)가 제대로 지켜지지 않아 버그 발생 시 문제점을 찾기 힘들며<br />
+  팀원과 협업 과정에서도 양쪽 다 해당 스크립트를 수정해야 하는 상황이 나왔을 때,<br />
+  수정 후 머지 과정이 복잡해지는 문제를 발생시켰습니다.<br />
+
+  단일책임원칙(SRP)를 기반으로 각 기능을 스크립트별로 나눠 구현하였습니다.<br />
+  다만 책임별로 스크립트를 분리하는 과정에서 플레이어를 관리하는 매니저 스크립트의 수가 늘어나게 되었습니다.<br />
+
+- 해결책<br />
+
+각 매니저를 개별 싱글톤으로 구현할 경우 매니저마다 독립적인 접근 진입점이 생겨 관리 구조가 복잡해질 수 있다고 판단하였습니다.<br />
+이를 해결하기 위해 플레이어 관련 매니저의 접근을 관리하는 허브 역할의 Player_Manager를 구현하여 진입점을 통일하였습니다.<br />
+
+Player_Manager를 통해 각 매니저에 접근할 수 있도록 구성함으로써,<br />
+기능별 스크립트 분리 구조를 유지하면서도 분리된 매니저의 접근 및 관리 경로를 일관되게 유지하고,<br />
+협업 과정에서 특정 매니저의 수정이 필요할 때 작업 영역이 최소한으로 겹치도록 설계하였습니다.<br />
+
+<img width="1179" height="686" alt="Image" src="https://github.com/user-attachments/assets/0077298d-85ff-47bc-830e-5abfa3a5f8d3" /><br />
 <br />
 
 
-이때 액션 입력의 경우 중복 방지 처리를 하나<br />
-쇼트컷 등록은 별도의 방지 처리 없이 입력하는 이유는<br />
-액션 입력의 경우 키가 중복 할당될 경우 액션이 꼬여 의도한 동작이 이루어지지 않을 수 있지만<br />
-
-쇼트컷의 경우 기존에 등록된 아이템을 제거하고<br />
-신규 아이템을 추가하는 방식으로 동작이 이루어지기 때문입니다.<br />
-<br />
-
-  - **1-3 플레이어 스크립트 관리**
-
-과거 프로젝트에서는 Player_Manager와 UI_Manager만 두고<br />
-내부에 대부분의 플레이어 & 플레이어 UI 관련 로직을 넣어 시스템을 구성하였습니다.<br />
-
-하지만 이와 같은 방식은 단일책임원칙(SRP)가 제대로 지켜지지 않아 버그 발생 시 문제점을 찾기 힘들며<br />
-팀원과 협업 과정에서도 양쪽 다 해당 스크립트를 수정해야 하는 상황이 나왔을 때,<br />
-수정 후 머지 과정이 복잡해지는 문제를 발생시켰습니다.<br />
-<br />
-
-
-단일책임원칙(SRP)를 기반으로 각 기능을 스크립트별로 나눠 구현하였습니다.<br />
-다만 책임별로 스크립트를 분리하는 과정에서 플레이어를 관리하는 매니저 스크립트의 수가 늘어나게 되었습니다.<br />
-
-<img width="1179" height="686" alt="Image" src="https://github.com/user-attachments/assets/0077298d-85ff-47bc-830e-5abfa3a5f8d3" />
-<br />
-<br />
-
-모든 매니저 스크립트를 싱글톤으로 구현하게 될 경우<br />
-진입점이 지나치게 많아져 스크립트 간 결합도가 지나치게 높아질 것이라 판단하여<br />
-플레이어 관련 매니저를 관리하는 Hub로 Player_Manager를 만들어 진입점을 통일하였습니다.<br />
 <br />
 <br />
 
