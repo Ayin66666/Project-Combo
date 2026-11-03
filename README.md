@@ -16,7 +16,7 @@
 - 게임 장르 : 3D 액션 게임
 - 제작 기간 : 25.03 ~ 25.09 (약 6개월)
 - 개발 목표 : 게임 '마비노기 영웅전'의 일반공격 & 스매시 전투 시스템 구현 및 Json을 활용한 데이터 로컬 저장
-- 기술 문서 : https://docs.google.com/presentation/d/1TijUUmfYp6Dh7DBAQQQgyUfkHiZ0gl0DBnp1yTRpF9I/edit?usp=sharing
+- 기술 문서 : https://bit.ly/4jUZ53C
 - 동작 영상 : https://www.youtube.com/watch?v=mEXa7664BfE
 <br />
 
@@ -49,7 +49,7 @@
 <br />
 
 플레이어 기능 구현에서 중요하게 고려한 부분은 기능과 유저 입력의 분리 관리,<br />
-추상 클래스를 기반 플레이어 공격 시스템의 설계,<br />
+추상 클래스 기반 플레이어 공격 시스템 설계,
 단일책임원칙(SRP) 기반 스크립트 분리 및 분리된 스크립트의 관리 구조 개선입니다.<br />
 <br />
 
@@ -174,6 +174,7 @@ Player_Manager를 통해 각 매니저에 접근할 수 있도록 구성함으�
 <br />
 <br />
 
+---
 
 ## **2. 몬스터**
 
@@ -222,8 +223,8 @@ Player_Manager를 통해 각 매니저에 접근할 수 있도록 구성함으�
 #### **▣ B-2. 인터페이스 기반 데미지 로직 분리**
 
 - **문제점**<br />
-  데미지 계산 로직이 Player, Enemy에 독립적으로 구현되어 있어 접근이 어려움
-  제3의 피격 가능 객체 구현 시 Player, Enemy에 포함된 불필요 기능이 강제됨
+  데미지 계산 로직이 Player, Enemy에 독립적으로 구현되어 있어 접근이 어려움<br />
+  제3의 피격 가능 객체 구현 시 Player, Enemy에 포함된 불필요 기능이 강제<br />
   
 - **고민**<br />
   과거 제작한 'Project : Origo'는 프로젝트는 플레이어, 몬스터에게 각각 TakeDamage() 함수를 구현하고,<br />
@@ -236,9 +237,28 @@ Player_Manager를 통해 각 매니저에 접근할 수 있도록 구성함으�
   Enemy_Base를 상속받아 구현하더라도 데미지 기능만 필요한 객체가 불필요한 기능을 포함하게 됩니다.<br />
   
 - **해결책**<br />
+
+  <img width="822" height="222" alt="Image" src="https://github.com/user-attachments/assets/19c7be10-3c21-458b-9ff7-01cd0d5bc002" /><br />
+  
   데미지 계산 및 상태 이상(넉백, 다운) 기능을 인터페이스로 구현하여<br /> 
   데미지를 받을 수 있는 객체는 IDamageSystem 인터페이스로 선언,<br />
   플레이어나 몬스터가 아닌 제3의 타입도 적용이 가능하게 설계하여 향후 확장성을 고려하였습니다.<br />
+  
+```
+ public interface IDamageSysteam
+ {
+    public enum DamageType { Physical, Magical }
+    public enum ArmorType { None, KnockBack, Down }
+    public enum HitVFX { None, KnockBack, Down }
+
+
+    public void Take_Damage(GameObject attackObj, DamageType type, HitVFX hitType, bool isCirtical, int hitCount, int damage);
+
+    public IEnumerator Hit_KnockBack(GameObject attackObj);
+
+    public IEnumerator Hit_Down(GameObject attackObj);
+}
+```
 <br />
 <br />
 
@@ -313,47 +333,18 @@ Data 내에는 데이터 클래스 ItemData, ClaerData, ChapterData 등<br />
   모든 데이터를 하나의 Json에 저장할지 결정해야 했습니다.<br />
 
 - **해결책**<br />
-  <img width="792" height="302" alt="Image" src="https://github.com/user-attachments/assets/84cefd91-25b1-44fa-9ea1-d238f486116c" /><br />
-  
   저장할 데이터는 플레이어의 스테이터스, 인벤토리, 착용 장비,<br />
   스킬 데이터, 플레이타임, 접속 위치, 스테이지 클리어 데이터로 결정하였습니다.<br />
   데이터의 구성 방식은 최상위 데이터 클래스 Data와 타입별 하위 클래스로 구성하였습니다.<br />
 
+<img width="792" height="302" alt="Image" src="https://github.com/user-attachments/assets/84cefd91-25b1-44fa-9ea1-d238f486116c" /><br />
 
 데이터를 타입별로 별개의 Json으로 저장하는 방식도 고려하였으나 저장할 데이터의 수가 적고,<br />
 저장하는 파일의 개수가 늘어날수록 경로별로 파일을 읽어오는 과정이 더 복잡해질 것이라 판단하였습니다.<br />
-// -> 이하 작성 필요
 
-```
-try
-{
-    string json = JsonUtility.ToJson(data);
-    File.WriteAllText(savePath + fileName[slotCount], json);
-
-    // 데이터 적용 - 스테이터스
-    Player_Manager.instance.status.Status_Setting(data);
-
-    // 데이터 적용 - 경험치
-    Player_Manager.instance.status.Level_Setting();
-
-    // 데이터 적용 - 챕터
-    ChapterData_Manager.instance.Data_Setting(data);
-
-    // 데이터 적용 - 스킬트리
-    Player_Manager.instance.skill.Skill_Setting(data);
-
-    return (data, true);
-}
-catch (Exception e)
-{
-    Debug.LogError($"저장 에러 발생! {e.Message}");
-    return (null, false);
-}
-
-```
-프로젝트 목표가 4개의 세이브 슬롯을 지원하는 만큼, 각 세이브에 접근하기 위한 명확한 경로 작성이 필요하였습니다.<br />
-이를 해결하기 위해 기본 파일 경로를 string 로 저장하고, 파일 이름을 save1~4로 저장하여,<br />
-각 슬롯을 클릭할 경우, 경로 + 파일 이름으로 필요한 파일의 접근 경로를 제작하는 방식으로 구현하였습니다.<br />
+프로젝트 목표가 4개의 세이브 슬롯을 지원하는 만큼 각 세이브에 접근하기 위한 경로가 필요하였습니다.<br />
+이를 해결하기 위해 기본 파일 경로를 string으로 저장하고, 파일 이름을 save1~4로 지정하여<br />
+각 슬롯을 클릭할 경우 경로 + 파일 이름으로 필요한 파일의 접근 경로를 제작하는 방식으로 구현하였습니다.<br />
 
 ```
 [System.Serializable]
@@ -403,8 +394,8 @@ public class Data
     public List<int> skillLevelData;
 }
 ```
-Json으로 변환되어 저장하는 데이터는 Class Data로<br />
-플레이어의 능력치, 인벤토리, 장비, 스킬, 클리어 데이터를 가지고 있습니다.<br />
+세이브 데이터는 Data 클래스를 Json으로 전환하여 저장하며,<br />
+Data는 플레이어의 능력치, 인벤토리, 장비, 스킬, 클리어 데이터를 가지고 있습니다.<br />
 
 ```
 [System.Serializable]
@@ -414,7 +405,6 @@ public class ItemData
     public int itemCount;
 }
 ```
-
 ```
 [System.Serializable]
 public class ClearData
@@ -444,28 +434,27 @@ public class StageData
 }
 ```
 
-이때 각 파트(인벤토리, 클리어 데이터 등)은 개별 데이터 클래스를 구현하여 저장하였습니다.<br />
-하나의 파일을 저장함에도 개별 클래스로 분리한 이유는 SaveLoad_Manager가<br />
-필요 이상으로 다른 매니저와 결합되는 것을 경계하기 위해서였습니다.<br />
+---
 
-저장되는 데이터는 각자 매니저를 보유한 기능들로,<br />
-런타임 데이터 역시 해당 매니저들이 보유하고 있습니다.<br />
+#### **▣ B-2. 런타임 & 세이브 데이터 관리**
 
-이때 저장되는 데이터와 런타임 데이터의 구성이 다르므로<br />
-저장을 위해 런타임 데이터를 세이브용 데이터로 전환하는 과정이 필요했습니다.<br />
-<br />
+- **문제점**<br />
+  런타임 데이터 & 세이브 데이터 전환 책임 및 관리
 
+- **고민**<br />
+  런타임 데이터는 개별 매니저들이 보유하고 있으며,<br />
+  런타임 데이터는 so 정보도 포함되어 있어 세이브 데이터로 사용하기 부적절하였습니다.<br />
 
-저는 이 과정에 대한 책임을 어느 스크립트에 줄지 고민하였고,<br />
-결과 SaveLoad_Manager에 런타임 -> 세이브 데이터 전환 책임까지 주는 것은<br />
-SaveLoad_Manager의 책임 영역 밖의 일이라 판단하였습니다.<br />
+  이를 해결하기 위해 세이브 데이터와 런타임 데이터를 분리하여 구현하였으나,<br />
+  세이브 & 로드를 위해 런타임 & 세이브 데이터를 각각 전환하는 기능이 필요해졌습니다.<br />
+  
+- **해결책**<br />
+  런타임 & 세이브 데이터 전환 대한 책임을 SaveLoad_Manager에 주는 것은<br />
+  SaveLoad_Manager의 책임 영역 밖의 일이라 판단하였습니다.<br />
 
-SaveLoad_Manager가 런타임 데이터의 전환까지 책임지게 구현했을 경우<br />
-런타임 데이터가 변경되면 거기에 맞춰 전환 로직도 교체해야 하는데,<br />
-데이터 스크립트와 전환 로직이 분리되어 있다면 교체 지점이 늘어나 작업 난이도가 상승하게 됩니다.<br />
-
-또한 전환 작업을 위해 이를 위해 SaveLoad_Manager가<br />
-필요 이상으로 다른 스크립트와 결합하게 될 것으로 판단하였습니다.<br />
+  SaveLoad_Manager는 런타임 데이터를 보유한 매니저의 전환 및 데이터 전달 함수 Get...()을 호출하면<br />
+  요청받은 매니저가 런타임 데이터에서 세이브 데이터로 전환한 뒤 SaveLoad_Manager에게 전달하고,<br />
+  해당 데이터를 기반으로 Data class를 작성하여 사용자의 컴퓨터에 저장되는 방식으로 구현하였습니다.<br />
 
 ```
 // SaveLoad_Manager -> Save(int index) 일부 발췌
@@ -489,14 +478,10 @@ SaveLoad_Manager가 런타임 데이터의 전환까지 책임지게 구현했�
     claerData = ChapterData_Manager.instance.claerData.claerData,
 }
 ```
-
-최종적으로 SaveLoad_Manager는 다른 매니저의 전환 및 데이터 전달 함수 Get...()을 호출하면<br />
-요청받은 매니저가 런타임 데이터에서 세이브용 데이터로 전환한 뒤 SaveLoad_Manager에게 전달하고,<br />
-해당 데이터를 기반으로 Data class를 작성하여 사용자의 컴퓨터에 저장되는 방식으로 구현하였습니다.<br />
 <br />
 <br />
 
-
+---
 
 ## **4. 장비 & 인벤토리**
 
@@ -520,44 +505,71 @@ SaveLoad_Manager가 런타임 데이터의 전환까지 책임지게 구현했�
   - 장착 & 해제에 따른 플레이어 능력치 증감 표시
 <br />
 
-### **B. 설계 방향**
+장비 & 인벤토리 시스템 구현에서 중요하게 생각한 부분은 아이템 데이터 관리 주체 결정이었습니다.<br />
 
-장비 & 인벤토리 시스템 구현에서 고려한 부분은 데이터의 관리 주체 결정이었습니다.<br />
-데이터 보유 책임을 각각의 슬롯에게 일임할지,<br />
-매니저가 모든 데이터를 보유하고 슬롯은 UI 표시만 담당할지 선택해야 했습니다.<br />
+---
 
-슬롯끼리 아이템 스왑(교체), 장비 장착과 같은 기능을 고려하였을 때,<br />
-슬롯은 자신이 어떤 아이템을 들고 있는지 알 필요가 있었습니다.<br />
+### **B. 사례**
 
-결과 아이템 추가 & 제거 로직은 Inventory_Manager가 관리하고<br />
-아이템의 종류, 보유 데이터는 Inventory_Slot이 관리하도록 구현하였습니다.<br />
+#### **▣ B-1. 인벤토리 아이템 데이터 관리**
+
+- **문제점**<br />
+  인벤토리의 아이템 데이터 관리 주체 결정
+
+- **고민**<br />
+  인벤토리 슬롯 및 쇼트 컷, 아이템 데이터를 어디에서 관리할 것인지,<br />
+  아이템 데이터 책임을 각각의 슬롯에게 일임할지,<br />
+  매니저가 모든 데이터를 보유하고 슬롯은 UI 표시만 담당할지 선택해야 했습니다.<br />
+
+- **해결책**<br />
+  슬롯끼리 아이템 스왑(교체), 장비 장착과 같은 기능을 고려하였을 때,<br />
+  슬롯이 어떤 아이템을 들고 있는지 알 필요가 있었습니다.<br />
+
+  결과 아이템 추가 & 제거 로직은 Inventory_Manager가 관리하고<br />
+  아이템의 보유 데이터는 Inventory_Slot이 개별 관리하도록 구현하였습니다.<br />
+  
+<img width="1037" height="447" alt="Image" src="https://github.com/user-attachments/assets/3d292223-fd3b-4252-871b-1560e38f6d8a" /><br />
+
+---
+
+#### **▣ B-2. 아이템 장착, 해제**
+
+- **문제점**<br />
+
+- **고민**<br />
+
+- **해결책**<br />
+
 <br />
 <br />
 
+---
 
-## **5. 스킬 & 스킬트리**
+## **5. 스킬 시스템**
 
 ### **A. 구현 정리**
+
+#### ▣ 스킬 트리
   - 스킬포인트를 소모하여 스킬 강화
   - 스킬 선택 시 설명 텍스트 및 영상 표시
-  - 스킬 강화 시 스킬  계수 및 아머, 피격 효과 변경
-  - 기능 동작 스크립트와 데이터 & UI 데이터를 각각 분리 구현
-<br />
+  - 스킬 레벨업 시 스킬 계수 및 아머, 피격 효과 변경
+  - 동작과 데이터 & UI 데이터를 분리 구현
 
+스킬과 스킬 트리 시스템에서 중요하게 고려한 부분은<br />
+데이터 관리 주체 결정과 스킬 포인트 관리입니다.<br />
+
+---
 
 ### **B. 설계 방향**
 
-스킬과 스킬트리 시스템 연계에서 중요하게 고려한 부분은<br />
-스킬 레벨 관리 주체 결정과 스킬 포인트 관리였습니다.<br />
-
 스킬은 각각 최대 레벨이 상이하며, 레벨에 따라 공격 배율이 달라집니다.<br />
-스킬트리는 각각의 스킬이 가진 최대 레벨 데이터와 UI 데이터,<br />
+스킬 트리는 각각의 스킬이 가진 최대 레벨 데이터와 UI 데이터,<br />
 레벨업에 필요한 포인트 데이터가 필요합니다.<br />
 
 스킬 레벨 UI 및 레벨업 관리를 Skill_Manager가,<br />
 스킬 데이터는 Attack_Base 보유하는 방식으로 나눠 관리하였으며<br />
 
-스킬트리에서 스킬 레벨 업 버튼을 누를 시, Skill_Manager가 이벤트를 받고<br />
+스킬 트리에서 스킬 레벨 업 버튼을 누를 시, Skill_Manager가 이벤트를 받고<br />
 Attack_Base에 데이터를 불러와 조건 확인 후 레벨업이 가능하면 증가,<br />
 아니라면 불가 조건에 따른 안내 UI를 표시하도록 구현하였습니다.<br />
 <br />
