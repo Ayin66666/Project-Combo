@@ -1,15 +1,12 @@
-
-## 개요
-
 <p align="center">
-<img src = "https://github.com/user-attachments/assets/0887308f-4dd4-4804-9535-efceb804711f" width="100%" height="100%"/>
+<img width="1035" height="578" alt="Image" src="https://github.com/user-attachments/assets/c543ce5e-cb2b-4f19-b4c2-c4ef2fb09b39" />
 </p>
 
+## 개요
 개인 프로젝트로 제작한 3D 액션 게임 'Project : Combo' 입니다.<br />
 
 게임 '명조 : 워더링웨이브', '마비노기 영웅전' 에서 모티브를 얻어 제작한 프로젝트로,<br />
-3-2 대학 캡스톤 수업에서 팀 프로젝트로 제작하였던 3D 액션 게임<br />
-'Project : Origo' 의 아쉬운 점을 보완한 완성형을 목표로 제작하였습니다.
+3-2 대학 팀 프로젝트로 제작한 3D 액션 게임 'Project : Origo'의 아쉬운 점을 보완한 완성형을 목표로 제작하였습니다.
 <br />
 
 ## 요약
@@ -60,21 +57,21 @@
 #### **▣ B-1. 입력 처리와 행동 실행 구조 설계**
 
 - **문제점**<br />
-기능 & 입력의 혼재로 인한 스크립트 강결합 문제 발생
+  기능 & 입력의 혼재로 인한 스크립트 강결합 문제 발생
   
 - **고민**<br />
-과거에는 프로젝트를 진행할 때 각각의 동작 스크립트가 Input.Getkey...()로 직접 입력을 처리하였습니다.<br />
-이 경우 여러 동작에 입력이 동시에 전달되어 의도한 동작이 이루어지지 않을 수 있으며,<br />
-이를 막기 위해 스크립트 간 의존성이 증가하는 문제가 발생하였습니다.<br />
+  과거 프로젝트를 진행할 때 각각의 동작 스크립트가 Input.Getkey...()로 직접 입력을 처리하였습니다.<br />
+  이 경우 여러 동작에 입력이 동시에 전달되어 의도한 동작이 이루어지지 않을 수 있으며,<br />
+  이를 막기 위해 스크립트 간 의존성이 증가하는 문제가 발생하였습니다.<br />
   
 - **해결책**<br />
-플레이어의 입력을 처리하는 전용 매니저 Input_Manager를 제작하여 입력 처리를 분리하고,<br />
-PlayerAction_Manager 현재 행동 가능 여부를 확인한 뒤<br />
-동작 로직이 담긴 Attack_Base를 실행하도록 설계하였습니다.<br />
-<br />
+  플레이어의 입력을 처리하는 전용 매니저 Input_Manager를 제작하여 입력 처리를 분리하고,<br />
+  PlayerAction_Manager 현재 행동 가능 여부를 확인한 뒤<br />
+  동작 로직이 담긴 Attack_Base를 실행하도록 설계하였습니다.<br />
+  <br />
 
-Input_Manager는 입력마다 호출할 동작을 데이터 클래스 InputData에 Action으로 등록하고,<br />
-매니저에서 입력을 받아 입력마다 할당된 동작을 호출합니다.<br />
+  Input_Manager는 입력마다 호출할 동작을 데이터 클래스 InputData에 Action으로 등록하고,<br />
+  매니저에서 입력을 받아 입력마다 할당된 동작을 호출합니다.<br />
 
 ```
     [Serializable]
@@ -88,8 +85,8 @@ Input_Manager는 입력마다 호출할 동작을 데이터 클래스 InputData�
     }
 ```
 
-입력 데이터는 일반 입력과 쇼트컷 입력을 구분하여<br />
-각각 List<InputData> inputDatas와 List<InputData> shortcutInputDatas에서 관리합니다.<br />
+  입력 데이터는 일반 입력과 쇼트컷 입력을 구분하여<br />
+  각각 List<InputData> inputDatas와 List<InputData> shortcutInputDatas에서 관리합니다.<br />
 ```
     public void Action_Setting(int index, Action name)
     {
@@ -102,11 +99,11 @@ Input_Manager는 입력마다 호출할 동작을 데이터 클래스 InputData�
         inputDatas[index].inputAction += name;
     }
 ```
-각 입력에 대응하는 동작은 Action_Setting(int index, Action name)와 <br />
-ShortCut_Setting(int index, Action name)로 List에 동작 데이터를 담습니다.<br />
+  각 입력에 대응하는 동작은 Action_Setting(int index, Action name)와 <br />
+  ShortCut_Setting(int index, Action name)로 List에 동작 데이터를 담습니다.<br />
 
-데이터는 Update()에서 Shortcut_Check(), KeyDown_Check(), KeyUp_Check()를 통해 입력을 체크하며<br />
-입력이 있을 경우 InputData에서 할당된 액션을 호출하여 동작합니다.<br />
+  데이터는 Update()에서 Shortcut_Check(), KeyDown_Check(), KeyUp_Check()를 통해 입력을 체크하며<br />
+  입력이 있을 경우 InputData에서 할당된 액션을 호출하여 동작합니다.<br />
 
 ```
     private void Attack_Normal()
@@ -166,13 +163,13 @@ Input_Manager의 동작 입력은 PlayerAction_Manager의 KeyActionSetting() 함
     이를 해결하기 위해 플레이어 관련 매니저의 관리 허브 Player_Manager를 구현하여 진입점을 통일하였습니다.<br />
     <br />
 
-<img width="1179" height="686" alt="Image" src="https://github.com/user-attachments/assets/0077298d-85ff-47bc-830e-5abfa3a5f8d3" /><br />
+    <img width="1179" height="686" alt="Image" src="https://github.com/user-attachments/assets/0077298d-85ff-47bc-830e-5abfa3a5f8d3" /><br />
 
-Player_Manager를 통해 각 매니저에 접근할 수 있도록 구성함으로써<br />
-기능별 스크립트 분리 구조를 유지하면서도 분리된 매니저의 접근 및 관리 경로를 일관되게 유지하고,<br />
-협업 과정에서 매니저의 수정이 필요할 때 작업 영역이 최소한으로 겹치도록 설계하였습니다.<br />
-<br />
-<br />
+    Player_Manager를 통해 각 매니저에 접근할 수 있도록 구성함으로써<br />
+    기능별 스크립트 분리 구조를 유지하면서도 분리된 매니저의 접근 및 관리 경로를 일관되게 유지하고,<br />
+    협업 과정에서 매니저의 수정이 필요할 때 작업 영역이 최소한으로 겹치도록 설계하였습니다.<br />
+    <br />
+    <br />
 
 ---
 
@@ -211,12 +208,13 @@ Player_Manager를 통해 각 매니저에 접근할 수 있도록 구성함으�
   이로 인해 코드 복잡도 상승, 프리팹 및 오브젝트 할당 및 수정 난이도 증가 문제가 발생하였습니다.<br />
 
 - **해결책**<br />
+
+  <img width="1411" height="812" alt="Image" src="https://github.com/user-attachments/assets/55764d6b-e1cd-4993-893c-1d9a7aed52af" /><br />
+
   이번 프로젝트에서는 Attack_Base를 기반으로 공격의 공용 기능을 담은 abstract class를 제작하고,<br />
   해당 스크립트 상속받아 스킬의 세부 기능을 구현하여 몬스터의 판단 로직과 공격 세부 동작을 분리하여 설계하였습니다.<br />
   또한 능력치, UI 데이터 역시 각각 SO로 분리하여 관리하여 단일 스크립트의 책임 과중을 경계하였습니다.<br />
   <br />
-
-  <img width="1411" height="812" alt="Image" src="https://github.com/user-attachments/assets/55764d6b-e1cd-4993-893c-1d9a7aed52af" /><br />
 
 ---
 
@@ -241,7 +239,7 @@ Player_Manager를 통해 각 매니저에 접근할 수 있도록 구성함으�
   <img width="822" height="222" alt="Image" src="https://github.com/user-attachments/assets/19c7be10-3c21-458b-9ff7-01cd0d5bc002" /><br />
   
   데미지 계산 및 상태 이상(넉백, 다운) 기능을 인터페이스로 구현하여<br /> 
-  데미지를 받을 수 있는 객체는 IDamageSystem 인터페이스로 선언,<br />
+  데미지를 받을 수 있는 객체는 IDamageSystem 인터페이스를 상속받아 구현하는 방식으로<br />
   플레이어나 몬스터가 아닌 제3의 타입도 적용이 가능하게 설계하여 향후 확장성을 고려하였습니다.<br />
   
 ```
@@ -299,11 +297,11 @@ Data 내에는 데이터 클래스 ItemData, ClaerData, ChapterData 등<br />
   세이브 데이터를 저장 방법 및 저장 위치 결정<br />
 
 - **고민**<br />
-  지금까지 대학교에서 제작한 개인 & 팀 프로젝트는 모두 외부 전시 및 시연에 초점이 맞춰진 프로젝트로,<br />
-  전시 및 시연의 특성 상 데이터를 저장할 필요가 없었기 때문에 관련 문제를 고려할 필요가 없었습니다.<br />
+  지금까지 대학교에서 제작한 개인 & 팀 프로젝트는 모두 외부 전시 & 시연에 초점이 맞춰진 프로젝트로,<br />
+  전시 & 시연의 특성 상 세이브 기능이 필요하지 않아 관련 문제를 고려할 필요가 없었습니다.<br />
 
-  하지만 단순 시연 목적이 아니라면 아무리 간단한 게임이라도<br />
-  진행사항이나 점수 등 데이터 세이브 & 로드 기능이 있는 경우가 대부분입니다.<br />
+  그러나 단순 시연 목적이 아니라면 간단한 게임이라도<br />
+  진행사항, 점수 등 데이터 세이브 & 로드 기능이 있는 경우가 대부분입니다.<br />
   무엇으로 세이브 데이터를 제작하고, 어떤 데이터를 저장할 것이며, 어디에 저장할지 선택이 필요했습니다.<br />
 
 - **해결책**<br />
@@ -317,7 +315,7 @@ Data 내에는 데이터 클래스 ItemData, ClaerData, ChapterData 등<br />
   Json은 바로 읽을 수 있는 텍스트 형식으로 데이터 구조를 쉽게 확인할 수 있으며,<br />
   C# 객체의 직렬화 및 역직렬화를 통해 저장과 복원 과정을 간결하게 구현할 수 있다는 장점이 있습니다.<br />
   이러한 특성을 고려하여 최종적으로 Json 저장 형식으로 선택하였습니다.<br />
-<br />
+  <br />
 
 ---
 
@@ -337,14 +335,14 @@ Data 내에는 데이터 클래스 ItemData, ClaerData, ChapterData 등<br />
   스킬 데이터, 플레이타임, 접속 위치, 스테이지 클리어 데이터로 결정하였습니다.<br />
   데이터의 구성 방식은 최상위 데이터 클래스 Data와 타입별 하위 클래스로 구성하였습니다.<br />
 
-<img width="792" height="302" alt="Image" src="https://github.com/user-attachments/assets/84cefd91-25b1-44fa-9ea1-d238f486116c" /><br />
+  <img width="792" height="302" alt="Image" src="https://github.com/user-attachments/assets/84cefd91-25b1-44fa-9ea1-d238f486116c" /><br />
 
-데이터를 타입별로 별개의 Json으로 저장하는 방식도 고려하였으나 저장할 데이터의 수가 적고,<br />
-저장하는 파일의 개수가 늘어날수록 경로별로 파일을 읽어오는 과정이 더 복잡해질 것이라 판단하였습니다.<br />
+  데이터를 타입별로 별개의 Json으로 저장하는 방식도 고려하였으나 저장할 데이터의 수가 적고,<br />
+  저장하는 파일의 개수가 늘어날수록 경로별로 파일을 읽어오는 과정이 더 복잡해질 것이라 판단하였습니다.<br />
 
-프로젝트 목표가 4개의 세이브 슬롯을 지원하는 만큼 각 세이브에 접근하기 위한 경로가 필요하였습니다.<br />
-이를 해결하기 위해 기본 파일 경로를 string으로 저장하고, 파일 이름을 save1~4로 지정하여<br />
-각 슬롯을 클릭할 경우 경로 + 파일 이름으로 필요한 파일의 접근 경로를 제작하는 방식으로 구현하였습니다.<br />
+  프로젝트 목표가 4개의 세이브 슬롯을 지원하는 만큼 각 세이브에 접근하기 위한 경로가 필요하였습니다.<br />
+  이를 해결하기 위해 기본 파일 경로를 string으로 저장하고, 파일 이름을 save1~4로 지정하여<br />
+  각 슬롯을 클릭할 경우 경로 + 파일 이름으로 필요한 파일의 접근 경로를 제작하는 방식으로 구현하였습니다.<br />
 
 ```
 [System.Serializable]
@@ -452,9 +450,9 @@ public class StageData
   런타임 & 세이브 데이터 전환 대한 책임을 SaveLoad_Manager에 주는 것은<br />
   SaveLoad_Manager의 책임 영역 밖의 일이라 판단하였습니다.<br />
 
-  SaveLoad_Manager는 런타임 데이터를 보유한 매니저의 전환 및 데이터 전달 함수 Get...()을 호출하면<br />
-  요청받은 매니저가 런타임 데이터에서 세이브 데이터로 전환한 뒤 SaveLoad_Manager에게 전달하고,<br />
-  해당 데이터를 기반으로 Data class를 작성하여 사용자의 컴퓨터에 저장되는 방식으로 구현하였습니다.<br />
+  SaveLoad_Manager가 런타임 데이터를 보유한 매니저의 전환 및 데이터 전달 함수 Get...()을 호출하면<br />
+  요청받은 매니저가 런타임 데이터에서 세이브 데이터로 전환한 뒤 반환하고,<br />
+  해당 데이터를 기반으로 Data class를 작성하여 사용자 컴퓨터에 저장되는 방식으로 구현하였습니다.<br />
 
 ```
 // SaveLoad_Manager -> Save(int index) 일부 발췌
@@ -505,13 +503,14 @@ public class StageData
   - 장착 & 해제에 따른 플레이어 능력치 증감 표시
 <br />
 
-장비 & 인벤토리 시스템 구현에서 중요하게 생각한 부분은 아이템 데이터 관리 주체 결정이었습니다.<br />
+장비 & 인벤토리 시스템 구현에서 중요하게 생각한 부분은 아이템 데이터 관리 주체 결정과<br />
+장비의 특수 효과 관리 및 착용 규칙이 2종류인 장비의 관리입니다.<br />
 
 ---
 
 ### **B. 사례**
 
-#### **▣ B-1. 인벤토리 아이템 데이터 관리**
+#### **▣ B-1. 인벤토리 아이템 데이터 관리 및 정렬**
 
 - **문제점**<br />
   인벤토리의 아이템 데이터 관리 주체 결정
@@ -522,26 +521,110 @@ public class StageData
   매니저가 모든 데이터를 보유하고 슬롯은 UI 표시만 담당할지 선택해야 했습니다.<br />
 
 - **해결책**<br />
+
+  <img width="1037" height="447" alt="Image" src="https://github.com/user-attachments/assets/3d292223-fd3b-4252-871b-1560e38f6d8a" /><br />
+  
   슬롯끼리 아이템 스왑(교체), 장비 장착과 같은 기능을 고려하였을 때,<br />
   슬롯이 어떤 아이템을 들고 있는지 알 필요가 있었습니다.<br />
 
   결과 아이템 추가 & 제거 로직은 Inventory_Manager가 관리하고<br />
   아이템의 보유 데이터는 Inventory_Slot이 개별 관리하도록 구현하였습니다.<br />
-  
-<img width="1037" height="447" alt="Image" src="https://github.com/user-attachments/assets/3d292223-fd3b-4252-871b-1560e38f6d8a" /><br />
 
 ---
 
-#### **▣ B-2. 아이템 장착, 해제**
+#### **▣ B-2. 아이템 구현**
 
 - **문제점**<br />
-
+  아이템 타입(장비, 소비, 기타), 아이템 등급에 따른 아이템 구현<br />
+  조건(장비, 소비, 기타 순서 정렬 + 동일 카테고리 내에서는 고등급 아이템 우선)을 만족하는 정렬 구현<br />
+  특수 효과를 지닌 장비 아이템의 효과 실행 및 관리<br />
+  
 - **고민**<br />
+  아이템은 카테고리(장비, 소비, 기타) 별로 동작 기능이 다르고,<br />
+  동일 카테고리 내에서도 아이템의 효과가 상이합니다.<br />
+  
+  Item_Base 상속으로 여러 타입의 아이템을 전부 구현할 경우<br />
+  해당 카테고리의 장비가 필요하지 않은 데이터까지 전부 알게 되거나<br />
+  동일 카테고리의 아이템을 다수 구현할때 중복되는 데이터를 여러번 선언하는 문제가 발생할 것이라 판단하였습니다.<br />
+  
+  또한 인벤토리 관리를 위해 아이템 정렬 로직을 구현하는 과정에서 정렬을 위해 데이터를 어떻게 관리할지,<br />
+  어떤 순서로 정렬해야 유저 편의성과 인벤토리 가독성을 높일 수 있을지 고민하였습니다.<br />
+
+  마지막으로 장비 아이템 중, 특정 아이템의 경우 장착 시 특수 효과가 부여되어 있습니다.<br />
+  장비의 특수 효과를 누가 관리할지, 장착, 해제 과정에서 효과의 추가 & 제거를 어떻게 진핼할지 선택해야했습니다.<br />
+  
+- **해결책**<br />
+
+  <img width="1300" height="461" alt="Image" src="https://github.com/user-attachments/assets/9702fb75-ee7c-4e7d-88cf-33f19c05633f" /><br />
+  
+  문제를 해결하기 위해 아이템 타입별로 스크립트를 나눠<br />
+  Item_Equipment, Item_Consumable, Item_Other 3종을 SO로 구현하였습니다.<br />
+  이를 통해 동일 카테고리의 아이템이 필요한 공용 데이터는 묶고,<br />
+  불필요한 데이터가 포함되는 것을 방지하였습니다.<br />
+
+  또한 아이템 정렬을 위해 Item_Base에 Enum Item_Type { Equipment, Consumable, Other }와<br />
+  Item_Rating { TierI, TierII, TierIII, TierVI, TierV }를 넣어 정렬을 위한 기준을 잡았습니다.<br />
+  
+  아이템 정렬의 경우, 대부분의 게임에서 공통적으로 따르는 장비, 소비, 잡화 순서로,<br />
+  동일 카테고리 내에서 아이템 정렬은 고티어 장비 - 저티어 장비 순서로 정렬하였습니다.<br />
+
+  장비 효과의 경우 Item_Effect_SO abstract 클래스로 구현하여 Item_Equipment SO에서 List로 관리하고,<br />
+  세부 기능 구현은 Item_Effect_SO를 상속받아 구현된 SO에서 세부 기능을 구현하였습니다.<br />
+  
+  장비 착용 & 해제를 통해 장비 효과가 추가 & 제거되는 만큼,<br />
+  장비 데이터를 관리하는 Equipment_Manager에서 관리하는 것이 옳다 판단하여<br />
+  Action itemEffect 형태로 장비 효과를 관리하였습니다.<br />
+
+
+  본 프로젝트에서는 무기에만 장비 효과를 부여하였기 때문에 List가 아닌 Action itemEffect로 관리하나,<br />
+  다수의 장비에 효과가 추가될 경우를 대비하여 장비 효과에 ID와 쿨타임을 추가하였기 때문에 프로젝트 확장이 필요할 경우<br />
+  List<Action>으로 관리하여 다수의 장비 효과가 추가되어도 추가 & 제거 & 발동 로직을 교체가 가능합니다.<br />
+  <br />
+  <br />
+
+---
+
+#### **▣ B-3. 장비 장착, 해제**
+
+- **문제점**<br />
+  장비의 장착 규칙 이원화에 따른 관리 방법 고민<br />
+  장비 효과(체력, 공격력 증가 등)의 적용, 해제 관리<br />
+  
+- **고민**<br />
+  장비 아이템은 무기, 머리, 몸, 바지, 신발, 악세서리(최대 3개 착용 가능 / 중복 가능)으로 나누어져 있습니다.<br />
+  이때 악세서리를 제외한 다른 부위는 착용 가능 개수가 1개로 제한되나<br />
+  악세서리는 최대 3개까지 착용이 가능하기 때문에 장비 장착 규칙이 2가지로 나뉘어진 상황이었습니다.<br />
 
 - **해결책**<br />
 
-<br />
-<br />
+  <img width="842" height="287" alt="Image" src="https://github.com/user-attachments/assets/f9ae2afa-5dd4-4121-a5d6-4ee813145882" /><br />
+
+```
+    [Header("---Equipment Slot---")]
+    [SerializeField] private List<SlotData> slots; // 외부 셋팅용
+    [SerializeField] private List<SlotData> coreSlot; // 실제 데이터 2
+    private Dictionary<Item_Equipment.EquipmentType, Inventory_Slot_Equipment> itemSlot; // 실제 데이터 1
+```
+```
+    [System.Serializable]
+    public class SlotData
+    {
+        [SerializeField] private Item_Equipment.EquipmentType equipmentType;
+        public Inventory_Slot_Equipment slot;
+        public Item_Equipment.EquipmentType EquipmentType { get { return equipmentType; } private set { equipmentType = value; } }
+    }
+```
+
+  장착 규칙이 나뉘어진 만큼, 장비 착용 데이터도 2종류로 나눠 악세서리 착용 데이터 List<SlotData> coreSlot와<br />
+  장비 착용 데이터 Dictionary<Item_Equipment.EquipmentType, Inventory_Slot_Equipment> itemSlot로 관리하였습니다.<br />
+
+  악세서리의 경우 슬롯이 전부 차지 않았다면 List내의 빈 슬롯을 찾아 삽입,<br />
+  모든 슬롯이 찬 경우 첫 번째 악세서리 슬롯의 장비를 교체하는 방식으로 동작합니다.<br />
+
+  장비의 경우 같은 부위는 무조건 하나의 장비만 허용되기 때문에,<br />
+  Dictionary로 장비 부위를 Key, 슬롯을 value로 두어 빠른 검색이 가능하도록 구현하였습니다.<br />
+  <br />
+  <br />
 
 ---
 
@@ -575,6 +658,7 @@ Attack_Base에 데이터를 불러와 조건 확인 후 레벨업이 가능하�
 <br />
 <br />
 
+---
 
 ## **6. 튜토리얼 & 유저 가이드**
 <img src="https://github.com/user-attachments/assets/db8d9098-51f2-41b4-b46b-ae32f1f4e944"/><br />
@@ -662,6 +746,7 @@ UI_Manager.instance.AttackGuide(nextAttackData); 형태로 호출하여 UI에 �
 <br />
 <br />
 
+---
 
 ## **7. 옵션**
 
@@ -715,7 +800,7 @@ Application.targetFrameRate = value; 를 사용하여 원하는 프레임으로 
 <br />
 <br />
 
-
+---
 
 ## **8. 아지트**
 
@@ -808,6 +893,7 @@ ClearData에서 List<ChapterData> 형태로 데이터를 저장하였습니다.<
 <br />
 <br />
 
+---
 
 ## **9. 스테이지 이벤트**
 
