@@ -227,7 +227,7 @@ KeyActionSetting() 함수에서 Attack_동작이름()을 등록하며,<br />
 
 - **문제점**<br />
   상태이상(넉백, 다운, 그로기) 상태 발생 시 동작 정지 과정에서 FSM 로직 꼬임<br />
-  판단 - 동작 - 딜레이 순서로 반복되는 FSM 및 가중치 랜덤 공격 패턴 선택 로직 구현<br />
+  판단 - 동작 - 딜레이 순서로 반복되는 FSM 구현<br />
   
 - **고민**<br />
   기존 프로젝트와 초기 프로토타입에서는 몬스터의 동작을 실행할 때<br />
@@ -240,15 +240,77 @@ KeyActionSetting() 함수에서 Attack_동작이름()을 등록하며,<br />
   종종 코루틴이 제대로 정지되지 않는 문제가 발생하였습니다.<br />
 
 - **해결책**<br />
-  이 문제를 해결하기 위해 Coroutine 변수이름; 형태로 코루틴을 담을 변수를 구현하고,<br />
-  FSM 동작 시 해당 동작을 변수에 담아 실행하여 한번에 1개의 동작 코루틴만 동작하게 구현하였습니다.<br />
-  또한 실행 과정에서 먼저 기존 코루틴 변수를 정지시켜 이전 행동이 종료되지 않은 상황에서 호출되었을 경우,<br />
-  기존 동작을 정지하고 넘어가도록 구현하여 코루틴이 제대로 종료되지 않아 동작이 꼬이는 문제를 해결하였습니다.<br />
-
-  // -> 이하 작성 필요
-  (코루틴 동작 코드 예제)
-  (가중치 랜덤 기반 패턴 선택 로직)
+  이 문제를 해결하기 위해 Coroutine 변수이름; 형태로 코루틴을 담을 변수 movementCoroutine을 선언하고,<br />
+  FSM 동작 시 해당 동작을 movementCoroutine에 담아 실행하여 한번에 1개의 동작 코루틴만 동작하게 구현하였습니다.<br />
   
+  또한 이전 행동이 종료되지 않은 상황에서 다음 행동이 호출되었을 경우,<br />
+  기존 동작을 정지하고 넘어가도록 구현하여 코루틴이 종료되지 않아 동작이 꼬이는 문제를 해결하였습니다.<br />
+  
+```
+  // 보스 FSM 예제 (판단 로직)
+  protected override void Think()
+  {
+      // 페이즈 변경 도중 Think 가 호출될 경우를 대비
+      if (curState == State.Spawn || curState == State.Die) return;
+
+      // 플레이어 사망 시 동작 정지
+      if (Player_Manager.instance.action.isDie)
+      {
+          curState = State.Idle;
+          return;
+      }
+
+      Debug.Log($"Boss Think Call / AttackCount : {attackCount}");
+      isInvincibility = false;
+      curState = State.Think;
+      Check_Target();
+      if (attackCount >= 3)
+      {
+          // 강화 공격
+          attackCount = 0;
+          int ran = Random.Range(0, 2);
+          if (movementCoroutine != null) StopCoroutine(movementCoroutine);
+          movementCoroutine = StartCoroutine(Patten_Use(pattens_Special, ran));
+      }
+      else
+      {
+          attackCount++;
+
+          // 일반 공격
+          int ran = Random.Range(0, 4);
+          if (targetRange <= 5)
+          {
+              // 근거리
+              if (movementCoroutine != null) StopCoroutine(movementCoroutine);
+              movementCoroutine = StartCoroutine(Patten_Use(pattens_Melee, ran));
+          }
+          else
+          {
+              // 추격 - 공격 로직
+              if (movementCoroutine != null) StopCoroutine(movementCoroutine);
+              movementCoroutine = StartCoroutine(ChaseMovement(ran));
+          }
+      }
+  }
+```
+
+몬스터는 Think() 함수에서 먼저 플레이어의 사망 여부를 체크하여 사망 시 동작을 정지합니다.<br />
+플레이어가 사망하지 않은 경우, Check_Target() 함수로 플레이어와 자신의 거리를 구해 다음 동작을 선택합니다.<br />
+공격 범위 밖에 플레이어가 있다면 ChaseMovement() 코루틴을, 공격 범위 내에 있다면 Patten_Use() 코루틴을 호출합니다.<br />
+
+```
+    private int[,] pattens_Melee = new int[4, 4]
+    {
+        { 0,4,1,7 },{ 1,3,4,8 },{ 0,3,2,5 },{ 3,6,4,7 }
+    };
+```
+<br />
+
+몬스터의 패턴 선택은 int[,] pattens_이름 형태의 이차원 배열로 관리하여<br />
+int ran = Random.Range(0, 2)로 임의의 패턴을 골라 동작하도록 구현하였습니다.<br />
+
+// 이하 작성 필요 -> 추적 & 딜레이 예제 코드
+
 ---
 
 #### **▣ B-3. 인터페이스 기반 데미지 로직 분리**
