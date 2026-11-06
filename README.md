@@ -307,9 +307,55 @@ KeyActionSetting() 함수에서 Attack_동작이름()을 등록하며,<br />
 <br />
 
 몬스터의 패턴 선택은 int[,] pattens_이름 형태의 이차원 배열로 관리하여<br />
-int ran = Random.Range(0, 2)로 임의의 패턴을 골라 동작하도록 구현하였습니다.<br />
+int ran = Random.Range(0 ~ 패턴 개수)로 임의의 패턴을 골라 동작하도록 구현하였습니다.<br />
+이때 이차원 패턴의 행이 하나의 패턴을, 열이 패턴 내에서 실행할 공격 동작을 뜻합니다.<br />
 
-// 이하 작성 필요 -> 추적 & 딜레이 예제 코드
+몬스터 추적의 경우 NavMesh 기반 추적으로 구성하였으며,<br />
+기본적으로 몬스터의 NavMesh 컴포넌트는 비활성화 상태로 유지합니다.<br />
+
+몬스터가 플레이어를 추적하지 않는 상황에서도 NavMeshAgent가 활성화되어 있다면<br />
+불필요한 이동 및 장애물 회피 연산이 발생할 수 있다고 판단하였습니다.<br />
+
+```
+    private IEnumerator ChaseMovement(int ran)
+    {
+        curState = State.Chase;
+
+        float timer = 0;
+        nav.enabled = true;
+        while (targetRange <= 5 && timer < chaseTime)
+        {
+            timer += Time.deltaTime;
+
+            Check_Target();
+            nav.SetDestination(target.transform.position);
+            yield return null;
+        }
+        nav.enabled = false;
+
+        // 공격 호출
+        if(targetRange <= 5)
+        {
+            // 추적 성공 - 근거리 패턴 시전
+            movementCoroutine = StartCoroutine(Patten_Use(pattens_Melee, ran));
+        }
+        else
+        {
+            // 추적 실패 - 원거리 패턴 시전
+            movementCoroutine = StartCoroutine(Patten_Use(pattens_Range, ran));
+        }
+    }
+```
+
+이에 따라 NavMeshAgent를 기본적으로 비활성화하고,<br />
+Think()에서 Target_Check()를 통해 플레이어와의 거리를 확인한 뒤<br />
+추적이 필요한 상황에서만 활성화하도록 구성하였습니다.<br />
+
+이를 통해 추적이 필요하지 않은 몬스터의 NavMeshAgent를 비활성화하여<br />
+불필요한 연산 부담을 줄이고자 하였습니다.<br />
+
+또한 일정 기간 이상 추적하였음에도 플레이어에게 일정 거리 이상 다가가지 못했을 경우,<br />
+추적을 중단하고 원거리 공격 패턴을 실행하여 계속 추적하기만 하는 상황을 방지하였습니다.<br />
 
 ---
 
@@ -428,7 +474,7 @@ Data 내에는 데이터 클래스 ItemData, ClaerData, ChapterData 등<br />
   저장할 데이터는 플레이어 스테이터스, 인벤토리, 착용 장비,<br />
   스킬 데이터, 플레이타임, 접속 위치, 스테이지 클리어 데이터로 결정하였습니다.<br />
 
-  세이브 데이터는 Data 클래스를 Json으로 전환하여 저장하며,<br />?
+  세이브 데이터는 Data 클래스를 Json으로 전환하여 저장하며,<br />
   데이터의 구성 방식은 최상위 데이터 클래스 Data와 타입별 하위 클래스로 구성하였습니다.<br />
 
   <img width="792" height="302" alt="Image" src="https://github.com/user-attachments/assets/84cefd91-25b1-44fa-9ea1-d238f486116c" /><br />
