@@ -244,10 +244,12 @@ public class Enemy_Boss_Arie : Enemy_Base
     {
         curState = State.Chase;
 
-        float tiemr = 0;
+        float timer = 0;
         nav.enabled = true;
-        while (targetRange <= 5 && tiemr < chaseTime)
+        while (targetRange <= 5 && timer < chaseTime)
         {
+            timer += Time.deltaTime;
+
             Check_Target();
             nav.SetDestination(target.transform.position);
             yield return null;
@@ -255,7 +257,16 @@ public class Enemy_Boss_Arie : Enemy_Base
         nav.enabled = false;
 
         // 공격 호출
-        movementCoroutine = StartCoroutine(Patten_Use(pattens_Range, ran));
+        if(targetRange <= 5)
+        {
+            // 추적 성공 - 근거리 패턴 시전
+            movementCoroutine = StartCoroutine(Patten_Use(pattens_Melee, ran));
+        }
+        else
+        {
+            // 추적 실패 - 원거리 패턴 시전
+            movementCoroutine = StartCoroutine(Patten_Use(pattens_Range, ran));
+        }
     }
 
     protected override IEnumerator DelayMovement()

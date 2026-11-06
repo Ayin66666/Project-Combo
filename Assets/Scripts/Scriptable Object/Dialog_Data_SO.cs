@@ -1,4 +1,3 @@
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -21,7 +20,6 @@ public class Dialog_Data_SO : ScriptableObject
         [Header("---Event---")]
         public List<EventData> eventDatas;
 
-
         [Header("---Dialog---")]
         public float dialog_Daley;
         public string characterName;
@@ -37,5 +35,4 @@ public class Dialog_Data_SO : ScriptableObject
         public int typeIndex;
         public bool typeOnOff;
     }
-
 }
