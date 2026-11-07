@@ -73,7 +73,7 @@
   Input_Manager는 입력마다 호출할 동작을 데이터 클래스 InputData에 Action으로 등록하고,<br />
   매니저에서 입력을 받아 입력마다 할당된 동작을 호출합니다.<br />
 
-```
+``` csharp
     [Serializable]
     public class InputData
     {
@@ -87,7 +87,7 @@
 
   입력 데이터는 일반 입력과 쇼트컷 입력을 구분하여<br />
   각각 List<InputData> inputDatas와 List<InputData> shortcutInputDatas에서 관리합니다.<br />
-```
+``` csharp
     public void Action_Setting(int index, Action name)
     {
         if(inputDatas[index].inputAction != null)
@@ -105,7 +105,7 @@
   데이터는 Update()에서 Shortcut_Check(), KeyDown_Check(), KeyUp_Check()를 통해 입력을 체크하며<br />
   입력이 있을 경우 InputData에서 할당된 액션을 호출하여 동작합니다.<br />
 
-```
+``` csharp
     private void Attack_Normal()
     {
         if (!canAction || !canAttack || isAttack || isSmash)
@@ -246,7 +246,7 @@ KeyActionSetting() 함수에서 Attack_동작이름()을 등록하며,<br />
   또한 이전 행동이 종료되지 않은 상황에서 다음 행동이 호출되었을 경우,<br />
   기존 동작을 정지하고 넘어가도록 구현하여 코루틴이 종료되지 않아 동작이 꼬이는 문제를 해결하였습니다.<br />
   
-```
+``` csharp
   // 보스 FSM 예제 (판단 로직)
   protected override void Think()
   {
@@ -298,7 +298,7 @@ KeyActionSetting() 함수에서 Attack_동작이름()을 등록하며,<br />
 플레이어가 사망하지 않은 경우, Check_Target() 함수로 플레이어와 자신의 거리를 구해 다음 동작을 선택합니다.<br />
 공격 범위 밖에 플레이어가 있다면 ChaseMovement() 코루틴을, 공격 범위 내에 있다면 Patten_Use() 코루틴을 호출합니다.<br />
 
-```
+``` csharp
     private int[,] pattens_Melee = new int[4, 4]
     {
         { 0,4,1,7 },{ 1,3,4,8 },{ 0,3,2,5 },{ 3,6,4,7 }
@@ -382,7 +382,7 @@ Think()에서 Target_Check()를 통해 플레이어와의 거리를 확인한 �
   데미지를 받을 수 있는 객체는 IDamageSystem 인터페이스를 상속받아 구현하는 방식으로<br />
   플레이어나 몬스터가 아닌 제3의 타입도 적용이 가능하게 설계하여 향후 확장성을 고려하였습니다.<br />
   
-```
+``` csharp
  public interface IDamageSysteam
  {
     public enum DamageType { Physical, Magical }
@@ -486,7 +486,7 @@ Data 내에는 데이터 클래스 ItemData, ClaerData, ChapterData 등<br />
   이를 해결하기 위해 기본 파일 경로를 string으로 저장하고, 파일 이름을 save1~4로 지정하여<br />
   각 슬롯을 클릭할 경우 경로 + 파일 이름으로 필요한 파일의 접근 경로를 제작하는 방식으로 구현하였습니다.<br />
 
-```
+``` csharp
 [System.Serializable]
 public class Data
 {
@@ -534,7 +534,7 @@ public class Data
     public List<int> skillLevelData;
 }
 ```
-```
+``` csharp
 [System.Serializable]
 public class ItemData
 {
@@ -542,7 +542,7 @@ public class ItemData
     public int itemCount;
 }
 ```
-```
+``` csharp
 [System.Serializable]
 public class ClearData
 {
@@ -550,7 +550,7 @@ public class ClearData
     public List<ChapterData> chapterList;
 }
 ```
-```
+``` csharp
 [System.Serializable]
 public class ChapterData
 {
@@ -559,7 +559,7 @@ public class ChapterData
     public List<StageData> stageList;
 }
 ```
-```
+``` csharp
 [System.Serializable]
 public class StageData
 {
@@ -593,7 +593,7 @@ public class StageData
   요청받은 매니저가 런타임 데이터에서 세이브 데이터로 전환한 뒤 반환하고,<br />
   해당 데이터를 기반으로 Data class를 작성하여 사용자 컴퓨터에 저장되는 방식으로 구현하였습니다.<br />
 
-```
+``` csharp
 // SaveLoad_Manager -> Save(int index) 일부 발췌
 {
     // 스킬트리
@@ -742,13 +742,13 @@ public class StageData
 
   <img width="842" height="287" alt="Image" src="https://github.com/user-attachments/assets/f9ae2afa-5dd4-4121-a5d6-4ee813145882" /><br />
 
-```
+``` csharp
     [Header("---Equipment Slot---")]
     [SerializeField] private List<SlotData> slots; // 외부 셋팅용
     [SerializeField] private List<SlotData> coreSlot; // 실제 데이터 2
     private Dictionary<Item_Equipment.EquipmentType, Inventory_Slot_Equipment> itemSlot; // 실제 데이터 1
 ```
-```
+``` csharp
     [System.Serializable]
     public class SlotData
     {
@@ -855,7 +855,7 @@ Attack_Base에 데이터를 불러와 조건 확인 후 레벨업이 가능하�
 <img width="972" height="422" alt="Image" src="https://github.com/user-attachments/assets/b1869eba-491c-49f1-bd8f-b93eb2637d14" />
 <br />
 
-```
+``` csharp
     public void AttackGuide(string[] nextAttacks)
     {
         if (attackGuideCoroutine != null)
@@ -865,7 +865,7 @@ Attack_Base에 데이터를 불러와 조건 확인 후 레벨업이 가능하�
         attackGuideCoroutine = StartCoroutine(AttackGuideCall(nextAttacks));
     }
 ```
-```
+``` csharp
     private IEnumerator AttackGuideCall(string[] nextAttacks)
     {
         // 텍스트 초기화
@@ -912,6 +912,7 @@ UI_Manager.instance.AttackGuide(nextAttackData); 형태로 호출하여 UI에 �
 Master의 하위에 SFX, BGM을 넣음으로서 개별 조절 및 Master 사운드 조절을 통한<br />
 전체 사운드 조절이 가능하게 구현하였습니다.<br />
 
+``` csharp
     public void Setting_Master(float value)
     {
         Master_Volume = Mathf.Log10(value) * 20;
@@ -923,12 +924,14 @@ Master의 하위에 SFX, BGM을 넣음으로서 개별 조절 및 Master 사운�
         isMasterOn = isOn;
         mixer.SetFloat("Master", Mathf.Log10(isMasterOn ? Master_Volume : 0.0001f) * 20);
     }
+```
 <br />
 
 프레임레이트 & 수직 동기화의 경우 유니티에서 지원하는 드롭다운 UI와<br />
 Application.targetFrameRate = value; 를 사용하여 원하는 프레임으로 설정 가능하게 구현하였습니다.<br />
 <br />
 
+``` csharp
     public void Setting_FPS(int value)
     {
         flameIndex = value;
@@ -940,6 +943,7 @@ Application.targetFrameRate = value; 를 사용하여 원하는 프레임으로 
         isVsync = value == 1 ? true : false;
         QualitySettings.vSyncCount = value;
     }
+```
 <br />
 <br />
 
@@ -972,7 +976,7 @@ Application.targetFrameRate = value; 를 사용하여 원하는 프레임으로 
 스테이지 클리어 시 클리어 데이터를 아지트에 복귀하기 전 최신화 해줄 필요가 있었습니다.<br />
 <br />
 
-```
+``` csharp
 [System.Serializable]
 public class StageData
 {
@@ -983,7 +987,7 @@ public class StageData
     public enum Rank { N, D, C, B, A, S }
 }
 ```
-```
+``` csharp
 [System.Serializable]
 public class ChapterData
 {
@@ -992,7 +996,7 @@ public class ChapterData
     public List<StageData> stageList;
 }
 ```
-```
+``` csharp
 [System.Serializable]
 public class ClearData
 {
@@ -1006,6 +1010,7 @@ public class ClearData
 스테이지를 관리하는 Stage_Manager가 스테이지 클리어 시 데이터를 넘겨받아 작성하는 역할을 부여하여<br />
 실시간 데이터 최신화가 가능하게 구현하였습니다.<br />
 
+``` csharp
     public void ClearData()
     {
         // 데이터 생성
@@ -1029,6 +1034,7 @@ public class ClearData
         // 데이터 전달
         ChapterData_Manager.instance.Data_Updata(chapter, stage, clearData);
     }
+```
 
 프로젝트에 구현된 챕터는 튜토리얼과 1장 뿐이나, 향후 챕터 및 스테이지 추가를 고려하여<br />
 ClearData에서 List<ChapterData> 형태로 데이터를 저장하였습니다.<br />
@@ -1066,6 +1072,7 @@ ClearData에서 List<ChapterData> 형태로 데이터를 저장하였습니다.<
 <br />
 <br />
 
+``` csharp
     /// <summary>
     /// 체크포인트 저장 - 호출은 체크포인트 오브젝트에서
     /// </summary>
@@ -1075,12 +1082,14 @@ ClearData에서 List<ChapterData> 형태로 데이터를 저장하였습니다.<
         spawnPos = pos.position;
         spawnRotation = Player_Manager.instance.transform.rotation;
     }
+```
 <br />
 
 저는 이 문제를 해결하기 위해 스테이지를 관리하는 Stage_Manager에<br />
 체크 포인트 오브젝트와 상호작용 시 호출되는 함수인 CheckPoint_Seting()와<br />
 <br />
 
+``` csharp
     /// <summary>
     /// 사망 시 체크포인트 호출 - 동작은 사망 후 플레이어 매니저 부분에서
     /// </summary>
@@ -1104,6 +1113,7 @@ ClearData에서 List<ChapterData> 형태로 데이터를 저장하였습니다.<
         // 플레이어 위치 이동
         PlayerAction_Manager.instance.Pos_Setting(spawnPos, spawnRotation);
     }
+```
 <br />
 
 실제 플레이어 사망 시 호출되는 함수 CheckPoint_Call()에서<br />
